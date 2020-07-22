@@ -129,7 +129,7 @@ function getData() {
     }
 
     $.ajax({
-        url: "/webform/test3/data/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + dateFrom + "/" + dateTo,
+        url: "/budget/test3/data/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + dateFrom + "/" + dateTo,
         dataType: "json",
         success: data => {
             //初期化

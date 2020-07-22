@@ -15,9 +15,9 @@
             {
                 Schema::create("project", function (Blueprint $table) {
 
-						$table->increments('id')->unsigned();
+						$table->string('id',50);
 						$table->integer('client_id')->nullable()->unsigned();
-						$table->string('project_type',4)->nullable();
+						$table->string('project_type',100)->nullable();
 						$table->integer('project_year')->nullable();
 						$table->string('project_name',200)->nullable();
 						$table->integer('pic')->nullable()->unsigned(); //社員マスタ - id

@@ -34,7 +34,7 @@ class BudgetController extends Controller
         $staffData = Staff::get();
         //pic
         $picData = Staff::get();
-
+       
         return view('budget_input')
                         ->with("client", $clientData)
                         ->with("project", $projectData)
@@ -360,7 +360,7 @@ class BudgetController extends Controller
         $week = $this->getWeek($requestYear, $requestMonth, $requestDay);
         $weekArray = [];
         foreach ($week as $xxx) {
-            array_push($weekArray, $xxx["month"] . "/" . $xxx["day"] . "/" . $xxx["year"]);
+            array_push($weekArray, $xxx["year"] . "/" . $xxx["month"] . "/" . $xxx["day"]);
         }
 
         $json = ["budget" => $res, "week" => $weekArray];

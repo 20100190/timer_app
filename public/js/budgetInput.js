@@ -2,7 +2,7 @@ $(document).ready(function () {
     var buttonWidth = "500px";
     $('#client').multiselect({
         buttonWidth: buttonWidth,
-        maxHeight: 900,
+        maxHeight: 800,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
@@ -551,7 +551,7 @@ function saveData() {
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
     });
     $.ajax({
-        url: "/webform/test3/save",
+        url: "/budget/test3/save",
         type: "post",
         contentType: "application/json",
         data: JSON.stringify(xxx),
@@ -622,7 +622,7 @@ function testData() {
 
 
     $.ajax({
-        url: "/webform/test3/input/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + year + "/" + month + "/" + day,
+        url: "/budget/test3/input/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + year + "/" + month + "/" + day,
         dataType: "json",
         success: data => {
             $('#budget_info').val(JSON.stringify(data.budget));
@@ -696,7 +696,7 @@ function testData() {
 function getProjectData() {
     var clientId = document.getElementById("client").value;
     $.ajax({
-        url: "/webform/test3/project/" + clientId,
+        url: "/budget/test3/project/" + clientId,
         dataType: "json",
         success: data => {
             $('#project').children().remove();
@@ -727,7 +727,7 @@ function saveCellData(client, project, staff, year, month, day, value) {
     }
 
     $.ajax({
-        url: "/webform/test3/save/" + client + "/" + project + "/" + staff + "/" + year + "/" + month + "/" + day + "/" + value,
+        url: "/budget/test3/save/" + client + "/" + project + "/" + staff + "/" + year + "/" + month + "/" + day + "/" + value,
     }).success(function (data) {
         //alert('success!!');
     }).error(function (XMLHttpRequest, textStatus, errorThrown) {

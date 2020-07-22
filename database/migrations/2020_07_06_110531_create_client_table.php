@@ -15,11 +15,11 @@
             {
                 Schema::create("client", function (Blueprint $table) {
 
-						$table->increments('id');
+						$table->string('id',3);
 						$table->string('name',200)->nullable();
 						$table->string('fye',5)->nullable();
-						$table->string('vic_status',3)->nullable();
-						$table->integer('group_companies')->nullable(); //client - id
+						$table->string('vic_status',200)->nullable();
+						$table->string('group_companies',200)->nullable(); //client - id
 						$table->string('website',300)->nullable();
 						$table->string('address_us',300)->nullable();
 						$table->string('address_jp',300)->nullable();
