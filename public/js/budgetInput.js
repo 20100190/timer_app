@@ -2,7 +2,7 @@ $(document).ready(function () {
     var buttonWidth = "500px";
     $('#client').multiselect({
         buttonWidth: buttonWidth,
-        maxHeight: 800,
+        maxHeight: 700,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
@@ -25,6 +25,7 @@ $(document).ready(function () {
     $('#pic').multiselect({
         buttonWidth: buttonWidth,
         enableFiltering: true,
+        maxHeight: 600,
         includeSelectAllOption: true,
     });
     $('#sel_role').multiselect({
@@ -35,6 +36,7 @@ $(document).ready(function () {
     $('#sel_staff').multiselect({
         buttonWidth: buttonWidth,
         enableFiltering: true,
+        maxHeight: 400,
         includeSelectAllOption: true,
     });
 });

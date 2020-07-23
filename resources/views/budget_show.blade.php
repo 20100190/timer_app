@@ -98,7 +98,7 @@
                     <select id="project" name="project" multiple="multiple" style="width: 200px;">
                         <!--<option value="blank"></option>-->
                         @foreach ($project as $projects)
-                        <option value="{{$projects->name}}">{{$projects->name}}</option>
+                        <option value="{{$projects->project_name}}">{{$projects->project_name}}</option>
                         @endforeach
                     </select>
                 </td>

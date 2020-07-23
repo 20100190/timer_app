@@ -5,7 +5,7 @@
 <form action="test3/save" method="POST" name="s">
     {{ csrf_field() }}  
 
-    <div class="row">
+    <div class="row" style="zoom: 50%">
         <div class="col col-md-1">
             Client
         </div>
@@ -18,20 +18,20 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="zoom: 50%">
         <div class="col col-md-1">
             Project
         </div>
         <div class="col col-md-1">
             <select id="project" name="project" multiple="multiple" style="width: 200px">                          
                 @foreach ($project as $projects)
-                <option value="{{$projects->name}}">{{$projects->name}}</option>
+                <option value="{{$projects->project_name}}">{{$projects->project_name}}</option>
                 @endforeach
             </select>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="zoom: 50%">
         <div class="col col-md-1">
             FYE
         </div>
@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="zoom: 50%">
         <div class="col col-md-1">
             PIC
         </div>
@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="zoom: 50%">
         <div class="col col-md-1">
             VIC
         </div>
@@ -80,7 +80,7 @@
     </div>
 
 
-    <div class="row">
+    <div class="row" style="zoom: 50%">
         <div class="col col-md-1">
             Role
         </div>
@@ -97,7 +97,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="zoom: 50%">
         <div class="col col-md-1">
             Staff
         </div>
@@ -111,11 +111,11 @@
     </div>   
 
     <div class="row">
-        <div class="col col-md-1">
+        <div class="col col-md-1" style="font-size: 3px">
             Date From
         </div>
         <div class="col col-md-1">
-            <input type="text" style="width:150px;margin-right: 20px;font-size: 3px" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="">                            
+            <input type="text" style="width:150px;hight:10px;margin-right: 20px;font-size: 3px" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="">                            
         </div>
         <div class="col col-md-1">
             <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="testData()">
