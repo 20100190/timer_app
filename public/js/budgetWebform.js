@@ -175,7 +175,7 @@ function getData() {
                     if (operatingTime <= data.total[s].working_days) {
                         document.getElementById("ot" + data.total[s].staff_id + colNo).style = "display:inline-block;height: 100%;width: 100%;background-color: #FFDBC9";
                     }
-                    document.getElementById("ot" + data.total[s].staff_id + colNo).innerHTML = data.total[s].working_days;
+                    document.getElementById("ot" + data.total[s].staff_id + colNo).innerHTML = Math.ceil(data.total[s].working_days);
                     document.getElementById("ot_initial" + data.total[s].staff_id).innerHTML = data.total[s].initial;
                 }
             }
@@ -183,14 +183,14 @@ function getData() {
             //overall personal total
             for (var s = 0; s < data.overallPTotal.length; s++) {
                 if (data.overallPTotal[s].staff_id !== null) {
-                    document.getElementById("ot_ptotal" + data.overallPTotal[s].staff_id).innerHTML = 1;//data.overallPTotal[s].working_days;
+                    document.getElementById("ot_ptotal" + data.overallPTotal[s].staff_id).innerHTML = data.overallPTotal[s].working_days;
                 }
             }
 
             //overall total            
             for (var s = 0; s < data.overallTotal.length; s++) {
                 var colNo = getOverallTotalColNo(data.overallTotal[s].year, data.overallTotal[s].month, data.overallTotal[s].day, data.week);
-                document.getElementById("otTotal" + colNo).innerHTML = data.overallTotal[s].working_days;
+                document.getElementById("otTotal" + colNo).innerHTML = Math.ceil(data.overallTotal[s].working_days);
             }
 
             //client list
@@ -218,9 +218,9 @@ function getData() {
                 var pic = data.clientList[s][4];
                 var role = data.clientList[s][5];
                 var assign = data.clientList[s][6];
-                var budget = data.clientList[s][7];
-                var assigned = data.clientList[s][8];
-                var diff = data.clientList[s][9];
+                var budget = Math.ceil(data.clientList[s][7]);
+                var assigned = Math.ceil(data.clientList[s][8]);
+                var diff = Math.ceil(data.clientList[s][9]);
 
                 var row = data.clientList[s];
 
@@ -242,11 +242,10 @@ function getData() {
                 detailRowArray[5] = role;
                 detailRowArray[6] = assign;
                 detailRowArray[7] = budget;
-                detailRowArray[8] = assigned;
-                detailRowArray[9] = diff;
-                for (var w = 10; w < 62; w++) {
-                    detailRowArray[w] = row[w];
-                    //td.style.textAlign = "right";
+                detailRowArray[8] = assigned.toLocaleString();
+                detailRowArray[9] = diff.toLocaleString();
+                for (var w = 10; w < 62; w++) {     
+                    detailRowArray[w] = Math.ceil(row[w]);                    
                 }
                 detailArray.push(detailRowArray);
                 detailRowArray = new Array(62);
@@ -314,26 +313,25 @@ function getData() {
                         }
                         if (x == 7) {
                             //td.innerHTML = budget;
-                            td.style.backgroundColor = backgroundColor;
+                            //td.style.backgroundColor = backgroundColor;
+                            td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                             td.classList.add("column_row_block");
                             td.classList.add("col8");
                         }
                         if (x == 8) {
-                            //td.innerHTML = assigned;
-                            td.style.backgroundColor = backgroundColor;
+                           td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                             td.classList.add("column_row_block");
                             td.classList.add("col9");
                         }
                         if (x == 9) {
-                            //td.innerHTML = diff;
-                            td.style.backgroundColor = backgroundColor;
+                            td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                             td.classList.add("column_row_block");
                             td.classList.add("col10");
                         }
                         for (c = 0; c < daysArray.length; c++) {
                             if (x == c + 10) {
                                 if (daysArray[c] != 0) {
-                                    td.innerHTML = daysArray[c];
+                                    td.innerHTML = Math.ceil(daysArray[c]);
                                 }
                                 td.style.backgroundColor = backgroundColor;
                                 td.align = "right";
@@ -387,22 +385,22 @@ function getData() {
                                 xtd.classList.add("col6");
                             }
                             if (f == 6) {
-                                xtd.style.backgroundColor = "white";
+                                xtd.style.backgroundColor = "white";                                
                                 xtd.classList.add("column_row_block");
                                 xtd.classList.add("col7");
                             }
-                            if (f == 7) {
-                                xtd.style.backgroundColor = "white";
+                            if (f == 7) {                                
+                                xtd.style.cssText = "text-align:right; background-color: white";
                                 xtd.classList.add("column_row_block");
                                 xtd.classList.add("col8");
                             }
                             if (f == 8) {
-                                xtd.style.backgroundColor = "white";
+                                xtd.style.cssText = "text-align:right; background-color: white";
                                 xtd.classList.add("column_row_block");
                                 xtd.classList.add("col9");
                             }
                             if (f == 9) {
-                                xtd.style.backgroundColor = "white";
+                                xtd.style.cssText = "text-align:right; background-color: white";
                                 xtd.classList.add("column_row_block");
                                 xtd.classList.add("col10");
                             }
@@ -475,28 +473,31 @@ function getData() {
                     }
                     if (x == 7) {
                         //td.innerHTML = budget;
-                        td.style.backgroundColor = backgroundColor;
+                        //td.style.backgroundColor = backgroundColor;
+                        td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                         td.classList.add("column_row_block");
                         td.classList.add("col8");
                     }
                     if (x == 8) {
                         //td.innerHTML = assigned;
-                        td.style.backgroundColor = backgroundColor;
+                        //td.style.backgroundColor = backgroundColor;
+                        td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                         td.classList.add("column_row_block");
                         td.classList.add("col9");
                     }
                     if (x == 9) {
                         //td.innerHTML = diff;
-                        td.style.backgroundColor = backgroundColor;
+                        //td.style.backgroundColor = backgroundColor;
+                        td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                         td.classList.add("column_row_block");
                         td.classList.add("col10");
                     }
                     for (c = 0; c < daysArray.length; c++) {
                         if (x == c + 10) {
                             if (daysArray[c] != 0) {
-                                td.innerHTML = daysArray[c]
+                                td.innerHTML = Math.ceil(daysArray[c]);
                             }
-                            ;
+                            
                             td.style.backgroundColor = backgroundColor;
                             td.align = "right";
                         }
@@ -549,17 +550,20 @@ function getData() {
                             xtd.classList.add("col7");
                         }
                         if (f == 7) {
-                            xtd.style.backgroundColor = "white";
+                            //xtd.style.backgroundColor = "white";
+                            xtd.style.cssText = "text-align:right; background-color: white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col8");
                         }
                         if (f == 8) {
-                            xtd.style.backgroundColor = "white";
+                            //xtd.style.backgroundColor = "white";
+                            xtd.style.cssText = "text-align:right; background-color: white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col9");
                         }
                         if (f == 9) {
-                            xtd.style.backgroundColor = "white";
+                            //xtd.style.backgroundColor = "white";
+                            xtd.style.cssText = "text-align:right; background-color: white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col10");
                         }

@@ -1,4 +1,17 @@
+window.addEventListener("resize", function (event) {
+
+    document.getElementById("spreadsheet").style.cssText = "width: 100%;height:" + (window.innerHeight - 280) + "px";
+    document.body.style.zoom = "80%";
+});
+
+$(window).on('load', function () {
+    document.getElementById("spreadsheet").style.cssText = "width: 100%;height:" + (window.innerHeight - 280) + "px";
+    document.body.style.zoom = "80%";
+});
+
 $(document).ready(function () {
+    //alert(window.innerHeight + "filt:" + $("#client").height());
+
     var buttonWidth = "500px";
     $('#client').multiselect({
         buttonWidth: buttonWidth,
@@ -53,10 +66,10 @@ var maskStr = "#,##0.0";
 var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //data: data,
     //url: "/webform/test3/input",
-    minDimensions: [62, 1000],
+    minDimensions: [62, 500],
     tableOverflow: true,
-    lazyLoading: true,
-    pagenation: 10,
+    //lazyLoading: true,
+    //pagenation: 10,
     tableWidth: '100%',
     tableHeight: "100%",
     freezeColumns: 10,
@@ -90,10 +103,7 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
             //source:["Role1","Role2","Admin"]
         },
         {
-            type: "dropdown",
             title: 'Staff',
-            //filter: dropdownFilter,
-            source: ["DAT", "OCH", "MGO", "YOU", "DEK", "KOM"],
             width: '80',
         },
         {
@@ -444,34 +454,34 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
         }
     },
     updateTable: function (el, cell, x, y, source, value, id) {
-        /*
-         //１行目ReadOnly
-         for (var i = 0; i < 60; i++) {
-         if ((x == i) && y == 0) {
-         cell.classList.add('readonly');
-         }
-         }
-         
-         //Budget列ReadOnly
-         for (var j = 0; j < 10; j++) {
-         for (var i = 1; i < 100; i++) {
-         if ((x == j) && y == i) {
-         cell.classList.add('readonly');
-         }
-         }
-         }
-         
-         //Total行ReadOnly
-         if (myspreadsheet != undefined) {
-         var project = myspreadsheet.getValueFromCoords(1, y);
-         if (project.slice(-5) == "Total") {
-         for (var i = 0; i < 60; i++) {
-         if ((x == i) && y == y) {
-         cell.classList.add('readonly');
-         }
-         }
-         }
-         }*/
+
+        //１行目ReadOnly
+        for (var i = 0; i < 60; i++) {
+            if ((x == i) && y == 0) {
+                cell.classList.add('readonly');
+            }
+        }
+
+        //Budget列ReadOnly
+        for (var j = 0; j < 10; j++) {
+            for (var i = 1; i < 100; i++) {
+                if ((x == j) && y == i) {
+                    cell.classList.add('readonly');
+                }
+            }
+        }
+
+        //Total行ReadOnly
+        if (myspreadsheet != undefined) {
+            var project = myspreadsheet.getValueFromCoords(1, y);
+            if (project.slice(-5) == "Total") {
+                for (var i = 0; i < 60; i++) {
+                    if ((x == i) && y == y) {
+                        cell.classList.add('readonly');
+                    }
+                }
+            }
+        }
     }
 });
 
@@ -635,20 +645,32 @@ function testData() {
             //background color
             for (var cnt = 0; cnt < data.budget.length; cnt++) {
                 myspreadsheet.setStyle('A' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('A' + (cnt + 1), 'color', 'black');
                 myspreadsheet.setStyle('B' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('B' + (cnt + 1), 'color', 'black');
                 myspreadsheet.setStyle('C' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('C' + (cnt + 1), 'color', 'black');
                 myspreadsheet.setStyle('D' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('D' + (cnt + 1), 'color', 'black');
                 myspreadsheet.setStyle('E' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('E' + (cnt + 1), 'color', 'black');
                 myspreadsheet.setStyle('F' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('F' + (cnt + 1), 'color', 'black');
                 myspreadsheet.setStyle('G' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('G' + (cnt + 1), 'color', 'black');
                 myspreadsheet.setStyle('H' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('H' + (cnt + 1), 'color', 'black');
                 myspreadsheet.setStyle('I' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('I' + (cnt + 1), 'color', 'black');
                 myspreadsheet.setStyle('J' + (cnt + 1), 'background-color', '#f5f5f5');
+                myspreadsheet.setStyle('J' + (cnt + 1), 'color', 'black');
+
                 if (data.budget[cnt][1].slice(-5) == "Total" || cnt == 0) {
 
                     //Total行初期色
                     for (var x = 0; x < ar.length; x++) {
                         myspreadsheet.setStyle(ar[x] + (cnt + 1), 'background-color', defaultColor);
+                        //
                     }
 
                     //Phase背景色
@@ -659,7 +681,8 @@ function testData() {
                     //    myspreadsheet.setStyle('K' + (cnt + 1), 'background-color', 'aliceblue');
                     //    myspreadsheet.setStyle('L' + (cnt + 1), 'background-color', 'lavender');
                     // }
-                }
+                } 
+
             }
 
             //header
