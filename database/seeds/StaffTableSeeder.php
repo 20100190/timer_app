@@ -15,7 +15,7 @@ class StaffTableSeeder extends Seeder
         
         DB::table('staff')->truncate();
         
-        $file = new SplFileObject(base_path('database\seeds\csvs\staff.csv'));
+        $file = new SplFileObject(base_path('database/seeds/csvs/staff.csv'));
         $file->setFlags(
             \SplFileObject::READ_CSV |
             \SplFileObject::READ_AHEAD |

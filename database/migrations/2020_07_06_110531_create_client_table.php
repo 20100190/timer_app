@@ -23,7 +23,7 @@
 						$table->string('website',300)->nullable();
 						$table->string('address_us',300)->nullable();
 						$table->string('address_jp',300)->nullable();
-						$table->string('mailing_address',20)->nullable();
+						$table->string('mailing_address',100)->nullable();
 						$table->string('tel1',50)->nullable();
 						$table->string('tel2',50)->nullable();
 						$table->string('tel3',50)->nullable();						

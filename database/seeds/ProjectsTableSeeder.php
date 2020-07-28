@@ -15,7 +15,7 @@ class ProjectsTableSeeder extends Seeder
         
         DB::table('project')->truncate();
         
-        $file = new SplFileObject(base_path('database\seeds\csvs\project.csv'));
+        $file = new SplFileObject(base_path('database/seeds/csvs/project.csv'));
         $file->setFlags(
             \SplFileObject::READ_CSV |
             \SplFileObject::READ_AHEAD |
@@ -35,10 +35,10 @@ class ProjectsTableSeeder extends Seeder
                 "start" => $line[6],
                 "end" => $line[7],
                 "billable" => $line[8],
-                //"note" => $line[9],
-                //"engagement_fee_unit" => $line[10],
-                //"invoice_per_year" => $line[11],
-                //"adjustments" => $line[12]
+                "note" => $line[9],
+                "engagement_fee_unit" => $line[10],
+                "invoice_per_year" => $line[11],
+                "adjustments" => $line[12]
             ];
         }
 

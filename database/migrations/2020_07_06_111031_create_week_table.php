@@ -19,7 +19,7 @@
 						$table->integer('month');
 						$table->integer('week');
 						$table->integer('day');
-                                                $table->integer('no');
+                                                $table->integer('operating_time');
 						$table->timestamps();
 						$table->softDeletes();
 						//$table->foreign("id")->references("assign_id")->on("budget");

@@ -15,7 +15,7 @@
             {
                 Schema::create("project", function (Blueprint $table) {
 
-						$table->string('id',50);
+						$table->increments('id');
 						$table->integer('client_id')->nullable()->unsigned();
 						$table->string('project_type',100)->nullable();
 						$table->integer('project_year')->nullable();

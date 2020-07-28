@@ -19,7 +19,7 @@
 						$table->integer('year')->nullable();
 						$table->integer('month')->nullable();
 						$table->integer('day')->nullable(); //月曜日の日付
-						$table->integer('working_days')->nullable();
+						$table->double('working_days')->nullable();
 						$table->integer('ymd')->nullable();
 						$table->timestamps();
 						$table->softDeletes();

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class WeeksTableSeeder extends Seeder
+class AssignTableSeeder extends Seeder
 {
 
     /**
@@ -13,9 +13,9 @@ class WeeksTableSeeder extends Seeder
     public function run()
     {
         
-        DB::table('week')->truncate();
+        DB::table('assign')->truncate();
         
-        $file = new SplFileObject(base_path('database/seeds/csvs/week.csv'));
+        $file = new SplFileObject(base_path('database/seeds/csvs/assign.csv'));
         $file->setFlags(
             \SplFileObject::READ_CSV |
             \SplFileObject::READ_AHEAD |
@@ -26,14 +26,13 @@ class WeeksTableSeeder extends Seeder
         //$now = Carbon::now();
         foreach($file as $line) {
             $list[] = [
-                "year" => $line[0],
-                "month" => $line[1],
-                "week" => $line[2],
-                "day" => $line[3],
-                "operating_time" => $line[4]                
+                "id" => $line[0],
+                "project_id" => $line[1],
+                "staff_id" => $line[2],
+                "role" => $line[3]                                
             ];
         }
 
-        DB::table("week")->insert($list);
+        DB::table("assign")->insert($list);
     }
 }
