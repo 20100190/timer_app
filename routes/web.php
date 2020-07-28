@@ -25,10 +25,12 @@ Route::post('/test', 'BudgetController@submit');
 Route::get('/budget/show', 'BudgetController@indexShow');
 Route::post('/test2', 'BudgetController@submit2');
 
-Route::get('/test3', 'BudgetController@index3');
+Route::get('/master/project', 'ProjectController@index');
 Route::get('/budget/test3/save/{client}/{project}/{staff}/{year}/{month}/{day}/{value}', 'BudgetController@save');
 Route::get('/budget/test3/data/{client}/{project}/{fye}/{vic}/{pic}/{staff}/{role}/{from}/{to}', 'BudgetController@getDetailData');
 Route::get('/test3/role', 'BudgetController@storeRole');
 Route::get('/budget/test3/project/{id}', 'BudgetController@storeProject');
 Route::get('/budget/test3/input/{client}/{project}/{fye}/{vic}/{pic}/{staff}/{role}/{year}/{month}/{day}', 'BudgetController@storeInput');
 Route::get('/test3/input2/{client}', 'BudgetController@storeInput2');
+
+Route::get('/test3/getProjectInfo/{client}/{type}/{year}', 'ProjectController@getTaskProjectInfo');
