@@ -7,6 +7,7 @@
 
 $(document).ready(function () {
     $('.datepicker1').datepicker({
+        defaultViewDate: Date(),
         format: "mm/dd/yyyy",
         language: "en",
         autoclose: true,
@@ -14,6 +15,8 @@ $(document).ready(function () {
     });
 
     $('#task_body').sortable();
+    
+    
 
     $("#fye option:not(:selected)").prop('disabled', true);
 
@@ -26,11 +29,12 @@ $('#task_body').bind('sortstop', function () {
         $(this).html(idx + 1);
     });
 
+    //order_noにnoを代入
     var specific_tbody = document.getElementById("task_body");
     var bodyLength = specific_tbody.rows.length;
     for (cnt = 0; cnt < bodyLength; cnt++) {
-        //alert(specific_tbody.rows[cnt].cells[0].innerText + " " + specific_tbody.rows[cnt].cells[5].children[0].name);
-        specific_tbody.rows[cnt].cells[5].children[0].value = specific_tbody.rows[cnt].cells[0].innerText;
+        //alert(specific_tbody.rows[cnt].cells[0].innerText + " " + specific_tbody.rows[cnt].cells[3].children[0].name);
+        specific_tbody.rows[cnt].cells[3].children[0].value = specific_tbody.rows[cnt].cells[0].innerText;
     }
 
 });
@@ -62,23 +66,23 @@ function insertTaskRow(name, status, taskId) {
     var c2 = row.insertCell(1);
     //var c3 = row.insertCell(2);
     //var c4 = row.insertCell(3);
-    var c5 = row.insertCell(2);
-    var c6 = row.insertCell(3);
-    var c7 = row.insertCell(4);
+    var c3 = row.insertCell(2);
+    var c4 = row.insertCell(3);
+    var c5 = row.insertCell(4);
 
     // 各列にスタイルを設定
     c1.style.cssText = "text-align:center; ";
-    c6.style.cssText = "visibility: collapse";
-    c7.style.cssText = "visibility: collapse";
+    c4.style.cssText = "visibility: collapse";
+    c5.style.cssText = "visibility: collapse";
 
     // 各列に表示内容を設定
     c1.innerHTML = '<span class="seqno-task">' + count + '</span>';
     c2.innerHTML = '<input class="inpname form-control form-control-sm" type="text"   id="task_name' + count + '" name="task_name' + count + '" value="' + name + '" style="width: 100%">';
     //c3.innerHTML = '<input class="inpstatus form-check-input position-static" type="checkbox"   id="task_status' + count + '" name="task_status' + count + '" value="" style="width: 100%;margin-left: 1px"' + statusChecked + '>';
     //c4.innerHTML = '<input class="edtbtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRow(this)">';
-    c5.innerHTML = '<input class="delbtn btn btn-danger btn-sm" type="button" id="delBtn' + count + '" value="削除" onclick="deleteRow(this)">';
-    c6.innerHTML = '<input class="inporder" type="text" id="order' + count + '" name="order' + count + '" value="' + count + '" style="width: 0px">';
-    c7.innerHTML = '<input class="inptaskid" type="text" id="task_id' + count + '" name="task_id' + count + '" value="' + taskId + '" style="width: 0px">';
+    c3.innerHTML = '<input class="delbtn btn btn-danger btn-sm" type="button" id="delBtn' + count + '" value="削除" onclick="deleteRow(this)">';
+    c4.innerHTML = '<input class="inporder" type="text" id="order' + count + '" name="order' + count + '" value="' + count + '" style="width: 20px">';
+    c5.innerHTML = '<input class="inptaskid" type="text" id="task_id' + count + '" name="task_id' + count + '" value="' + taskId + '" style="width: 20px">';
 }
 
 function appendBudgetRow()
@@ -99,9 +103,8 @@ function appendBudgetRow()
     var c3 = row.insertCell(2);
     var c4 = row.insertCell(3);
     var c5 = row.insertCell(4);
-    var c6 = row.insertCell(5);
+    var c6 = row.insertCell(5);   
     var c7 = row.insertCell(6);
-    var c8 = row.insertCell(7);
 
     // 各列にスタイルを設定
     c2.style.cssText = "width: 150px";
@@ -121,7 +124,7 @@ function appendBudgetRow()
     c5.innerHTML = '<input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="0" style="text-align: right;width: 100%" readonly>';
     c6.innerHTML = '<input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 100%"  readonly>';
     //c7.innerHTML = '<input class="edtBudgetBtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRowBudgetList(this)">';
-    c8.innerHTML = '<input class="delBudgetBtn btn btn-danger btn-sm" type="button" id="delBtn' + count + '" value="削除" onclick="delRowBudgetList(this)">';
+    c7.innerHTML = '<input class="delBudgetBtn btn btn-danger btn-sm" type="button" id="delBtn' + count + '" value="削除" onclick="delRowBudgetList(this)">';
 
 }
 
@@ -340,9 +343,21 @@ function calc() {
     }
 
     document.getElementById("total_budget").innerHTML = total;
-    document.getElementById("engagement_total").innerHTML = (parseInt(document.getElementById("engagement_fee").value) * parseInt(document.getElementById("engagement_monthly").value)) + parseInt(document.getElementById("adjustments").value);
-    document.getElementById("defference").innerHTML = parseInt(document.getElementById("engagement_total").innerHTML) - total;
+    
+    var engTotal = (parseInt(document.getElementById("engagement_fee").value) * parseInt(document.getElementById("engagement_monthly").value)) + parseInt(document.getElementById("adjustments").value);
+    document.getElementById("engagement_total").innerHTML = 0;
+    if (!isNaN(engTotal)) {
+        document.getElementById("engagement_total").innerHTML = engTotal;//(parseInt(document.getElementById("engagement_fee").value) * parseInt(document.getElementById("engagement_monthly").value)) + parseInt(document.getElementById("adjustments").value);
+    }
+    
+    var defTotal = parseInt(document.getElementById("engagement_total").innerHTML) - total;
+    document.getElementById("defference").innerHTML = 0;
+    if (!isNaN(defTotal)) {
+        document.getElementById("defference").innerHTML = defTotal;//parseInt(document.getElementById("engagement_total").innerHTML) - total;
+    }
+    
     var realization = (new Decimal(parseInt(document.getElementById("engagement_total").innerHTML)).div(total).times(100).toFixed(1));
+    document.getElementById("realization").innerHTML = "0%";
     if (!isNaN(realization)) {
         document.getElementById("realization").innerHTML = realization + "%";
     }
@@ -384,11 +399,22 @@ function loadTask() {
             }
             document.getElementById("engagement_fee").value = data.project.engagement_fee_unit;
             document.getElementById("engagement_monthly").value = data.project.invoice_per_year;
-            document.getElementById("adjustments").value = data.project.adjustment;
+            document.getElementById("adjustments").value = data.project.adjustments;
             document.getElementById("billable").selectedIndex = data.project.billable;
             document.getElementById("note").value = data.project.note;
             document.getElementById("pic").selectedIndex = data.project.pic - 1;
         }
+        
+        if (document.getElementById("starts_on").value == "") {
+            var defaultDate = new Date();
+            document.getElementById("starts_on").value = ('00' + (defaultDate.getMonth() + 1)).slice(-2) + "/" + defaultDate.getDate() + "/" + defaultDate.getFullYear();
+        }
+        
+        if (document.getElementById("ends_on").value == "") {
+            var defaultDate = new Date();
+            document.getElementById("ends_on").value = ('00' + (defaultDate.getMonth() + 1)).slice(-2) + "/" + defaultDate.getDate() + "/" + defaultDate.getFullYear();
+        }
+        
 
         var fyeMonth = data.client.fye.split("/")["0"];
         document.getElementById("fye").selectedIndex = fyeMonth - 1;
@@ -440,7 +466,7 @@ function saveForm() {
     });
 
     $.ajax({
-        url: "/webform/test3",
+        url: "/master/project/test3",
         type: "POST",
         data: params,
         timeout: 10000,
@@ -501,7 +527,12 @@ function saveForm() {
 }
 
 function showToast() {
-    $('.toast').toast({animation: true, delay: 2000});
-    $('.toast').toast('show');
+    Swal.fire({
+        position: 'top',
+        icon: 'success',
+        title: '保存完了しました。',
+        showConfirmButton: false,
+        timer: 1500
+    });
 }
 

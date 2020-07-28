@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.main')
 <style type="text/css">
     #p2146-2-table {
         width: 100%;
@@ -87,7 +87,7 @@
 @section('content') 
 
 <!-- Message Toast -->
-<div class="position-absolute w-100 d-flex flex-column p-4" style="z-index: -1">
+<!--<div class="position-absolute w-100 d-flex flex-column p-4" style="z-index: -1">
     <div class="toast ml-auto" role="alert" data-delay="700" data-autohide="true" style="width: 400px;height: 100px">
         <div class="toast-header">
             <strong class="mr-auto text-primary">保存完了</strong>
@@ -98,11 +98,11 @@
         </div>
         <div class="toast-body">保存完了しました。</div>
     </div>        
-</div>
+</div>-->
 
 <form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter">
     <!--@csrf-->
-    <div style="float: left">        
+    <div style="float: left;">        
         <label>Client</label><br>
         <select id="client" name="client" class="form-control">
             <option value="blank"></option>
@@ -213,7 +213,8 @@
 
     <!--task-->
     <div style="float: left;margin-top: 20px;margin-right: 100px">
-        <span class="label label-default">Task</span>
+        <!--<span class="label label-default" style="font-size: 12px">Task</span>-->
+        <label style="font-size: 20">Task</label>
         <div>新しい行を追加：<input type="button" id="add" name="add" class="btn btn-primary btn-sm" value="追加" onclick="appendRow()"></div>
         <table border="0" id="tbl" style="font-size: 12px;table-layout: fixed;width: 330px" class="table table-sm">
             <thead>
@@ -230,7 +231,7 @@
     </div>
 
     <div style="float: left;margin-top: 20px">
-        <span class="label label-default">Project Budget</span>
+        <label style="font-size: 20">Project Budget</label>
         <div>新しい行を追加：<input type="button" id="add" name="add" value="追加" class="btn btn-primary btn-sm" onclick="appendBudgetRow()"></div>
         <table border="0" id="budget_list" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 700px">                
             <thead>

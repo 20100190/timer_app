@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('content') 
 
@@ -7,11 +7,11 @@
 
     <div id="filter_area">
         <div class="row" style="zoom: 100%">
-            <div class="col col-md-1">
+            <div class="col col-md-1" >
                 Client
             </div>
             <div class="col col-md-1">
-                <select id="client" name="client" multiple="multiple" class="form-control" data-display="static">                           
+                <select id="client" name="client" multiple="multiple" class="form-control select2" data-display="static">                           
                     @foreach ($client as $clients)
                     <option value="{{$clients->id}}">{{$clients->name}}</option>
                     @endforeach

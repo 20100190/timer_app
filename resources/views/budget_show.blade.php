@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
 <style type="text/css">
     .column1_block{
@@ -75,7 +75,7 @@
 
 @section('content')   
 
-<div style="margin-left: 50px">
+<div style="margin-left: 0px">
 
     <div style="overflow: hidden;height: 3%;margin-left: 20px;margin-right: 20px;text-align: right">       
         <button style="" onclick="closeOverrall()">閉じる</button>

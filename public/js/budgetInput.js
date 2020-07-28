@@ -1,17 +1,17 @@
 window.addEventListener("resize", function (event) {
 
     document.getElementById("spreadsheet").style.cssText = "width: 100%;height:" + (window.innerHeight - 280) + "px";
-    document.body.style.zoom = "80%";
+    //document.body.style.zoom = "80%";
 });
 
 $(window).on('load', function () {
     document.getElementById("spreadsheet").style.cssText = "width: 100%;height:" + (window.innerHeight - 280) + "px";
-    document.body.style.zoom = "80%";
+    //document.body.style.zoom = "80%";
 });
 
 $(document).ready(function () {
     //alert(window.innerHeight + "filt:" + $("#client").height());
-
+  
     var buttonWidth = "500px";
     $('#client').multiselect({
         buttonWidth: buttonWidth,

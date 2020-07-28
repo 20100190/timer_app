@@ -18,6 +18,7 @@
 						$table->increments('id')->unsigned();
 						$table->integer('project_id')->nullable()->unsigned();
 						$table->integer('task_id')->nullable()->unsigned();
+                                                $table->integer('order_no')->nullable();
 						$table->timestamps();
 						$table->softDeletes();
 						//$table->foreign("project_id")->references("id")->on("project");

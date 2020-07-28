@@ -26,6 +26,7 @@ Route::get('/budget/show', 'BudgetController@indexShow');
 Route::post('/test2', 'BudgetController@submit2');
 
 Route::get('/master/project', 'ProjectController@index');
+Route::post('/master/project/test3', 'ProjectController@saveProjectTaskBudget');
 Route::get('/budget/test3/save/{client}/{project}/{staff}/{year}/{month}/{day}/{value}', 'BudgetController@save');
 Route::get('/budget/test3/data/{client}/{project}/{fye}/{vic}/{pic}/{staff}/{role}/{from}/{to}', 'BudgetController@getDetailData');
 Route::get('/test3/role', 'BudgetController@storeRole');

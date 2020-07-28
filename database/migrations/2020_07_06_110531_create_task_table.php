@@ -16,9 +16,9 @@
                 Schema::create("task", function (Blueprint $table) {
 
 						$table->increments('id');
-						$table->string('project_type',5)->nullable();
-						$table->integer('name')->nullable();
-						$table->integer('is_standard')->nullable();
+						$table->string('project_type',50)->nullable();
+						$table->string('name',200)->nullable();
+						$table->string('is_standard',5)->nullable();
 						$table->timestamps();
 						$table->softDeletes();
 
