@@ -27,3 +27,6 @@
 27,BM,8.1 Consultation,TRUE
 28,BM,8.2 Billing/Invoicing,TRUE
 29,BM,9.1 Non-Billable,TRUE
+30,INDIV TAX ,Income Tax Return - Individual,TRUE
+31,INDIV TAX ,Consulting,TRUE
+32,INDIV TAX ,Billing/Invoicing,TRUE
