@@ -98,7 +98,7 @@ class BudgetController extends Controller
         array_push($res, $data);
       
         //project取得
-        $comments = Project::select("client.name as client", "project.project_name as project", "assign.role as role", "staff.initial as initial", "client.fye", "client.vic_status", "B.initial as pic")
+        $comments = Project::select("client.name as client", "project.project_name as project", "assign.role as role", "staff.initial as initial", "client.fye", "client.vic_status", "B.initial as pic","assign.budget_hour")
                 ->join("client", "project.client_id", "=", "client.id")
                 ->leftjoin("assign", "assign.project_id", "=", "project.id")
                 ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
@@ -318,7 +318,7 @@ class BudgetController extends Controller
                 $data1 = $this->initArray();
                 $data1[$colClient] = $xxx->client;
                 $data1[$colProject] = $xxx->project . " Total";
-                $data1[$colBudget] = "0";
+                $data1[$colBudget] = "=SUM(H" . ($index + 1) . ":H" . ($index + $detailRowCnt) . ")";
                 $data1[$colAssignedHours] = "=SUM(K" . $index . ":BJ" . $index . ")";
                 $data1[$colDiff] = "=I" . $index . "-H" . $index;
                 for ($i = $colWeek; $i < count($columnArray); $i++) {
@@ -345,7 +345,7 @@ class BudgetController extends Controller
                 $data1 = $this->initArray();
                 $data1[$colClient] = $xxx->client;
                 $data1[$colProject] = $xxx->project . " Total";
-                $data1[$colBudget] = "0";
+                $data1[$colBudget] = "=SUM(H" . ($index + 1) . ":H" . ($index + $detailRowCnt) . ")";
                 $data1[$colAssignedHours] = "=SUM(K" . $index . ":BJ" . $index . ")";
                 $data1[$colDiff] = "=I" . $index . "-H" . $index;
                 for ($i = $colWeek; $i < count($columnArray); $i++) {
@@ -372,7 +372,7 @@ class BudgetController extends Controller
             $data[$colPic] = $xxx->pic;
             $data[$colRole] = $xxx->role;
             $data[$colAssign] = $xxx->initial;
-            $data[$colBudget] = "0";
+            $data[$colBudget] = $xxx->budget_hour;
             $data[$colAssignedHours] = "=SUM(K" . $index . ":BJ" . $index . ")";
             $data[$colDiff] = "=I" . $index . "-H" . $index;
 
@@ -636,7 +636,7 @@ class BudgetController extends Controller
 
 
         //project取得
-        $comments = Project::select("client.name as client", "project.project_name as project", "assign.role as role", "staff.initial as initial", "client.fye", "client.vic_status", "B.initial as pic")
+        $comments = Project::select("client.name as client", "project.project_name as project", "assign.role as role", "staff.initial as initial", "client.fye", "client.vic_status", "B.initial as pic","assign.budget_hour")
                 ->leftjoin("client", "project.client_id", "=", "client.id")
                 ->leftjoin("assign", "assign.project_id", "=", "project.id")
                 ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
@@ -866,7 +866,7 @@ class BudgetController extends Controller
             $data[$colPic] = $xxx->pic;
             $data[$colRole] = $xxx->role;
             $data[$colAssign] = $xxx->initial;
-            $data[$colBudget] = 0;
+            $data[$colBudget] = $xxx->budget_hour;
             $data[$colAssignedHours] = 0;
             $data[$colDiff] = 0;
 

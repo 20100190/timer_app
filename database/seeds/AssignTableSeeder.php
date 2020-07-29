@@ -29,7 +29,8 @@ class AssignTableSeeder extends Seeder
                 "id" => $line[0],
                 "project_id" => $line[1],
                 "staff_id" => $line[2],
-                "role" => $line[3]                                
+                "role" => $line[3],
+                "budget_hour" => $line[4]    
             ];
         }
 
