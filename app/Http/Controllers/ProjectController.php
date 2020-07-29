@@ -42,11 +42,16 @@ class ProjectController extends Controller
                 ->leftJoin("task", "project task.task_id", "=", "task.id")
                 ->get();
        
+        //project Type
+        $projectTypeData = Task::select("project_type")
+                ->groupBy("project_type")
+                ->get();
 
         return view('master/project')
                         ->with("client", $clientData)
                         ->with("pic", $picData)
-                        ->with("task", $taskData);
+                        ->with("task", $taskData)
+                        ->with("projectType", $projectTypeData);
     }
     
     public function getTaskProjectInfo(Request $request) {
