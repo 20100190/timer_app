@@ -21,6 +21,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <script src="{{asset("node_modules/admin-lte/plugins/iCheck/icheck.min.js")}}"></script>-->
                         
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" type="text/css" />
+        <style type="text/css">
+            .multiselect.dropdown-toggle {
+                text-align: left;
+            }
+        </style>
         
         <!-- Theme style -->
         <link rel="stylesheet" href="{{asset("node_modules/admin-lte/dist/css/AdminLTE.min.css")}}">
@@ -35,6 +40,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <script src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
         <link rel="stylesheet" href="https://bossanova.uk/jsuites/v2/jsuites.css" type="text/css" />
         <link rel="stylesheet" href="https://bossanova.uk/jexcel/v4/jexcel.css" type="text/css" />
+        
+        <style type="text/css">
+            .jexcel_content::-webkit-scrollbar {
+                width: 20px;
+                height: 12px;
+            }
+        </style>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -54,6 +66,12 @@ var backgroundColorError = "#ff7f7f";
 
 
         <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+        
+        <!-- jQuery UI -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
         <!--moment.js-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" type="text/javascript"></script>
@@ -61,11 +79,7 @@ var backgroundColorError = "#ff7f7f";
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.ja.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
-        <!-- jQuery UI -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
         
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     </head>
     <!--
