@@ -1,0 +1,29 @@
+1,AUD,Audit,TRUE
+2,AUD,Consulting,TRUE
+3,AUD,Billing/Invoicing,TRUE
+4,REV,Review,TRUE
+5,REV,Consulting,TRUE
+6,REV,Billing/Invoicing,TRUE
+7,COMP,Compilation,TRUE
+8,COMP,Consulting,TRUE
+9,COMP,Billing/Invoicing,TRUE
+10,CORP TAX,Income Tax Return - Corporate,TRUE
+11,CORP TAX,Consulting,TRUE
+12,CORP TAX,Billing/Invoicing,TRUE
+13,TP,Transfer Pricing Study,TRUE
+14,TP,Consulting,TRUE
+15,TP,Billing/Invoicing,TRUE
+16,BM,1.1 Transaction - Bill,TRUE
+17,BM,1.2 Transaction - Sales,TRUE
+18,BM,2.1 Tax - Sales Tax,TRUE
+19,BM,2.2 Tax - Business Tax,TRUE
+20,BM,2.3 Tax - Property Tax,TRUE
+21,BM,3.1 Payroll,TRUE
+22,BM,3.2 Gross up,TRUE
+23,BM,4.1 Closing,TRUE
+24,BM,7.1 1099,TRUE
+25,BM,7.2 1042,TRUE
+26,BM,7.3 BEA,TRUE
+27,BM,8.1 Consultation,TRUE
+28,BM,8.2 Billing/Invoicing,TRUE
+29,BM,9.1 Non-Billable,TRUE
