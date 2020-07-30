@@ -9,7 +9,7 @@ $(document).ready(function () {
         div2.scrollLeft(div1.scrollLeft())
     });
 
-    var buttonWidth = "500px";
+    var buttonWidth = "400px";
     $('#client').multiselect({
         buttonWidth: buttonWidth,
         maxHeight: "500",
@@ -158,24 +158,40 @@ function getData() {
             }
 
             //overall detail 初期化
-            for (var a = 1; a <= 14; a++) {
+            /*for (var a = 1; a <= 20; a++) {
                 document.getElementById("ot_initial" + a).innerHTML = "";
                 document.getElementById("ot_ptotal" + a).innerHTML = "";
                 for (var b = 1; b <= 52; b++) {
                     document.getElementById("ot" + a + b).innerHTML = "";
                 }
+            }*/
+            for (var a = 1; a <= 20; a++) {
+                document.getElementById("ot_initial" + a).innerHTML = "";
+                document.getElementById("ot_ptotal" + a).innerHTML = "";
+                for (var b = 1; b <= 52; b++) {
+                    document.getElementById("ot" + ("00" + a).slice(-2) + b).innerHTML = "";
+                }
+            }
+            
+            //overall total 初期化
+            for (var c = 1; c <= 52; c++) {
+                document.getElementById("otTotal" + c).innerHTML = "";
             }
 
             //overall detail
             for (var s = 0; s < data.total.length; s++) {
-                if (data.total[s].staff_id !== null) {
-                    var colNo = getOverallTotalColNo(data.total[s].year, data.total[s].month, data.total[s].day, data.week);
+                if (data.total[s].staff_id !== null) {                                      
+                    var colNo = getOverallTotalColNo(data.total[s].year, data.total[s].month, data.total[s].day, data.week);                                        
                     var operatingTime = data.week[colNo - 1].operating_time;
-                    document.getElementById("ot" + data.total[s].staff_id + colNo).style = "background-color: white";
-                    if (operatingTime <= data.total[s].working_days) {
-                        document.getElementById("ot" + data.total[s].staff_id + colNo).style = "display:inline-block;height: 100%;width: 100%;background-color: #FFDBC9";
+                    var staffId = ("00" + data.total[s].staff_id).slice(-2);
+                    //document.getElementById("ot" + data.total[s].staff_id + colNo).style = "background-color: white";
+                    document.getElementById("ot" + staffId + colNo).style = "background-color: white";
+                    if (operatingTime < data.total[s].working_days) {
+                        //document.getElementById("ot" + data.total[s].staff_id + colNo).style = "display:inline-block;height: 100%;width: 100%;background-color: #FFDBC9";
+                        document.getElementById("ot" + staffId + colNo).style = "display:inline-block;height: 100%;width: 100%;background-color: #FFDBC9";
                     }
-                    document.getElementById("ot" + data.total[s].staff_id + colNo).innerHTML = Math.ceil(data.total[s].working_days);
+                    //document.getElementById("ot" + data.total[s].staff_id + colNo).innerHTML = Math.ceil(data.total[s].working_days);
+                    document.getElementById("ot" + staffId + colNo).innerHTML = Math.ceil(data.total[s].working_days);
                     document.getElementById("ot_initial" + data.total[s].staff_id).innerHTML = data.total[s].initial;
                 }
             }
@@ -183,7 +199,7 @@ function getData() {
             //overall personal total
             for (var s = 0; s < data.overallPTotal.length; s++) {
                 if (data.overallPTotal[s].staff_id !== null) {
-                    document.getElementById("ot_ptotal" + data.overallPTotal[s].staff_id).innerHTML = data.overallPTotal[s].working_days;
+                    document.getElementById("ot_ptotal" + data.overallPTotal[s].staff_id).innerHTML = Number(data.overallPTotal[s].working_days).toLocaleString();
                 }
             }
 

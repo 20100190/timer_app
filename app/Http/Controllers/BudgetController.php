@@ -31,10 +31,10 @@ class BudgetController extends Controller
                         ->groupBy('project_name')
                         ->orderBy('project_name', 'asc')->get();
         //staff
-        $staffData = Staff::get();
+        $staffData = Staff::where([['status', '=', "Active"]])->get();
         //pic
-        $picData = Staff::get();
-       
+        $picData = Staff::where([['status', '=', "Active"]])->get();
+         
         return view('budget_input')
                         ->with("client", $clientData)
                         ->with("project", $projectData)
@@ -51,9 +51,9 @@ class BudgetController extends Controller
                         ->groupBy('project_name')
                         ->orderBy('project_name', 'asc')->get();
         //staff
-        $staffData = Staff::get();
+        $staffData = Staff::where([['status', '=', "Active"]])->get();
         //pic
-        $picData = Staff::get();
+        $picData = Staff::where([['status', '=', "Active"]])->get();
         
         return view('budget_show')
                 ->with("client", $clientData)
@@ -120,45 +120,45 @@ class BudgetController extends Controller
             $fyeFilter = [];
             for ($i = 0; $i < count($fyeArray); $i++) {
                 if ($fyeArray[$i] == 1) {
-                    array_push($fyeFilter, "01/31");
+                    array_push($fyeFilter, "01");
                 }
                 if ($fyeArray[$i] == 2) {
-                    array_push($fyeFilter, "02/28");
+                    array_push($fyeFilter, "02");
                 }
                 if ($fyeArray[$i] == 3) {
-                    array_push($fyeFilter, "03/31");
+                    array_push($fyeFilter, "03");
                 }
                 if ($fyeArray[$i] == 4) {
-                    array_push($fyeFilter, "04/30");
+                    array_push($fyeFilter, "04");
                 }
                 if ($fyeArray[$i] == 5) {
-                    array_push($fyeFilter, "05/31");
+                    array_push($fyeFilter, "05");
                 }
                 if ($fyeArray[$i] == 6) {
-                    array_push($fyeFilter, "06/30");
+                    array_push($fyeFilter, "06");
                 }
                 if ($fyeArray[$i] == 7) {
-                    array_push($fyeFilter, "07/31");
+                    array_push($fyeFilter, "07");
                 }
                 if ($fyeArray[$i] == 8) {
-                    array_push($fyeFilter, "08/31");
+                    array_push($fyeFilter, "08");
                 }
                 if ($fyeArray[$i] == 9) {
-                    array_push($fyeFilter, "09/30");
+                    array_push($fyeFilter, "09");
                 }
                 if ($fyeArray[$i] == 10) {
-                    array_push($fyeFilter, "10/31");
+                    array_push($fyeFilter, "10");
                 }
                 if ($fyeArray[$i] == 11) {
-                    array_push($fyeFilter, "11/30");
+                    array_push($fyeFilter, "11");
                 }
                 if ($fyeArray[$i] == 12) {
-                    array_push($fyeFilter, "12/31");
+                    array_push($fyeFilter, "12");
                 }
             }
 
             $comments = $comments
-                    ->wherein('client.fye', $fyeFilter);
+                    ->wherein(DB::raw('Substring(client.fye,1,2)'), $fyeFilter);
         }
 
         if ($request->vic != "blank") {
@@ -659,45 +659,45 @@ class BudgetController extends Controller
             $fyeFilter = [];
             for ($i = 0; $i < count($fyeArray); $i++) {
                 if ($fyeArray[$i] == 1) {
-                    array_push($fyeFilter, "1/31");
+                    array_push($fyeFilter, "01");
                 }
                 if ($fyeArray[$i] == 2) {
-                    array_push($fyeFilter, "2/28");
+                    array_push($fyeFilter, "02");
                 }
                 if ($fyeArray[$i] == 3) {
-                    array_push($fyeFilter, "3/31");
+                    array_push($fyeFilter, "03");
                 }
                 if ($fyeArray[$i] == 4) {
-                    array_push($fyeFilter, "4/30");
+                    array_push($fyeFilter, "04");
                 }
                 if ($fyeArray[$i] == 5) {
-                    array_push($fyeFilter, "5/31");
+                    array_push($fyeFilter, "05");
                 }
                 if ($fyeArray[$i] == 6) {
-                    array_push($fyeFilter, "6/30");
+                    array_push($fyeFilter, "06");
                 }
                 if ($fyeArray[$i] == 7) {
-                    array_push($fyeFilter, "7/31");
+                    array_push($fyeFilter, "07");
                 }
                 if ($fyeArray[$i] == 8) {
-                    array_push($fyeFilter, "8/31");
+                    array_push($fyeFilter, "08");
                 }
                 if ($fyeArray[$i] == 9) {
-                    array_push($fyeFilter, "9/30");
+                    array_push($fyeFilter, "09");
                 }
                 if ($fyeArray[$i] == 10) {
-                    array_push($fyeFilter, "10/31");
+                    array_push($fyeFilter, "10");
                 }
                 if ($fyeArray[$i] == 11) {
-                    array_push($fyeFilter, "11/30");
+                    array_push($fyeFilter, "11");
                 }
                 if ($fyeArray[$i] == 12) {
-                    array_push($fyeFilter, "12/31");
+                    array_push($fyeFilter, "12");
                 }
             }
 
             $comments = $comments
-                    ->wherein('client.fye', $fyeFilter);
+                    ->wherein(DB::raw('Substring(client.fye,1,2)'), $fyeFilter);
         }
 
         if ($request->vic != "blank") {
@@ -925,45 +925,45 @@ class BudgetController extends Controller
             $fyeFilter = [];
             for ($i = 0; $i < count($fyeArray); $i++) {
                 if ($fyeArray[$i] == 1) {
-                    array_push($fyeFilter, "1/31");
+                    array_push($fyeFilter, "01");
                 }
                 if ($fyeArray[$i] == 2) {
-                    array_push($fyeFilter, "2/28");
+                    array_push($fyeFilter, "02");
                 }
                 if ($fyeArray[$i] == 3) {
-                    array_push($fyeFilter, "3/31");
+                    array_push($fyeFilter, "03");
                 }
                 if ($fyeArray[$i] == 4) {
-                    array_push($fyeFilter, "4/30");
+                    array_push($fyeFilter, "04");
                 }
                 if ($fyeArray[$i] == 5) {
-                    array_push($fyeFilter, "5/31");
+                    array_push($fyeFilter, "05");
                 }
                 if ($fyeArray[$i] == 6) {
-                    array_push($fyeFilter, "6/30");
+                    array_push($fyeFilter, "06");
                 }
                 if ($fyeArray[$i] == 7) {
-                    array_push($fyeFilter, "7/31");
+                    array_push($fyeFilter, "07");
                 }
                 if ($fyeArray[$i] == 8) {
-                    array_push($fyeFilter, "8/31");
+                    array_push($fyeFilter, "08");
                 }
                 if ($fyeArray[$i] == 9) {
-                    array_push($fyeFilter, "9/30");
+                    array_push($fyeFilter, "09");
                 }
                 if ($fyeArray[$i] == 10) {
-                    array_push($fyeFilter, "10/31");
+                    array_push($fyeFilter, "10");
                 }
                 if ($fyeArray[$i] == 11) {
-                    array_push($fyeFilter, "11/30");
+                    array_push($fyeFilter, "11");
                 }
                 if ($fyeArray[$i] == 12) {
-                    array_push($fyeFilter, "12/31");
+                    array_push($fyeFilter, "12");
                 }
             }
 
             $overallDetail = $overallDetail
-                    ->wherein('client.fye', $fyeFilter);
+                    ->wherein(DB::raw('Substring(client.fye,1,2)'), $fyeFilter);
         }
 
         if ($request->vic != "blank") {

@@ -24,6 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <style type="text/css">
             .multiselect.dropdown-toggle {
                 text-align: left;
+                height: 30px;
             }
         </style>
         
@@ -80,7 +81,6 @@ var backgroundColorError = "#ff7f7f";
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.ja.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
         
-
     </head>
     <!--
     BODY TAG OPTIONS:
