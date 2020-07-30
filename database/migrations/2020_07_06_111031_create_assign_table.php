@@ -15,7 +15,7 @@
             {
                 Schema::create("assign", function (Blueprint $table) {
 
-						$table->integer('id')->nullable()->unsigned();
+						$table->increments('id');
 						$table->integer('project_id')->unsigned();
 						$table->string('staff_id',10)->nullable();
 						$table->string('role',20)->nullable();
