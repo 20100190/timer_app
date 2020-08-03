@@ -888,10 +888,11 @@ class BudgetController extends Controller
         
         //対象のAssign取得
         $targetAssignIdList = $this->getOverallDetailQuery($request, $startDate, $endDate)
-                ->select("assign_id")
+                ->select("assign_id","client.name")
                 ->where("working_days","<>","0")
                 ->orderBy("client.name")
-                ->groupBy("assign_id")                
+                ->groupBy("assign_id")
+                ->groupBy("client.name")
                 ->get();
         
         $targetAssignId = "";
