@@ -542,7 +542,7 @@
                         <td class="column_row_block col6" style="background-color: white;"></td>
                         <td class="column_row_block col7" style="background-color: white;"></td>
                         <td class="column_row_block col8" style="background-color: white;border-top:thin solid black"></td>
-                        <td class="column_row_block col9" style="background-color: white;border-top:thin solid black">Total</td>
+                        <td class="column_row_block col9" style="background-color: white;border-top:thin solid black;text-align: right"><span id="otAll">0</span></td>
                         <td class="column_row_block col10" style="background-color: white;text-align: right;border-top:thin solid black"></td>
                         @for($i=1;$i<=52;$i++)
                         <td class="column_row_block col11" style="background-color: white;text-align: right;border-top:thin solid black"><span id="otTotal{{$i}}"></td>

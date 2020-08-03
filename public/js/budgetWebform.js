@@ -208,7 +208,13 @@ function getData() {
                 var colNo = getOverallTotalColNo(data.overallTotal[s].year, data.overallTotal[s].month, data.overallTotal[s].day, data.week);
                 document.getElementById("otTotal" + colNo).innerHTML = Math.ceil(data.overallTotal[s].working_days);
             }
-
+            
+            //overall total week
+            document.getElementById("otAll").innerHTML = "0";
+            if (data.overallWeekTotal[0].working_days !== null) {
+                document.getElementById("otAll").innerHTML =  Number(data.overallWeekTotal[0].working_days).toLocaleString();
+            }
+            
             //client list
             var table = document.getElementById("budget_list");
             var oldClient = "";
