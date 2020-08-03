@@ -11,9 +11,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         
-        <link rel="stylesheet" href="{{asset("node_modules/bootstrap/dist/css/bootstrap.min.css")}}">
+        <!--<link rel="stylesheet" href="{{asset("node_modules/bootstrap/dist/css/bootstrap.min.css")}}">-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" type="text/css" />
+        
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="{{asset("node_modules/font-awesome/css/font-awesome.min.css")}}">
+        <!--<link rel="stylesheet" href="{{asset("node_modules/font-awesome/css/font-awesome.min.css")}}">-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- Ionicons -->
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <!-- iCheck for checkboxes and radio inputs -->
@@ -29,13 +32,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </style>
         
         <!-- Theme style -->
-        <link rel="stylesheet" href="{{asset("node_modules/admin-lte/dist/css/AdminLTE.min.css")}}">
+        <link rel="stylesheet" href="{{asset("admin-lte/dist/css/AdminLTE.min.css")}}">
+        
+        <style type="text/css">
+            .sidebar-mini.sidebar-collapse .main-header .navbar {
+                margin-left: 0px;
+            }            
+            .sidebar-mini.sidebar-collapse .main-sidebar {       
+                width: 0px !important;
+            }
+            .sidebar-mini.sidebar-collapse .main-footer {
+                margin-left: 0px !important;              
+            }
+        </style>
         
         <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
               page. However, you can choose any other skin. Make sure you
               apply the skin class to the body tag so the changes take effect. -->
-        <link rel="stylesheet" href="{{asset("node_modules/admin-lte/dist/css/skins/skin-blue.min.css")}}">
-        <link rel="stylesheet" href="{{asset("node_modules/admin-lte/dist/css/skins/skin-green.min.css")}}">
+        <link rel="stylesheet" href="{{asset("admin-lte/dist/css/skins/skin-blue.min.css")}}">
+        <link rel="stylesheet" href="{{asset("admin-lte/dist/css/skins/skin-green.min.css")}}">
 
         <script src="https://bossanova.uk/jexcel/v4/jexcel.js"></script>
         <script src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
@@ -61,8 +76,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
         <script type="text/javascript">
-var backgroundColorError = "#ff7f7f";
-
+            var backgroundColorError = "#ff7f7f";
         </script>
 
 
@@ -114,14 +128,14 @@ var backgroundColorError = "#ff7f7f";
                         <span class="sr-only">Toggle navigation</span>
                     </a>
                     <ul class="nav navbar-nav">
-                        <li><a href="{{asset("budget/enter")}}">予算入力</a></li>
-                        <li><a href="{{asset("budget/show")}}">予算照会</a></li>                        
-                        <!-- doropdown -->
-                        <!--<li class="dropdown">
-                            <a href="" class="dropdown-toggle" data-toggle="dropdown">その他<span class="caret"></span></a>
+                        <li><a style="font-size: 20px;width: 200px" href="">Budget Webform</a></li>
+                        <li @if(Request::decodedPath() == "budget/enter") class="active" @endif><a href="{{asset("budget/enter")}}">Entry</a></li>
+                        <li @if(Request::decodedPath() == "budget/show") class="active" @endif><a href="{{asset("budget/show")}}">Report</a></li>                        
+                        <!--<li @if(substr(Request::decodedPath(),0,6) == "master") class="dropdown active" @else class="dropdown" @endif>
+                            <a href="" data-toggle="dropdown" class="dropdown-toggle">Master<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="">その他１</a></li>
-                                <li><a href="">その他２</a></li>
+                                <li @if(Request::decodedPath() == "master/project") class="active" @endif><a href="{{asset("master/project")}}">Project</a></li>                                
+                                <li><a href="xxx">Client</a></li>                                
                             </ul>
                         </li>-->
                     </ul>
@@ -184,8 +198,8 @@ var backgroundColorError = "#ff7f7f";
         </div><!-- end wrapper -->
 
         <!-- AdminLTE App -->
-        <script src="{{asset("node_modules/admin-lte/dist/js/adminlte.min.js")}}"></script>
-        <script src="{{asset("node_modules/bootstrap/dist/js/bootstrap.min.js")}}"></script>
+        <script src="{{asset("admin-lte/dist/js/adminlte.min.js")}}"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <!--decimal.js-->
         <script type="text/javascript" src="{{ asset('js/decimal.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
