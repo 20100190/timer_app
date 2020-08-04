@@ -1,223 +1,696 @@
-1,172,1,Partner
-2,172,7,Sr.
-3,172,12,Stf.
-4,186,7,Sr.
-5,186,3,Manager
-6,1,1,Partner
-7,1,7,Sr.
-8,1,8,Sr.
-9,1,11,Stf.
-10,1,0,Stf.
-11,1,0,Manager
-12,1,10,Stf.
-13,142,1,Partner
-14,142,7,Sr.
-15,142,8,Sr.
-16,143,0,Stf.
-17,143,12,Stf.
-18,143,9,Exp. Stf
-19,143,10,Stf.
-20,143,0,Stf.
-21,143,6,Sr.
-22,143,1,Partner
-23,143,7,Sr.
-24,144,1,Partner
-25,144,0,Stf.
-26,144,7,Sr.
-27,144,8,Sr.
-28,144,6,Sr.
-29,144,3,Manager
-30,144,9,Exp. Stf
-31,145,1,Partner
-32,145,7,Sr.
-33,145,9,Exp. Stf
-34,146,7,Sr.
-35,146,6,Sr.
-36,147,1,Partner
-37,147,7,Sr.
-38,147,2,Partner
-39,147,8,Sr.
-40,148,0,Stf.
-41,148,9,Exp. Stf
-42,148,7,Sr.
-43,148,8,Sr.
-44,149,1,Partner
-45,149,7,Sr.
-46,150,7,Sr.
-47,151,1,Partner
-48,151,7,Sr.
-49,151,8,Sr.
-50,155,1,Partner
-51,155,0,Stf.
-52,155,11,Stf.
-53,155,7,Sr.
-54,155,8,Sr.
-55,156,11,Stf.
-56,156,7,Sr.
-57,156,8,Sr.
-58,157,1,Partner
-59,157,0,Stf.
-60,157,9,Exp. Stf
-61,157,7,Sr.
-62,159,1,Partner
-63,159,12,Stf.
-64,159,9,Exp. Stf
-65,159,7,Sr.
-66,159,2,Partner
-67,161,1,Partner
-68,161,2,Partner
-69,161,7,Sr.
-70,161,0,Stf.
-71,161,8,Sr.
-72,162,9,Exp. Stf
-73,162,1,Partner
-74,162,6,Sr.
-75,162,3,Manager
-76,162,7,Sr.
-77,167,1,Partner
-78,167,12,Stf.
-79,167,7,Sr.
-80,167,0,Stf.
-81,167,9,Exp. Stf
-82,167,0,Stf.
-83,167,0,Sr.
-84,168,1,Partner
-85,168,0,Stf.
-86,168,9,Exp. Stf
-87,168,7,Sr.
-88,173,1,Partner
-89,173,12,Stf.
-90,173,7,Sr.
-91,177,7,Sr.
-92,178,1,Partner
-93,178,7,Sr.
-94,178,8,Sr.
-95,178,0,Stf.
-96,179,7,Sr.
-97,179,12,Stf.
-98,180,1,Partner
-99,180,7,Sr.
-100,180,11,Stf.
-101,180,0,Stf.
-102,186,0,Stf.
-103,186,9,Exp. Stf
-104,186,3,Manager
-105,186,12,Stf.
-106,186,7,Sr.
-107,186,1,Partner
-108,194,6,Sr.
-109,194,0,Stf.
-110,194,9,Exp. Stf
-111,194,1,Partner
-112,194,0,Stf.
-113,194,7,Sr.
-114,195,1,Partner
-115,195,0,Manager
-116,195,0,Stf.
-117,195,9,Exp. Stf
-118,195,7,Sr.
-119,195,8,Sr.
-120,196,1,Partner
-121,196,0,Stf.
-122,196,11,Stf.
-123,196,7,Sr.
-124,196,14,Stf.
-125,196,13,Exp. Stf.
-126,196,8,Sr.
-127,198,1,Partner
-128,198,11,Stf.
-129,198,7,Sr.
-130,198,14,Stf.
-131,198,13,Exp. Stf.
-132,198,8,Sr.
-133,163,1,Partner
-134,163,0,Stf.
-135,163,9,Exp. Stf
-136,163,3,Manager
-137,163,2,Partner
-138,163,7,Sr.
-139,152,12,Stf.
-140,152,13,Exp. Stf.
-141,152,11,Stf.
-142,152,0,Sr.
-143,152,7,Sr.
-144,158,12,Stf.
-145,158,0,Stf.
-146,158,10,
-147,158,0,
-148,158,0,0
-149,158,13,Exp. Stf.
-150,158,11,Stf.
-151,158,0,Sr.
-152,158,7,Sr.
-153,164,12,Stf.
-154,164,0,
-155,164,0,
-156,164,0,0
-157,164,13,Exp. Stf.
-158,164,11,Stf.
-159,164,0,Sr.
-160,164,7,Sr.
-161,165,12,
-162,165,0,0
-163,165,13,Exp. Stf.
-164,165,0,Sr.
-165,165,7,Sr.
-166,169,12,
-167,169,5,0
-168,169,13,Exp. Stf.
-169,169,0,Sr.
-170,169,7,Sr.
-171,170,1,Partner
-172,170,0,Stf.
-173,170,12,Stf.
-174,170,14,Stf.
-175,170,10,Stf.
-176,170,0,Stf.
-177,170,0,Stf.
-178,170,0,Sr.
-179,170,7,Sr.
-180,174,12,Stf.
-181,174,13,Exp. Stf.
-182,174,0,Sr.
-183,174,7,Sr.
-184,181,11,Stf.
-185,181,0,Manager
-186,181,0,Stf.
-187,181,7,Sr.
-188,181,0,Stf.
-189,181,0,Sr.
-190,181,7,Sr.
-191,182,9,Exp. Stf
-192,182,11,Stf.
-193,182,0,Sr.
-194,182,7,Sr.
-195,183,1,Partner
-196,183,0,Stf.
-197,183,0,Stf.
-198,183,4,Manager
-199,183,12,Stf.
-200,183,13,Exp. Stf.
-201,183,11,Stf.
-202,183,0,Sr.
-203,183,7,Sr.
-204,187,5,0
-205,187,0,Stf.
-206,187,10,Stf.
-207,187,0,Stf.
-208,187,13,Exp. Stf.
-209,187,12,Stf.
-210,187,0,Sr.
-211,187,7,Sr.
-212,188,0,Stf.
-213,188,12,Stf.
-214,188,13,Exp. Stf.
-215,188,11,
-216,188,0,0
-217,188,0,Sr.
-218,188,7,Sr.
-219,189,11,Stf.
-220,191,12,Stf.
-221,191,11,Stf.
-222,191,0,Sr.
-223,191,7,
+2,77,1,Partner,17.6
+3,77,20,Manager,0
+4,77,3,Manager,154.1
+5,77,4,Manager,109.05
+6,77,6,Senior,23.55
+7,77,9,Experienced Staff,83.27
+8,77,10,Staff,92.56
+9,77,16,Staff,0
+10,77,12,Staff,0
+11,77,17,Staff,0
+26,64,1,Partner,9
+27,64,2,Partner,2
+28,64,20,Manager,0
+29,64,3,Manager,81.1
+30,64,8,Senior,70
+31,64,9,Experienced Staff,38
+32,64,7,Senior,0
+33,64,17,Staff,0
+34,64,10,Staff,86
+35,63,1,Partner,5
+36,63,20,Manager,0
+37,63,3,Manager,34
+38,63,8,Senior,0
+39,63,9,Experienced Staff,68.5
+40,63,10,Staff,0
+41,63,17,Staff,0
+42,63,16,Staff,0
+43,70,1,Partner,25.2
+44,70,3,Manager,246.75
+45,70,4,Manager,157.52
+46,70,10,Staff,31.75
+47,70,9,Experienced Staff,77.66
+48,70,8,Senior,172.99
+49,70,17,Staff,0
+50,70,11,Staff,49
+53,105,1,Partner,6.67
+54,105,2,Partner,0
+55,105,3,Manager,63.05
+56,105,7,Senior,11.87
+57,105,9,Experienced Staff,62.95
+58,105,11,Staff,0.92
+59,105,17,Staff,0
+60,203,1,Partner,12.43
+61,203,10,Staff,64.88
+62,203,9,Experienced Staff,15.66
+63,203,7,Senior,9.72
+64,203,2,Partner,4
+65,203,20,Manager,0
+66,203,17,Staff,0
+67,203,4,Manager,87.97
+68,206,1,Partner,27.04
+69,206,6,Senior,0.25
+70,206,16,Staff,3.52
+71,206,10,Staff,96.42
+72,206,9,Experienced Staff,2.94
+73,206,3,Manager,0.2
+74,206,18,Staff,0
+75,206,17,Staff,4
+76,206,7,Senior,0
+77,206,20,Manager,0
+78,206,4,Manager,77.64
+85,73,1,Partner,2.3
+86,73,3,Manager,36.8
+87,73,8,Senior,44.71
+88,81,8,Senior,6.71
+89,67,8,Senior,4.81
+90,58,1,Partner,22.52
+91,58,10,Staff,4
+92,58,20,Manager,0
+93,58,17,Staff,0
+94,58,6,Senior,61.6
+95,58,3,Manager,2.5
+96,56,6,Senior,41.79
+97,56,20,Manager,0
+98,56,17,Staff,0
+99,56,1,Partner,10
+100,56,10,Staff,14
+101,88,1,Partner,0
+102,88,2,Partner,1.5
+103,88,20,Manager,0
+104,88,3,Manager,20.8
+105,88,9,Experienced Staff,43.27
+113,95,1,Partner,2
+114,95,20,Manager,0
+115,95,3,Manager,19.7
+116,95,6,Senior,0
+117,95,9,Experienced Staff,39.47
+118,112,1,Partner,5
+119,112,3,Manager,16.6
+120,112,6,Senior,29
+121,201,1,Partner,2.48
+122,201,12,Staff,12.32
+123,201,4,Manager,8.19
+134,29,6,Senior,16.44
+135,29,9,Experienced Staff,0.35
+136,29,3,Manager,0.35
+137,29,17,Staff,0.35
+138,29,2,Partner,2
+139,29,19,Senior,7.73
+140,30,6,Senior,13.76
+141,30,11,Staff,20
+142,30,19,Senior,0
+143,30,17,Staff,5.76
+144,30,16,Staff,0.42
+145,32,6,Senior,9.51
+146,32,16,Staff,0
+147,32,9,Experienced Staff,0
+148,32,1,Partner,0
+149,32,20,Manager,0
+150,32,12,Staff,15.3
+151,34,6,Senior,1.38
+152,34,11,Staff,4
+153,36,6,Senior,10.91
+154,36,10,Staff,26.9
+155,37,6,Senior,9.47
+156,37,14,Staff,3
+157,37,17,Staff,0
+158,37,10,Staff,0.33
+159,39,6,Senior,50.76
+160,39,1,Partner,0
+161,39,20,Manager,0
+162,39,4,Manager,0
+163,39,17,Staff,0
+164,39,16,Staff,0.4
+165,39,10,Staff,136.4
+166,40,6,Senior,5.5
+167,40,20,Manager,0
+168,40,9,Experienced Staff,0
+169,40,5,Manager,0
+170,40,1,Partner,1
+171,40,16,Staff,0
+172,40,14,Staff,3
+173,40,10,Staff,1.08
+174,41,6,Senior,10.4
+175,41,16,Staff,0
+176,41,20,Manager,0
+177,41,17,Staff,0
+178,41,10,Staff,4
+179,41,3,Manager,0.3
+189,42,1,Partner,0.2
+190,42,6,Senior,2.08
+191,42,11,Staff,5.31
+192,43,6,Senior,22.51
+200,44,1,Partner,2.22
+201,44,11,Staff,23
+202,44,16,Staff,0
+203,44,17,Staff,0
+204,44,6,Senior,13.15
+205,45,6,Senior,2.1
+206,46,16,Staff,0.22
+207,46,1,Partner,0
+208,46,6,Senior,0
+209,46,20,Manager,0
+210,46,9,Experienced Staff,0
+211,46,12,Staff,1.91
+212,46,2,Partner,0.25
+213,49,1,Partner,1
+214,49,6,Senior,12.3
+215,49,16,Staff,0
+216,49,9,Experienced Staff,0
+217,49,3,Manager,2.1
+218,52,1,Partner,3.29
+219,52,6,Senior,80.54
+220,52,5,Manager,10.18
+221,52,16,,34.11
+222,52,9,,249.79
+223,52,21,Staff,0
+224,52,20,Manager,0
+225,52,11,Staff,82.05
+226,52,19,Senior,1.25
+231,53,1,Partner,3
+232,53,9,Experienced Staff,23
+233,53,6,Senior,10
+234,53,17,Staff,0
+240,55,1,Partner,18.03
+241,55,20,Manager,0
+242,55,5,,0
+243,55,9,Experienced Staff,0
+244,55,4,Manager,47.67
+245,55,3,Manager,0
+246,55,17,Staff,0
+247,55,6,Senior,75.47
+248,55,16,Staff,14.53
+249,55,10,Staff,175.38
+250,55,11,Staff,39.73
+251,57,1,Partner,5.23
+252,57,6,Senior,71.3
+253,57,16,Staff,14.7
+254,57,10,Staff,290.2
+255,57,3,Manager,1.3
+256,57,5,Manager,0
+257,57,20,Manager,0
+258,57,9,Experienced Staff,0
+259,57,17,Staff,0
+260,57,11,Staff,98.17
+261,57,4,Manager,73.17
+262,59,6,Senior,19.3
+263,59,20,Manager,0
+264,59,9,Experienced Staff,0
+265,59,7,Senior,2.42
+271,60,6,Senior,12.2
+272,60,9,Experienced Staff,31
+273,60,3,Manager,0
+286,27,6,Senior,2.5
+287,27,1,Partner,0
+288,27,12,Staff,0
+289,27,4,Manager,0
+290,27,11,Staff,6
+292,61,5,,22.61
+293,61,10,Staff,0.23
+302,65,3,Manager,0.2
+303,66,1,Partner,1
+304,66,3,,4
+305,66,3,Manager,19
+306,69,1,Partner,5
+307,69,3,Manager,46.45
+308,69,8,Senior,113.37
+309,69,7,Senior,0
+310,72,1,Partner,1
+311,72,8,Senior,16.09
+312,72,17,Staff,0
+313,72,3,Manager,4
+321,76,3,Manager,1.75
+322,78,1,Partner,2
+323,78,6,Senior,68.25
+324,78,9,Experienced Staff,0.1
+325,78,16,Staff,0
+326,78,17,Staff,0
+327,78,3,Manager,19.1
+328,79,1,Partner,26.99
+329,79,3,Manager,83.65
+330,79,18,Staff,0
+331,79,12,Staff,134.06
+332,134,8,Senior,6.91
+333,134,1,Partner,1
+334,134,3,Manager,1
+335,134,16,Staff,0
+336,134,11,Staff,17
+337,134,9,Experienced Staff,0
+338,136,8,Senior,5.5
+339,136,1,Partner,1
+340,136,3,Manager,0
+341,136,9,Experienced Staff,0
+342,136,11,Staff,5
+343,136,16,Staff,0
+344,80,1,Partner,1
+345,80,3,Manager,2.8
+346,80,3,Manager,14
+347,83,1,Partner,6
+348,83,3,Manager,49.95
+349,83,16,Staff,0
+350,83,8,Senior,131.5
+357,91,3,Manager,1.55
+358,91,8,Senior,12.36
+359,92,9,Experienced Staff,47.62
+360,92,1,Partner,4
+361,92,20,Manager,0
+362,92,16,Staff,0
+363,92,17,Staff,0
+364,92,3,Manager,16.5
+365,93,6,Senior,68.45
+366,93,1,Partner,4
+367,93,16,Staff,1.3
+368,93,10,Staff,0.17
+369,93,20,Manager,0
+370,93,9,Experienced Staff,0
+371,93,12,Staff,0
+372,93,3,Manager,24.95
+376,96,9,Experienced Staff,51.45
+377,96,3,Manager,15.9
+378,96,1,Partner,2
+379,96,17,Staff,0
+380,96,16,Staff,0
+381,96,20,Manager,0
+382,96,2,Partner,0
+383,96,12,Staff,2.36
+391,99,1,Partner,1.7
+392,99,9,Experienced Staff,7.43
+393,99,3,Manager,16.45
+394,99,8,Senior,0.56
+395,172,1,Partner,1
+396,172,7,Senior,3
+397,172,12,Staff,10
+398,47,6,Senior,16.81
+399,47,1,Partner,0
+400,47,16,Staff,0
+401,47,3,Manager,1.1
+402,48,6,Senior,7.2
+403,48,11,Staff,13
+404,48,1,Partner,1
+405,48,16,Staff,0
+406,48,9,Experienced Staff,0
+407,48,3,Manager,0
+408,100,1,Partner,0.33
+409,100,6,Senior,1.35
+410,100,16,Staff,1.8
+411,100,9,Experienced Staff,14.19
+412,100,3,Manager,0.6
+413,100,2,Partner,1.5
+414,101,1,Partner,2
+415,101,3,Manager,53.25
+416,101,8,Senior,46
+417,101,16,Staff,0
+418,101,11,Staff,36
+419,50,16,Staff,8.28
+420,50,9,Experienced Staff,10.25
+421,50,6,Senior,12
+422,50,12,Staff,8
+423,50,3,Manager,4.25
+424,51,6,Senior,14.9
+425,51,1,Partner,1
+426,51,16,Staff,0
+427,51,3,Manager,1.6
+428,102,6,Senior,1.48
+429,102,4,Manager,54
+430,102,1,Partner,3
+431,102,10,Staff,0.49
+432,102,20,Manager,0
+433,102,16,Staff,0
+434,102,7,Senior,0
+435,102,3,Manager,11.15
+439,186,7,Senior,0
+440,186,3,Manager,0
+441,106,1,Partner,2.2
+442,106,6,Senior,42.71
+443,106,16,Staff,0
+444,106,9,Experienced Staff,0
+445,106,3,Manager,7
+446,107,3,Manager,17.5
+447,107,1,Partner,3
+448,107,8,Senior,66.74
+457,111,6,Senior,5.2
+458,111,16,Staff,19.89
+459,111,9,Experienced Staff,34.34
+460,111,3,Manager,55.7
+461,111,12,Staff,36
+462,111,15,Staff,1811.97
+463,113,1,Partner,3.5
+464,113,6,Senior,12.17
+465,113,3,Manager,3.4
+469,115,1,Partner,15.72
+470,115,16,Staff,0.14
+471,115,9,Experienced Staff,0.24
+472,115,3,Manager,130.55
+473,115,11,Staff,3.51
+474,115,7,Senior,240.65
+475,115,17,Staff,0
+476,115,8,Senior,64.34
+477,117,1,Partner,9.77
+478,117,16,Staff,0.32
+479,117,3,Manager,51.9
+480,117,7,Senior,181.31
+481,117,17,Staff,0
+482,117,8,Senior,25.41
+487,26,1,Partner,0.75
+488,26,3,Manager,0.75
+489,26,6,Senior,9.25
+490,26,9,Experienced Staff,0.25
+491,119,1,Partner,12.64
+492,119,16,Staff,0.6
+493,119,9,Experienced Staff,103.29
+494,119,11,Staff,97.57
+495,120,9,Experienced Staff,14.85
+496,120,7,Senior,7
+502,121,1,,4
+503,121,16,Staff,6.31
+504,121,9,Experienced Staff,11.23
+505,121,11,Staff,20.15
+508,122,9,Experienced Staff,2.52
+509,122,11,Staff,0
+513,123,1,,1
+514,123,9,Experienced Staff,6.29
+515,123,12,Staff,48.78
+518,125,6,Senior,8.36
+519,125,16,Staff,0.93
+520,125,9,Experienced Staff,20.74
+521,125,2,Partner,0.1
+522,126,16,Staff,9.25
+523,126,9,Experienced Staff,10.13
+524,126,3,Manager,4.8
+525,126,2,Partner,3
+526,127,11,Staff,13
+527,127,16,Staff,0.9
+528,127,9,Experienced Staff,2.94
+530,129,1,Partner,17.38
+531,129,6,Senior,3.2
+532,129,16,Staff,6.5
+533,129,9,Experienced Staff,111.9
+534,129,11,Staff,24.18
+535,129,4,Manager,28.8
+536,130,9,Experienced Staff,7.14
+537,130,11,Staff,16
+559,104,9,Experienced Staff,0.82
+560,104,3,Manager,0.2
+573,131,1,Partner,16.83
+574,131,16,Staff,0
+575,131,22,Experienced Staff,0
+576,131,11,Staff,72.71
+577,131,14,Staff,4.13
+578,131,13,Experienced Staff,117.07
+579,131,8,Senior,74.35
+593,137,1,Partner,2.24
+594,137,16,Staff,0.35
+595,137,3,Manager,0.4
+596,137,8,Senior,17.58
+597,1,1,Partner,2
+598,1,7,Senior,14.32
+599,1,8,Senior,16.2
+600,1,11,Staff,0
+601,1,16,Staff,0
+602,1,20,Manager,0
+603,1,10,Staff,0
+604,2,1,Partner,0.5
+605,2,7,Senior,31.02
+606,2,8,Senior,15.24
+610,140,1,Partner,2.55
+611,140,14,Staff,15.29
+612,140,8,Senior,21.63
+613,141,1,Partner,0.7
+614,141,11,Staff,19.91
+615,141,14,Staff,2.5
+616,141,8,Senior,7.83
+629,142,1,Partner,1
+630,142,7,Senior,12.27
+631,142,8,Senior,8.58
+632,143,16,Staff,32.39
+633,143,12,Staff,52.5
+634,143,9,Experienced Staff,0.47
+635,143,10,Staff,0
+636,143,17,Staff,0
+637,143,6,Senior,0
+638,143,1,Partner,0
+639,143,7,Senior,37.69
+642,144,1,Partner,6.75
+643,144,16,Staff,0.1
+644,144,7,Senior,184.07
+645,144,8,Senior,94.22
+646,144,6,Senior,0
+647,144,3,Manager,0
+648,144,9,Experienced Staff,0
+650,145,1,Partner,0.5
+651,145,7,Senior,8.2
+652,145,9,Experienced Staff,9
+653,146,7,Senior,15.56
+654,146,6,Senior,0
+657,147,1,Partner,1
+658,147,7,Senior,18.15
+659,147,2,Partner,0
+660,147,8,Senior,15
+666,148,16,Staff,0.25
+667,148,9,Experienced Staff,0.67
+668,148,7,Senior,8.7
+669,148,8,Senior,3.98
+675,149,1,Partner,1.16
+676,149,7,Senior,0.85
+677,150,7,Senior,3.61
+678,151,1,Partner,0.5
+679,151,7,Senior,13.2
+680,151,8,Senior,13
+681,155,1,Partner,5.74
+682,155,16,Staff,7.79
+683,155,11,Staff,12.5
+684,155,7,Senior,139.06
+685,155,8,Senior,112.39
+686,156,11,Staff,21.19
+687,156,7,Senior,8.05
+688,156,8,Senior,10.38
+689,157,1,Partner,0.86
+690,157,16,Staff,0.78
+691,157,9,Experienced Staff,10.23
+692,157,7,Senior,16.21
+693,159,1,Partner,2
+694,159,12,Staff,20.44
+695,159,9,Experienced Staff,0
+696,159,7,Senior,24.52
+697,159,2,Partner,0.25
+700,160,9,Experienced Staff,0.45
+701,160,11,Staff,1.36
+702,161,1,Partner,0
+703,161,2,Partner,0
+704,161,7,Senior,12.1
+705,161,17,Staff,0
+706,161,8,Senior,12
+711,162,9,Experienced Staff,13.03
+712,162,1,Partner,2
+713,162,6,Senior,0
+714,162,3,Manager,0
+715,162,7,Senior,17.57
+720,167,1,Partner,1
+721,167,12,Staff,22.91
+722,167,7,Senior,10.55
+723,167,16,Staff,0
+724,167,9,Experienced Staff,0
+725,167,18,Staff,0
+726,167,19,Senior,0
+730,168,1,Partner,1
+731,168,16,Staff,2.84
+732,168,9,Experienced Staff,32.32
+733,168,7,Senior,13.31
+738,173,1,Partner,0.2
+739,173,12,Staff,5.88
+740,173,7,Senior,2.6
+741,177,7,Senior,2.4
+746,178,1,Partner,0.5
+747,178,7,Senior,5.4
+748,178,8,Senior,6.84
+749,178,16,Staff,0
+750,179,7,Senior,27.5
+751,179,12,Staff,30
+752,180,1,Partner,1
+753,180,7,Senior,9.25
+754,180,11,Staff,11
+755,180,17,Staff,0
+761,186,16,Staff,0.55
+762,186,9,Experienced Staff,0.08
+763,186,3,Manager,0.25
+764,186,12,Staff,13.61
+765,186,7,Senior,10.92
+766,186,1,Partner,1
+770,194,6,Senior,0.35
+771,194,16,Staff,0.5
+772,194,9,Experienced Staff,15.11
+773,194,1,Partner,2
+774,194,17,Staff,0
+775,194,7,Senior,21.32
+776,195,1,Partner,0.5
+777,195,20,Manager,0
+778,195,16,Staff,0
+779,195,9,Experienced Staff,0
+780,195,7,Senior,5
+781,195,8,Senior,6.74
+782,196,1,Partner,3.72
+783,196,16,Staff,15.71
+784,196,11,Staff,8.82
+785,196,7,Senior,165.35
+786,196,14,Staff,16.56
+787,196,13,Experienced Staff,11.23
+788,196,8,Senior,115
+793,198,1,Partner,0.18
+794,198,11,Staff,1.56
+795,198,7,Senior,6.6
+796,198,14,Staff,3.8
+797,198,13,Experienced Staff,3.57
+798,198,8,Senior,3.43
+806,163,1,Partner,1
+807,163,16,Staff,0
+808,163,9,Experienced Staff,14
+809,163,3,Manager,0
+810,163,2,Partner,0
+811,163,7,Senior,15.78
+828,152,12,Staff,5.13
+829,152,13,Experienced Staff,2.09
+830,152,11,Staff,7.59
+831,152,19,Senior,7.02
+832,152,7,Senior,6
+833,153,11,Staff,2.36
+841,28,12,Staff,0.96
+842,28,11,Staff,29
+843,28,13,Experienced Staff,0
+844,28,19,Senior,0.7
+845,28,6,Senior,15
+851,31,1,Partner,0.15
+852,31,13,Experienced Staff,0
+853,31,12,Staff,12.44
+854,31,19,Senior,3.25
+855,31,6,Senior,2
+860,35,16,Staff,0.2
+861,35,13,Experienced Staff,0
+862,35,12,Staff,24.25
+863,35,19,Senior,0.96
+864,35,6,Senior,10
+874,158,12,Staff,8.87
+875,158,16,Staff,0
+876,158,10,Staff,0
+877,158,18,,0
+878,158,23,,0
+879,158,13,Experienced Staff,0
+880,158,11,Staff,17.9
+881,158,19,Senior,12.68
+882,158,7,Senior,7
+883,164,12,Staff,14.02
+884,164,16,Staff,0
+885,164,18,,0
+886,164,23,,0
+887,164,13,Experienced Staff,18
+888,164,11,Staff,13.65
+889,164,19,Senior,13.73
+890,164,7,Senior,9.5
+891,165,12,Staff,8.91
+892,165,23,,0
+893,165,13,Experienced Staff,15
+894,165,19,Senior,5.32
+895,165,7,Senior,13
+897,169,12,Staff,68.83
+898,169,5,0,0
+899,169,13,Experienced Staff,0
+900,169,19,Senior,2.41
+901,169,7,Senior,25
+902,170,1,Partner,3.06
+903,170,16,Staff,1.5
+904,170,12,Staff,70.68
+905,170,14,Staff,0.88
+906,170,10,Staff,0
+907,170,18,Staff,0
+908,170,23,Staff,0
+909,170,19,Senior,18.65
+910,170,7,Senior,0
+911,174,12,Staff,23.1
+912,174,13,Experienced Staff,0
+913,174,19,Senior,9.45
+914,174,7,Senior,2
+915,175,19,Senior,1.01
+916,176,1,Partner,0.39
+917,176,16,Staff,1.83
+918,176,11,Staff,7.05
+919,176,19,Senior,5.36
+920,181,11,Staff,27
+921,181,20,Manager,0
+922,181,16,Staff,0
+923,181,7,Senior,0
+924,181,17,Staff,0
+925,181,19,Senior,9.55
+926,181,7,Senior,20
+927,182,9,Experienced Staff,0.45
+928,182,11,Staff,14.64
+929,182,19,Senior,0.6
+930,182,7,Senior,2
+931,183,1,Partner,2.34
+932,183,16,Staff,0.81
+933,183,23,Staff,0
+934,183,4,Manager,0
+935,183,12,Staff,2.36
+936,183,13,Experienced Staff,0
+937,183,11,Staff,28.14
+938,183,19,Senior,23.95
+939,183,7,Senior,6.5
+945,187,5,,1.16
+946,187,16,Staff,0.64
+947,187,10,Staff,0
+948,187,18,Staff,0
+949,187,13,Experienced Staff,0
+950,187,12,Staff,38.78
+951,187,19,Senior,2.35
+952,187,7,Senior,12
+953,188,16,Staff,1.12
+954,188,12,Staff,3.79
+955,188,13,Experienced Staff,13
+956,188,11,Staff,23.99
+957,188,23,,0
+958,188,19,Senior,13.69
+959,188,7,Senior,9
+960,189,11,Staff,5.48
+961,191,12,Staff,2.18
+962,191,11,Staff,4
+963,191,19,Senior,3.85
+964,191,7,Senior,0
+968,54,12,Staff,1.01
+969,54,11,Staff,28
+970,54,13,Experienced Staff,0
+971,54,19,Senior,0.8
+972,54,6,Senior,15
+981,199,1,Partner,13.07
+982,199,6,Senior,2.36
+983,199,16,Staff,0.78
+984,199,10,Staff,0.25
+985,199,12,Staff,97.55
+986,199,7,Senior,0
+987,199,18,Staff,0
+988,199,20,Manager,0
+989,199,9,Experienced Staff,0
+990,199,4,Manager,160.26
+991,200,16,Staff,2.67
+992,200,9,Experienced Staff,0
+993,200,6,Senior,0
+994,200,1,Partner,0
+995,200,12,Staff,176.53
+996,200,7,Senior,0.52
+997,200,19,Senior,0.1
+998,200,4,Manager,110.37
+999,204,16,Staff,1.66
+1000,204,10,Staff,0.57
+1001,204,9,Experienced Staff,0
+1002,204,12,Staff,24.75
+1003,204,20,Manager,0
+1004,204,4,Manager,44.75
+1005,205,1,Partner,24.6
+1006,205,6,Senior,0
+1007,205,7,Senior,0
+1008,205,4,Manager,22.23
+1009,207,1,Partner,20.49
+1010,207,6,Senior,0.25
+1011,207,16,Staff,115.23
+1012,207,10,Staff,565.11
+1013,207,11,Staff,246.05
+1014,207,13,Experienced Staff,657.9
+1015,207,4,Manager,237.71

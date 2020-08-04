@@ -119,7 +119,7 @@ function appendBudgetRow()
     // 各列に表示内容を設定
     c1.innerHTML = '<span class="seqno">' + count + '</span>';
     c2.innerHTML = '<select class="inpassign form-control form-control-sm" id="assign' + count + '" name="assign' + count + '" onchange="setStaffRate(this,' + count + ')">' + staffInitialOption + '</select>';
-    c3.innerHTML = '<select class="inprole form-control form-control-sm" id="role' + count + '" name="role' + count + '" style="width: 100%"><option value="Partner">Partner</option><option value="Senior Manager">Senior Manager</option><option value="Manager">Manager</option><option value="Experienced Senior">Experienced Senior</option><option value="Senior">Senior</option><option value="Experienced Staff">Experienced Staff</option><option value="Staff">Staff</option></select>';
+    c3.innerHTML = '<input class="inprole form-control form-control-sm" id="role' + count + '" name="role' + count + '" style="width: 100%" value="' + '" readonly>';
     c4.innerHTML = '<input class="inphours form-control form-control-sm" type="text" onchange="calc()" id="hours' + count + '" name="hours' + count + '" value="0" style="text-align: right;width: 100%">';
     c5.innerHTML = '<input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="0" style="text-align: right;width: 100%" readonly>';
     c6.innerHTML = '<input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 100%"  readonly>';
@@ -170,7 +170,7 @@ function insertBudgetRow(staffId, role, hours) {
     // 各列に表示内容を設定
     c1.innerHTML = '<span class="seqno">' + count + '</span>';
     c2.innerHTML = '<select class="inpassign form-control form-control-sm" id="assign' + count + '" name="assign' + count + '" onchange="setStaffRate(this,' + count + ')">' + staffInitialOption + '</select>';
-    c3.innerHTML = '<input class="inprole form-control form-control-sm" id="role' + count + '" name="role' + count + '" style="width: 100%" value="' + role + '">';
+    c3.innerHTML = '<input class="inprole form-control form-control-sm" id="role' + count + '" name="role' + count + '" style="width: 100%" value="' + role + '" readonly>';
     c4.innerHTML = '<input class="inphours form-control form-control-sm" type="text" onchange="calc()" id="hours' + count + '" name="hours' + count + '" value="' + hours + '" style="text-align: right;width: 100%">';
     c5.innerHTML = '<input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="' + staffRate + '" style="text-align: right;width: 100%" readonly>';
     c6.innerHTML = '<input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 100%"  readonly>';

@@ -10,6 +10,15 @@
 10,11,Koki,Makita,KOM,,Accounting Technology Consultant,Experienced Staff,150,104,kokim@topc.us,404 536 2968,Active
 11,13,Shirley,Williams,SHW,,Accounting Advisor,Staff,130,115,shirleyw@topc.us,850 865 0345,Active
 12,12,Ritsuko,Matsuda,RIM,,Accounting Advisor,Experienced Staff,150,103,ritsukom@topc.us,310 622 3690,Active
-13,9001,Toshie,Yagi,TOY,,Accounting Advisor,Experienced Staff,150,N/A,toshiey@topc.us,714 276 5742,Active
+13,9001,Toshie,Yagi,TOY,,Accounting Advisor,Experienced Staff,150,0,toshiey@topc.us,714 276 5742,Active
 14,9002,Takahiro,Yoshimatsu,TAY,,Accounting Technology Engineer,Staff,130,114,takahiroy@topc.us,+81 90 5472 5987 ,Active
-15,9,Shigemi,Almony,SHA,,Staff Accountant,Accounting Assistant,65,N/A,shigemia@topc.us,818 862 6727,Active
+15,9,Shigemi,Almony,SHA,,Staff Accountant,Accounting Assistant,65,0,shigemia@topc.us,818 862 6727,Active
+16,9991,Imani,Brown,IMB,,Staff Accountant,Accounting Assistant,65,0,N/A,N/A,Inactive
+17,9992,Wimu,Lu,WEL,,Accounting Advisor,Staff,130,115,N/A,N/A,Inactive
+18,9993,Sharon,Lee,SHL,,Accounting Advisor,Staff,130,115,N/A,N/A,Inactive
+19,9994,Tomoko,Berger,TOB,,Senior Tax Advisor,Experienced Senior,195,0,N/A,N/A,Inactive
+20,9995,Katsuhiro,Ichikawa,HIC,,Accounting Manager,Manager,250,0,N/A,N/A,Inactive
+21,9996,Emi,Oshima,EMO,,HR and Operations Staff,Accounting Assistant,65,0,N/A,N/A,Inactive
+22,9997,Noriko,Adachi,NOA,,HR and Operations Staff,HR,130,0,N/A,N/A,Inactive
+23,9998,Tomoka,Nishimaki,TON,,Staff Accountant,Accounting Assistant,65,0,N/A,N/A,Inactive
+24,9999,Intern,Intern,Intern,,Intern,Accounting Assistant,65,0,N/A,N/A,Inactive

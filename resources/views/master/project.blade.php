@@ -116,13 +116,16 @@
         <label>Project Type</label><br>
         <select id="project_type" name="project_type" class="form-control" style="width: 100%" onchange="getProjectName();">      
             <option value="blank"></option>
-            <option value="AUD">AUD</option>
+            @foreach ($projectType as $projectTypes)
+            <option value="{{$projectTypes->project_type}}">{{$projectTypes->project_type}}</option>
+            @endforeach
+            <!--<option value="AUD">AUD</option>
             <option value="COMP">COMP</option>
             <option value="REV">REV</option>
             <option value="CTR">CTR</option>
             <option value="ITR">ITR</option>
             <option value="BM">BM</option>
-            <option value="OTH">OTH</option>            
+            <option value="OTH">OTH</option>  -->          
         </select>
     </div>
 
@@ -130,6 +133,7 @@
         <label>Project Year</label><br>
         <select id="project_year" name="project_year" class="form-control" style="width: 100%" onchange="getProjectName();">     
             <option value="blank"></option>
+            <option value="2019">2019</option>
             <option value="2020">2020</option>
             <option value="2021">2021</option>
             <option value="2022">2022</option>
