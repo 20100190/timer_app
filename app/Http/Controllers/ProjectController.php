@@ -35,7 +35,7 @@ class ProjectController extends Controller
         $clientData = Client::orderBy("name", "asc")->get();
 
         //pic
-        $picData = Staff::get();
+        $picData = Staff::ActiveStaff();
 
         //task       
         $taskData = ProjectTask::select("task_id", "name")
@@ -66,7 +66,7 @@ class ProjectController extends Controller
         $isExistTask = ProjectTask::where([['project_id', '=', $projectId]])->exists();
 
         if (!$isExistTask) {
-            $data = Task::select("id as task_id", "name", DB::raw("0 as task_status"))
+            $data = Task::select("id as task_id", "name", DB::raw("0 as task_status"))                    
                     ->where([['project_type', '=', $request->type], ['is_standard', '=', 'True']])
                     ->get();
         } else {
@@ -81,14 +81,24 @@ class ProjectController extends Controller
         $projectData = $projectObj->first();
         
         //Staff
-        $staffData = Staff::select("id","initial","rate","billing_title")->get();
+        $staffData = Staff::ActiveStaff();//Staff::select("id","initial","rate","billing_title")->get();
         
         $budgetData = Assign::where([['project_id', '=', $projectId]])->get();
+        
+        //All Task
+        $allTask = Task::select(DB::raw("0 as id"),"name")->where([['is_standard', '=', 'True']])->groupBy("name")->get();//TaskName::get();
         
         //fye
         $fye = Client::select("fye")->where([['id', '=', $request->client]])->first();
         
-        $json = ["task" => $data, "staff" => $staffData, "budget" => $budgetData, "project" => $projectData, "client" => $fye];
+        $json = [
+            "task" => $data,
+            "staff" => $staffData,
+            "budget" => $budgetData,
+            "project" => $projectData,
+            "client" => $fye,
+            "allTask" => $allTask,
+                ];
 
         return response()->json($json);
     }
@@ -100,6 +110,7 @@ class ProjectController extends Controller
         $projectId = $this->saveProjectTable($request);
         //task
         $this->saveTaskTable($projectId, $request);
+        
         //assign
         $table = new Assign;
         $queryObj = Assign::where([['project_id', '=', $projectId]]);
