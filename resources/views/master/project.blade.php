@@ -99,7 +99,6 @@
         <div class="toast-body">保存完了しました。</div>
     </div>        
 </div>-->
-
 <form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter">
     <!--@csrf-->
     <div style="float: left;">        
@@ -154,7 +153,7 @@
         <!--<input type="button" onclick="loadTask()" class="btn btn-primary" style="margin-left: 20px" value="読込">-->
         <button class="btn btn-primary" type="button" onclick="loadTask()">
             <!--<span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>-->
-            <span id="loadingText">読込</span>
+            <span id="loadingText">Confirm</span>
         </button>
     </div>
 
@@ -217,9 +216,8 @@
 
     <!--task-->
     <div style="float: left;margin-top: 20px;margin-right: 100px">
-        <!--<span class="label label-default" style="font-size: 12px">Task</span>-->
-        <label style="font-size: 20">Task</label>
-        <div>新しい行を追加：<input type="button" id="add" name="add" class="btn btn-primary btn-sm" value="追加" onclick="appendRow()"></div>
+        <!--<span class="label label-default" style="font-size: 12px">Task</span>-->       
+        <div><label style="font-size: 20;margin-right: 20px">Task</label><input type="button" id="add" name="add" class="btn btn-primary btn-sm" value="Add" onclick="appendRow()"></div>
         <table border="0" id="tbl" style="font-size: 12px;table-layout: fixed;width: 330px" class="table table-sm">
             <thead>
                 <tr>
@@ -234,9 +232,8 @@
         </table>
     </div>
 
-    <div style="float: left;margin-top: 20px">
-        <label style="font-size: 20">Project Budget</label>
-        <div>新しい行を追加：<input type="button" id="add" name="add" value="追加" class="btn btn-primary btn-sm" onclick="appendBudgetRow()"></div>
+    <div style="float: left;margin-top: 20px">        
+        <div><label style="font-size: 20;margin-right: 20px">Project Budget</label><input type="button" id="add" name="add" value="Add" class="btn btn-primary btn-sm" onclick="appendBudgetRow()"></div>
         <table border="0" id="budget_list" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 700px">                
             <thead>
                 <tr>
@@ -338,7 +335,7 @@
     </div>    
 
     <input type="hidden" id="staff_info" name="staff_info" value="">
-
+    <input type="hidden" id="task_info" name="task_info" value="">
 
 </form>
 
@@ -349,7 +346,7 @@
 <!--<input type="button" onclick="saveForm()" class="btn btn-primary" value="保存">-->
 <button id="btn_save" name="btn_save" class="btn btn-primary" type="button" onclick="saveForm()">
     <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-    <span id="savingText">保存</span>
+    <span id="savingText">Save</span>
 </button>
 
 <script src="{{ asset('js/project.js') }}"></script>
