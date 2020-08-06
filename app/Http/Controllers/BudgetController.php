@@ -10,6 +10,7 @@ use App\Budget;
 use App\Staff;
 use App\Week;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class BudgetController extends Controller
 {
@@ -34,12 +35,16 @@ class BudgetController extends Controller
         $staffData = Staff::where([['status', '=', "Active"]])->get();
         //pic
         $picData = Staff::where([['status', '=', "Active"]])->get();
-         
+        
+        //Login User Initial
+        $loginUserInitial = Staff::select("initial")->where([['email', '=', Auth::User()->email]])->first();
+                 
         return view('budget_input')
                         ->with("client", $clientData)
                         ->with("project", $projectData)
-                        ->with("staff", $staffData)                        
-                        ->with("pic", $picData);
+                        ->with("staff", $staffData)
+                        ->with("pic", $picData)
+                        ->with("loginInitial", $loginUserInitial);
     }
     
     function indexShow() {
