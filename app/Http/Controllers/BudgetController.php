@@ -105,7 +105,7 @@ class BudgetController extends Controller
         //project取得
         $comments = Project::select("client.name as client", "project.project_name as project", "assign.role as role", "staff.initial as initial", "client.fye", "client.vic_status", "B.initial as pic","assign.budget_hour")
                 ->join("client", "project.client_id", "=", "client.id")
-                ->leftjoin("assign", "assign.project_id", "=", "project.id")
+                ->join("assign", "assign.project_id", "=", "project.id")
                 ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
                 ->leftjoin("staff as B", "B.id", "=", "client.pic");
         if ($request->client != "blank") {
@@ -425,7 +425,7 @@ class BudgetController extends Controller
             //array_push($weekArray, $xxx["year"] . "/" . $xxx["month"] . "/" . $xxx["day"]);
             array_push($weekArray, $xxx["month"] . "/" . $xxx["day"] . "/" . $xxx["year"]);
         }
-
+        
         $json = ["budget" => $res, "week" => $weekArray];
 
         return response()->json($json);
