@@ -52,11 +52,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <link rel="stylesheet" href="{{asset("admin-lte/dist/css/skins/skin-blue.min.css")}}">
         <link rel="stylesheet" href="{{asset("admin-lte/dist/css/skins/skin-green.min.css")}}">
 
-        <script src="https://bossanova.uk/jexcel/v4/jexcel.js"></script>
+        <!--<script src="https://bossanova.uk/jexcel/v4/jexcel.js"></script>
         <script src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
         <link rel="stylesheet" href="https://bossanova.uk/jsuites/v2/jsuites.css" type="text/css" />
-        <link rel="stylesheet" href="https://bossanova.uk/jexcel/v4/jexcel.css" type="text/css" />
+        <link rel="stylesheet" href="https://bossanova.uk/jexcel/v4/jexcel.css" type="text/css" />-->
         
+        <script src="https://jexcel.net/v5/jexcel.js"></script>
+        <script src="https://jexcel.net/v5/jsuites.js"></script>
+        <link rel="stylesheet" href="https://jexcel.net/v5/jsuites.css" type="text/css" />
+        <link rel="stylesheet" href="https://jexcel.net/v5/jexcel.css" type="text/css" />
+
         <style type="text/css">
             .jexcel_content::-webkit-scrollbar {
                 width: 20px;

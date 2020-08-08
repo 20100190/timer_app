@@ -1,6 +1,6 @@
 window.addEventListener("resize", function (event) {
 
-    document.getElementById("spreadsheet").style.cssText = "width: 100%;height:" + (window.innerHeight - 280) + "px";
+    //document.getElementById("spreadsheet").style.cssText = "width: 100%;height:" + (window.innerHeight - 280) + "px";
     //document.body.style.zoom = "80%";
 });
 
@@ -71,7 +71,7 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //lazyLoading: true,
     //pagenation: 10,
     tableWidth: '100%',
-    tableHeight: "100%",
+    tableHeight: "500px",
     freezeColumns: 10,
     columns: [
         {
@@ -447,9 +447,13 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
 
         //ブランク行、集計セルのonchange回避
         if (client !== "" && project !== "" && value.charAt(0) !== "=") {
-            var year = myspreadsheet.getHeader(c).split("\n")[0];
-            var month = myspreadsheet.getHeader(c).split("\n")[1].split("/")[0];
-            var day = myspreadsheet.getHeader(c).split("/")[1];
+            //var year = myspreadsheet.getHeader(c).split("\n")[0];
+            //var month = myspreadsheet.getHeader(c).split("\n")[1].split("/")[0];
+            //var day = myspreadsheet.getHeader(c).split("/")[1];
+            var headerDate = myspreadsheet.getHeader(c).split("/");
+            var year = headerDate[2];
+            var month = headerDate[0];
+            var day = headerDate[1];
             saveCellData(client, project, staff, year, month, day, value);
         }
     },
@@ -688,8 +692,8 @@ function testData() {
             //header
             var columnCnt = 10;
             for (var s = 0; s < data.week.length; s++) {
-                //myspreadsheet.setHeader(columnCnt, data.week[s]);
-                myspreadsheet.setHeader(columnCnt, data.week[s].replace("/", "\n"));
+                myspreadsheet.setHeader(columnCnt, data.week[s]);
+                //myspreadsheet.setHeader(columnCnt, data.week[s].replace("/", "\n"));
                 columnCnt += 1;
             }
 
