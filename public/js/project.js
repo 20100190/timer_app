@@ -487,8 +487,137 @@ function setStaffRate(assignObj, rowNo) {
     }
 }
 
-function saveForm() {
+function getIsDuplicate(arr1) {
+    var s = new Set(arr1);
+    return s.size != arr1.length;
+}
 
+function getErrorText(){
+    var objTBL = document.getElementById("project_body");
+    if (!objTBL)
+        return;
+
+    var count = objTBL.rows.length;
+    
+    var staffArray = [];
+    var errorText = "";
+    var isStaffError = false;
+    var isHoursError = false;
+    for (var cnt = 1; cnt <= count; cnt++) {
+        var assign = document.getElementById("assign" + cnt).selectedIndex;
+        var hours = document.getElementById("hours" + cnt).value;
+        if(assign == 0){
+            isStaffError = true;
+        }
+        
+        if(hours == ""){
+            isHoursError = true;
+        }
+        
+        staffArray.push(assign);
+        
+    }
+    
+    //未選択チェック
+    if(isStaffError){
+        errorText += "Staffが選択されていない行があります。<br>";
+    }
+    
+    //Staff重複チェック
+    if(getIsDuplicate(staffArray)){
+        errorText += "Staffが重複しています。<br>";
+    }
+    
+    //Budget hours 未入力チェック
+    if(isHoursError){
+        errorText += "Budget Hoursが入力されていない行があります。<br>";
+    }
+    
+    return errorText;
+}
+
+function saveForm() {
+    
+    //エラーチェック
+    var errorText = getErrorText();
+    if (errorText != "") {
+        showErrorToast(errorText);
+        return;
+    }        
+    
+    saveDetail();
+    
+    /*
+    var params = $("form").serialize();
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        url: "/master/project/test3",
+        type: "POST",
+        data: params,
+        timeout: 10000,
+        beforeSend: function (xhr, settings) {
+            //Buttonを無効にする
+            //$('#btnProfileUpdate').attr('disabled', true);
+            //処理中のを通知するアイコンを表示する
+            //$('#boxEmailSettings').append('<div class="overlay" id ="spin" name = "spin"><i class="fa fa-refresh fa-spin"></i></div>');
+
+            //処理中
+            $("#savingSpinner").css("visibility", "visible");
+            $("#savingText").html("保存中");
+            $("#taskEnter").find(':input').attr('disabled', true);
+            $("#btn_save").attr('disabled', true);
+
+        },
+        complete: function (xhr, textStatus) {
+            //処理中アイコン削除
+            //$('#spin').remove();
+            //$('#btnProfileUpdate').attr('disabled', false);
+            //処理済
+            $("#savingSpinner").css("visibility", "hidden");
+            $("#savingText").html("保存");
+            $("#taskEnter").find(':input').attr('disabled', false);
+            $("#taskEnter").find(':input').removeAttr('disabled');
+            $("#btn_save").attr('disabled', false);
+            $("#btn_save").removeAttr('disabled');
+
+            showToast();
+        },
+        success: function (result, textStatus, xhr) {
+            //ret = jQuery.parseJSON(result);
+            //Alertで送信結果を表示する
+            //if (ret.success) {
+            //    $('#alert_profile_content').html(ret.message);
+            //    $('#alerts_profile').attr('class', 'alert alert-success alert-dismissible');
+            //} else {
+            //    var messageBags = ret.errors;
+            //    $('#alertContent').html('');
+            //    var html = '';
+            //    jQuery.each(messageBags, function (key, value) {
+            //        var fieldName = key;
+            //        var errorMessages = value;
+            //        jQuery.each(errorMessages, function (msgID, msgContent) {
+            //            html += '<li>' + msgContent + '</li>';
+            //        });
+            //    });
+            //    $('#alert_profile_content').html(html);
+            //    $('#alerts_profile').attr('class', 'alert alert-danger alert-dismissible');
+            //}
+            //$('#alerts_profile').show();
+        },
+        error: function (data) {
+            //$('#btnProfileUpdate').attr('disabled', false);
+            console.debug(data);
+        }
+    });*/
+}
+
+function saveDetail(){
     var params = $("form").serialize();
 
     $.ajaxSetup({
@@ -565,6 +694,15 @@ function showToast() {
         title: '保存完了しました。',
         showConfirmButton: false,
         timer: 1500
+    });
+}
+
+function showErrorToast(errorText) {
+    Swal.fire({
+        position: 'top',
+        icon: 'error',
+        title: 'Error',
+        html: errorText
     });
 }
 
