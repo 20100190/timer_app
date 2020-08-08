@@ -66,7 +66,7 @@ var maskStr = "#,##0.0";
 var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //data: data,
     //url: "/webform/test3/input",
-    minDimensions: [62, 500],
+    minDimensions: [62, 100],
     tableOverflow: true,
     //lazyLoading: true,
     //pagenation: 10,

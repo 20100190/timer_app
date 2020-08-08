@@ -10,6 +10,7 @@ use App\Budget;
 use App\Staff;
 use App\Week;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class BudgetController extends Controller
 {
@@ -34,12 +35,16 @@ class BudgetController extends Controller
         $staffData = Staff::where([['status', '=', "Active"]])->get();
         //pic
         $picData = Staff::where([['status', '=', "Active"]])->get();
-         
+        
+        //Login User Initial
+        $loginUserInitial = Staff::select("initial")->where([['email', '=', Auth::User()->email]])->first();
+                 
         return view('budget_input')
                         ->with("client", $clientData)
                         ->with("project", $projectData)
-                        ->with("staff", $staffData)                        
-                        ->with("pic", $picData);
+                        ->with("staff", $staffData)
+                        ->with("pic", $picData)
+                        ->with("loginInitial", $loginUserInitial);
     }
     
     function indexShow() {
@@ -107,7 +112,7 @@ class BudgetController extends Controller
             $comments = $comments
                     ->wherein('client.id', explode(",", $request->client));
         }
-
+        
         if ($request->project != "blank") {
             $comments = $comments
                     ->wherein('project.project_name', explode(",", $request->project));
@@ -225,9 +230,28 @@ class BudgetController extends Controller
 
             $comments = $comments
                     ->wherein('assign.role', $roleFilter);
-        }        
+        }
         
-
+        //Adminアカウント以外の条件
+        $loginUserInitialObj = Staff::select("initial")->where([['email', '=', Auth::User()->email]])->first();
+        $loginUserInitial = "";        
+        if (!is_null($loginUserInitialObj)) {
+            $loginUserInitial = $loginUserInitialObj["initial"];
+        }
+        $requestPIC = "";
+        if(isset($picArray)){            
+            $requestPICObj = Staff::select("initial")->where([['id', '=',$picArray[0]]])->first();
+            if(!is_null($requestPICObj)){
+                $requestPIC = $requestPICObj["initial"];
+            }
+        }
+        
+        if ($loginUserInitial != "" && $loginUserInitial == $requestPIC && ($request->client == "blank" || in_array("108",explode(",", $request->client)))) {
+            //clientがブランクまたはTOPCが指定されていれば
+            $comments = $comments
+                    ->orWhere('project.client_id', "=", 108);
+        }
+   
         $comments = $comments
                 ->orderBy("client", "asc")
                 ->orderBy("project", "asc")

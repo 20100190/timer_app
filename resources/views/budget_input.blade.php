@@ -4,7 +4,6 @@
 
 <form action="test3/save" method="POST" name="s">
     {{ csrf_field() }}  
-
     <div id="filter_area">
         <div class="row" style="zoom: 100%">
             <div class="col col-md-1" >
@@ -59,11 +58,20 @@
                 PIC
             </div>
             <div class="col col-md-1">
-                <select id="pic" name="pic" multiple="multiple" class="form-control" >                            
-                    @foreach ($pic as $pics)
+                @if(!is_object($loginInitial))
+                <select id="pic" name="pic" multiple="multiple" class="form-control">                            
+                    @foreach ($pic as $pics)                    
                     <option value="{{$pics->id}}">{{$pics->initial}}</option>
                     @endforeach
                 </select>
+                @else
+                <select id="pic" name="pic" multiple="multiple" class="form-control" disabled>                            
+                    @foreach ($pic as $pics)                    
+                    <option value="{{$pics->id}}" @if($loginInitial->initial == $pics->initial) selected @endif>{{$pics->initial}}</option>
+                    @endforeach
+                </select>
+                @endif
+                
             </div>
         </div>
 
