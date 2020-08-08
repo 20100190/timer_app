@@ -97,7 +97,7 @@ class BudgetController extends Controller
         $data = $this->initArray();
         $data[$colBudget] = "0";
         $data[$colAssignedHours] = "=SUM(K1:BH1)";
-        $data[$colDiff] = "=I1-H1";
+        $data[$colDiff] = "=H1-I1";
 
         $res = [];
         array_push($res, $data);
@@ -344,7 +344,7 @@ class BudgetController extends Controller
                 $data1[$colProject] = $xxx->project . " Total";
                 $data1[$colBudget] = "=SUM(H" . ($index + 1) . ":H" . ($index + $detailRowCnt) . ")";
                 $data1[$colAssignedHours] = "=SUM(K" . $index . ":BJ" . $index . ")";
-                $data1[$colDiff] = "=I" . $index . "-H" . $index;
+                $data1[$colDiff] = "=H" . $index . "-I" . $index;
                 for ($i = $colWeek; $i < count($columnArray); $i++) {
                     $data1[$i] = "=SUM(" . $columnArray[$i] . ($index + 1) . ":" . $columnArray[$i] . ($index + $detailRowCnt) . ")";
                 }
@@ -371,7 +371,7 @@ class BudgetController extends Controller
                 $data1[$colProject] = $xxx->project . " Total";
                 $data1[$colBudget] = "=SUM(H" . ($index + 1) . ":H" . ($index + $detailRowCnt) . ")";
                 $data1[$colAssignedHours] = "=SUM(K" . $index . ":BJ" . $index . ")";
-                $data1[$colDiff] = "=I" . $index . "-H" . $index;
+                $data1[$colDiff] = "=H" . $index . "-I" . $index;
                 for ($i = $colWeek; $i < count($columnArray); $i++) {
                     $data1[$i] = "=SUM(" . $columnArray[$i] . ($index + 1) . ":" . $columnArray[$i] . ($index + $detailRowCnt) . ")";
                 }
@@ -398,7 +398,7 @@ class BudgetController extends Controller
             $data[$colAssign] = $xxx->initial;
             $data[$colBudget] = $xxx->budget_hour;
             $data[$colAssignedHours] = "=SUM(K" . $index . ":BJ" . $index . ")";
-            $data[$colDiff] = "=I" . $index . "-H" . $index;
+            $data[$colDiff] = "=H" . $index . "-I" . $index;
 
             foreach ($budgetDetail as $yyy) {
                 $data[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] = $yyy->working_days;
@@ -994,7 +994,7 @@ class BudgetController extends Controller
                 $totalBudget += $yyy->working_days;
             }
             $data[$colAssignedHours] = $totalBudget;
-            $data[$colDiff] = $data[$colAssignedHours] - $data[$colBudget];
+            $data[$colDiff] = $data[$colBudget] - $data[$colAssignedHours];
 
             if ($totalBudget != 0) {
                 array_push($res, $data);
