@@ -32,9 +32,9 @@ class BudgetController extends Controller
                         ->groupBy('project_name')
                         ->orderBy('project_name', 'asc')->get();
         //staff
-        $staffData = Staff::where([['status', '=', "Active"]])->get();
+        $staffData = Staff::ActiveStaffOrderByInitial();
         //pic
-        $picData = Staff::where([['status', '=', "Active"]])->get();
+        $picData = Staff::ActiveStaffOrderByInitial();
         
         //Login User Initial
         $loginUserInitial = Staff::select("initial")->where([['email', '=', Auth::User()->email]])->first();
@@ -56,9 +56,9 @@ class BudgetController extends Controller
                         ->groupBy('project_name')
                         ->orderBy('project_name', 'asc')->get();
         //staff
-        $staffData = Staff::where([['status', '=', "Active"]])->get();
+        $staffData = Staff::ActiveStaffOrderByInitial();
         //pic
-        $picData = Staff::where([['status', '=', "Active"]])->get();
+        $picData = Staff::ActiveStaffOrderByInitial();
         
         return view('budget_show')
                 ->with("client", $clientData)
@@ -422,7 +422,8 @@ class BudgetController extends Controller
         $week = $this->getWeek($requestYear, $requestMonth, $requestDay);
         $weekArray = [];
         foreach ($week as $xxx) {
-            array_push($weekArray, $xxx["year"] . "/" . $xxx["month"] . "/" . $xxx["day"]);
+            //array_push($weekArray, $xxx["year"] . "/" . $xxx["month"] . "/" . $xxx["day"]);
+            array_push($weekArray, $xxx["month"] . "/" . $xxx["day"] . "/" . $xxx["year"]);
         }
 
         $json = ["budget" => $res, "week" => $weekArray];

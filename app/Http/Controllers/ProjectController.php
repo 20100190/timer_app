@@ -35,7 +35,7 @@ class ProjectController extends Controller
         $clientData = Client::orderBy("name", "asc")->get();
 
         //pic
-        $picData = Staff::ActiveStaff();
+        $picData = Staff::ActiveStaffOrderByInitial();//Staff::ActiveStaff();
 
         //task       
         $taskData = ProjectTask::select("task_id", "name")

@@ -14,4 +14,8 @@ class Staff extends Model
         return $query->where([['status', '=', "Active"]])->get();
     }
     
+    public function scopeActiveStaffOrderByInitial($query){
+        return $query->where([['status', '=', "Active"]])->orderBy("initial")->get();
+    }
+    
 }
