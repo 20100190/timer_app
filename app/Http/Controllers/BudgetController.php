@@ -32,9 +32,9 @@ class BudgetController extends Controller
                         ->groupBy('project_name')
                         ->orderBy('project_name', 'asc')->get();
         //staff
-        $staffData = Staff::where([['status', '=', "Active"]])->get();
+        $staffData = Staff::ActiveStaffOrderByInitial();
         //pic
-        $picData = Staff::where([['status', '=', "Active"]])->get();
+        $picData = Staff::ActiveStaffOrderByInitial();
         
         //Login User Initial
         $loginUserInitial = Staff::select("initial")->where([['email', '=', Auth::User()->email]])->first();
@@ -56,9 +56,9 @@ class BudgetController extends Controller
                         ->groupBy('project_name')
                         ->orderBy('project_name', 'asc')->get();
         //staff
-        $staffData = Staff::where([['status', '=', "Active"]])->get();
+        $staffData = Staff::ActiveStaffOrderByInitial();
         //pic
-        $picData = Staff::where([['status', '=', "Active"]])->get();
+        $picData = Staff::ActiveStaffOrderByInitial();
         
         return view('budget_show')
                 ->with("client", $clientData)
@@ -97,7 +97,7 @@ class BudgetController extends Controller
         $data = $this->initArray();
         $data[$colBudget] = "0";
         $data[$colAssignedHours] = "=SUM(K1:BH1)";
-        $data[$colDiff] = "=I1-H1";
+        $data[$colDiff] = "=H1-I1";
 
         $res = [];
         array_push($res, $data);
@@ -105,7 +105,7 @@ class BudgetController extends Controller
         //project取得
         $comments = Project::select("client.name as client", "project.project_name as project", "assign.role as role", "staff.initial as initial", "client.fye", "client.vic_status", "B.initial as pic","assign.budget_hour")
                 ->join("client", "project.client_id", "=", "client.id")
-                ->leftjoin("assign", "assign.project_id", "=", "project.id")
+                ->join("assign", "assign.project_id", "=", "project.id")
                 ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
                 ->leftjoin("staff as B", "B.id", "=", "client.pic");
         if ($request->client != "blank") {
@@ -255,6 +255,7 @@ class BudgetController extends Controller
         $comments = $comments
                 ->orderBy("client", "asc")
                 ->orderBy("project", "asc")
+                ->orderBy("initial", "asc")
                 ->get();
                 
         
@@ -279,7 +280,7 @@ class BudgetController extends Controller
                     ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
                     ->leftjoin("budget", "budget.assign_id", "=", "assign.id")
                     //->leftjoin("A_staff as B", "B.id", "=", "A_client.pic")
-                    ->where([['client.name', '=', $xxx->client], ['project.project_name', '=', $xxx->project], ['assign.role', '=', $xxx->role], ['staff.initial', '=', $xxx->initial], ['budget.ymd', '<=', $endDate], ['budget.ymd', '>=', $startDate]])
+                    ->where([['client.name', '=', $xxx->client], ['project.project_name', '=', $xxx->project], ['assign.role', '=', $xxx->role], ['staff.initial', '=', $xxx->initial], ['budget.ymd', '<=', $endDate], ['budget.ymd', '>=', $startDate]])                                               
                     ->get();
          
             //プロジェクト単位の行数取得                        
@@ -344,7 +345,7 @@ class BudgetController extends Controller
                 $data1[$colProject] = $xxx->project . " Total";
                 $data1[$colBudget] = "=SUM(H" . ($index + 1) . ":H" . ($index + $detailRowCnt) . ")";
                 $data1[$colAssignedHours] = "=SUM(K" . $index . ":BJ" . $index . ")";
-                $data1[$colDiff] = "=I" . $index . "-H" . $index;
+                $data1[$colDiff] = "=H" . $index . "-I" . $index;
                 for ($i = $colWeek; $i < count($columnArray); $i++) {
                     $data1[$i] = "=SUM(" . $columnArray[$i] . ($index + 1) . ":" . $columnArray[$i] . ($index + $detailRowCnt) . ")";
                 }
@@ -371,7 +372,7 @@ class BudgetController extends Controller
                 $data1[$colProject] = $xxx->project . " Total";
                 $data1[$colBudget] = "=SUM(H" . ($index + 1) . ":H" . ($index + $detailRowCnt) . ")";
                 $data1[$colAssignedHours] = "=SUM(K" . $index . ":BJ" . $index . ")";
-                $data1[$colDiff] = "=I" . $index . "-H" . $index;
+                $data1[$colDiff] = "=H" . $index . "-I" . $index;
                 for ($i = $colWeek; $i < count($columnArray); $i++) {
                     $data1[$i] = "=SUM(" . $columnArray[$i] . ($index + 1) . ":" . $columnArray[$i] . ($index + $detailRowCnt) . ")";
                 }
@@ -398,7 +399,7 @@ class BudgetController extends Controller
             $data[$colAssign] = $xxx->initial;
             $data[$colBudget] = $xxx->budget_hour;
             $data[$colAssignedHours] = "=SUM(K" . $index . ":BJ" . $index . ")";
-            $data[$colDiff] = "=I" . $index . "-H" . $index;
+            $data[$colDiff] = "=H" . $index . "-I" . $index;
 
             foreach ($budgetDetail as $yyy) {
                 $data[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] = $yyy->working_days;
@@ -422,9 +423,10 @@ class BudgetController extends Controller
         $week = $this->getWeek($requestYear, $requestMonth, $requestDay);
         $weekArray = [];
         foreach ($week as $xxx) {
-            array_push($weekArray, $xxx["year"] . "/" . $xxx["month"] . "/" . $xxx["day"]);
+            //array_push($weekArray, $xxx["year"] . "/" . $xxx["month"] . "/" . $xxx["day"]);
+            array_push($weekArray, $xxx["month"] . "/" . $xxx["day"] . "/" . $xxx["year"]);
         }
-
+        
         $json = ["budget" => $res, "week" => $weekArray];
 
         return response()->json($json);
@@ -613,286 +615,10 @@ class BudgetController extends Controller
         return $weekNo + 1;
     }
     
-    /*
-    function getDetailData(Request $request){
-        $dateFrom = explode("-", $request->from);
-        $dateTo = explode("-", $request->to);
-        $startDate = $dateFrom[2] . $dateFrom[0] . $dateFrom[1];
-        $endDate = $dateTo[2] . $dateTo[0] . $dateTo[1];
-
-        //row setting
-        $colClient = 0;
-        $colProject = 1;
-        $colFye = 2;
-        $colVic = 3;
-        $colPic = 4;
-        $colRole = 5;
-        $colAssign = 6;
-        $colBudget = 7;
-        $colAssignedHours = 8;
-        $colDiff = 9;
-        $colWeek = 10;
-
-        $weekArray = $this->getWeek($dateFrom[2], intval($dateFrom[0]), intval($dateFrom[1]));
-
-        $res = [];
-
-        $overallDetailData = $this->getOverallDetailQuery($request, $startDate, $endDate)
-                ->groupBy("staff_id", "initial", "year", "month", "day")
-                ->orderBy("staff_id", "asc")
-                ->orderBy("year", "asc")
-                ->orderBy("month", "asc")
-                ->orderBy("day", "asc")
-                ->get();
-
-        $overallTotal = $this->getOverallDetailQuery($request, $startDate, $endDate)
-                ->select("budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
-                ->groupBy("year", "month", "day")
-                ->orderBy("year", "asc")
-                ->orderBy("month", "asc")
-                ->orderBy("day", "asc")
-                ->get();
-        
-        $overallWeekTotal = $this->getOverallDetailQuery($request, $startDate, $endDate)
-                ->select(DB::raw("SUM(working_days) as working_days"))                
-                ->get();
-        
-        $overallPersonalTotal = $this->getOverallDetailQuery($request, $startDate, $endDate)
-                ->select("staff_id", DB::raw("SUM(CEILING(working_days)) as working_days"))
-                ->groupBy("staff_id")
-                ->get();
-
-
-        //project取得
-        $comments = Project::select("client.name as client", "project.project_name as project", "assign.role as role", "staff.initial as initial", "client.fye", "client.vic_status", "B.initial as pic","assign.budget_hour")
-                ->leftjoin("client", "project.client_id", "=", "client.id")
-                ->leftjoin("assign", "assign.project_id", "=", "project.id")
-                ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic");
-
-        if ($request->client != "blank") {
-            $comments = $comments
-                    ->wherein('client.id', explode(",", $request->client));
-        }
-
-        if ($request->project != "blank") {
-            $comments = $comments
-                    ->wherein('project.project_name', explode(",", $request->project));
-        }
-
-        if ($request->fye != "blank") {
-            $fye = "";
-
-            $fyeArray = explode(",", $request->fye);
-            $fyeFilter = [];
-            for ($i = 0; $i < count($fyeArray); $i++) {
-                if ($fyeArray[$i] == 1) {
-                    array_push($fyeFilter, "01");
-                }
-                if ($fyeArray[$i] == 2) {
-                    array_push($fyeFilter, "02");
-                }
-                if ($fyeArray[$i] == 3) {
-                    array_push($fyeFilter, "03");
-                }
-                if ($fyeArray[$i] == 4) {
-                    array_push($fyeFilter, "04");
-                }
-                if ($fyeArray[$i] == 5) {
-                    array_push($fyeFilter, "05");
-                }
-                if ($fyeArray[$i] == 6) {
-                    array_push($fyeFilter, "06");
-                }
-                if ($fyeArray[$i] == 7) {
-                    array_push($fyeFilter, "07");
-                }
-                if ($fyeArray[$i] == 8) {
-                    array_push($fyeFilter, "08");
-                }
-                if ($fyeArray[$i] == 9) {
-                    array_push($fyeFilter, "09");
-                }
-                if ($fyeArray[$i] == 10) {
-                    array_push($fyeFilter, "10");
-                }
-                if ($fyeArray[$i] == 11) {
-                    array_push($fyeFilter, "11");
-                }
-                if ($fyeArray[$i] == 12) {
-                    array_push($fyeFilter, "12");
-                }
-            }
-
-            $comments = $comments
-                    ->wherein(DB::raw('Substring(client.fye,1,2)'), $fyeFilter);
-        }
-
-        if ($request->vic != "blank") {
-            $vic = "";
-            $vicArray = explode(",", $request->vic);
-            $vicFilter = [];
-            for ($i = 0; $i < count($vicArray); $i++) {
-                if ($vicArray[$i] == 1) {
-                    array_push($vicFilter, "VIC");
-                }
-                if ($vicArray[$i] == 2) {
-                    array_push($vicFilter, "IC");
-                }
-                if ($vicArray[$i] == 3) {
-                    array_push($vicFilter, "C");
-                }
-            }
-
-            $comments = $comments
-                    ->wherein('client.vic_status', $vicFilter);
-        }
-
-        if ($request->pic != "blank") {
-            $picArray = explode(",", $request->pic);
-
-            $comments = $comments
-                    ->wherein('client.pic', $picArray);
-        }
-
-        if ($request->staff != "blank") {
-            $staffArray = explode(",", $request->staff);
-
-            $comments = $comments
-                    ->wherein('assign.staff_id', $staffArray);
-        }
-
-        if ($request->role != "blank") {
-            $role = "";
-            $roleArray = explode(",", $request->role);
-            $roleFilter = [];
-            for ($i = 0; $i < count($roleArray); $i++) {
-                if ($roleArray[$i] == 1) {
-                    array_push($roleFilter, "Partner");
-                }
-                if ($roleArray[$i] == 2) {
-                    array_push($roleFilter, "Senior Manager");
-                }
-                if ($roleArray[$i] == 3) {
-                    array_push($roleFilter, "Manager");
-                }
-                if ($roleArray[$i] == 4) {
-                    array_push($roleFilter, "Experienced Senior");
-                }
-                if ($roleArray[$i] == 5) {
-                    array_push($roleFilter, "Senior");
-                }
-                if ($roleArray[$i] == 6) {
-                    array_push($roleFilter, "Experienced Staff");
-                }
-                if ($roleArray[$i] == 7) {
-                    array_push($roleFilter, "Staff");
-                }
-            }
-
-            $comments = $comments
-                    ->wherein('assign.role', $roleFilter);
-        }
-
-        $comments = $comments
-                ->orderBy("client", "asc")
-                ->orderBy("project", "asc")
-                ->get();
-
-        $index = 2;
-
-        $oldClient = "";
-        $oldProject = "";
-        $oldRole = "";
-        $oldAssign = "";
-        $newClient = "";
-        $newProject = "";
-        $newRole = "";
-        $newAssign = "";
-
-        foreach ($comments as $xxx) {
-            $data = $this->initArray();
-
-            //budget data 取得            
-            $budgetDetail = Assign::select("client.name as client_id", "project.project_name as project_id", "assign.role as role_id", "staff.initial", "budget.year", "budget.month", "budget.day", "budget.working_days as working_days")//, "budget.no as no")//,"B.initial as pic")
-                    ->leftjoin("project", "assign.project_id", "=", "project.id")
-                    ->leftjoin("client", "client.id", "=", "project.client_id")
-                    ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
-                    ->leftjoin("budget", "budget.assign_id", "=", "assign.id")
-                    //->leftjoin("A_staff as B", "B.id", "=", "client.pic")
-                    ->where([['client.name', '=', $xxx->client], ['project.project_name', '=', $xxx->project], ['assign.role', '=', $xxx->role], ['staff.initial', '=', $xxx->initial], ['budget.ymd', '<=', $endDate], ['budget.ymd', '>=', $startDate]])
-                    ->get();
-
-            //対象行数            
-            $detailRowCnt = Assign::select()
-                            ->leftjoin("project", "assign.project_id", "=", "project.id")
-                            ->leftjoin("client", "client.id", "=", "project.client_id")
-                            ->where([['client.name', '=', $xxx->client], ['project.project_name', '=', $xxx->project]])->count();
-            //Assignが存在しない場合は、集計の計算式がズレてしまうため
-            if ($detailRowCnt == 0) {
-                $detailRowCnt = 1;
-            }
-
-            if ($oldClient == "") {
-                
-            }
-
-            $newClient = $xxx->client;
-            $newProject = $xxx->project;
-
-            if ($oldClient != $newClient || $oldProject != $newProject) {
-                
-            }
-
-            $data[$colClient] = $xxx->client;
-            $data[$colProject] = $xxx->project;
-            $data[$colFye] = $xxx->fye;
-            $data[$colVic] = $xxx->vic_status;
-            $data[$colPic] = $xxx->pic;
-            $data[$colRole] = $xxx->role;
-            $data[$colAssign] = $xxx->initial;
-            $data[$colBudget] = $xxx->budget_hour;
-            $data[$colAssignedHours] = 0;
-            $data[$colDiff] = 0;
-
-            $totalBudget = 0;
-            foreach ($budgetDetail as $yyy) {
-                $data[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] = $yyy->working_days;
-                $totalBudget += $yyy->working_days;
-            }
-            $data[$colAssignedHours] = $totalBudget;
-            $data[$colDiff] = $data[$colAssignedHours] - $data[$colBudget];
-
-            if($totalBudget != 0){
-            array_push($res, $data);            
-            $index += 1;
-            }
-
-            $oldClient = $newClient;
-            $oldProject = $newProject;
-            $oldRole = $newRole;
-            $oldAssign = $newAssign;
-        }
-
-        $json = [
-            "week" => $weekArray,
-            "total" => $overallDetailData,
-            "overallTotal" => $overallTotal,
-            "overallWeekTotal" => $overallWeekTotal,
-            "overallPTotal" => $overallPersonalTotal,
-            "clientList" => $res
-        ];
-
-        return response()->json($json);
-    } 
-     */
-
     function getDetailData(Request $request) {
         $dateFrom = explode("-", $request->from);
         $dateTo = explode("-", $request->to);
-        $startDate = $dateFrom[2] . $dateFrom[0] . $dateFrom[1];
-        $endDate = $dateTo[2] . $dateTo[0] . $dateTo[1];
-
+       
         //row setting
         $colClient = 0;
         $colProject = 1;
@@ -907,6 +633,11 @@ class BudgetController extends Controller
         $colWeek = 10;
 
         $weekArray = $this->getWeek($dateFrom[2], intval($dateFrom[0]), intval($dateFrom[1]));
+        $startDateAll = $weekArray[0]["year"] . sprintf('%02d', $weekArray[0]["month"]) . sprintf('%02d', $weekArray[0]["day"]);
+        $endDateAll = $weekArray[51]["year"] . sprintf('%02d', $weekArray[51]["month"]) . sprintf('%02d', $weekArray[51]["day"]);        
+        $startDate = $dateFrom[2] . $dateFrom[0] . $dateFrom[1];
+        $endDate = $dateTo[2] . $dateTo[0] . $dateTo[1];
+
 
         $res = [];
         
@@ -915,8 +646,10 @@ class BudgetController extends Controller
                 ->select("assign_id","client.name")
                 ->where("working_days","<>","0")
                 ->orderBy("client.name")
+                ->orderBy("project.id")
+                ->orderBy("staff.initial")
                 ->groupBy("assign_id")
-                ->groupBy("client.name")
+                ->groupBy("client.name")                
                 ->get();
         
         $targetAssignId = "";
@@ -973,7 +706,7 @@ class BudgetController extends Controller
                     ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
                     ->leftjoin("budget", "budget.assign_id", "=", "assign.id")
                     ->leftjoin("staff as B", "B.id", "=", "client.pic")
-                    ->where([['assign_id', '=', $idList["assign_id"]],["ymd",">=",$startDate]])                   
+                    ->where([['assign_id', '=', $idList["assign_id"]],["ymd",">=",$startDateAll],["ymd","<=",$endDateAll]])                   
                     ->get();
 
             $data[$colClient] = $budgetDetail[0]["client_id"];
@@ -993,7 +726,7 @@ class BudgetController extends Controller
                 $totalBudget += $yyy->working_days;
             }
             $data[$colAssignedHours] = $totalBudget;
-            $data[$colDiff] = $data[$colAssignedHours] - $data[$colBudget];
+            $data[$colDiff] = $data[$colBudget] - $data[$colAssignedHours];
 
             if ($totalBudget != 0) {
                 array_push($res, $data);

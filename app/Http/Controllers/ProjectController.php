@@ -35,7 +35,7 @@ class ProjectController extends Controller
         $clientData = Client::orderBy("name", "asc")->get();
 
         //pic
-        $picData = Staff::ActiveStaff();
+        $picData = Staff::ActiveStaffOrderByInitial();//Staff::ActiveStaff();
 
         //task       
         $taskData = ProjectTask::select("task_id", "name")
@@ -81,7 +81,7 @@ class ProjectController extends Controller
         $projectData = $projectObj->first();
         
         //Staff
-        $staffData = Staff::ActiveStaff();//Staff::select("id","initial","rate","billing_title")->get();
+        $staffData = Staff::ActiveStaffOrderByInitial();
         
         $budgetData = Assign::where([['project_id', '=', $projectId]])->get();
         
