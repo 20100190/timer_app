@@ -46,6 +46,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
         </style>
         
+        <style type="text/css">
+            .project-layout {
+                margin-right: 20px
+            }
+            
+            .project-button {
+                width: 160px
+            }
+            
+            .block-background-color {
+                padding: 10px;
+                /*border: 1px solid #333333;*/
+                width: 1020px;
+                height: 260px;
+                background-color: #f6fafd;
+            }
+           
+        </style>
+            
+        
         <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
               page. However, you can choose any other skin. Make sure you
               apply the skin class to the body tag so the changes take effect. -->
