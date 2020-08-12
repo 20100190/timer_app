@@ -12,7 +12,8 @@ $(window).on('load', function () {
 $(document).ready(function () {
     //alert(window.innerHeight + "filt:" + $("#client").height());
   
-    var buttonWidth = "500px";
+    var buttonWidth = "400px";
+    var buttonWidth2 = "150px";
     $('#client').multiselect({
         buttonWidth: buttonWidth,
         maxHeight: 700,
@@ -21,7 +22,7 @@ $(document).ready(function () {
     });
     $('#project').multiselect({
         buttonWidth: buttonWidth,
-        maxHeight: 400,
+        maxHeight: 700,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
@@ -36,18 +37,18 @@ $(document).ready(function () {
         includeSelectAllOption: true,
     });
     $('#pic').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         maxHeight: 600,
         includeSelectAllOption: true,
     });
     $('#sel_role').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
     $('#sel_staff').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         maxHeight: 400,
         includeSelectAllOption: true,
@@ -436,7 +437,7 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
             width: '70',
             mask: maskStr
         },
-    ],
+    ],    
     onload: function (instance) {
 
     },
