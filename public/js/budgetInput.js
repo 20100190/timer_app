@@ -75,6 +75,7 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     tableWidth: '100%',
     tableHeight: "490px",
     freezeColumns: 10,
+    contextMenu:function() { return false; },
     columns: [
         {
             title: 'Client',
