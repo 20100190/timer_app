@@ -62,6 +62,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 height: 260px;
                 background-color: #f6fafd;
             }
+            
+            .font-bold {
+                font-weight: bold;
+            }
+            
+            .border-top-style-list {
+                border-top: solid 1px lightgray;
+            }
+            
+            .border-bottom-style-list {
+                border-bottom: solid 1px lightgray;
+            }
+            
+            .project-font-size {
+                font-size: 14px;
+            }
            
         </style>
             

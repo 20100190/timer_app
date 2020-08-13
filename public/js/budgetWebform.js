@@ -9,7 +9,7 @@ $(document).ready(function () {
         div2.scrollLeft(div1.scrollLeft())
     });
 
-    var buttonWidth = "400px";
+    var buttonWidth = "300px";
     $('#client').multiselect({
         buttonWidth: buttonWidth,
         maxHeight: "500",
@@ -18,7 +18,7 @@ $(document).ready(function () {
     });
     $('#project').multiselect({
         buttonWidth: buttonWidth, 
-        maxHeight: "400",
+        maxHeight: "500",
         enableFiltering: true,
         includeSelectAllOption: true,                
     });
@@ -33,17 +33,17 @@ $(document).ready(function () {
         includeSelectAllOption: true,
     });
     $('#pic').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: 150,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
     $('#sel_staff').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: 150,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
     $('#sel_role').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: 150,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
@@ -59,7 +59,9 @@ $(document).ready(function () {
 
 function closeOverrall() {
     var acWidth = document.getElementById("div1").style.height;
+    var btnObj = document.getElementById("btn_open_close");
     if (acWidth == "0%") {
+        btnObj.src = imagesUrl + "/close.png"
         document.getElementById("div1").style.height = "40%";
         document.getElementById("div1").style.minHeight = "350px";
         document.getElementById("div2").style.height = "57%";
@@ -68,6 +70,7 @@ function closeOverrall() {
         document.getElementById("div3").style.zIndex = "10";        
         
     } else {
+        btnObj.src = imagesUrl + "/open.png"
         document.getElementById("div1").style.height = "0%";
         document.getElementById("div1").style.minHeight = "0px";
         document.getElementById("div2").style.height = "97%";
@@ -135,8 +138,8 @@ function getData() {
             //初期化
             var table = document.getElementById("budget_list");
             while (table.rows.length > 2)
-                table.deleteRow(2);
-
+                table.deleteRow(2);                       
+          
             //header
             var mnt = "";
             for (var i = 0; i < data.week.length; i++) {
@@ -149,8 +152,25 @@ function getData() {
                 document.getElementById("d_month" + (i + 1)).innerHTML = data.week[i].day;
 
                 if (mnt != data.week[i].month) {
-                    document.getElementById("h_month" + (i + 1)).innerHTML = data.week[i].month;
-                    document.getElementById("h2_month" + (i + 1)).innerHTML = data.week[i].month;
+                    var monthEng = getMonthEng(data.week[i].month);
+                    document.getElementById("h_month" + (i + 1)).innerHTML = monthEng;//data.week[i].month;
+                    document.getElementById("h2_month" + (i + 1)).innerHTML = monthEng;//data.week[i].month;
+                }
+                
+                //overall total style       
+                document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;";
+                document.getElementById("td_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;";
+                if (document.getElementById("h2_month" + (i + 1)).innerHTML != "") {
+                    document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;border-left: solid 1px lightgray";
+                    document.getElementById("td_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;border-left: solid 1px lightgray";
+                }
+                
+                //client list style
+                document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;";
+                document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;";
+                if (document.getElementById("h_month" + (i + 1)).innerHTML != "") {
+                    document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;border-left: solid 1px lightgray";
+                    document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;border-left: solid 1px lightgray";
                 }
 
                 mnt = data.week[i].month;
@@ -195,6 +215,26 @@ function getData() {
                     document.getElementById("ot_initial" + data.total[s].staff_id).innerHTML = data.total[s].initial;
                 }
             }
+            
+            //罫線適用
+            var baseStyle = "width: 50px;z-index: 0;text-align: right;background-color: white;";
+            var borderStyle = "border-left: solid 1px lightgray";
+            for (var x = 0; x < data.week.length; x++) {               
+               //初期化
+                document.getElementById("td_otTotal" + (x + 1)).style.cssText = baseStyle;
+                for (y = 1; y <= 20; y++) {
+                    document.getElementById("td_ot" + ("00" + y).slice(-2) + (x + 1)).style.cssText = baseStyle;
+                }
+                
+                if (document.getElementById("h2_month" + (x + 1)).innerHTML != ""){
+                    var str = baseStyle + borderStyle;
+                    for(y = 1; y <= 20; y++){
+                        document.getElementById("td_ot" + ("00" + y).slice(-2) + (x + 1)).style.cssText = str;                        
+                    }     
+                    
+                    document.getElementById("td_otTotal" + (x + 1)).style.cssText += ";" + borderStyle;
+                }
+            }                        
 
             //overall personal total
             for (var s = 0; s < data.overallPTotal.length; s++) {
@@ -294,7 +334,7 @@ function getData() {
                         var td = document.createElement('td');
                         if (x == 0) {
                             td.innerHTML = client;
-                            td.style.backgroundColor = backgroundColor;
+                            td.style.backgroundColor = backgroundColor;                            
                             td.classList.add("column_row_block");
                         }
                         if (x == 1) {
@@ -357,6 +397,11 @@ function getData() {
                                 }
                                 td.style.backgroundColor = backgroundColor;
                                 td.align = "right";
+                                
+                                if(document.getElementById("h_month" + (c+1)).innerHTML != ""){
+                                    td.style.borderLeft = "solid 1px lightgray";
+                                }
+                                
                             }
                         }
 
@@ -427,7 +472,10 @@ function getData() {
                                 xtd.classList.add("col10");
                             }
                             if (f >= 10) {
-                                xtd.style.textAlign = "right";
+                                xtd.style.textAlign = "right";                                
+                                if (document.getElementById("h_month" + (f-9)).innerHTML != "") {
+                                    xtd.style.borderLeft = "solid 1px lightgray";
+                                }
                             }
 
                             xtr.appendChild(xtd);
@@ -522,6 +570,10 @@ function getData() {
                             
                             td.style.backgroundColor = backgroundColor;
                             td.align = "right";
+                            
+                            if (document.getElementById("h_month" + (c + 1)).innerHTML != "") {
+                                td.style.borderLeft = "solid 1px lightgray";
+                            }
                         }
                     }
 
@@ -540,57 +592,94 @@ function getData() {
                         if (f == 0) {
                             xtd.style.backgroundColor = "white";
                             xtd.classList.add("column_row_block");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f == 1) {
                             xtd.style.backgroundColor = "white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col2");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f == 2) {
                             xtd.style.backgroundColor = "white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col3");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f == 3) {
                             xtd.style.backgroundColor = "white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col4");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f == 4) {
                             xtd.style.backgroundColor = "white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col5");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f == 5) {
                             xtd.style.backgroundColor = "white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col6");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f == 6) {
                             xtd.style.backgroundColor = "white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col7");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f == 7) {
                             //xtd.style.backgroundColor = "white";
                             xtd.style.cssText = "text-align:right; background-color: white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col8");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f == 8) {
                             //xtd.style.backgroundColor = "white";
                             xtd.style.cssText = "text-align:right; background-color: white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col9");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f == 9) {
                             //xtd.style.backgroundColor = "white";
                             xtd.style.cssText = "text-align:right; background-color: white";
                             xtd.classList.add("column_row_block");
                             xtd.classList.add("col10");
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
                         if (f >= 10) {
                             xtd.style.textAlign = "right";
+                            if (document.getElementById("h_month" + (f - 9)).innerHTML != "") {
+                                xtd.style.borderLeft = "solid 1px lightgray";
+                            }
+                            
+                            if(x == detailArray.length - 1){
+                                xtd.style.borderBottom = "solid 1px lightgray";
+                            }
                         }
 
                         xtr.appendChild(xtd);
@@ -604,7 +693,7 @@ function getData() {
             for (var a = 0; a < daysArray.length; a++) {
                 daysArray[a] = 0;                
             }
-
+            
         },
         beforeSend: function (xhr, settings) {
             //処理中
@@ -708,4 +797,35 @@ function columnArray() {
     array[61] = "BJ";
 
     return array;
+}
+
+function getMonthEng(month){
+    var eng = "";
+    if(month == 1){
+        eng = "Jan";
+    }else if(month == 2){
+        eng = "Feb";
+    }else if(month == 3){
+        eng = "Mar";
+    }else if(month == 4){
+        eng = "Apr";
+    }else if(month == 5){
+        eng = "May";
+    }else if(month == 6){
+        eng = "Jun";
+    }else if(month == 7){
+        eng = "Jul";
+    }else if(month == 8){
+        eng = "Aug";
+    }else if(month == 9){
+        eng = "Sep";
+    }else if(month == 10){
+        eng = "Oct";
+    }else if(month == 11){
+        eng = "Nov";
+    }else if(month == 12){
+        eng = "Dec";
+    }
+    
+    return eng;
 }
