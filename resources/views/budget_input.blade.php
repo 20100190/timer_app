@@ -4,8 +4,8 @@
 
 <form action="test3/save" method="POST" name="s">
     {{ csrf_field() }}  
-    <div id="filter_area">
-        <div id="filter_left" style="float: left">
+    <div id="filter_area" style="margin-top: 40px;">
+        <div id="filter_left" style="float: left;height: 200px">
             <div class="row" style="zoom: 100%">
                 <div class="col col-md-3" >
                     Client
@@ -133,7 +133,7 @@
                 <div class="col col-md-3">                    
                 </div>
                 <div class="col col-md-1">
-                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="testData()" style="width: 150px">
+                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="getInputAllData()" style="width: 150px">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
                         <span id="loadingText">Confirm</span>
                     </button>
@@ -148,7 +148,7 @@
     </div>
 
     <div id="spreadsheet" name="spreadsheet" style=""></div>
-
+   
     <input type="hidden" value="" id="postArray" name="postArray">
     <input type="hidden" id="budget_info" name="budget_info" value="">
 

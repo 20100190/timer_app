@@ -73,7 +73,7 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //lazyLoading: true,
     //pagenation: 10,
     tableWidth: '100%',
-    tableHeight: "550px",
+    tableHeight: "490px",
     freezeColumns: 10,
     columns: [
         {
@@ -830,28 +830,58 @@ function sss() {
     myspreadsheet.setData(budgetArray);
 }
 
-function clearInputFilter(){
+function clearInputFilter() {
     $('#client').multiselect('deselectAll', false);
     $('#client').multiselect('updateButtonText');
-    
+
     $('#project').multiselect('deselectAll', false);
     $('#project').multiselect('updateButtonText');
-    
+
     $('#fye').multiselect('deselectAll', false);
     $('#fye').multiselect('updateButtonText');
-    
+
     $('#vic').multiselect('deselectAll', false);
     $('#vic').multiselect('updateButtonText');
-    
+
     $('#pic').multiselect('deselectAll', false);
     $('#pic').multiselect('updateButtonText');
-    
+
     $('#sel_role').multiselect('deselectAll', false);
     $('#sel_role').multiselect('updateButtonText');
-    
+
     $('#sel_staff').multiselect('deselectAll', false);
     $('#sel_staff').multiselect('updateButtonText');
-    
+
     document.getElementById("filter_date").value = "";
+}
+
+function getInputAllData() {
+    var clientObj = $("#client").val();
+    var projectObj = $("#project").val();
+    var fyeObj = $("#fye").val();
+    var vicObj = $("#vic").val();
+    var picObj = $("#pic").val();
+    var staffObj = $("#sel_staff").val();
+    var roleObj = $("#sel_role").val();
+    var dateFromObj = document.getElementById("filter_date").value;
+
+    if (clientObj == null && projectObj == null && fyeObj == null && vicObj == null && picObj == null && staffObj == null && roleObj == null && dateFromObj == "") {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "検索結果が多いため、表示までに時間がかかります。実行しますか？",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.value) {
+                testData();
+            }
+        })
+    } else {
+        testData();
+    }
+
 }
         
