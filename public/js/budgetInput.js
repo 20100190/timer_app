@@ -63,6 +63,7 @@ $('.datepicker1').datepicker({
 });
 
 var maskStr = "#,##0.0";
+var spreadsheetWidth = "80";
 
 var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //data: data,
@@ -111,331 +112,386 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
             type: 'number',
             title: 'Budget',
             width: '100',
-            mask: maskStr
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: 'Assigned',
             width: '100',
-            mask: maskStr
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: 'Diff',
             width: '100',
-            mask: "[-]" + maskStr
+            mask: "[-]" + maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
     ],    
     onload: function (instance) {
