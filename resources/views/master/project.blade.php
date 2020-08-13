@@ -202,8 +202,8 @@
         <table border="0" id="tbl" style="font-size: 12px;table-layout: fixed;width: 330px" class="table table-sm">
             <thead>
                 <tr>
-                    <th name="task_no" style="text-align:center; width:30px;">No</th>
-                    <th style="width: 200px">Task</th>                        
+                    <th class="project-font-size" name="task_no" style="text-align:center; width:30px;">No</th>
+                    <th class="project-font-size" style="width: 200px">Task</th>                        
                     <th style="width:30px;"></th>
                     <th style="width:50px;"></th>  
                     <th style="width:50px;"></th>   
@@ -219,12 +219,12 @@
         <table border="0" id="budget_list" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 650px">                
             <thead>
                 <tr>
-                    <th style="text-align:center; width:40px;">No</th>
-                    <th style="width: 70px">Staff</th>
-                    <th style="width: 120px">Role</th>
-                    <th style="width: 100px">Budget Hours</th>
-                    <th style="width: 50px">Rate</th>
-                    <th style="width: 60px">Budget</th>                        
+                    <th class="project-font-size" style="text-align:center; width:40px;">No</th>
+                    <th class="project-font-size" style="width: 70px">Staff</th>
+                    <th class="project-font-size" style="width: 120px">Role</th>
+                    <th class="project-font-size" style="width: 100px">Budget Hours</th>
+                    <th class="project-font-size" style="width: 50px">Rate</th>
+                    <th class="project-font-size" style="width: 60px">Budget</th>                        
                     <th style="width:40px;"> </th>
                 </tr> 
             </thead>
@@ -235,8 +235,8 @@
                     <td style="width: 70px"></td>
                     <td style="width: 120px"></td>                    
                     <td style="width: 120px"></td>                    
-                    <td style="width: 50px;">Total</td>
-                    <td style="width: 60px;text-align: right"><span id="total_budget">0</span></td>                       
+                    <td class="project-font-size" style="width: 50px;">Total</td>
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="total_budget">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr style="height: 30px">
@@ -252,7 +252,7 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;">Engagement Fee / Month</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Engagement Fee / Month</td>                    
                     <td style="width: 60px;text-align: right">
                         <input type="text" class="form-control form-control-sm" id="engagement_fee" name="engagement_fee" value="0" onchange="calc()" style="text-align: right;width: 100%">
                     </td>                        
@@ -262,7 +262,7 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;"># of montl</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;"># of montl</td>                    
                     <td style="width: 60px;">
                         <input type="text" class="form-control form-control-sm" id="engagement_monthly" name="engagement_monthly" value="0" onchange="calc()" style="text-align: right;width: 100%">
                     </td>                        
@@ -272,7 +272,7 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;">Adjustmentws</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Adjustmentws</td>                    
                     <td style="width: 60px;text-align: right">
                         <input type="text" class="form-control form-control-sm" id="adjustments" name="adjustments" value="0" onchange="calc()" style="text-align: right;width: 100%">
                     </td>                       
@@ -282,8 +282,8 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;">Engagement Fee</td>                    
-                    <td style="width: 60px;text-align: right"><span id="engagement_total">0</span></td>                       
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Engagement Fee</td>                    
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="engagement_total">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr style="height: 30px">
@@ -299,16 +299,16 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;">Defference</td>                    
-                    <td style="width: 60px;text-align: right"><span id="defference">0</span></td>                       
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Defference</td>                    
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="defference">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr>
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;">Realization</td>                    
-                    <td style="width: 60px;text-align: right"><span id="realization">0%</span></td>                      
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Realization</td>                    
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="realization">0%</span></td>                      
                     <td style="width:40px;"> </td>
                 </tr>
             </tfoot>
@@ -335,7 +335,7 @@
 
 <script>
     // "global" vars, built using blade
-    var imagesUrl = '{{ URL::asset(' / image') }}';
+    var imagesUrl = '{{ URL::asset('/image') }}';
 </script>
 <script src="{{ asset('js/project.js') }}"></script>
 
