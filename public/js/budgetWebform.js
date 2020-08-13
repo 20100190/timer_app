@@ -289,6 +289,10 @@ function getData() {
                 if (assigned == 0) {
                     continue;
                 }
+                
+                if (client == null) {
+                    continue;
+                }
 
                 if (oldClient == "") {
                     oldClient = client;
