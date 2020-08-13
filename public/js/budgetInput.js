@@ -73,7 +73,7 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //lazyLoading: true,
     //pagenation: 10,
     tableWidth: '100%',
-    tableHeight: "600px",
+    tableHeight: "550px",
     freezeColumns: 10,
     columns: [
         {

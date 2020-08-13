@@ -229,10 +229,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div><!-- end content -->
             
             
-            <footer class="main-footer">
+            <!--<footer class="main-footer">
                 <div class="pull-right hidden-xs">Version1.0</div>
                 <strong> </strong>
-            </footer><!-- end footer -->
+            </footer>--><!-- end footer -->
 
 
 

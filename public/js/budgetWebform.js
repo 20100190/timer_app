@@ -64,7 +64,7 @@ function closeOverrall() {
         btnObj.src = imagesUrl + "/close.png"
         document.getElementById("div1").style.height = "40%";
         document.getElementById("div1").style.minHeight = "350px";
-        document.getElementById("div2").style.height = "57%";
+        document.getElementById("div2").style.height = "40%";
         document.getElementById("div3").style.height = "300px";
         
         document.getElementById("div3").style.zIndex = "10";        
@@ -73,7 +73,7 @@ function closeOverrall() {
         btnObj.src = imagesUrl + "/open.png"
         document.getElementById("div1").style.height = "0%";
         document.getElementById("div1").style.minHeight = "0px";
-        document.getElementById("div2").style.height = "97%";
+        document.getElementById("div2").style.height = "80%";
         document.getElementById("div3").style.height = "0px";
         
         document.getElementById("div3").style.zIndex = "0";
