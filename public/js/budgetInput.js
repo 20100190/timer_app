@@ -829,4 +829,29 @@ function sss() {
     var budgetArray = JSON.parse(document.getElementById("budget_info").value);
     myspreadsheet.setData(budgetArray);
 }
+
+function clearInputFilter(){
+    $('#client').multiselect('deselectAll', false);
+    $('#client').multiselect('updateButtonText');
+    
+    $('#project').multiselect('deselectAll', false);
+    $('#project').multiselect('updateButtonText');
+    
+    $('#fye').multiselect('deselectAll', false);
+    $('#fye').multiselect('updateButtonText');
+    
+    $('#vic').multiselect('deselectAll', false);
+    $('#vic').multiselect('updateButtonText');
+    
+    $('#pic').multiselect('deselectAll', false);
+    $('#pic').multiselect('updateButtonText');
+    
+    $('#sel_role').multiselect('deselectAll', false);
+    $('#sel_role').multiselect('updateButtonText');
+    
+    $('#sel_staff').multiselect('deselectAll', false);
+    $('#sel_staff').multiselect('updateButtonText');
+    
+    document.getElementById("filter_date").value = "";
+}
         

@@ -208,7 +208,18 @@
                 </div>
             </div>
             
-            <div class="row" style="zoom: 100%;margin-top: 60px">
+            <div class="row" style="zoom: 100%;margin-top: 15px">
+                <div class="col col-md-3">                    
+                </div>
+                <div class="col col-md-1">
+                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px" onclick="clearShowFilter()">
+                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="loadingText">Clear</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row" style="zoom: 100%;margin-top: 15px">
                 <div class="col col-md-3">                    
                 </div>
                 <div class="col col-md-1">

@@ -16,7 +16,7 @@
                         <option value="{{$clients->id}}">{{$clients->name}}</option>
                         @endforeach
                     </select>
-                </div>           
+                </div>  
             </div>
 
             <div class="row" style="zoom: 100%">
@@ -138,8 +138,12 @@
                         <span id="loadingText">Confirm</span>
                     </button>
                 </div>
+            </div>            
+        </div>
+        <div style="float: left">
+            <div class="col col-md-3" >
+                <input type="button" class="btn btn-primary" value="clear" onclick="clearInputFilter()" style="width: 150px">
             </div>
-            
         </div>
     </div>
 
