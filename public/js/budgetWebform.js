@@ -184,8 +184,9 @@ function getData() {
                 for (var b = 1; b <= 52; b++) {
                     document.getElementById("ot" + a + b).innerHTML = "";
                 }
-            }*/
-            for (var a = 1; a <= 20; a++) {
+            }*/            
+            var staffCount = 30
+            for (var a = 1; a <= staffCount; a++) {
                 document.getElementById("ot_initial" + a).innerHTML = "";
                 document.getElementById("ot_ptotal" + a).innerHTML = "";
                 for (var b = 1; b <= 52; b++) {
@@ -222,13 +223,13 @@ function getData() {
             for (var x = 0; x < data.week.length; x++) {               
                //初期化
                 document.getElementById("td_otTotal" + (x + 1)).style.cssText = baseStyle;
-                for (y = 1; y <= 20; y++) {
+                for (y = 1; y <= staffCount; y++) {
                     document.getElementById("td_ot" + ("00" + y).slice(-2) + (x + 1)).style.cssText = baseStyle;
                 }
                 
                 if (document.getElementById("h2_month" + (x + 1)).innerHTML != ""){
                     var str = baseStyle + borderStyle;
-                    for(y = 1; y <= 20; y++){
+                    for(y = 1; y <= staffCount; y++){
                         document.getElementById("td_ot" + ("00" + y).slice(-2) + (x + 1)).style.cssText = str;                        
                     }     
                     
