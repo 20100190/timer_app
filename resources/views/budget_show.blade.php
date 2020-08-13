@@ -560,6 +560,156 @@
                         <td class="column_row_block col11" id="td_ot20{{$i}}" style="background-color: white;text-align: right"><span id="ot20{{$i}}"></td>
                         @endfor  
                     </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial21"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal21"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot21{{$i}}" style="background-color: white;text-align: right"><span id="ot21{{$i}}"></td>
+                        @endfor  
+                    </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial22"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal22"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot22{{$i}}" style="background-color: white;text-align: right"><span id="ot22{{$i}}"></td>
+                        @endfor  
+                    </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial23"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal23"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot23{{$i}}" style="background-color: white;text-align: right"><span id="ot23{{$i}}"></td>
+                        @endfor  
+                    </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial24"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal24"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot24{{$i}}" style="background-color: white;text-align: right"><span id="ot24{{$i}}"></td>
+                        @endfor  
+                    </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial25"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal25"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot25{{$i}}" style="background-color: white;text-align: right"><span id="ot25{{$i}}"></td>
+                        @endfor  
+                    </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial26"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal26"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot26{{$i}}" style="background-color: white;text-align: right"><span id="ot26{{$i}}"></td>
+                        @endfor  
+                    </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial27"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal27"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot27{{$i}}" style="background-color: white;text-align: right"><span id="ot27{{$i}}"></td>
+                        @endfor  
+                    </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial28"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal28"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot28{{$i}}" style="background-color: white;text-align: right"><span id="ot28{{$i}}"></td>
+                        @endfor  
+                    </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial29"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal29"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot29{{$i}}" style="background-color: white;text-align: right"><span id="ot29{{$i}}"></td>
+                        @endfor  
+                    </tr>
+                    <tr>
+                        <td class="column_row_block" style="background-color: white"></td>
+                        <td class="column_row_block col2" style="background-color: white;"></td>
+                        <td class="column_row_block col3" style="background-color: white;"></td>
+                        <td class="column_row_block col4" style="background-color: white;"></td>
+                        <td class="column_row_block col5" style="background-color: white;"></td>
+                        <td class="column_row_block col6" style="background-color: white;"></td>
+                        <td class="column_row_block col7" style="background-color: white;"></td>
+                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial30"></span></td>
+                        <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal30"></span></td>
+                        <td class="column_row_block col10" style="background-color: white;"></td>
+                        @for($i=1;$i<=52;$i++)
+                        <td class="column_row_block col11" id="td_ot30{{$i}}" style="background-color: white;text-align: right"><span id="ot30{{$i}}"></td>
+                        @endfor  
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr>
