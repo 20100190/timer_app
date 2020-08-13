@@ -501,10 +501,14 @@ function getErrorText(){
 
     var count = objTBL.rows.length;
     
+    var objTaskTBL = document.getElementById("tbl");
+    var taskCount = objTaskTBL.rows.length;
+    
     var staffArray = [];
     var errorText = "";
     var isStaffError = false;
     var isHoursError = false;
+    var isTaskError = false;
     for (var cnt = 1; cnt <= count; cnt++) {
         var assign = document.getElementById("assign" + cnt).selectedIndex;
         var hours = document.getElementById("hours" + cnt).value;
@@ -512,12 +516,19 @@ function getErrorText(){
             isStaffError = true;
         }
         
-        if(hours == ""){
+        if(hours == "" || hours == 0){
             isHoursError = true;
         }
         
         staffArray.push(assign);
         
+    }
+    
+    for(var cnt = 1; cnt < taskCount; cnt++){
+        var taskName = document.getElementById("task_name" + cnt).value;
+        if(taskName == ""){
+            isTaskError = true;
+        }
     }
     
     //未選択チェック
@@ -533,6 +544,10 @@ function getErrorText(){
     //Budget hours 未入力チェック
     if(isHoursError){
         errorText += "Budget Hoursが入力されていない行があります。<br>";
+    }
+    
+    if(isTaskError){
+        errorText += "Taskが選択されていない行があります。<br>";
     }
     
     return errorText;
