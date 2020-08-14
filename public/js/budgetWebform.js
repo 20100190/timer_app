@@ -204,11 +204,10 @@ function getData() {
                 if (data.total[s].staff_id !== null) {                                      
                     var colNo = getOverallTotalColNo(data.total[s].year, data.total[s].month, data.total[s].day, data.week);                                        
                     var operatingTime = data.week[colNo - 1].operating_time;
-                    var staffId = ("00" + data.total[s].staff_id).slice(-2);
+                    var staffId = ("00" + data.total[s].staff_id).slice(-2);                   
                     //document.getElementById("ot" + data.total[s].staff_id + colNo).style = "background-color: white";
                     document.getElementById("ot" + staffId + colNo).style = "background-color: white";
-                    if (operatingTime < data.total[s].working_days) {
-                        //document.getElementById("ot" + data.total[s].staff_id + colNo).style = "display:inline-block;height: 100%;width: 100%;background-color: #FFDBC9";
+                    if (operatingTime < data.total[s].working_days) {                        
                         document.getElementById("ot" + staffId + colNo).style = "display:inline-block;height: 100%;width: 100%;background-color: #FFDBC9";
                     }
                     //document.getElementById("ot" + data.total[s].staff_id + colNo).innerHTML = Math.ceil(data.total[s].working_days);
@@ -235,6 +234,38 @@ function getData() {
                     
                     document.getElementById("td_otTotal" + (x + 1)).style.cssText += ";" + borderStyle;
                 }
+                
+                //背景色
+                var rowStyle = "display:inline-block;height: 100%;width: 100%;";
+                var rowColorOdd = "background-color: aliceblue";
+                var rowColorWhite = "background-color: white";
+                var currentColor = rowColorOdd;
+                for (var a = 1; a <= staffCount; a++) {
+                    if (document.getElementById("ot_initial" + a).innerHTML != "") {
+                        if (document.getElementById("ot" + ("00" + a).slice(-2) + (x + 1)).innerHTML == "") {
+                            document.getElementById("ot" + ("00" + a).slice(-2) + (x + 1)).innerHTML = "&nbsp";
+                        }
+                        
+                        if (document.getElementById("ot_uh" + a).innerHTML == "") {
+                            document.getElementById("ot_uh" + a).innerHTML = "&nbsp";
+                        }
+                        
+                        document.getElementById("ot_initial" + a).style = rowStyle + currentColor;
+                        document.getElementById("ot_ptotal" + a).style = rowStyle + currentColor;
+                        document.getElementById("ot_uh" + a).style = rowStyle + currentColor;
+                        
+                        if(document.getElementById("ot" + ("00" + a).slice(-2) + (x + 1)).style.cssText != "display: inline-block; height: 100%; width: 100%; background-color: rgb(255, 219, 201);"){
+                            document.getElementById("ot" + ("00" + a).slice(-2) + (x + 1)).style = rowStyle + currentColor;//"display:inline-block;height: 100%;width: 100%;background-color: lightblue";
+                        }
+                        
+                        if(currentColor == rowColorOdd){
+                            currentColor = rowColorWhite;
+                        }else{
+                            currentColor = rowColorOdd;
+                        }                    
+                    }
+                }
+                
             }                        
 
             //overall personal total
