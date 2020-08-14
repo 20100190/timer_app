@@ -302,6 +302,10 @@ function getData() {
 
             var detailArray = [];
             var detailRowArray = new Array(62);
+            
+            var sumBudget = 0;
+            var sumAssigned = 0;
+            var sumDiff = 0;
 
             for (var s = 0; s < data.clientList.length; s++) {
                 var tr = document.createElement('tr');
@@ -314,8 +318,8 @@ function getData() {
                 var assign = data.clientList[s][6];
                 var budget = Math.ceil(data.clientList[s][7]);
                 var assigned = Math.ceil(data.clientList[s][8]);
-                var diff = Math.ceil(data.clientList[s][9]);
-
+                var diff = Math.ceil(data.clientList[s][9]);               
+                
                 var row = data.clientList[s];
 
                 if (assigned == 0) {
@@ -330,7 +334,10 @@ function getData() {
                     oldClient = client;
                     oldProject = project;
                 }
-
+                
+                sumBudget += budget;
+                sumAssigned += assigned;
+                sumDiff += diff;
 
                 detailRowArray[0] = client;
                 detailRowArray[1] = project;
@@ -411,20 +418,25 @@ function getData() {
                         }
                         if (x == 7) {
                             //td.innerHTML = budget;
-                            //td.style.backgroundColor = backgroundColor;
+                            td.innerHTML = sumBudget;
                             td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                             td.classList.add("column_row_block");
                             td.classList.add("col8");
+                            sumBudget = 0;
                         }
                         if (x == 8) {
-                           td.style.cssText = "text-align:right; background-color: " + backgroundColor;
+                            td.innerHTML = sumAssigned;
+                            td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                             td.classList.add("column_row_block");
                             td.classList.add("col9");
+                            sumAssigned = 0;
                         }
                         if (x == 9) {
+                            td.innerHTML = sumDiff;
                             td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                             td.classList.add("column_row_block");
                             td.classList.add("col10");
+                            sumDiff = 0;
                         }
                         for (c = 0; c < daysArray.length; c++) {
                             if (x == c + 10) {
@@ -579,24 +591,27 @@ function getData() {
                     }
                     if (x == 7) {
                         //td.innerHTML = budget;
-                        //td.style.backgroundColor = backgroundColor;
+                        td.innerHTML = sumBudget;                       
                         td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                         td.classList.add("column_row_block");
                         td.classList.add("col8");
+                        sumBudget = 0;
                     }
                     if (x == 8) {
                         //td.innerHTML = assigned;
-                        //td.style.backgroundColor = backgroundColor;
+                        td.innerHTML = sumAssigned;
                         td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                         td.classList.add("column_row_block");
                         td.classList.add("col9");
+                        sumAssigned = 0;
                     }
                     if (x == 9) {
                         //td.innerHTML = diff;
-                        //td.style.backgroundColor = backgroundColor;
+                        td.innerHTML = sumDiff;
                         td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                         td.classList.add("column_row_block");
                         td.classList.add("col10");
+                        sumDiff = 0;
                     }
                     for (c = 0; c < daysArray.length; c++) {
                         if (x == c + 10) {
