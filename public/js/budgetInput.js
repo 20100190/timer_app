@@ -79,11 +79,11 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     columns: [
         {
             title: 'Client',
-            width: '150'
+            width: '250'
         },
         {
             title: 'Project',
-            width: '150'
+            width: '300'
         },
         {
             title: 'FYE',
