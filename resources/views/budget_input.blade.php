@@ -105,13 +105,9 @@
                 </div>
                 <div class="col col-md-1">
                     <select id="sel_role" name="sel_role" multiple="multiple" class="form-control" >                            
-                        <option value="1">Partner</option>
-                        <option value="2">Senior Manager</option> 
-                        <option value="3">Manager</option>
-                        <option value="4">Experienced Senior</option>
-                        <option value="5">Senior</option>
-                        <option value="6">Experienced Staff</option>
-                        <option value="7">Staff</option>                            
+                        @foreach ($role as $roles)                    
+                        <option value="{{$roles->id}}">{{$roles->role}}</option>
+                        @endforeach                    
                     </select>
                 </div>
             </div>

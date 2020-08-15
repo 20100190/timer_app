@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(WeeksTableSeeder::class);
         $this->call(AssignTableSeeder::class);
         $this->call(TaskTableSeeder::class);
+        $this->call(RoleOrderTableSeeder::class);
     }
 }
