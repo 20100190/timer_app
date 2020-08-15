@@ -198,6 +198,15 @@ function getData() {
             for (var c = 1; c <= 52; c++) {
                 document.getElementById("otTotal" + c).innerHTML = "";
             }
+            
+            for (var a = 1; a <= staffCount; a++) {
+                for (var x = 0; x < data.week.length; x++) {
+                    document.getElementById("ot" + ("00" + a).slice(-2) + (x + 1)).innerHTML = "";
+                    document.getElementById("ot_uh" + a).innerHTML = "";
+                    document.getElementById("ot" + ("00" + a).slice(-2) + (x + 1)).style.cssText = "";
+                }
+            }
+                
 
             //overall detail
             for (var s = 0; s < data.total.length; s++) {
@@ -234,7 +243,7 @@ function getData() {
                     
                     document.getElementById("td_otTotal" + (x + 1)).style.cssText += ";" + borderStyle;
                 }
-                
+             
                 //背景色
                 var rowStyle = "display:inline-block;height: 100%;width: 100%;";
                 var rowColorOdd = "background-color: aliceblue";
