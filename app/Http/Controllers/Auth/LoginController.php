@@ -25,7 +25,7 @@ use AuthenticatesUsers;
      *
      * @var string
      */
-    protected $redirectTo = '/budget/enter';
+    protected $redirectTo = '/budget/show';
 
     /**
      * Create a new controller instance.
