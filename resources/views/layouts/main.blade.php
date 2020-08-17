@@ -51,6 +51,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 margin-right: 20px
             }
             
+            .entry-filter-bottom {
+                margin-bottom: 10px;
+            }
+            
             .project-button {
                 width: 160px
             }
@@ -59,7 +63,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 padding: 10px;
                 /*border: 1px solid #333333;*/
                 width: 1020px;
-                height: 260px;
+                height: 220px;
                 background-color: #f6fafd;
             }
             
@@ -78,7 +82,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             .project-font-size {
                 font-size: 14px;
             }
-           
+            
+            .line-height {
+                line-height: 30px;
+            }
+
         </style>
             
         

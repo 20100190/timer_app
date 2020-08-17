@@ -4,11 +4,11 @@
 
 <form action="test3/save" method="POST" name="s">
     {{ csrf_field() }}  
-    <div id="filter_area" style="margin-top: 40px;">
-        <div id="filter_left" style="float: left;height: 200px">
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3" >
-                    Client
+    <div id="filter_area" style="margin-top: 30px;">
+        <div id="filter_left" style="float: left;height: 200px;margin-bottom: 30px">
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-2" >
+                    <span class="line-height">Client</span>
                 </div>
                 <div class="col col-md-3">
                     <select id="client" name="client" multiple="multiple" class="form-control select2" data-display="static">                           
@@ -19,9 +19,9 @@
                 </div>  
             </div>
 
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3">
-                    Project
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-2">
+                    <span class="line-height">Project</span>
                 </div>
                 <div class="col col-md-1">
                     <select id="project" name="project" multiple="multiple" style="width: 200px">                          
@@ -31,10 +31,53 @@
                     </select>
                 </div>
             </div>
+            
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-2">
+                    <span class="line-height">PIC</span>
+                </div>
+                <div class="col col-md-1">
+                    @if(!is_object($loginInitial))
+                    <select id="pic" name="pic" multiple="multiple" class="form-control">                            
+                        @foreach ($pic as $pics)                    
+                        <option value="{{$pics->id}}">{{$pics->initial}}</option>
+                        @endforeach
+                    </select>
+                    @else
+                    <select id="pic" name="pic" multiple="multiple" class="form-control" disabled>                            
+                        @foreach ($pic as $pics)                    
+                        <option value="{{$pics->id}}" @if($loginInitial->initial == $pics->initial) selected @endif>{{$pics->initial}}</option>
+                        @endforeach
+                    </select>
+                    @endif                
+                </div>
+            </div>
+            
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-2">
+                    <span class="line-height">Staff</span>
+                </div>
+                <div class="col col-md-1">
+                    <select id="sel_staff" name="sel_staff" multiple="multiple" class="form-control" >                            
+                        @foreach ($staff as $staffs)
+                        <option value="{{$staffs->id}}">{{$staffs->initial}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>              
 
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3">
-                    FYE
+            <div class="row entry-filter-bottom">                           
+                <div class="col col-md-3" >
+                    <input type="button" class="btn btn-primary" value="clear" onclick="clearInputFilter()" style="width: 150px;margin-left: 335px">
+                </div>
+            </div>
+        </div>
+
+        <div id="filter_right" style="float: left;margin-left: 80px">
+            
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-4">
+                    <span class="line-height">FYE</span>
                 </div>
                 <div class="col col-md-1">
                     <select id="fye" name="fye" class="form-control" multiple="multiple" >                            
@@ -54,9 +97,9 @@
                 </div>
             </div>       
 
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3">
-                    VIC
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-4">
+                    <span class="line-height">VIC</span>
                 </div>
                 <div class="col col-md-1">
                     <select id="vic" name="vic" multiple="multiple" class="form-control" >                            
@@ -66,42 +109,11 @@
                     </select>
                 </div>
             </div>
+            
 
-            <div class="row">
-                <div class="col col-md-3">
-                    Date From
-                </div>
-                <div class="col col-md-1">
-                    <input type="text" style="width:150px;hight:10px;margin-right: 20px;font-size: 3px" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="">                            
-                </div>                
-            </div>
-        </div>
-
-        <div id="filter_right" style="float: left;margin-left: 80px">
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3">
-                    PIC
-                </div>
-                <div class="col col-md-1">
-                    @if(!is_object($loginInitial))
-                    <select id="pic" name="pic" multiple="multiple" class="form-control">                            
-                        @foreach ($pic as $pics)                    
-                        <option value="{{$pics->id}}">{{$pics->initial}}</option>
-                        @endforeach
-                    </select>
-                    @else
-                    <select id="pic" name="pic" multiple="multiple" class="form-control" disabled>                            
-                        @foreach ($pic as $pics)                    
-                        <option value="{{$pics->id}}" @if($loginInitial->initial == $pics->initial) selected @endif>{{$pics->initial}}</option>
-                        @endforeach
-                    </select>
-                    @endif                
-                </div>
-            </div>
-
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3">
-                    Role
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-4">
+                    <span class="line-height">Role</span>
                 </div>
                 <div class="col col-md-1">
                     <select id="sel_role" name="sel_role" multiple="multiple" class="form-control" >                            
@@ -111,36 +123,27 @@
                     </select>
                 </div>
             </div>
-
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3">
-                    Staff
+           
+            <div class="row entry-filter-bottom">
+                <div class="col col-md-4">
+                    <span class="line-height">Date From</span>
                 </div>
                 <div class="col col-md-1">
-                    <select id="sel_staff" name="sel_staff" multiple="multiple" class="form-control" >                            
-                        @foreach ($staff as $staffs)
-                        <option value="{{$staffs->id}}">{{$staffs->initial}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>  
+                    <input type="text" style="width:150px;hight:10px;margin-right: 20px;font-size: 3px" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="">                            
+                </div>                 
+            </div>
             
-            <div class="row" style="zoom: 100%;margin-top: 25px">
-                <div class="col col-md-3">                    
+            <div class="row entry-filter-bottom" style="zoom: 100%;">    
+                <div class="col col-md-4">                   
                 </div>
                 <div class="col col-md-1">
                     <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="getInputAllData()" style="width: 150px">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                        <span id="loadingText">Confirm</span>
+                        <span id="loadingText">Search</span>
                     </button>
                 </div>
             </div>            
-        </div>
-        <div style="float: left">
-            <div class="col col-md-3" >
-                <input type="button" class="btn btn-primary" value="clear" onclick="clearInputFilter()" style="width: 150px">
-            </div>
-        </div>
+        </div>        
     </div>
 
     <div id="spreadsheet" name="spreadsheet" style=""></div>

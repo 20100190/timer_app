@@ -27,12 +27,12 @@ $(document).ready(function () {
         includeSelectAllOption: true,
     });
     $('#fye').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
     $('#vic').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         includeSelectAllOption: true,
     });

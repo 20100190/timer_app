@@ -134,7 +134,7 @@
             <!--<input type="button" onclick="loadTask()" class="btn btn-primary" style="margin-left: 20px" value="読込">-->
             <button class="btn btn-primary" type="button" onclick="loadTask()">
                 <!--<span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>-->
-                <span id="loadingText">Confirm</span>
+                <span id="loadingText">Search</span>
             </button>
         </div>
 
@@ -190,9 +190,9 @@
             <label>Notes</label><br>
             <input type="text" id="note" name="note" class="form-control" style="width: 100%">
         </div>
-        
-         </div>
-   
+
+    </div>
+
     <div style="clear: left"></div>
 
     <!--task-->
@@ -327,7 +327,7 @@
 
 <!--<button onclick="save()">xxx</button>-->
 <!--<input type="button" onclick="saveForm()" class="btn btn-primary" value="保存">-->
-<button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()">
+<button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()" style="margin-left: 800px;margin-top: 30px">
     <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
     <span id="savingText">Save</span>
 </button>

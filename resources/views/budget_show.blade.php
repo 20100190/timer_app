@@ -70,6 +70,10 @@
         z-index: 0;
         text-align: center;
     }   
+    
+    .line-height {
+        line-height: 30px;
+    }
 
 </style>      
 
@@ -83,9 +87,9 @@
     </div>
     <div id="div3" style="width: 800px;height: 300px;position: absolute;margin-top: 50px;margin-left: 20px;z-index: 10">
         <div id="filter_left" style="float: left">
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3" >
-                    Client
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-3">
+                    <span class="line-height">Client</span>
                 </div>
                 <div class="col col-md-3">
                     <select id="client" name="client" multiple="multiple" class="form-control">            
@@ -96,9 +100,9 @@
                 </div>           
             </div>
             
-            <div class="row" style="zoom: 100%">
+            <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-3">
-                    Project
+                    <span class="line-height">Project</span>
                 </div>
                 <div class="col col-md-1">
                     <select id="project" name="project" multiple="multiple" style="width: 200px;">                        
@@ -109,9 +113,62 @@
                 </div>
             </div>
             
-            <div class="row" style="zoom: 100%">
+            <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-3">
-                    FYE
+                    <span class="line-height">PIC</span>
+                </div>
+                <div class="col col-md-1">
+                    <select id="pic" name="pic" multiple="multiple" class="form-control" >                            
+                        @foreach ($pic as $pic)
+                        <option value="{{$pic->id}}">{{$pic->initial}}</option>
+                        @endforeach
+                    </select>           
+                </div>
+            </div>
+            
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-3">
+                    <span class="line-height">Staff</span>
+                </div>
+                <div class="col col-md-1">
+                    <select id="sel_staff" name="sel_staff" multiple="multiple" class="form-control" >                            
+                        @foreach ($staff as $staff)
+                        <option value="{{$staff->id}}">{{$staff->initial}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row entry-filter-bottom">
+                <div class="col col-md-3">
+                    <span class="line-height">Date From</span>
+                </div>
+                <div class="col col-md-1">
+                    <input type="text" style="width:150px;margin-right: 20px" class="form-control datepicker1" id="filter_date_from" name="filter_date_from" placeholder="mm/dd/yyyy" value="">                            
+                </div>                      
+            </div>
+            
+            <div class="row entry-filter-bottom">
+                <div class="col col-md-3">
+                    <span class="line-height">Date To</span>
+                </div>
+                <div class="col col-md-4">
+                    <input type="text" style="width:150px;margin-right: 20px" class="form-control datepicker1" id="filter_date_to" name="filter_date_to" placeholder="mm/dd/yyyy" value="">                            
+                </div>  
+                <div class="col col-md-1">
+                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px;margin-left: 0px" onclick="clearShowFilter()">
+                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="loadingText">Clear</span>
+                    </button>
+                </div>
+            </div>  
+            
+        </div>       
+
+        <div id="filter_right" style="float: left;margin-left: 30px">
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-3">
+                    <span class="line-height">FYE</span>
                 </div>
                 <div class="col col-md-1">
                     <select id="fye" name="fye" class="form-control" multiple="multiple" >                            
@@ -131,9 +188,9 @@
                 </div>
             </div>   
             
-            <div class="row" style="zoom: 100%">
+            <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-3">
-                    VIC
+                    <span class="line-height">VIC</span>
                 </div>
                 <div class="col col-md-1">
                     <select id="vic" name="vic" multiple="multiple" class="form-control" >                            
@@ -144,43 +201,9 @@
                 </div>
             </div>
             
-            <div class="row">
+            <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-3">
-                    Date From
-                </div>
-                <div class="col col-md-1">
-                    <input type="text" style="width:100px;margin-right: 20px" class="form-control datepicker1" id="filter_date_from" name="filter_date_from" placeholder="mm/dd/yyyy" value="">                            
-                </div>                
-            </div>
-            
-            <div class="row">
-                <div class="col col-md-3">
-                    Date To
-                </div>
-                <div class="col col-md-1">
-                    <input type="text" style="width:100px;margin-right: 20px" class="form-control datepicker1" id="filter_date_to" name="filter_date_to" placeholder="mm/dd/yyyy" value="">                            
-                </div>                
-            </div>
-            
-        </div>       
-
-        <div id="filter_right" style="float: left;margin-left: 100px">
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3">
-                    PIC
-                </div>
-                <div class="col col-md-1">
-                    <select id="pic" name="pic" multiple="multiple" class="form-control" >                            
-                        @foreach ($pic as $pic)
-                        <option value="{{$pic->id}}">{{$pic->initial}}</option>
-                        @endforeach
-                    </select>           
-                </div>
-            </div>
-            
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3">
-                    Role
+                    <span class="line-height">Role</span>
                 </div>
                 <div class="col col-md-1">
                     <select id="sel_role" name="sel_role" multiple="multiple" class="form-control" >                            
@@ -191,37 +214,13 @@
                 </div>
             </div>
             
-            <div class="row" style="zoom: 100%">
-                <div class="col col-md-3">
-                    Staff
-                </div>
-                <div class="col col-md-1">
-                    <select id="sel_staff" name="sel_staff" multiple="multiple" class="form-control" >                            
-                        @foreach ($staff as $staff)
-                        <option value="{{$staff->id}}">{{$staff->initial}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            
-            <div class="row" style="zoom: 100%;margin-top: 15px">
-                <div class="col col-md-3">                    
-                </div>
-                <div class="col col-md-1">
-                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px" onclick="clearShowFilter()">
-                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                        <span id="loadingText">Clear</span>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="row" style="zoom: 100%;margin-top: 15px">
+            <div class="row entry-filter-bottom" style="zoom: 100%;margin-top: 93px">
                 <div class="col col-md-3">                    
                 </div>
                 <div class="col col-md-1">
                     <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px" onclick="getData()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                        <span id="loadingText">Confirm</span>
+                        <span id="loadingText">Search</span>
                     </button>
                 </div>
             </div>
