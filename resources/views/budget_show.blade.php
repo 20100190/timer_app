@@ -71,10 +71,6 @@
         text-align: center;
     }   
     
-    .line-height {
-        line-height: 30px;
-    }
-
 </style>      
 
 @section('content')   
