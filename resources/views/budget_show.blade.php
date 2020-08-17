@@ -81,7 +81,7 @@
         <!--<button style="" onclick="closeOverrall()">閉じる</button>-->
         <input type="image" id="btn_open_close" src="{{ URL::asset('/image') }}/close.png" onclick="closeOverrall()">
     </div>
-    <div id="div3" style="width: 800px;height: 300px;position: absolute;margin-top: 50px;margin-left: 20px;z-index: 10">
+    <div id="div3" style="width: 800px;height: 300px;position: absolute;margin-top: 0px;margin-left: 20px;z-index: 10">
         <div id="filter_left" style="float: left">
             <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-3">
