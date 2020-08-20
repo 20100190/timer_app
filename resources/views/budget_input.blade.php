@@ -68,7 +68,7 @@
 
             <div class="row entry-filter-bottom">                           
                 <div class="col col-md-3" >
-                    <input type="button" class="btn btn-primary" value="clear" onclick="clearInputFilter()" style="width: 150px;margin-left: 335px">
+                    <input type="button" class="btn btn-primary" value="Clear" onclick="clearInputFilter()" style="width: 150px;margin-left: 335px">
                 </div>
             </div>
         </div>
@@ -129,7 +129,7 @@
                     <span class="line-height">Date From</span>
                 </div>
                 <div class="col col-md-1">
-                    <input type="text" style="width:150px;hight:10px;margin-right: 20px;font-size: 3px" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="">                            
+                    <input type="text" style="width:150px;hight:10px;margin-right: 20px;" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="">                            
                 </div>                 
             </div>
             
