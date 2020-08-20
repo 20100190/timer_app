@@ -46,6 +46,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
         </style>
         
+        <style type="text/css">
+            .project-layout {
+                margin-right: 20px
+            }
+            
+            .entry-filter-bottom {
+                margin-bottom: 10px;
+            }
+            
+            .project-button {
+                width: 160px
+            }
+            
+            .block-background-color {
+                padding: 10px;
+                /*border: 1px solid #333333;*/
+                width: 1020px;
+                height: 220px;
+                background-color: #f6fafd;
+            }
+            
+            .font-bold {
+                font-weight: bold;
+            }
+            
+            .border-top-style-list {
+                border-top: solid 1px lightgray;
+            }
+            
+            .border-bottom-style-list {
+                border-bottom: solid 1px lightgray;
+            }
+            
+            .project-font-size {
+                font-size: 14px;
+            }
+            
+            .line-height {
+                line-height: 30px;
+            }
+
+        </style>
+            
+        
         <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
               page. However, you can choose any other skin. Make sure you
               apply the skin class to the body tag so the changes take effect. -->
@@ -193,10 +237,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div><!-- end content -->
             
             
-            <footer class="main-footer">
+            <!--<footer class="main-footer">
                 <div class="pull-right hidden-xs">Version1.0</div>
                 <strong> </strong>
-            </footer><!-- end footer -->
+            </footer>--><!-- end footer -->
 
 
 

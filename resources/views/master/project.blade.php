@@ -86,145 +86,127 @@
 
 @section('content') 
 
-<!-- Message Toast -->
-<!--<div class="position-absolute w-100 d-flex flex-column p-4" style="z-index: -1">
-    <div class="toast ml-auto" role="alert" data-delay="700" data-autohide="true" style="width: 400px;height: 100px">
-        <div class="toast-header">
-            <strong class="mr-auto text-primary">保存完了</strong>
-            <small class="text-muted"></small>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-        <div class="toast-body">保存完了しました。</div>
-    </div>        
-</div>-->
 <form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter">
     <!--@csrf-->
-    <div style="float: left;">        
-        <label>Client</label><br>
-        <select id="client" name="client" class="form-control">
-            <option value="blank"></option>
-            @foreach ($client as $clients)
-            <option value="{{$clients->id}}">{{$clients->name}}</option>
-            @endforeach
-        </select>
-    </div>
+    <div class="block-background-color">
+        <div class="project-layout" style="float: left;">        
+            <label>Client</label><br>
+            <select id="client" name="client" class="form-control">
+                <option value="blank"></option>
+                @foreach ($client as $clients)
+                <option value="{{$clients->id}}">{{$clients->name}}</option>
+                @endforeach
+            </select>
+        </div>
 
-    <div style="float: left;width: 150px">        
-        <label>Project Type</label><br>
-        <select id="project_type" name="project_type" class="form-control" style="width: 100%" onchange="getProjectName();">      
-            <option value="blank"></option>
-            @foreach ($projectType as $projectTypes)
-            <option value="{{$projectTypes->project_type}}">{{$projectTypes->project_type}}</option>
-            @endforeach
-            <!--<option value="AUD">AUD</option>
-            <option value="COMP">COMP</option>
-            <option value="REV">REV</option>
-            <option value="CTR">CTR</option>
-            <option value="ITR">ITR</option>
-            <option value="BM">BM</option>
-            <option value="OTH">OTH</option>  -->          
-        </select>
-    </div>
+        <div class="project-layout" style="float: left;width: 150px">        
+            <label>Project Type</label><br>
+            <select id="project_type" name="project_type" class="form-control" style="width: 100%" onchange="getProjectName();">      
+                <option value="blank"></option>
+                @foreach ($projectType as $projectTypes)
+                <option value="{{$projectTypes->project_type}}">{{$projectTypes->project_type}}</option>
+                @endforeach                 
+            </select>
+        </div>
 
-    <div style="float: left;width: 150px">        
-        <label>Project Year</label><br>
-        <select id="project_year" name="project_year" class="form-control" style="width: 100%" onchange="getProjectName();">     
-            <option value="blank"></option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>            
-        </select>
-    </div>
+        <div class="project-layout" style="float: left;width: 150px">        
+            <label>Project Year</label><br>
+            <select id="project_year" name="project_year" class="form-control" style="width: 100%" onchange="getProjectName();">     
+                <option value="blank"></option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>            
+            </select>
+        </div>
 
-    <div style="float: left">        
-        <label>Harvest Project Name</label><br>
-        <input type="text" value="" class="form-control" id="harvest_project_name" name="harvest_project_name" readonly>
-    </div>
+        <div class="project-layout" style="float: left">        
+            <label>Harvest Project Name</label><br>
+            <input type="text" value="" class="form-control" id="harvest_project_name" name="harvest_project_name" readonly>
+        </div>
 
-    <div style="float: left">   
-        <label>&nbsp;</label><br>
-        <!--<input type="button" onclick="loadTask()" class="btn btn-primary" style="margin-left: 20px" value="読込">-->
-        <button class="btn btn-primary" type="button" onclick="loadTask()">
-            <!--<span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>-->
-            <span id="loadingText">Confirm</span>
-        </button>
-    </div>
+        <div class="project-layout" style="float: left">   
+            <label>&nbsp;</label><br>
+            <!--<input type="button" onclick="loadTask()" class="btn btn-primary" style="margin-left: 20px" value="読込">-->
+            <button class="btn btn-primary" type="button" onclick="loadTask()">
+                <!--<span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>-->
+                <span id="loadingText">Search</span>
+            </button>
+        </div>
 
+        <div style="clear: left"></div>
 
+        <div class="project-layout" style="float: left;width: 170px">        
+            <label>PIC</label><br>
+            <select id="pic" name="pic" class="form-control" >                            
+                @foreach ($pic as $pic)
+                <option value="{{$pic->id}}">{{$pic->initial}}</option>
+                @endforeach
+            </select>
+        </div>
 
-    <div style="clear: left"></div>
+        <div class="project-layout" style="float: left">        
+            <label>Starts On</label><br>
+            <input type="text" style="width:150px;" class="form-control datepicker1" id="starts_on" name="starts_on" placeholder="mm/dd/yyyy" value="">                            
+        </div>
 
-    <div style="float: left">        
-        <label>PIC</label><br>
-        <select id="pic" name="pic" class="form-control" >                            
-            @foreach ($pic as $pic)
-            <option value="{{$pic->id}}">{{$pic->initial}}</option>
-            @endforeach
-        </select>
-    </div>
+        <div class="project-layout" style="float: left">        
+            <label>Ends On</label><br>
+            <input type="text" style="width:150px;" class="form-control datepicker1" id="ends_on" name="ends_on" placeholder="mm/dd/yyyy" value="">                            
+        </div>
 
-    <div style="float: left">        
-        <label>Starts On</label><br>
-        <input type="text" style="width:250px;margin-right: 20px" class="form-control datepicker1" id="starts_on" name="starts_on" placeholder="mm/dd/yyyy" value="">                            
-    </div>
+        <div class="project-layout" style="float: left;width: 150px">        
+            <label>FYE</label><br>
+            <select id="fye" name="fye" class="form-control">                            
+                <option value="1/31">1/31</option>
+                <option value="2/28">2/28</option>
+                <option value="3/31">3/31</option>
+                <option value="4/30">4/30</option>
+                <option value="5/31">5/31</option>
+                <option value="6/30">6/30</option>
+                <option value="7/31">7/31</option>
+                <option value="8/31">8/31</option>
+                <option value="9/30">9/30</option>
+                <option value="10/31">10/31</option>
+                <option value="11/30">11/30</option>
+                <option value="12/31">12/31</option>
+            </select>
+        </div>
+        <div class="project-layout" style="float: left;width: 182px">        
+            <label>Billable</label><br>
+            <select id="billable" name="billable" class="form-control" style="width: 100%">            
+                <option value="0">Yes</option>
+                <option value="1">No</option>              
+            </select>
+        </div>
 
-    <div style="float: left">        
-        <label>Ends On</label><br>
-        <input type="text" style="width:250px;margin-right: 20px" class="form-control datepicker1" id="ends_on" name="ends_on" placeholder="mm/dd/yyyy" value="">                            
-    </div>
+        <div style="clear: left"></div>
 
-    <div style="float: left">        
-        <label>FYE</label><br>
-        <select id="fye" name="fye" class="form-control">                            
-            <option value="1/31">1/31</option>
-            <option value="2/28">2/28</option>
-            <option value="3/31">3/31</option>
-            <option value="4/30">4/30</option>
-            <option value="5/31">5/31</option>
-            <option value="6/30">6/30</option>
-            <option value="7/31">7/31</option>
-            <option value="8/31">8/31</option>
-            <option value="9/30">9/30</option>
-            <option value="10/31">10/31</option>
-            <option value="11/30">11/30</option>
-            <option value="12/31">12/31</option>
-        </select>
-    </div>
-    <div style="float: left">        
-        <label>Billable</label><br>
-        <select id="billable" name="billable" class="form-control" style="width: 100%">            
-            <option value="0">Yes</option>
-            <option value="1">No</option>              
-        </select>
-    </div>
+        <div style="float: left;width: 882px">        
+            <label>Notes</label><br>
+            <input type="text" id="note" name="note" class="form-control" style="width: 100%">
+        </div>
 
-    <div style="clear: left"></div>
-
-    <div style="float: left;width: 700px">        
-        <label>Notes</label><br>
-        <input type="text" id="note" name="note" class="form-control" style="width: 100%">
     </div>
 
     <div style="clear: left"></div>
 
     <!--task-->
-    <div style="float: left;margin-top: 20px;margin-right: 100px">
+    <div style="float: left;margin-top: 20px;margin-right: 0px">
         <!--<span class="label label-default" style="font-size: 12px">Task</span>-->       
-        <div><label style="font-size: 20;margin-right: 20px">Task</label><input type="button" id="add" name="add" class="btn btn-primary btn-sm" value="Add" onclick="appendRow()"></div>
+        <div><label style="font-size: 20;margin-right: 20px">Task</label><input type="button" id="addTaskList" name="addTaskList" class="btn btn-primary btn-sm project-button" value="Add" onclick="appendRow()"></div>
         <table border="0" id="tbl" style="font-size: 12px;table-layout: fixed;width: 330px" class="table table-sm">
             <thead>
                 <tr>
-                    <th name="task_no" style="text-align:center; width:30px;">No</th>
-                    <th style="width: 200px">Task</th>                        
-                    <th style="width:50px;"></th>
-                    <th style="width:50px;"></th>                        
+                    <th class="project-font-size" name="task_no" style="text-align:center; width:30px;">No</th>
+                    <th class="project-font-size" style="width: 200px">Task</th>                        
+                    <th style="width:30px;"></th>
+                    <th style="width:50px;"></th>  
+                    <th style="width:50px;"></th>   
                 </tr>
             </thead>
             <tbody id="task_body">
@@ -233,16 +215,16 @@
     </div>
 
     <div style="float: left;margin-top: 20px">        
-        <div><label style="font-size: 20;margin-right: 20px">Project Budget</label><input type="button" id="add" name="add" value="Add" class="btn btn-primary btn-sm" onclick="appendBudgetRow()"></div>
-        <table border="0" id="budget_list" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 700px">                
+        <div><label style="font-size: 20;margin-right: 20px">Project Budget</label><input type="button" id="addBudgetList" name="addBudgetList" value="Add" class="btn btn-primary btn-sm project-button" onclick="appendBudgetRow()"></div>
+        <table border="0" id="budget_list" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 650px">                
             <thead>
                 <tr>
-                    <th style="text-align:center; width:40px;">No</th>
-                    <th style="width: 70px">Staff</th>
-                    <th style="width: 120px">Role</th>
-                    <th style="width: 100px">Budget Hours</th>
-                    <th style="width: 50px">Rate</th>
-                    <th style="width: 60px">Budget</th>                        
+                    <th class="project-font-size" style="text-align:center; width:40px;">No</th>
+                    <th class="project-font-size" style="width: 70px">Staff</th>
+                    <th class="project-font-size" style="width: 120px">Role</th>
+                    <th class="project-font-size" style="width: 100px">Budget Hours</th>
+                    <th class="project-font-size" style="width: 50px">Rate</th>
+                    <th class="project-font-size" style="width: 60px">Budget</th>                        
                     <th style="width:40px;"> </th>
                 </tr> 
             </thead>
@@ -253,8 +235,8 @@
                     <td style="width: 70px"></td>
                     <td style="width: 120px"></td>                    
                     <td style="width: 120px"></td>                    
-                    <td style="width: 50px;text-align: right">Total</td>
-                    <td style="width: 60px;text-align: right"><span id="total_budget">0</span></td>                       
+                    <td class="project-font-size" style="width: 50px;">Total</td>
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="total_budget">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr style="height: 30px">
@@ -270,7 +252,7 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;text-align: right">Engagement Fee / Month</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Engagement Fee / Month</td>                    
                     <td style="width: 60px;text-align: right">
                         <input type="text" class="form-control form-control-sm" id="engagement_fee" name="engagement_fee" value="0" onchange="calc()" style="text-align: right;width: 100%">
                     </td>                        
@@ -280,7 +262,7 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;text-align: right"># of montl</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;"># of montl</td>                    
                     <td style="width: 60px;">
                         <input type="text" class="form-control form-control-sm" id="engagement_monthly" name="engagement_monthly" value="0" onchange="calc()" style="text-align: right;width: 100%">
                     </td>                        
@@ -290,7 +272,7 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;text-align: right">Adjustmentws</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Adjustmentws</td>                    
                     <td style="width: 60px;text-align: right">
                         <input type="text" class="form-control form-control-sm" id="adjustments" name="adjustments" value="0" onchange="calc()" style="text-align: right;width: 100%">
                     </td>                       
@@ -300,8 +282,8 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;text-align: right">Engagement Fee</td>                    
-                    <td style="width: 60px;text-align: right"><span id="engagement_total">0</span></td>                       
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Engagement Fee</td>                    
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="engagement_total">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr style="height: 30px">
@@ -317,22 +299,23 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;text-align: right">Defference</td>                    
-                    <td style="width: 60px;text-align: right"><span id="defference">0</span></td>                       
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Defference</td>                    
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="defference">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr>
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td colspan="2" style="width: 170px;text-align: right">Realization</td>                    
-                    <td style="width: 60px;text-align: right"><span id="realization">0%</span></td>                      
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Realization</td>                    
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="realization">0%</span></td>                      
                     <td style="width:40px;"> </td>
                 </tr>
             </tfoot>
         </table>
 
     </div>    
+
 
     <input type="hidden" id="staff_info" name="staff_info" value="">
     <input type="hidden" id="task_info" name="task_info" value="">
@@ -344,11 +327,16 @@
 
 <!--<button onclick="save()">xxx</button>-->
 <!--<input type="button" onclick="saveForm()" class="btn btn-primary" value="保存">-->
-<button id="btn_save" name="btn_save" class="btn btn-primary" type="button" onclick="saveForm()">
+<button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()" style="margin-left: 800px;margin-top: 30px">
     <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
     <span id="savingText">Save</span>
 </button>
 
+
+<script>
+    // "global" vars, built using blade
+    var imagesUrl = '{{ URL::asset('/image') }}';
+</script>
 <script src="{{ asset('js/project.js') }}"></script>
 
 @endsection

@@ -9,6 +9,7 @@ use App\Assign;
 use App\Budget;
 use App\Staff;
 use App\Week;
+use App\RoleOrder;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
@@ -36,6 +37,9 @@ class BudgetController extends Controller
         //pic
         $picData = Staff::ActiveStaffOrderByInitial();
         
+        //role
+        $roleData = RoleOrder::GetRoleData();
+        
         //Login User Initial
         $loginUserInitial = Staff::select("initial")->where([['email', '=', Auth::User()->email]])->first();
                  
@@ -44,6 +48,7 @@ class BudgetController extends Controller
                         ->with("project", $projectData)
                         ->with("staff", $staffData)
                         ->with("pic", $picData)
+                        ->with("role", $roleData)
                         ->with("loginInitial", $loginUserInitial);
     }
     
@@ -60,10 +65,14 @@ class BudgetController extends Controller
         //pic
         $picData = Staff::ActiveStaffOrderByInitial();
         
+        //role
+        $roleData = RoleOrder::GetRoleData();
+        
         return view('budget_show')
                 ->with("client", $clientData)
                 ->with("project", $projectData)
                 ->with("staff", $staffData)
+                ->with("role", $roleData)
                 ->with("pic", $picData);
     }
     
@@ -103,11 +112,12 @@ class BudgetController extends Controller
         array_push($res, $data);
       
         //project取得
-        $comments = Project::select("client.name as client", "project.project_name as project", "assign.role as role", "staff.initial as initial", "client.fye", "client.vic_status", "B.initial as pic","assign.budget_hour")
+        $comments = Project::select("client.name as client", "project.project_name as project", "assign.role as role", "staff.initial as initial", "client.fye", "client.vic_status", "B.initial as pic","assign.budget_hour","role_order.order")
                 ->join("client", "project.client_id", "=", "client.id")
                 ->join("assign", "assign.project_id", "=", "project.id")
                 ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic");
+                ->leftjoin("staff as B", "B.id", "=", "client.pic")
+                ->leftjoin("role_order", "role_order.role", "=", "assign.role");
         if ($request->client != "blank") {
             $comments = $comments
                     ->wherein('client.id', explode(",", $request->client));
@@ -203,33 +213,8 @@ class BudgetController extends Controller
         if ($request->role != "blank") {            
             $role = "";
             $roleArray = explode(",", $request->role);
-            $roleFilter = [];
-            for ($i = 0; $i < count($roleArray); $i++) {
-                if ($roleArray[$i] == 1) {
-                    array_push($roleFilter, "Partner");
-                }
-                if ($roleArray[$i] == 2) {
-                    array_push($roleFilter, "Senior Manager");
-                }
-                if ($roleArray[$i] == 3) {
-                    array_push($roleFilter, "Manager");
-                }
-                if ($roleArray[$i] == 4) {
-                    array_push($roleFilter, "Experienced Senior");
-                }
-                if ($roleArray[$i] == 5) {
-                    array_push($roleFilter, "Senior");
-                }
-                if ($roleArray[$i] == 6) {
-                    array_push($roleFilter, "Experienced Staff");
-                }
-                if ($roleArray[$i] == 7) {
-                    array_push($roleFilter, "Staff");
-                }
-            }
-
             $comments = $comments
-                    ->wherein('assign.role', $roleFilter);
+                    ->wherein('role_order.id', $roleArray);           
         }
         
         //Adminアカウント以外の条件
@@ -255,7 +240,8 @@ class BudgetController extends Controller
         $comments = $comments
                 ->orderBy("client", "asc")
                 ->orderBy("project", "asc")
-                ->orderBy("initial", "asc")
+                ->orderBy("order", "asc")
+                ->orderBy("initial", "asc")                
                 ->get();
                 
         
@@ -285,9 +271,10 @@ class BudgetController extends Controller
          
             //プロジェクト単位の行数取得                        
             $detailRowCnt = Assign::select()
-                            ->leftjoin("project", "assign.project_id", "=", "project.id")
-                            ->leftjoin("client", "client.id", "=", "project.client_id")
-                            ->where([['client.name', '=', $xxx->client], ['project.project_name', '=', $xxx->project]]);            
+                    ->leftjoin("project", "assign.project_id", "=", "project.id")
+                    ->leftjoin("client", "client.id", "=", "project.client_id")
+                    ->leftjoin("role_order", "role_order.role", "=", "assign.role")
+                    ->where([['client.name', '=', $xxx->client], ['project.project_name', '=', $xxx->project]]);
             if ($request->staff != "blank") {
                 $staffArray = explode(",", $request->staff);
 
@@ -298,33 +285,8 @@ class BudgetController extends Controller
             if ($request->role != "blank") {
                 $role = "";
                 $roleArray = explode(",", $request->role);
-                $roleFilter = [];
-                for ($i = 0; $i < count($roleArray); $i++) {
-                    if ($roleArray[$i] == 1) {
-                        array_push($roleFilter, "Partner");
-                    }
-                    if ($roleArray[$i] == 2) {
-                        array_push($roleFilter, "Senior Manager");
-                    }
-                    if ($roleArray[$i] == 3) {
-                        array_push($roleFilter, "Manager");
-                    }
-                    if ($roleArray[$i] == 4) {
-                        array_push($roleFilter, "Experienced Senior");
-                    }
-                    if ($roleArray[$i] == 5) {
-                        array_push($roleFilter, "Senior");
-                    }
-                    if ($roleArray[$i] == 6) {
-                        array_push($roleFilter, "Experienced Staff");
-                    }
-                    if ($roleArray[$i] == 7) {
-                        array_push($roleFilter, "Staff");
-                    }
-                }
-                
-                 $detailRowCnt = $detailRowCnt
-                    ->wherein('assign.role', $roleFilter);
+                $detailRowCnt = $detailRowCnt
+                    ->wherein('role_order.id', $roleArray);                
                 
             }
 
@@ -413,6 +375,11 @@ class BudgetController extends Controller
             $oldRole = $newRole;
             $oldAssign = $newAssign;
         }
+        
+        //TotalBudget書き換え(K列の計算式を書き換え)
+        $totalFormula = $res[0][10];
+        $totalBudgetFormula = str_replace("K", "H", $totalFormula);
+        $res[0][$colBudget] = $totalBudgetFormula;
 
         //date
         /* $week = Week::orderBy('month', 'asc')->orderBy('week', 'asc')->where([['year', '=', "2020"]])->get();
@@ -643,13 +610,14 @@ class BudgetController extends Controller
         
         //対象のAssign取得
         $targetAssignIdList = $this->getOverallDetailQuery($request, $startDate, $endDate)
-                ->select("assign_id","client.name")
+                ->select("assign_id","client.name","role_order.order")
                 ->where("working_days","<>","0")
                 ->orderBy("client.name")
                 ->orderBy("project.id")
-                ->orderBy("staff.initial")
+                ->orderBy("role_order.order")
                 ->groupBy("assign_id")
-                ->groupBy("client.name")                
+                ->groupBy("client.name")     
+                ->groupBy("role_order.order")
                 ->get();
         
         $targetAssignId = "";
@@ -663,7 +631,7 @@ class BudgetController extends Controller
         
         $overallDetailData = $this->getAssignDataObj()
                 ->wherein('assign_id', explode(",", $targetAssignId))
-                ->where([["ymd",">=",$startDate]])  
+                ->where([["ymd",">=",$startDateAll]])  
                 ->groupBy("staff_id", "initial", "year", "month", "day")
                 ->orderBy("staff_id", "asc")
                 ->orderBy("year", "asc")
@@ -674,7 +642,7 @@ class BudgetController extends Controller
         $overallTotal = $this->getAssignDataObj()
                 ->select("budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
                 ->wherein('assign_id', explode(",", $targetAssignId))             
-                ->where([["ymd",">=",$startDate]])  
+                ->where([["ymd",">=",$startDateAll]])  
                 ->groupBy("year", "month", "day")
                 ->orderBy("year", "asc")
                 ->orderBy("month", "asc")
@@ -684,13 +652,13 @@ class BudgetController extends Controller
         $overallWeekTotal = $this->getAssignDataObj()
                 ->select(DB::raw("SUM(working_days) as working_days"))    
                 ->wherein('assign_id', explode(",", $targetAssignId))   
-                ->where([["ymd",">=",$startDate]])  
+                ->where([["ymd",">=",$startDateAll]])  
                 ->get();
         
         $overallPersonalTotal = $this->getAssignDataObj()
                 ->select("staff_id", DB::raw("SUM(CEILING(working_days)) as working_days"))
                 ->wherein('assign_id', explode(",", $targetAssignId))
-                ->where([["ymd",">=",$startDate]])  
+                ->where([["ymd",">=",$startDateAll]])  
                 ->groupBy("staff_id")
                 ->get();
         
@@ -752,12 +720,13 @@ class BudgetController extends Controller
     }
 
     function getOverallDetailQuery($request, $dateFrom, $dateTo) {
-        $overallDetail = Budget::select("staff_id", "staff.initial as initial", "budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
+        $overallDetail = Budget::select("staff_id", "staff.initial as initial", "budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"),"role_order.order")
                 ->Join("assign", "assign.id", "=", "budget.assign_id")
                 ->leftJoin("staff", "assign.staff_id", "=", "staff.id")
                 ->leftJoin("project", "project.id", "=", "assign.project_id")
                 ->leftjoin("client", "project.client_id", "=", "client.id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic");
+                ->leftjoin("staff as B", "B.id", "=", "client.pic")
+                ->leftjoin("role_order", "role_order.role", "=", "assign.role");;
 
         if ($request->client != "blank") {
             $overallDetail = $overallDetail

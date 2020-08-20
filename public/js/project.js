@@ -32,7 +32,7 @@ $('#task_body').bind('sortstop', function () {
     var bodyLength = specific_tbody.rows.length;
     for (cnt = 0; cnt < bodyLength; cnt++) {
         //alert(specific_tbody.rows[cnt].cells[0].innerText + " " + specific_tbody.rows[cnt].cells[3].children[0].name);
-        specific_tbody.rows[cnt].cells[3].children[0].value = specific_tbody.rows[cnt].cells[0].innerText;
+        specific_tbody.rows[cnt].cells[4].children[0].value = specific_tbody.rows[cnt].cells[0].innerText;
     }
    
 });
@@ -49,7 +49,7 @@ function reOrderTaskNo() {
     var bodyLength = specific_tbody.rows.length;
     for (cnt = 0; cnt < bodyLength; cnt++) {
         //alert(specific_tbody.rows[cnt].cells[0].innerText + " " + specific_tbody.rows[cnt].cells[3].children[0].name);
-        specific_tbody.rows[cnt].cells[3].children[0].value = specific_tbody.rows[cnt].cells[0].innerText;
+        specific_tbody.rows[cnt].cells[4].children[0].value = specific_tbody.rows[cnt].cells[0].innerText;
     }
 }
 
@@ -83,6 +83,7 @@ function insertTaskRow(name, status, taskId, isNew) {
     var c3 = row.insertCell(2);
     var c4 = row.insertCell(3);
     var c5 = row.insertCell(4);
+    var c6 = row.insertCell(5);
     
     //var status = "readonly";
     var taskNameObj = '<input class="inpname form-control form-control-sm" type="text" id="task_name' + count + '" name="task_name' + count + '" value="' + name + '" style="width: 100%" readonly>';
@@ -98,16 +99,17 @@ function insertTaskRow(name, status, taskId, isNew) {
 
     // 各列にスタイルを設定
     c1.style.cssText = "text-align:center; ";
-    c4.style.cssText = "visibility: collapse";
     c5.style.cssText = "visibility: collapse";
+    c6.style.cssText = "visibility: collapse";
     
     // 各列に表示内容を設定
     c1.innerHTML = '<span class="seqno-task">' + count + '</span>';
     //c2.innerHTML = '<input class="inpname form-control form-control-sm" type="text"   id="task_name' + count + '" name="task_name' + count + '" value="' + name + '" style="width: 100%">';
     c2.innerHTML = taskNameObj;
-    c3.innerHTML = '<input class="delbtn btn btn-danger btn-sm" type="button" id="delBtn' + count + '" value="Delete" onclick="deleteRow(this)">';
-    c4.innerHTML = '<input class="inporder" type="text" id="order' + count + '" name="order' + count + '" value="' + count + '" style="width: 20px">';
-    c5.innerHTML = '<input class="inptaskid" type="text" id="task_id' + count + '" name="task_id' + count + '" value="' + taskId + '" style="width: 20px">';
+    c3.innerHTML = '<img src="'+ imagesUrl + "/arrow.png" +'" style="width: 20px;height: 20px;margin-top: 8px">';
+    c4.innerHTML = '<input class="delbtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnTask' + count + '" value="Delete" onclick="deleteRow(this)">';
+    c5.innerHTML = '<input class="inporder" type="text" id="order' + count + '" name="order' + count + '" value="' + count + '" style="width: 20px">';
+    c6.innerHTML = '<input class="inptaskid" type="text" id="task_id' + count + '" name="task_id' + count + '" value="' + taskId + '" style="width: 20px">';
 }
 
 function appendBudgetRow()
@@ -149,7 +151,7 @@ function appendBudgetRow()
     c5.innerHTML = '<input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="0" style="text-align: right;width: 100%" readonly>';
     c6.innerHTML = '<input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 100%"  readonly>';
     //c7.innerHTML = '<input class="edtBudgetBtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRowBudgetList(this)">';
-    c7.innerHTML = '<input class="delBudgetBtn btn btn-danger btn-sm" type="button" id="delBtn' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
+    c7.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
 
 }
 
@@ -200,7 +202,7 @@ function insertBudgetRow(staffId, role, hours) {
     c5.innerHTML = '<input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="' + staffRate + '" style="text-align: right;width: 100%" readonly>';
     c6.innerHTML = '<input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 100%"  readonly>';
     //c7.innerHTML = '<input class="edtBudgetBtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRowBudgetList(this)">';
-    c8.innerHTML = '<input class="delBudgetBtn btn btn-danger btn-sm" type="button" id="delBtn' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
+    c8.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
 
 }
 
@@ -297,7 +299,7 @@ function delRowBudgetList(obj) {
 
     reOrderElementTag(tagElements, "inphours", "hours");
     reOrderElementTag(selectTagElements, "inpassign", "assign");
-    reOrderElementTag(selectTagElements, "inprole", "role");
+    reOrderElementTag(tagElements, "inprole", "role");
     reOrderElementTag(tagElements, "inprate", "rate");
     reOrderElementTag(tagElements, "inpbudget", "budget");
 
@@ -499,10 +501,14 @@ function getErrorText(){
 
     var count = objTBL.rows.length;
     
+    var objTaskTBL = document.getElementById("tbl");
+    var taskCount = objTaskTBL.rows.length;
+    
     var staffArray = [];
     var errorText = "";
     var isStaffError = false;
     var isHoursError = false;
+    var isTaskError = false;
     for (var cnt = 1; cnt <= count; cnt++) {
         var assign = document.getElementById("assign" + cnt).selectedIndex;
         var hours = document.getElementById("hours" + cnt).value;
@@ -510,12 +516,19 @@ function getErrorText(){
             isStaffError = true;
         }
         
-        if(hours == ""){
+        if(hours == "" || hours == 0){
             isHoursError = true;
         }
         
         staffArray.push(assign);
         
+    }
+    
+    for(var cnt = 1; cnt < taskCount; cnt++){
+        var taskName = document.getElementById("task_name" + cnt).value;
+        if(taskName == ""){
+            isTaskError = true;
+        }
     }
     
     //未選択チェック
@@ -531,6 +544,10 @@ function getErrorText(){
     //Budget hours 未入力チェック
     if(isHoursError){
         errorText += "Budget Hoursが入力されていない行があります。<br>";
+    }
+    
+    if(isTaskError){
+        errorText += "Taskが選択されていない行があります。<br>";
     }
     
     return errorText;

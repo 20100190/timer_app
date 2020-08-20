@@ -12,7 +12,8 @@ $(window).on('load', function () {
 $(document).ready(function () {
     //alert(window.innerHeight + "filt:" + $("#client").height());
   
-    var buttonWidth = "500px";
+    var buttonWidth = "400px";
+    var buttonWidth2 = "150px";
     $('#client').multiselect({
         buttonWidth: buttonWidth,
         maxHeight: 700,
@@ -21,33 +22,33 @@ $(document).ready(function () {
     });
     $('#project').multiselect({
         buttonWidth: buttonWidth,
-        maxHeight: 400,
+        maxHeight: 700,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
     $('#fye').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
     $('#vic').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
     $('#pic').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         maxHeight: 600,
         includeSelectAllOption: true,
     });
     $('#sel_role').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         includeSelectAllOption: true,
     });
     $('#sel_staff').multiselect({
-        buttonWidth: buttonWidth,
+        buttonWidth: buttonWidth2,
         enableFiltering: true,
         maxHeight: 400,
         includeSelectAllOption: true,
@@ -62,6 +63,7 @@ $('.datepicker1').datepicker({
 });
 
 var maskStr = "#,##0.0";
+var spreadsheetWidth = "80";
 
 var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //data: data,
@@ -71,16 +73,17 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //lazyLoading: true,
     //pagenation: 10,
     tableWidth: '100%',
-    tableHeight: "600px",
+    tableHeight: "490px",
     freezeColumns: 10,
+    contextMenu:function() { return false; },
     columns: [
         {
             title: 'Client',
-            width: '150'
+            width: '250'
         },
         {
             title: 'Project',
-            width: '150'
+            width: '300'
         },
         {
             title: 'FYE',
@@ -110,333 +113,388 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
             type: 'number',
             title: 'Budget',
             width: '100',
-            mask: maskStr
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: 'Assigned',
             width: '100',
-            mask: maskStr
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: 'Diff',
             width: '100',
-            mask: "[-]" + maskStr
+            mask: "[-]" + maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
         {
             type: 'number',
             title: ' ',
-            width: '70',
-            mask: maskStr
+            width: spreadsheetWidth,
+            mask: maskStr,
+            align: "right"
         },
-    ],
+    ],    
     onload: function (instance) {
 
     },
@@ -690,12 +748,21 @@ function testData() {
             }
 
             //header
+            //undoのバグ回避のため2回読み込み----------------------------------------
             var columnCnt = 10;
             for (var s = 0; s < data.week.length; s++) {
                 myspreadsheet.setHeader(columnCnt, data.week[s]);
                 //myspreadsheet.setHeader(columnCnt, data.week[s].replace("/", "\n"));
                 columnCnt += 1;
             }
+            
+            var columnCnt = 10;
+            for (var s = 0; s < data.week.length; s++) {
+                myspreadsheet.setHeader(columnCnt, data.week[s]);
+                //myspreadsheet.setHeader(columnCnt, data.week[s].replace("/", "\n"));
+                columnCnt += 1;
+            }
+            //--------------------------------------------------------------------------
 
         },
         beforeSend: function (xhr, settings) {
@@ -771,5 +838,60 @@ function saveCellData(client, project, staff, year, month, day, value) {
 function sss() {
     var budgetArray = JSON.parse(document.getElementById("budget_info").value);
     myspreadsheet.setData(budgetArray);
+}
+
+function clearInputFilter() {
+    $('#client').multiselect('deselectAll', false);
+    $('#client').multiselect('updateButtonText');
+
+    $('#project').multiselect('deselectAll', false);
+    $('#project').multiselect('updateButtonText');
+
+    $('#fye').multiselect('deselectAll', false);
+    $('#fye').multiselect('updateButtonText');
+
+    $('#vic').multiselect('deselectAll', false);
+    $('#vic').multiselect('updateButtonText');
+
+    $('#pic').multiselect('deselectAll', false);
+    $('#pic').multiselect('updateButtonText');
+
+    $('#sel_role').multiselect('deselectAll', false);
+    $('#sel_role').multiselect('updateButtonText');
+
+    $('#sel_staff').multiselect('deselectAll', false);
+    $('#sel_staff').multiselect('updateButtonText');
+
+    document.getElementById("filter_date").value = "";
+}
+
+function getInputAllData() {
+    var clientObj = $("#client").val();
+    var projectObj = $("#project").val();
+    var fyeObj = $("#fye").val();
+    var vicObj = $("#vic").val();
+    var picObj = $("#pic").val();
+    var staffObj = $("#sel_staff").val();
+    var roleObj = $("#sel_role").val();
+    var dateFromObj = document.getElementById("filter_date").value;
+
+    if (clientObj == null && projectObj == null && fyeObj == null && vicObj == null && picObj == null && staffObj == null && roleObj == null && dateFromObj == "") {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "検索結果が多いため、表示までに時間がかかります。実行しますか？",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.value) {
+                testData();
+            }
+        })
+    } else {
+        testData();
+    }
+
 }
         

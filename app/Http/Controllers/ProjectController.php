@@ -10,6 +10,7 @@ use App\Staff;
 use App\Task;
 use App\Assign;
 use App\ProjectTask;
+use App\ProjectType;
 use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
@@ -43,8 +44,10 @@ class ProjectController extends Controller
                 ->get();
        
         //project Type
-        $projectTypeData = Task::select("project_type")
+        /*$projectTypeData = Task::select("project_type")
                 ->groupBy("project_type")
+                ->get();*/
+        $projectTypeData = ProjectType::select("project_type")                
                 ->get();
 
         return view('master/project')
