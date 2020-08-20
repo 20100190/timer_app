@@ -748,12 +748,21 @@ function testData() {
             }
 
             //header
+            //undoのバグ回避のため2回読み込み----------------------------------------
             var columnCnt = 10;
             for (var s = 0; s < data.week.length; s++) {
                 myspreadsheet.setHeader(columnCnt, data.week[s]);
                 //myspreadsheet.setHeader(columnCnt, data.week[s].replace("/", "\n"));
                 columnCnt += 1;
             }
+            
+            var columnCnt = 10;
+            for (var s = 0; s < data.week.length; s++) {
+                myspreadsheet.setHeader(columnCnt, data.week[s]);
+                //myspreadsheet.setHeader(columnCnt, data.week[s].replace("/", "\n"));
+                columnCnt += 1;
+            }
+            //--------------------------------------------------------------------------
 
         },
         beforeSend: function (xhr, settings) {
