@@ -610,13 +610,14 @@ class BudgetController extends Controller
         
         //対象のAssign取得
         $targetAssignIdList = $this->getOverallDetailQuery($request, $startDate, $endDate)
-                ->select("assign_id","client.name")
+                ->select("assign_id","client.name","role_order.order")
                 ->where("working_days","<>","0")
                 ->orderBy("client.name")
                 ->orderBy("project.id")
-                ->orderBy("staff.initial")
+                ->orderBy("role_order.order")
                 ->groupBy("assign_id")
-                ->groupBy("client.name")                
+                ->groupBy("client.name")     
+                ->groupBy("role_order.order")
                 ->get();
         
         $targetAssignId = "";
@@ -719,12 +720,13 @@ class BudgetController extends Controller
     }
 
     function getOverallDetailQuery($request, $dateFrom, $dateTo) {
-        $overallDetail = Budget::select("staff_id", "staff.initial as initial", "budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
+        $overallDetail = Budget::select("staff_id", "staff.initial as initial", "budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"),"role_order.order")
                 ->Join("assign", "assign.id", "=", "budget.assign_id")
                 ->leftJoin("staff", "assign.staff_id", "=", "staff.id")
                 ->leftJoin("project", "project.id", "=", "assign.project_id")
                 ->leftjoin("client", "project.client_id", "=", "client.id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic");
+                ->leftjoin("staff as B", "B.id", "=", "client.pic")
+                ->leftjoin("role_order", "role_order.role", "=", "assign.role");;
 
         if ($request->client != "blank") {
             $overallDetail = $overallDetail
