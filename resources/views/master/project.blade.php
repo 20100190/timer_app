@@ -89,7 +89,7 @@
 <form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter">
     <!--@csrf-->
     <div class="block-background-color">
-        <div class="project-layout" style="float: left;">        
+        <div class="project-layout" style="float: left">        
             <label>Client</label><br>
             <select id="client" name="client" class="form-control">
                 <option value="blank"></option>
@@ -109,7 +109,7 @@
             </select>
         </div>
 
-        <div class="project-layout" style="float: left;width: 150px">        
+        <div class="project-layout" style="float: left;width: 133px">        
             <label>Project Year</label><br>
             <select id="project_year" name="project_year" class="form-control" style="width: 100%" onchange="getProjectName();">     
                 <option value="blank"></option>
@@ -124,23 +124,29 @@
             </select>
         </div>
 
-        <div class="project-layout" style="float: left">        
+        <div class="project-layout" style="float: left;width: 180px;margin-right: 19px">        
             <label>Harvest Project Name</label><br>
             <input type="text" value="" class="form-control" id="harvest_project_name" name="harvest_project_name" readonly>
         </div>
 
         <div class="project-layout" style="float: left">   
-            <label>&nbsp;</label><br>
-            <!--<input type="button" onclick="loadTask()" class="btn btn-primary" style="margin-left: 20px" value="読込">-->
-            <button class="btn btn-primary" type="button" onclick="loadTask()">
-                <!--<span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>-->
+            <label>&nbsp;</label><br>            
+            <button class="btn btn-primary" type="button" style="width: 65px" onclick="loadTask()">                
                 <span id="loadingText">Search</span>
             </button>
         </div>
+        <div class="project-layout" style="float: left;width: 1200px; height: 20px">            
+        </div>
 
         <div style="clear: left"></div>
-
-        <div class="project-layout" style="float: left;width: 170px">        
+        
+        <!--背景色-->
+        <div class="project-layout" style="float: left;width: 1200px;background-color: white; height: 40px">            
+        </div>
+        
+        <div style="clear: left"></div>
+        
+        <div class="project-layout" style="margin-top: 20px;float: left;width: 170px">        
             <label>PIC</label><br>
             <select id="pic" name="pic" class="form-control" >                            
                 @foreach ($pic as $pic)
@@ -149,17 +155,17 @@
             </select>
         </div>
 
-        <div class="project-layout" style="float: left">        
+        <div class="project-layout" style="margin-top: 20px;float: left">        
             <label>Starts On</label><br>
             <input type="text" style="width:150px;" class="form-control datepicker1" id="starts_on" name="starts_on" placeholder="mm/dd/yyyy" value="">                            
         </div>
 
-        <div class="project-layout" style="float: left">        
+        <div class="project-layout" style="margin-top: 20px;float: left">        
             <label>Ends On</label><br>
             <input type="text" style="width:150px;" class="form-control datepicker1" id="ends_on" name="ends_on" placeholder="mm/dd/yyyy" value="">                            
         </div>
 
-        <div class="project-layout" style="float: left;width: 150px">        
+        <div class="project-layout" style="margin-top: 20px;float: left;width: 133px">        
             <label>FYE</label><br>
             <select id="fye" name="fye" class="form-control">                            
                 <option value="1/31">1/31</option>
@@ -176,7 +182,7 @@
                 <option value="12/31">12/31</option>
             </select>
         </div>
-        <div class="project-layout" style="float: left;width: 182px">        
+        <div class="project-layout" style="margin-top: 20px;float: left;width: 181px">        
             <label>Billable</label><br>
             <select id="billable" name="billable" class="form-control" style="width: 100%">            
                 <option value="0">Yes</option>
@@ -186,7 +192,7 @@
 
         <div style="clear: left"></div>
 
-        <div style="float: left;width: 882px">        
+        <div style="float: left;width: 864px">        
             <label>Notes</label><br>
             <input type="text" id="note" name="note" class="form-control" style="width: 100%">
         </div>
@@ -215,7 +221,10 @@
     </div>
 
     <div style="float: left;margin-top: 20px">        
-        <div><label style="font-size: 20;margin-right: 20px">Project Budget</label><input type="button" id="addBudgetList" name="addBudgetList" value="Add" class="btn btn-primary btn-sm project-button" onclick="appendBudgetRow()"></div>
+        <div>
+            <label style="font-size: 20;margin-right: 25px">Project Budget</label>
+            <input type="button" id="addBudgetList" name="addBudgetList" value="Add" class="btn btn-primary btn-sm project-button" style="width: 147px" onclick="appendBudgetRow()">
+        </div>
         <table border="0" id="budget_list" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 650px">                
             <thead>
                 <tr>
@@ -311,6 +320,18 @@
                     <td class="project-font-size" style="width: 60px;text-align: right"><span id="realization">0%</span></td>                      
                     <td style="width:40px;"> </td>
                 </tr>
+                <tr>
+                    <td></td>                    
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()" style="margin-top: 30px">
+                            <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                            <span id="savingText">Save</span>
+                        </button>
+                    </td>
+                </tr>
             </tfoot>
         </table>
 
@@ -324,13 +345,6 @@
 
 <div style="clear: both">
 </div>
-
-<!--<button onclick="save()">xxx</button>-->
-<!--<input type="button" onclick="saveForm()" class="btn btn-primary" value="保存">-->
-<button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()" style="margin-left: 800px;margin-top: 30px">
-    <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-    <span id="savingText">Save</span>
-</button>
 
 
 <script>

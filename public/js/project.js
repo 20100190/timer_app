@@ -98,7 +98,7 @@ function insertTaskRow(name, status, taskId, isNew) {
     }
 
     // 各列にスタイルを設定
-    c1.style.cssText = "text-align:center; ";
+    c1.style.cssText = "text-align:center;vertical-align: middle ";
     c5.style.cssText = "visibility: collapse";
     c6.style.cssText = "visibility: collapse";
     
@@ -135,7 +135,7 @@ function appendBudgetRow()
 
     // 各列にスタイルを設定
     c2.style.cssText = "width: 150px";
-    c1.style.cssText = "text-align:center";
+    c1.style.cssText = "text-align:center;vertical-align: middle";
 
     var staffInitialOption = "<option value=''></option>";
     var staffInfo = JSON.parse(document.getElementById("staff_info").value);
@@ -174,7 +174,7 @@ function insertBudgetRow(staffId, role, hours) {
 
     // 各列にスタイルを設定
     c2.style.cssText = "width: 150px";
-    c1.style.cssText = "text-align:center";
+    c1.style.cssText = "text-align:center;vertical-align: middle";
 
     var staffInitialOption = "<option value=''></option>";
     var staffInfo = JSON.parse(document.getElementById("staff_info").value);
@@ -533,21 +533,21 @@ function getErrorText(){
     
     //未選択チェック
     if(isStaffError){
-        errorText += "Staffが選択されていない行があります。<br>";
+        errorText += "Staff field is required.<br>";
     }
     
     //Staff重複チェック
     if(getIsDuplicate(staffArray)){
-        errorText += "Staffが重複しています。<br>";
+        errorText += "Duplicate Staff exists.<br>";
     }
     
     //Budget hours 未入力チェック
     if(isHoursError){
-        errorText += "Budget Hoursが入力されていない行があります。<br>";
+        errorText += "Budget Hour is required.<br>";
     }
     
     if(isTaskError){
-        errorText += "Taskが選択されていない行があります。<br>";
+        errorText += "Task field is required.<br>";
     }
     
     return errorText;
@@ -708,7 +708,7 @@ function showToast() {
     Swal.fire({
         position: 'top',
         icon: 'success',
-        title: '保存完了しました。',
+        title: 'Saved',
         showConfirmButton: false,
         timer: 1500
     });

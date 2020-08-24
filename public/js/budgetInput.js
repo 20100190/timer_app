@@ -114,397 +114,397 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
             title: 'Budget',
             width: '100',
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: 'Assigned',
             width: '100',
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: 'Diff',
             width: '100',
             mask: "[-]" + maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
         {
             type: 'number',
             title: ' ',
             width: spreadsheetWidth,
             mask: maskStr,
-            align: "right"
+            align: "center"
         },
     ],    
     onload: function (instance) {
 
-    },
+    },    
     onchange: function (instance, cell, c, r, value) {
         var client = myspreadsheet.getValueFromCoords(0, r);
         var project = myspreadsheet.getValueFromCoords(1, r);
         var staff = myspreadsheet.getValueFromCoords(6, r);
 
         //ブランク行、集計セルのonchange回避
-        if (client !== "" && project !== "" && value.charAt(0) !== "=") {
+        if (client !== "" && project !== "" && value.charAt(0) !== "=") {           
             //var year = myspreadsheet.getHeader(c).split("\n")[0];
             //var month = myspreadsheet.getHeader(c).split("\n")[1].split("/")[0];
             //var day = myspreadsheet.getHeader(c).split("/")[1];
@@ -763,6 +763,17 @@ function testData() {
                 columnCnt += 1;
             }
             //--------------------------------------------------------------------------
+            
+            //Style設定
+            for (var t = 1; t <= myspreadsheet.rows.length; t++) {
+                for (var x = 1; x < ar.length; x++) {
+                    if (x < 7) {
+                        myspreadsheet.setStyle(ar[x] + t, 'text-align', 'left');
+                    } else {
+                        myspreadsheet.setStyle(ar[x] + t, 'text-align', 'right');
+                    }
+                }
+            }
 
         },
         beforeSend: function (xhr, settings) {
@@ -878,7 +889,7 @@ function getInputAllData() {
     if (clientObj == null && projectObj == null && fyeObj == null && vicObj == null && picObj == null && staffObj == null && roleObj == null && dateFromObj == "") {
         Swal.fire({
             title: 'Are you sure?',
-            text: "検索結果が多いため、表示までに時間がかかります。実行しますか？",
+            text: "Your search returned a large number of results. Continue with the search?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
