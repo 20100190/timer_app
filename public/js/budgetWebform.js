@@ -157,20 +157,22 @@ function getData() {
                     document.getElementById("h2_month" + (i + 1)).innerHTML = monthEng;//data.week[i].month;
                 }
                 
+                var bkColor = "#e2efda";
+                var rowWidth = "40";
                 //overall total style       
-                document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;";
-                document.getElementById("td_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;";
+                document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";";
+                document.getElementById("td_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";";
                 if (document.getElementById("h2_month" + (i + 1)).innerHTML != "") {
-                    document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;border-left: solid 1px lightgray";
-                    document.getElementById("td_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;border-left: solid 1px lightgray";
+                    document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray";
+                    document.getElementById("td_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray";
                 }
                 
                 //client list style
-                document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;";
-                document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;";
+                document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";";
+                document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";";
                 if (document.getElementById("h_month" + (i + 1)).innerHTML != "") {
-                    document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;border-left: solid 1px lightgray";
-                    document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: 50px;z-index: 0;text-align: center;background-color: white;border-left: solid 1px lightgray";
+                    document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray";
+                    document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray";
                 }
 
                 mnt = data.week[i].month;
@@ -357,9 +359,16 @@ function getData() {
                 detailRowArray[6] = assign;
                 detailRowArray[7] = budget;
                 detailRowArray[8] = assigned.toLocaleString();
-                detailRowArray[9] = diff.toLocaleString();
-                for (var w = 10; w < 62; w++) {     
-                    detailRowArray[w] = Math.ceil(row[w]);                    
+                detailRowArray[9] = " ";
+                if (diff != 0) {
+                    detailRowArray[9] = diff.toLocaleString();
+                }
+                
+                for (var w = 10; w < 62; w++) {
+                    detailRowArray[w] = " ";
+                    if (row[w] != 0) {
+                        detailRowArray[w] = Math.ceil(row[w]);
+                    }
                 }
                 detailArray.push(detailRowArray);
                 detailRowArray = new Array(62);
@@ -426,8 +435,10 @@ function getData() {
                             td.classList.add("col7");
                         }
                         if (x == 7) {
-                            //td.innerHTML = budget;
-                            td.innerHTML = sumBudget;
+                            td.innerHTML = "&nbsp";
+                            if (sumBudget != 0) {
+                                td.innerHTML = sumBudget;
+                            }
                             td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                             td.classList.add("column_row_block");
                             td.classList.add("col8");
@@ -441,7 +452,10 @@ function getData() {
                             sumAssigned = 0;
                         }
                         if (x == 9) {
-                            td.innerHTML = sumDiff;
+                            td.innerHTML = "&nbsp";
+                            if (sumDiff != 0) {
+                                td.innerHTML = sumDiff;
+                            }
                             td.style.cssText = "text-align:right; background-color: " + backgroundColor;
                             td.classList.add("column_row_block");
                             td.classList.add("col10");

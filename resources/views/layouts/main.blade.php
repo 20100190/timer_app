@@ -60,10 +60,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
             
             .block-background-color {
-                padding: 10px;
+                padding: 40px 0px;
                 /*border: 1px solid #333333;*/
                 width: 1020px;
-                height: 220px;
+                height: 320px;
                 background-color: #f6fafd;
             }
             
@@ -217,11 +217,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- メニューヘッダ -->
                           <!-- メニュー項目 -->  
                         <!--予算入力-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "enter") class="active" @endif><a onclick="return movePageControl();" href="{{asset("budget/enter")}}" @if(isset($navigation_status[0]["intro"]) && $navigation_status[0]["intro"])  style="font-weight: bold;color:#292939"  @endif>&nbsp;予算入力</a></li>
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "enter") class="active" @endif><a onclick="return movePageControl();" href="{{asset("budget/enter")}}" @if(isset($navigation_status[0]["intro"]) && $navigation_status[0]["intro"])  style="font-weight: bold;color:#292939"  @endif>&nbsp;Budget Entry</a></li>
                         <!--予算照会-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "show") class="active" @endif><a onclick="return movePageControl();" href="{{asset("budget/show")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;予算照会</a></li>
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "show") class="active" @endif><a onclick="return movePageControl();" href="{{asset("budget/show")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Budget Report</a></li>
                         <!--プロジェクトマスタ-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "project") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/project")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Projectマスタ</a></li>
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "project") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/project")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Project</a></li>
                         
                     </ul>
                     

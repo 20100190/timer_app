@@ -70,6 +70,9 @@
         z-index: 0;
         text-align: center;
     }   
+    .header-background-color {
+        background-color: #e2efda;
+    }    
     
 </style>      
 
@@ -236,11 +239,11 @@
                         <td class="column1_block col5" style="background-color: white"></td>
                         <td class="column1_block col6" style="background-color: white"></td>
                         <td class="column1_block col7" style="background-color: white"></td>
-                        <td class="column1_block col8 font-bold border-top-style-list" style="background-color: white">Overrall</td>
-                        <td class="column1_block col9 font-bold border-top-style-list" style="background-color: white">Total</td>
-                        <td class="column1_block col10 border-top-style-list" style="background-color: white"></td>
+                        <td class="column1_block col8 font-bold border-top-style-list header-background-color">Overrall</td>
+                        <td class="column1_block col9 font-bold border-top-style-list header-background-color">Total</td>
+                        <td class="column1_block col10 border-top-style-list header-background-color"></td>
                         @for($i=1;$i<=52;$i++)
-                        <td class="column1_block font-bold border-top-style-list" id="td_h2_month{{$i}}" style="width: 50px;z-index: 0;text-align: center;background-color: white"><span id="h2_month{{$i}}"></td>
+                        <td class="column1_block font-bold border-top-style-list header-background-color" id="td_h2_month{{$i}}" style="width: 50px;z-index: 0;text-align: center"><span id="h2_month{{$i}}"></td>
                         @endfor
 
                     </tr>
@@ -253,12 +256,12 @@
                         <td class="column2_block col5" style="background-color: white"></td>
                         <td class="column2_block col6" style="background-color: white"></td>
                         <td class="column2_block col7" style="background-color: white"></td>
-                        <td class="column2_block col8 font-bold border-bottom-style-list" style="background-color: white;text-align: center">Name</td>
-                        <td class="column2_block col9 font-bold border-bottom-style-list" style="background-color: white;text-align: center">Total</td>
-                        <td class="column2_block col10 font-bold border-bottom-style-list" style="background-color: white;text-align: center">Unassigned hours</td>
+                        <td class="column2_block col8 font-bold border-bottom-style-list header-background-color" style="text-align: center">Name</td>
+                        <td class="column2_block col9 font-bold border-bottom-style-list header-background-color" style="text-align: center">Total</td>
+                        <td class="column2_block col10 font-bold border-bottom-style-list header-background-color" style="text-align: center">Unassigned hours</td>
 
                         @for($i=1;$i<=52;$i++)
-                        <td class="column2_block font-bold border-bottom-style-list" id="td_month{{$i}}" style="width: 50px;z-index: 0;text-align: center;background-color: white"><span id="month{{$i}}"></td>
+                        <td class="column2_block font-bold border-bottom-style-list header-background-color" id="td_month{{$i}}" style="width: 50px;z-index: 0;text-align: center;"><span id="month{{$i}}"></td>
                         @endfor                        
                     </tr>
                 </thead>
@@ -307,33 +310,33 @@
             <table class="font1" border="0" id="budget_list" style="table-layout: fixed;width:100%">
                 <thead>
                     <tr style="height: 30px">
-                        <td class="column1_block font-bold border-top-style-list" style="width: 250px;left: 0px">Client</td>
-                        <td class="column1_block col2 font-bold border-top-style-list">Project</td>
-                        <td class="column1_block col3 font-bold border-top-style-list">FYE</td>
-                        <td class="column1_block col4 font-bold border-top-style-list">VIC</td>
-                        <td class="column1_block col5 font-bold border-top-style-list">PIC</td>
-                        <td class="column1_block col6 font-bold border-top-style-list">Role</td>
-                        <td class="column1_block col7 font-bold border-top-style-list">Staff</td>
-                        <td class="column1_block col8 font-bold border-top-style-list">Budget</td>
-                        <td class="column1_block col9 font-bold border-top-style-list">Assigned</td>
-                        <td class="column1_block col10 font-bold border-top-style-list">Diff</td>
+                        <td class="column1_block font-bold border-top-style-list header-background-color" style="width: 250px;left: 0px;text-align:center">Client</td>
+                        <td class="column1_block col2 font-bold border-top-style-list header-background-color" style="text-align: center">Project</td>
+                        <td class="column1_block col3 font-bold border-top-style-list header-background-color" style="text-align: center">FYE</td>
+                        <td class="column1_block col4 font-bold border-top-style-list header-background-color" style="text-align: center">VIC</td>
+                        <td class="column1_block col5 font-bold border-top-style-list header-background-color" style="text-align: center">PIC</td>
+                        <td class="column1_block col6 font-bold border-top-style-list header-background-color" style="text-align: center">Role</td>
+                        <td class="column1_block col7 font-bold border-top-style-list header-background-color" style="text-align: center">Staff</td>
+                        <td class="column1_block col8 font-bold border-top-style-list header-background-color" style="text-align: center">Budget</td>
+                        <td class="column1_block col9 font-bold border-top-style-list header-background-color" style="text-align: center">Assigned</td>
+                        <td class="column1_block col10 font-bold border-top-style-list header-background-color" style="text-align: center">Diff</td>
                         @for($i=1;$i<=52;$i++)
-                        <td class="column1_block font-bold border-top-style-list" id="td_h_month{{$i}}" style="width: 50px;z-index: 0;text-align: center;font-weight: bold"><span id="h_month{{$i}}"></td>
+                        <td class="column1_block font-bold border-top-style-list header-background-color" id="td_h_month{{$i}}" style="width: 50px;z-index: 0;text-align: center;font-weight: bold"><span id="h_month{{$i}}"></td>
                         @endfor                          
                     </tr>
                     <tr style="height: 30px">
-                        <td class="column2_block border-bottom-style-list" style="left: 0px;"></td>
-                        <td class="column2_block col2 border-bottom-style-list"></td>
-                        <td class="column2_block col3 border-bottom-style-list"></td>
-                        <td class="column2_block col4 border-bottom-style-list"></td>
-                        <td class="column2_block col5 border-bottom-style-list"></td>
-                        <td class="column2_block col6 border-bottom-style-list"></td>
-                        <td class="column2_block col7 border-bottom-style-list"></td>
-                        <td class="column2_block col8 border-bottom-style-list"></td>
-                        <td class="column2_block col9 border-bottom-style-list"></td>
-                        <td class="column2_block col10 border-bottom-style-list"></td>
+                        <td class="column2_block border-bottom-style-list header-background-color" style="left: 0px;"></td>
+                        <td class="column2_block col2 border-bottom-style-list header-background-color"></td>
+                        <td class="column2_block col3 border-bottom-style-list header-background-color"></td>
+                        <td class="column2_block col4 border-bottom-style-list header-background-color"></td>
+                        <td class="column2_block col5 border-bottom-style-list header-background-color"></td>
+                        <td class="column2_block col6 border-bottom-style-list header-background-color"></td>
+                        <td class="column2_block col7 border-bottom-style-list header-background-color"></td>
+                        <td class="column2_block col8 border-bottom-style-list header-background-color"></td>
+                        <td class="column2_block col9 border-bottom-style-list header-background-color"></td>
+                        <td class="column2_block col10 border-bottom-style-list header-background-color"></td>
                         @for($i=1;$i<=52;$i++)
-                        <td class="column2_block col11 font-bold border-bottom-style-list" id="td_d_month{{$i}}" style="font-weight: bold"><span id="d_month{{$i}}"></td>
+                        <td class="column2_block col11 font-bold border-bottom-style-list header-background-color" id="td_d_month{{$i}}" style="font-weight: bold"><span id="d_month{{$i}}"></td>
                         @endfor                           
                     </tr>
                 </thead>
