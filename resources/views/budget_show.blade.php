@@ -226,7 +226,7 @@
             
         </div>       
     </div>
-    <div id="div1" style="overflow: hidden;height: 300px;margin-left: 20px;min-height: 350px;margin-right: 20px;position: relative";>          
+    <div id="div1" style="overflow: hidden;height: 400px;margin-left: 20px;min-height: 350px;margin-right: 20px;position: relative";>          
         <div style="width: 100%;float: left">
             <table class="font1" border="0" id="summary_list" style="table-layout: fixed;width:98%;">
                 <thead>
@@ -305,7 +305,7 @@
         </div>
     </div>
 
-    <div id="div2" style="overflow: scroll;height: 40%;margin-left: 20px";>  
+    <div id="div2" style="overflow: scroll;height: 40%;margin-left: 20px;">  
         <div style="width: 100%">
             <table class="font1" border="0" id="budget_list" style="table-layout: fixed;width:100%">
                 <thead>
