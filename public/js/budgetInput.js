@@ -766,7 +766,7 @@ function testData() {
             
             //Style設定
             for (var t = 1; t <= myspreadsheet.rows.length; t++) {
-                for (var x = 1; x < ar.length; x++) {
+                for (var x = 0; x < ar.length; x++) {
                     if (x < 7) {
                         myspreadsheet.setStyle(ar[x] + t, 'text-align', 'left');
                     } else {
