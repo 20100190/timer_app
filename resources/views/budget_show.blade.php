@@ -155,12 +155,22 @@
                     <input type="text" style="width:150px;margin-right: 20px" class="form-control datepicker1" id="filter_date_to" name="filter_date_to" placeholder="mm/dd/yyyy" value="">                            
                 </div>  
                 <div class="col col-md-1">
-                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px;margin-left: 0px" onclick="clearShowFilter()">
+                   
+                </div>
+            </div> 
+            <div class="row entry-filter-bottom">
+                <div class="col">
+                    <button id="btn_load" name="btn_load" class="btn btn-default" type="button" style="width: 150px;margin-left: 115px" onclick="clearShowFilter()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
                         <span id="loadingText">Clear</span>
                     </button>
+                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px;margin-left: 0px" onclick="getData()">
+                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="loadingText">Search</span>
+                    </button>
                 </div>
-            </div>  
+               
+            </div>
             
         </div>       
 
@@ -217,10 +227,7 @@
                 <div class="col col-md-3">                    
                 </div>
                 <div class="col col-md-1">
-                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px" onclick="getData()">
-                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                        <span id="loadingText">Search</span>
-                    </button>
+                    
                 </div>
             </div>
             

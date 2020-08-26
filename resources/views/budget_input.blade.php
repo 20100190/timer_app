@@ -68,7 +68,13 @@
 
             <div class="row entry-filter-bottom">                           
                 <div class="col col-md-3" >
-                    <input type="button" class="btn btn-primary" value="Clear" onclick="clearInputFilter()" style="width: 150px;margin-left: 335px">
+                    <input type="button" class="btn btn-block btn-default" value="Clear" onclick="clearInputFilter()" style="width: 150px;margin-left: 85px">
+                </div>
+                <div class="col" >
+                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="getInputAllData()" style="width: 150px;margin-left: 140px">
+                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="loadingText">Search</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -137,10 +143,7 @@
                 <div class="col col-md-4">                   
                 </div>
                 <div class="col col-md-1">
-                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="getInputAllData()" style="width: 150px">
-                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                        <span id="loadingText">Search</span>
-                    </button>
+                    
                 </div>
             </div>            
         </div>        
