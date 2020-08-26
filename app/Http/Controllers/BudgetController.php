@@ -631,7 +631,8 @@ class BudgetController extends Controller
         
         $overallDetailData = $this->getAssignDataObj()
                 ->wherein('assign_id', explode(",", $targetAssignId))
-                ->where([["ymd",">=",$startDateAll]])  
+                //->where([["ymd",">=",$startDateAll]])  
+                ->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
                 ->groupBy("staff_id", "initial", "year", "month", "day")
                 ->orderBy("staff_id", "asc")
                 ->orderBy("year", "asc")
@@ -642,7 +643,8 @@ class BudgetController extends Controller
         $overallTotal = $this->getAssignDataObj()
                 ->select("budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
                 ->wherein('assign_id', explode(",", $targetAssignId))             
-                ->where([["ymd",">=",$startDateAll]])  
+                //->where([["ymd",">=",$startDateAll]])  
+                ->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
                 ->groupBy("year", "month", "day")
                 ->orderBy("year", "asc")
                 ->orderBy("month", "asc")
@@ -652,13 +654,14 @@ class BudgetController extends Controller
         $overallWeekTotal = $this->getAssignDataObj()
                 ->select(DB::raw("SUM(working_days) as working_days"))    
                 ->wherein('assign_id', explode(",", $targetAssignId))   
-                ->where([["ymd",">=",$startDateAll]])  
+                //->where([["ymd",">=",$startDateAll]])  
+                ->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
                 ->get();
         
         $overallPersonalTotal = $this->getAssignDataObj()
                 ->select("staff_id", DB::raw("SUM(CEILING(working_days)) as working_days"))
                 ->wherein('assign_id', explode(",", $targetAssignId))
-                ->where([["ymd",">=",$startDateAll]])  
+                ->where([["ymd",">=",$startDateAll],["client.id","<>","0"]])  
                 ->groupBy("staff_id")
                 ->get();
         

@@ -155,12 +155,22 @@
                     <input type="text" style="width:150px;margin-right: 20px" class="form-control datepicker1" id="filter_date_to" name="filter_date_to" placeholder="mm/dd/yyyy" value="">                            
                 </div>  
                 <div class="col col-md-1">
-                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px;margin-left: 0px" onclick="clearShowFilter()">
+                   
+                </div>
+            </div> 
+            <div class="row entry-filter-bottom">
+                <div class="col">
+                    <button id="btn_load" name="btn_load" class="btn btn-default" type="button" style="width: 150px;margin-left: 115px" onclick="clearShowFilter()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
                         <span id="loadingText">Clear</span>
                     </button>
+                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px;margin-left: 0px" onclick="getData()">
+                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="loadingText">Search</span>
+                    </button>
                 </div>
-            </div>  
+               
+            </div>
             
         </div>       
 
@@ -217,16 +227,13 @@
                 <div class="col col-md-3">                    
                 </div>
                 <div class="col col-md-1">
-                    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px" onclick="getData()">
-                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                        <span id="loadingText">Search</span>
-                    </button>
+                    
                 </div>
             </div>
             
         </div>       
     </div>
-    <div id="div1" style="overflow: hidden;height: 300px;margin-left: 20px;min-height: 350px;margin-right: 20px;position: relative";>          
+    <div id="div1" style="overflow: hidden;height: 400px;margin-left: 20px;min-height: 350px;margin-right: 20px;position: relative";>          
         <div style="width: 100%;float: left">
             <table class="font1" border="0" id="summary_list" style="table-layout: fixed;width:98%;">
                 <thead>
@@ -305,7 +312,7 @@
         </div>
     </div>
 
-    <div id="div2" style="overflow: scroll;height: 40%;margin-left: 20px";>  
+    <div id="div2" style="overflow: scroll;height: 40%;margin-left: 20px;">  
         <div style="width: 100%">
             <table class="font1" border="0" id="budget_list" style="table-layout: fixed;width:100%">
                 <thead>
