@@ -7,9 +7,6 @@
 7,0,Company Improvement Project,2020,Company Improvement Project - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 8,0,Vacation,2020,Vacation - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 9,0,CPE and Training,2020,CPE and Training - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
-10,0,Evaluation,2020,Evaluation - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
-11,0,Holiday,2020,Holiday - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
-12,0,Holiday,2020,Holiday - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 13,0,Leave of Absence (Non-Paid),2020,Leave of Absence (Non-Paid) - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 14,0,Legal and Immigration,2020,Legal and Immigration - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 15,0,Meal Break (Non-Paid),2020,Meal Break (Non-Paid) - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
@@ -19,7 +16,6 @@
 19,0,Peer Review,2020,Peer Review - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 20,0,Recruiting,2020,Recruiting - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 21,0,Research,2020,Research - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
-22,0,Sick Leave,2020,Sick Leave - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 23,0,Software Maintenance/Management,2020,Software Maintenance/Management - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 24,0,Vacation,2020,Vacation - 2020,1,2020-01-01,2020-12-31,NO,,0,1,0,NULL,NULL,NULL
 25,1,TAX EQ,2019,TAX EQ - 2019,6,2020-01-01,2020-12-31,YES,ITR_various fee based on number of ITR and forms,0,1,0,NULL,NULL,NULL
