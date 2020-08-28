@@ -86,6 +86,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
             .line-height {
                 line-height: 30px;
             }
+            
+            #loader-bg {
+                background: #fff;
+                opacity: 0.8;
+                height: 100%;
+                width: 100%;
+                position: fixed;
+                top: 0px;
+                left: 0px;
+                z-index: 20;
+            }
+            #loader-bg img {	
+                background: #fff;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                z-index: 20;
+            }
 
         </style>
             
@@ -166,6 +187,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     |---------------------------------------------------------|
     -->
     <body class="hold-transition skin-green sidebar-mini sidebar-collapse"> <!--style変更　 style="font-family: Segoe UI"-->
+        <div id="loader-bg">
+            <img src="{{asset("image/loading.gif")}}">
+        </div>
         <div class="wrapper">
             <header class="main-header">
                 <!-- ロゴ -->
