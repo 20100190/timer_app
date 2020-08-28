@@ -6,7 +6,7 @@ window.addEventListener("resize", function (event) {
 
 $(window).on('load', function () {
     document.getElementById("spreadsheet").style.cssText = "width: 100%;height:" + (window.innerHeight - 280) + "px";
-    //document.body.style.zoom = "80%";
+    jQuery('#loader-bg').hide();
 });
 
 $(document).ready(function () {
@@ -693,8 +693,8 @@ function testData() {
         month = parseInt(dateObj.value.split("/")[0]);
         day = parseInt(dateObj.value.split("/")[1]);
     }
-
-
+    
+  
     $.ajax({
         url: "/budget/test3/input/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + year + "/" + month + "/" + day,
         dataType: "json",
@@ -778,24 +778,27 @@ function testData() {
         },
         beforeSend: function (xhr, settings) {
             //処理中
-            $("#loadingSpinner").css("visibility", "visible");
+            //$("#loadingSpinner").css("visibility", "visible");
             //$("#loadingText").html("保存中");
             //$("#s").find(':select').attr('readonly', true);
-            $("#btn_load").attr('disabled', true);
+            //$("#btn_load").attr('disabled', true);
+            jQuery('#loader-bg').show();
 
         },
         complete: function (xhr, textStatus) {
             //sss();
 
-            $("#loadingSpinner").css("visibility", "hidden");
+            //$("#loadingSpinner").css("visibility", "hidden");
             //$("#loadingText").html("保存");
             //$("#s").find(':select').attr('readonly', false);
             //$("#s").find(':select').removeAttr('readonly');
-            $("#btn_load").attr('disabled', false);
-            $("#btn_load").removeAttr('disabled');
+            //$("#btn_load").attr('disabled', false);
+            //$("#btn_load").removeAttr('disabled');            
+            jQuery('#loader-bg').hide();
         },
         error: () => {
             alert("ajax Error");
+            jQuery('#loader-bg').hide();    
         }
     });
 }
@@ -904,5 +907,29 @@ function getInputAllData() {
         testData();
     }
 
+}
+
+/* ------------------------------
+ Loading イメージ表示関数
+ 引数： msg 画面に表示する文言
+ ------------------------------ */
+function dispLoading(msg){
+  // 引数なし（メッセージなし）を許容
+  if( msg == undefined ){
+    msg = "";
+  }
+  // 画面表示メッセージ
+  //var dispMsg = "<div class='loadingMsg'>" + msg + "</div>";
+  // ローディング画像が表示されていない場合のみ出力
+  //if($("#loading").length == 0){
+    $("body").append("<div id='loading'><div class='loadingMsg'>" + "" + "</div></div>");
+  //}
+}
+ 
+/* ------------------------------
+ Loading イメージ削除関数
+ ------------------------------ */
+function removeLoading(){
+  $("#loading").remove();
 }
         

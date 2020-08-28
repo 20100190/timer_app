@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    
+     jQuery('#loader-bg').hide();
+    
     //読込イベント処理を書く
     var div1 = $('#div1');
     var div2 = $('#div2');
@@ -130,7 +133,7 @@ function getData() {
     if (dateToObj.value != "") {
         dateTo = dateToObj.value.split("/").join("-");
     }
-
+    
     $.ajax({
         url: "/budget/test3/data/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + dateFrom + "/" + dateTo,
         dataType: "json",
@@ -771,16 +774,19 @@ function getData() {
         },
         beforeSend: function (xhr, settings) {
             //処理中
-            $("#loadingSpinner").css("visibility", "visible");
-            $("#btn_load").attr('disabled', true);
+            //$("#loadingSpinner").css("visibility", "visible");
+            //$("#btn_load").attr('disabled', true);
+            jQuery('#loader-bg').show();
         },
         complete: function (xhr, textStatus) {
-            $("#loadingSpinner").css("visibility", "hidden");
-            $("#btn_load").attr('disabled', false);
-            $("#btn_load").removeAttr('disabled');
+            //$("#loadingSpinner").css("visibility", "hidden");
+            //$("#btn_load").attr('disabled', false);
+            //$("#btn_load").removeAttr('disabled');
+            jQuery('#loader-bg').hide();
         },
         error: () => {
             alert("ajax Error");
+            jQuery('#loader-bg').hide();
         }
     });
 }

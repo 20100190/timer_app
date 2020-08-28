@@ -17,6 +17,8 @@ $(document).ready(function () {
     $('#task_body').sortable();
 
     $("#fye option:not(:selected)").prop('disabled', true);
+    
+     jQuery('#loader-bg').hide();
 
 });
 
