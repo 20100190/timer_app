@@ -540,7 +540,7 @@ class BudgetController extends Controller
             $budgetTable->year = $request->year;
             $budgetTable->month = $request->month;
             $budgetTable->day = $request->day;
-            $budgetTable->working_days = $request->value;           
+            $budgetTable->working_days = str_replace(",","",$request->value);           
             $budgetTable->ymd = $request->year . sprintf('%02d', $request->month) . sprintf('%02d', $request->day);
             $budgetTable->save();
         } else {
@@ -632,7 +632,8 @@ class BudgetController extends Controller
         $overallDetailData = $this->getAssignDataObj()
                 ->wherein('assign_id', explode(",", $targetAssignId))
                 //->where([["ymd",">=",$startDateAll]])  
-                ->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
+                //->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
+                ->where([["ymd",">=",$startDateAll]]) 
                 ->groupBy("staff_id", "initial", "year", "month", "day")
                 ->orderBy("staff_id", "asc")
                 ->orderBy("year", "asc")
@@ -643,8 +644,8 @@ class BudgetController extends Controller
         $overallTotal = $this->getAssignDataObj()
                 ->select("budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
                 ->wherein('assign_id', explode(",", $targetAssignId))             
-                //->where([["ymd",">=",$startDateAll]])  
-                ->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
+                ->where([["ymd",">=",$startDateAll]])  
+                //->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
                 ->groupBy("year", "month", "day")
                 ->orderBy("year", "asc")
                 ->orderBy("month", "asc")
@@ -654,14 +655,15 @@ class BudgetController extends Controller
         $overallWeekTotal = $this->getAssignDataObj()
                 ->select(DB::raw("SUM(working_days) as working_days"))    
                 ->wherein('assign_id', explode(",", $targetAssignId))   
-                //->where([["ymd",">=",$startDateAll]])  
-                ->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
+                ->where([["ymd",">=",$startDateAll]])  
+                //->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
                 ->get();
         
         $overallPersonalTotal = $this->getAssignDataObj()
                 ->select("staff_id", DB::raw("SUM(CEILING(working_days)) as working_days"))
                 ->wherein('assign_id', explode(",", $targetAssignId))
-                ->where([["ymd",">=",$startDateAll],["client.id","<>","0"]])  
+                //->where([["ymd",">=",$startDateAll],["client.id","<>","0"]])  
+                ->where([["ymd",">=",$startDateAll]])  
                 ->groupBy("staff_id")
                 ->get();
         
