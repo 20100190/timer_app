@@ -68,7 +68,7 @@
 
             <div class="row entry-filter-bottom">                           
                 <div class="col col-md-3" >
-                    <input type="button" class="btn btn-block btn-default" value="Clear" onclick="clearInputFilter()" style="width: 150px;margin-left: 85px">
+                    <input type="button" class="btn btn-default" value="Clear" onclick="clearInputFilter()" style="background-color: white;width: 150px;margin-left: 85px">
                 </div>
                 <div class="col" >
                     <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="getInputAllData()" style="width: 150px;margin-left: 140px">
