@@ -160,7 +160,7 @@
             </div> 
             <div class="row entry-filter-bottom">
                 <div class="col">
-                    <button id="btn_load" name="btn_load" class="btn btn-default" type="button" style="width: 150px;margin-left: 115px" onclick="clearShowFilter()">
+                    <button id="btn_load" name="btn_load" class="btn btn-default" type="button" style="background-color: white;width: 150px;margin-left: 121px" onclick="clearShowFilter()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
                         <span id="loadingText">Clear</span>
                     </button>
