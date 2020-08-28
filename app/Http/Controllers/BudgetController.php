@@ -642,7 +642,7 @@ class BudgetController extends Controller
                 ->get();      
         
         $overallTotal = $this->getAssignDataObj()
-                ->select("budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
+                ->select("budget.year", "budget.month", "budget.day", DB::raw("SUM(CEILING(working_days)) as working_days"))
                 ->wherein('assign_id', explode(",", $targetAssignId))             
                 ->where([["ymd",">=",$startDateAll]])  
                 //->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
@@ -653,7 +653,7 @@ class BudgetController extends Controller
                 ->get();
         
         $overallWeekTotal = $this->getAssignDataObj()
-                ->select(DB::raw("SUM(working_days) as working_days"))    
+                ->select(DB::raw("SUM(CEILING(working_days)) as working_days"))    
                 ->wherein('assign_id', explode(",", $targetAssignId))   
                 ->where([["ymd",">=",$startDateAll]])  
                 //->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
@@ -863,7 +863,7 @@ class BudgetController extends Controller
     }
     
     function getAssignDataObj(){
-        $obj = Budget::select("staff_id", "staff.initial as initial", "budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
+        $obj = Budget::select("staff_id", "staff.initial as initial", "budget.year", "budget.month", "budget.day", DB::raw("SUM(CEILING(working_days)) as working_days"))
                 ->Join("assign", "assign.id", "=", "budget.assign_id")
                 ->leftJoin("staff", "assign.staff_id", "=", "staff.id")
                 ->leftJoin("project", "project.id", "=", "assign.project_id")
