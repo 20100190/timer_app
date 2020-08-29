@@ -5,7 +5,7 @@
 5,BM ,Yes
 6,Business Development,No
 7,COMP ,Yes
-8,Company Improvement Project,No
+8,Company Improvements,No
 9,CORP TAX ,Yes
 10,CPE and Training,No
 11,Evaluation,No
@@ -15,21 +15,24 @@
 15,Leave of Absence (Non-Paid),No
 16,Legal and Immigration,No
 17,Meal Break (Non-Paid),No
-18,Meeting - Scheduling,No
-19,NOTICE HANDLING - CTR,Yes
-20,NOTICE HANDLING - ITR,Yes
-21,OTH BUS ,Yes
-22,Peer Review,No
-23,Recruiting,No
-24,Research,No
-25,REV ,Yes
-26,Sick Leave,No
-27,Software Maintenance/Management,No
-28,TAX AUDIT - CTR,Yes
-29,TAX AUDIT - ITR ,Yes
-30,TAX EQ ,Yes
-31,TP ,Yes
-32,Vacation,No
-33,TAX AUDIT - OTH,Yes
-34,Paid Rest Break,No
-35,Payroll,No
+18,Mtg - Scheduling,No
+19,Mtg - Other,No
+20,NOTICE HANDLING - CTR,Yes
+21,NOTICE HANDLING - ITR,Yes
+22,OTH BUS ,Yes
+23,Peer Review,No
+24,Recruiting,No
+25,Research,No
+26,REV ,Yes
+27,Sick Leave,No
+28,Software Maintenance/Management,No
+29,TAX AUDIT - CTR,Yes
+30,TAX AUDIT - ITR ,Yes
+31,TAX EQ ,Yes
+32,TP ,Yes
+33,Vacation,No
+34,TAX AUDIT - OTH,Yes
+35,Paid Rest Break,No
+36,Payroll,No
+37,Training,No
+38,Administrative tasks,No
