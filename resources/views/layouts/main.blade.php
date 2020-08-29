@@ -147,6 +147,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <script type="text/javascript">
             var backgroundColorError = "#ff7f7f";
+            
+            function showImage(){
+                var cssText = document.getElementById("header_logo").style.cssText;
+                
+                document.getElementById("header_logo").style.cssText = "";
+                if(cssText == ""){
+                    document.getElementById("header_logo").style.cssText = "display: none";    
+                }                
+            }
         </script>
 
 
@@ -193,11 +202,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="wrapper">
             <header class="main-header">
                 <!-- ロゴ -->
-                <a href="{{ action('HomeController@index') }}"><img src="{{asset("image/TOPC_logo.png")}}" class="logo"></a>
+                <!--<a href="{{ action('HomeController@index') }}">-->
+                    <img src="{{asset("image/TOPC_logo.png")}}" id="header_logo" class="logo" style="display: none">
+                <!--</a>-->
 
                 <!-- トップメニュー -->
                 <nav class="navbar navbar-static-top" role="navigation">
-                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" id="btn_menu" onclick="showImage()" style="margin-left: 10px">
                         <span class="sr-only">Toggle navigation</span>
                     </a>
                     <ul class="nav navbar-nav">
