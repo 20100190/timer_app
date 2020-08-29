@@ -16,7 +16,7 @@ $(document).ready(function () {
 
     $('#task_body').sortable();
 
-    $("#fye option:not(:selected)").prop('disabled', true);
+    //$("#fye option:not(:selected)").prop('disabled', true);
     
      jQuery('#loader-bg').hide();
 
@@ -316,7 +316,7 @@ function delRowCommon(obj, seqNoId) {
     // 確認
     if (!confirm("この行を削除しますか？"))
         return;
-
+    
     if (!obj)
         return;
 
@@ -436,9 +436,11 @@ function loadTask() {
             document.getElementById("engagement_fee").value = data.project.engagement_fee_unit;
             document.getElementById("engagement_monthly").value = data.project.invoice_per_year;
             document.getElementById("adjustments").value = data.project.adjustments;
-            document.getElementById("billable").selectedIndex = data.project.billable;
+            //document.getElementById("billable").selectedIndex = data.project.billable;
+            $("#billable").val(data.project.billable);  
             document.getElementById("note").value = data.project.note;
-            document.getElementById("pic").selectedIndex = data.project.pic - 1;
+            //document.getElementById("pic").selectedIndex = data.project.pic - 1;
+            $("#pic").val(data.project.pic);            
         }
         
         if (document.getElementById("starts_on").value == "") {

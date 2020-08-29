@@ -678,7 +678,7 @@ class BudgetController extends Controller
                     ->leftjoin("client", "client.id", "=", "project.client_id")
                     ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
                     ->leftjoin("budget", "budget.assign_id", "=", "assign.id")
-                    ->leftjoin("staff as B", "B.id", "=", "client.pic")
+                    ->leftjoin("staff as B", "B.id", "=", "project.pic")
                     ->where([['assign_id', '=', $idList["assign_id"]],["ymd",">=",$startDateAll],["ymd","<=",$endDateAll]])                   
                     ->get();
 
@@ -730,7 +730,7 @@ class BudgetController extends Controller
                 ->leftJoin("staff", "assign.staff_id", "=", "staff.id")
                 ->leftJoin("project", "project.id", "=", "assign.project_id")
                 ->leftjoin("client", "project.client_id", "=", "client.id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic")
+                ->leftjoin("staff as B", "B.id", "=", "project.pic")
                 ->leftjoin("role_order", "role_order.role", "=", "assign.role");;
 
         if ($request->client != "blank") {
@@ -815,7 +815,7 @@ class BudgetController extends Controller
             $picArray = explode(",", $request->pic);
 
             $overallDetail = $overallDetail
-                    ->wherein('client.pic', $picArray);
+                    ->wherein('project.pic', $picArray);
         }
 
         if ($request->staff != "blank") {
@@ -868,7 +868,7 @@ class BudgetController extends Controller
                 ->leftJoin("staff", "assign.staff_id", "=", "staff.id")
                 ->leftJoin("project", "project.id", "=", "assign.project_id")
                 ->leftjoin("client", "project.client_id", "=", "client.id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic");        
+                ->leftjoin("staff as B", "B.id", "=", "project.pic");        
         return $obj;
     }
        

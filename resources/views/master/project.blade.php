@@ -86,7 +86,8 @@
 
 @section('content') 
 
-<form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter">
+<!--<form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px">-->
+<form method="POST" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px">
     <!--@csrf-->
     <div class="block-background-color">
         <div class="project-layout" style="float: left">        
@@ -185,8 +186,8 @@
         <div class="project-layout" style="margin-top: 20px;float: left;width: 181px">        
             <label>Billable</label><br>
             <select id="billable" name="billable" class="form-control" style="width: 100%">            
-                <option value="0">Yes</option>
-                <option value="1">No</option>              
+                <option value="YES">Yes</option>
+                <option value="NO">No</option>              
             </select>
         </div>
 
