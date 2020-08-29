@@ -116,7 +116,7 @@ class BudgetController extends Controller
                 ->join("client", "project.client_id", "=", "client.id")
                 ->join("assign", "assign.project_id", "=", "project.id")
                 ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic")
+                ->leftjoin("staff as B", "B.id", "=", "project.pic")
                 ->leftjoin("role_order", "role_order.role", "=", "assign.role");
         if ($request->client != "blank") {
             $comments = $comments
@@ -200,7 +200,7 @@ class BudgetController extends Controller
             $picArray = explode(",", $request->pic);
 
             $comments = $comments
-                    ->wherein('client.pic', $picArray);
+                    ->wherein('project.pic', $picArray);
         }
 
         if ($request->staff != "blank") {
