@@ -84,7 +84,8 @@ class ProjectController extends Controller
         $projectData = $projectObj->first();
         
         //Staff
-        $staffData = Staff::ActiveStaffOrderByInitial();
+        //$staffData = Staff::ActiveStaffOrderByInitial();
+        $staffData = Staff::orderBy("initial")->get();
         
         $budgetData = Assign::where([['project_id', '=', $projectId]])->get();
         

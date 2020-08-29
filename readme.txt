@@ -16,7 +16,8 @@ php artisan db:seed
 
 
 
-
+#エラー時
+composer dump-autoload
 
 #login
 http://127.0.0.1:8000/budget/login
