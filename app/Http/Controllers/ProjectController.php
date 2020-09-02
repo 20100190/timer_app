@@ -84,7 +84,8 @@ class ProjectController extends Controller
         $projectData = $projectObj->first();
         
         //Staff
-        $staffData = Staff::ActiveStaffOrderByInitial();
+        //$staffData = Staff::ActiveStaffOrderByInitial();
+        $staffData = Staff::orderBy("initial")->get();
         
         $budgetData = Assign::where([['project_id', '=', $projectId]])->get();
         
@@ -115,7 +116,7 @@ class ProjectController extends Controller
         $this->saveTaskTable($projectId, $request);
         
         //assign
-        $table = new Assign;
+        /*$table = new Assign;
         $queryObj = Assign::where([['project_id', '=', $projectId]]);
         $queryObj->delete();
         
@@ -135,6 +136,62 @@ class ProjectController extends Controller
                 
                 $table->save();             
             }           
+        }*/
+        $table = new Assign;
+        $queryObj = Assign::where([['project_id', '=', $projectId]]);
+        
+         //削除されたAssignを削除
+        $assignData = $queryObj->get();
+        foreach ($assignData as $x) {
+            $isExist = false;
+            for ($assignCnt = 1; $assignCnt < 20; $assignCnt++) {
+                if (!isset($_POST["assign" . $assignCnt])) {
+                    break;
+                }
+                
+                if($x["project_id"] == $projectId && $x["staff_id"] == $_POST["assign" . $assignCnt]){
+                    $isExist = true;
+                    break;
+                }                
+            }
+            
+            if($isExist == false){
+                $queryObj = Assign::where([['project_id', '=', $projectId],['staff_id', '=', $x["staff_id"]]]);
+                $queryObj->delete();
+            }
+            
+        }
+
+        for ($assignCnt = 1; $assignCnt < 20; $assignCnt++) {
+            if (!isset($_POST["assign" . $assignCnt])) {
+                break;
+            }
+            
+            $staffId = $_POST["assign" . $assignCnt];
+            $queryObj = Assign::where([['project_id', '=', $projectId],['staff_id', '=', $staffId]]);                   
+            
+            $assignId = "";
+            if ($queryObj->exists()) {
+                $assignId = $queryObj->first()["id"];
+            }
+            
+            if($assignId != ""){
+                //update
+                $updateAssignItem = [
+                    "role" => $_POST["role" . $assignCnt],
+                    "budget_hour" => $_POST["hours" . $assignCnt],
+                ];
+                $queryObj->update($updateAssignItem);
+            }else{
+                //insert
+                $table->project_id = $projectId;
+                $table->staff_id = $_POST["assign" . $assignCnt];
+                $table->role = $_POST["role" . $assignCnt];
+                $table->budget_hour = $_POST["hours" . $assignCnt];
+                
+                $table->save();             
+            }
+            
         }
         
         //client
@@ -148,10 +205,14 @@ class ProjectController extends Controller
                 ->leftJoin("task", "project task.task_id", "=", "task.id")
                 ->get();
         
+        $projectTypeData = ProjectType::select("project_type")                
+                ->get();
+        
         return view('master/project')
                         ->with("client", $clientData)
                         ->with("pic", $picData)
-                        ->with("task", $taskData);
+                        ->with("task", $taskData)
+                        ->with("projectType", $projectTypeData);;
     }
     
     public function saveProjectTable($request) {
@@ -199,6 +260,19 @@ class ProjectController extends Controller
             }
 
             $projectObj->update($updateItem);
+        }
+        
+        $clientObj = Client::where([['id', '=', $request->input("client")]]);
+        $isExistClient = $clientObj->exists();
+        if ($isExistClient && $request->input("fye") != "") {
+            $fyeStr = $request->input("fye");
+            if(strlen($fyeStr) == 4){
+                $fyeStr = "0" . $fyeStr;
+            }
+            $updateClientItem = [
+                "fye" => $fyeStr,
+            ];
+            $clientObj->update($updateClientItem);
         }
 
         //project id

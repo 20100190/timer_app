@@ -116,7 +116,7 @@ class BudgetController extends Controller
                 ->join("client", "project.client_id", "=", "client.id")
                 ->join("assign", "assign.project_id", "=", "project.id")
                 ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic")
+                ->leftjoin("staff as B", "B.id", "=", "project.pic")
                 ->leftjoin("role_order", "role_order.role", "=", "assign.role");
         if ($request->client != "blank") {
             $comments = $comments
@@ -200,7 +200,7 @@ class BudgetController extends Controller
             $picArray = explode(",", $request->pic);
 
             $comments = $comments
-                    ->wherein('client.pic', $picArray);
+                    ->wherein('project.pic', $picArray);
         }
 
         if ($request->staff != "blank") {
@@ -642,7 +642,7 @@ class BudgetController extends Controller
                 ->get();      
         
         $overallTotal = $this->getAssignDataObj()
-                ->select("budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
+                ->select("budget.year", "budget.month", "budget.day", DB::raw("SUM(CEILING(working_days)) as working_days"))
                 ->wherein('assign_id', explode(",", $targetAssignId))             
                 ->where([["ymd",">=",$startDateAll]])  
                 //->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
@@ -653,7 +653,7 @@ class BudgetController extends Controller
                 ->get();
         
         $overallWeekTotal = $this->getAssignDataObj()
-                ->select(DB::raw("SUM(working_days) as working_days"))    
+                ->select(DB::raw("SUM(CEILING(working_days)) as working_days"))    
                 ->wherein('assign_id', explode(",", $targetAssignId))   
                 ->where([["ymd",">=",$startDateAll]])  
                 //->where([["ymd",">=",$startDateAll],["client.id","<>","0"]]) 
@@ -678,7 +678,7 @@ class BudgetController extends Controller
                     ->leftjoin("client", "client.id", "=", "project.client_id")
                     ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
                     ->leftjoin("budget", "budget.assign_id", "=", "assign.id")
-                    ->leftjoin("staff as B", "B.id", "=", "client.pic")
+                    ->leftjoin("staff as B", "B.id", "=", "project.pic")
                     ->where([['assign_id', '=', $idList["assign_id"]],["ymd",">=",$startDateAll],["ymd","<=",$endDateAll]])                   
                     ->get();
 
@@ -730,7 +730,7 @@ class BudgetController extends Controller
                 ->leftJoin("staff", "assign.staff_id", "=", "staff.id")
                 ->leftJoin("project", "project.id", "=", "assign.project_id")
                 ->leftjoin("client", "project.client_id", "=", "client.id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic")
+                ->leftjoin("staff as B", "B.id", "=", "project.pic")
                 ->leftjoin("role_order", "role_order.role", "=", "assign.role");;
 
         if ($request->client != "blank") {
@@ -815,7 +815,7 @@ class BudgetController extends Controller
             $picArray = explode(",", $request->pic);
 
             $overallDetail = $overallDetail
-                    ->wherein('client.pic', $picArray);
+                    ->wherein('project.pic', $picArray);
         }
 
         if ($request->staff != "blank") {
@@ -863,12 +863,12 @@ class BudgetController extends Controller
     }
     
     function getAssignDataObj(){
-        $obj = Budget::select("staff_id", "staff.initial as initial", "budget.year", "budget.month", "budget.day", DB::raw("SUM(working_days) as working_days"))
+        $obj = Budget::select("staff_id", "staff.initial as initial", "budget.year", "budget.month", "budget.day", DB::raw("SUM(CEILING(working_days)) as working_days"))
                 ->Join("assign", "assign.id", "=", "budget.assign_id")
                 ->leftJoin("staff", "assign.staff_id", "=", "staff.id")
                 ->leftJoin("project", "project.id", "=", "assign.project_id")
                 ->leftjoin("client", "project.client_id", "=", "client.id")
-                ->leftjoin("staff as B", "B.id", "=", "client.pic");        
+                ->leftjoin("staff as B", "B.id", "=", "project.pic");        
         return $obj;
     }
        
