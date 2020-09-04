@@ -231,10 +231,10 @@ class BudgetController extends Controller
             }
         }
         
-        if ($loginUserInitial != "" && $loginUserInitial == $requestPIC && ($request->client == "blank" || in_array("108",explode(",", $request->client)))) {
+        if ($loginUserInitial != "" && $loginUserInitial == $requestPIC && ($request->client == "blank" || in_array("0",explode(",", $request->client)))) {
             //clientがブランクまたはTOPCが指定されていれば
             $comments = $comments
-                    ->orWhere('project.client_id', "=", 108);
+                    ->orWhere('project.client_id', "=", 0);
         }
    
         $comments = $comments
