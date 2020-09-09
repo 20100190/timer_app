@@ -35,3 +35,25 @@ Route::get('/budget/test3/input/{client}/{project}/{fye}/{vic}/{pic}/{staff}/{ro
 Route::get('/test3/input2/{client}', 'BudgetController@storeInput2');
 
 Route::get('/test3/getProjectInfo/{client}/{type}/{year}', 'ProjectController@getTaskProjectInfo');
+
+//phase entry
+Route::get('/phase/enter', 'PhaseEntryController@index');
+Route::get('/phase/entry/{client}/{project}/{vic}/{pic}/{staff}/{role}/{year}/{month}/{day}', 'PhaseEntryController@storeInput');
+Route::get('/phase/entry/save/{projectId}/{year}/{month}/{day}/{value}', 'PhaseEntryController@save');
+
+//Client
+//index
+Route::get("master/staff/", "StaffController@index");
+//create
+Route::get("master/staff/create", "StaffController@create");
+//show
+Route::get("master/staff/{id}", "StaffController@show");
+//store
+Route::post("master/staff/store", "StaffController@store");
+//edit
+Route::get("master/staff/{id}/edit", "StaffController@edit");
+//update
+Route::put("master/staff/{id}", "StaffController@update");
+//destroy
+Route::delete("master/staff/{id}", "StaffController@destroy");
+
