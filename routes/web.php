@@ -39,7 +39,7 @@ Route::get('/test3/getProjectInfo/{client}/{type}/{year}', 'ProjectController@ge
 //phase entry
 Route::get('/phase/enter', 'PhaseEntryController@index');
 Route::get('/phase/entry/{client}/{project}/{vic}/{pic}/{staff}/{role}/{year}/{month}/{day}', 'PhaseEntryController@storeInput');
-Route::get('/phase/entry/save/{projectId}/{year}/{month}/{day}/{value}', 'PhaseEntryController@save');
+Route::get('/phase/entry/save/{projectId}/{year}/{month}/{day}/{value}/{projectTypeId}', 'PhaseEntryController@save');
 
 //Client
 //index

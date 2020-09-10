@@ -165,7 +165,21 @@
     <div id='spreadsheet2'></div>
 
     <input type="hidden" id="phaseCTR">
+    <input type="hidden" id="phaseBM">
+    <input type="hidden" id="phaseAUD">
+    <input type="hidden" id="phaseREV">
+    <input type="hidden" id="phaseCOMP">
+    <input type="hidden" id="phaseITR">
+    <input type="hidden" id="phaseTOPC">
+    <input type="hidden" id="phaseOTH">
     <input type="hidden" id="phaseCTRColor">
+    <input type="hidden" id="phaseAUDColor">
+    <input type="hidden" id="phaseREVColor">
+    <input type="hidden" id="phaseCOMPColor">
+    <input type="hidden" id="phaseITRColor">
+    <input type="hidden" id="phaseBMColor">
+    <input type="hidden" id="phaseTOPCColor">
+    <input type="hidden" id="phaseOTHColor">
 </div>
 
 <script>
@@ -181,15 +195,36 @@
     var filterOptions = function (o, cell, x, y, value, config) {
         var value = o.getValueFromCoords(2, y);
         var phaseCtrStr = $("#phaseCTR").val();
+        var phaseBmStr = $("#phaseBM").val();
+        var phaseAudStr = $("#phaseAUD").val();
+        var phaseCompStr = $("#phaseCOMP").val();
+        var phaseOthStr = $("#phaseOTH").val();
+        var phaseRevStr = $("#phaseREV").val();
+        var phaseItrStr = $("#phaseITR").val();
 
         var arrCorp = phaseCtrStr.split(",");//new Array('CORP Phase1', 'CORP Phase2', 'CORP Phase3', 'CORP Phase4', 'CORP Phase5');
-        var arrBm = new Array('BM Phase1', 'BM Phase2', 'BM Phase3', 'BM Phase4', 'BM Phase5');
-        //var arrAll = arrCorp.concat(arrBm);
+        var arrBm = phaseBmStr.split(",");
+        var arrAud = phaseAudStr.split(",");
+        var arrComp = phaseCompStr.split(",");
+        var arrOth = phaseOthStr.split(",");
+        var arrRev = phaseRevStr.split(",");
+        var arrItr = phaseItrStr.split(",");
+        
         var arrAll = new Array();
         if (value.match("CORP") != null) {
             config.source = arrCorp;
         } else if (value.match("BM") != null) {
             config.source = arrBm;
+        } else if (value.match("AUD") != null) {
+            config.source = arrAud;
+        } else if (value.match("COMP") != null) {
+            config.source = arrComp;
+        } else if (value.match("OTH") != null) {
+            config.source = arrOth;
+        } else if (value.match("REV") != null) {
+            config.source = arrRev;
+        } else if (value.match("INDIV") != null) {
+            config.source = arrItr;
         } else {
             config.source = arrAll;
         }
@@ -599,20 +634,83 @@
         },
         onchange: function (instance, cell, c, r, value) {
             var projectId = myspreadsheet.getValueFromCoords(0, r);
+            var projectName = myspreadsheet.getValueFromCoords(2, r);
             var headerDate = myspreadsheet.getHeader(c).split("/");
             var year = headerDate[2];
             var month = headerDate[0];
-            var day = headerDate[1];
-
-            saveCellData(projectId, year, month, day, value);
+            var day = headerDate[1]; 
+            
+            var projectTypeId = 0;
+            if(projectName.match("BM")){
+                projectTypeId = 5;
+            }else if(projectName.match("CORP TAX")){
+                projectTypeId = 9;
+            }else if(projectName.match("AUD")){
+                projectTypeId = 4;
+            }else if(projectName.match("COMP")){
+                projectTypeId = 7;
+            }else if(projectName.match("OTH")){
+                projectTypeId = 22;
+            }else if(projectName.match("REV")){
+                projectTypeId = 26;
+            }else if(projectName.match("INDIV")){
+                projectTypeId = 14;
+            }
+            
+            saveCellData(projectId, year, month, day, value,projectTypeId);
 
             //背景色設定
             var obj = JSON.parse($('#phaseCTRColor').val());
+            var obj2 = JSON.parse($('#phaseBMColor').val());
+            var obj3 = JSON.parse($('#phaseAUDColor').val());
+            var obj4 = JSON.parse($('#phaseCOMPColor').val());
+            var obj5 = JSON.parse($('#phaseOTHColor').val());
+            var obj6 = JSON.parse($('#phaseREVColor').val());
+            var obj7 = JSON.parse($('#phaseITRColor').val());
+            
             var color = "white";
-
-            for (var i = 0; i < obj.length; i++) {
-                if (value == obj[i]["name"]) {
-                    color = obj[i]["color"];
+            
+            if(projectTypeId == 9){
+                for (var i = 0; i < obj.length; i++) {
+                    if (value == obj[i]["name"]) {
+                        color = obj[i]["color"];
+                    }
+                }
+            }else if(projectTypeId == 5){
+                for (var i = 0; i < obj2.length; i++) {
+                    if (value == obj2[i]["name"]) {
+                        color = obj2[i]["color"];
+                    }
+                }
+            }else if(projectTypeId == 4){
+                for (var i = 0; i < obj3.length; i++) {
+                    if (value == obj3[i]["name"]) {
+                        color = obj3[i]["color"];
+                    }
+                }
+            }else if(projectTypeId == 7){
+                for (var i = 0; i < obj4.length; i++) {
+                    if (value == obj4[i]["name"]) {
+                        color = obj4[i]["color"];
+                    }
+                }
+            }else if(projectTypeId == 22){
+                for (var i = 0; i < obj5.length; i++) {
+                    if (value == obj5[i]["name"]) {
+                        color = obj5[i]["color"];
+                    }
+                }
+            }else if(projectTypeId == 26){
+                for (var i = 0; i < obj6.length; i++) {
+                    if (value == obj6[i]["name"]) {
+                        color = obj6[i]["color"];
+                    }
+                }
+            }else if(projectTypeId == 14){
+                for (var i = 0; i < obj7.length; i++) {
+                    if (value == obj7[i]["name"]) {
+                        color = obj7[i]["color"];
+                    }
                 }
             }
 
@@ -678,6 +776,18 @@
                 $('#budget_info').val(JSON.stringify(data.budget));
                 $('#phaseCTR').val(JSON.stringify(data.phaseCTR).replace(/"/g, ""));
                 $('#phaseCTRColor').val(JSON.stringify(data.phaseCTRColor));
+                $('#phaseBM').val(JSON.stringify(data.phaseBM).replace(/"/g, ""));
+                $('#phaseBMColor').val(JSON.stringify(data.phaseBMColor));
+                $('#phaseAUD').val(JSON.stringify(data.phaseAUD).replace(/"/g, ""));
+                $('#phaseAUDColor').val(JSON.stringify(data.phaseAUDColor));
+                $('#phaseCOMP').val(JSON.stringify(data.phaseCOMP).replace(/"/g, ""));
+                $('#phaseCOMPColor').val(JSON.stringify(data.phaseCOMPColor));
+                $('#phaseOTH').val(JSON.stringify(data.phaseOTH).replace(/"/g, ""));
+                $('#phaseOTHColor').val(JSON.stringify(data.phaseOTHColor));
+                $('#phaseREV').val(JSON.stringify(data.phaseREV).replace(/"/g, ""));
+                $('#phaseREVColor').val(JSON.stringify(data.phaseREVColor));
+                $('#phaseITR').val(JSON.stringify(data.phaseITR).replace(/"/g, ""));
+                $('#phaseITRColor').val(JSON.stringify(data.phaseITRColor));
 
                 myspreadsheet.setData(data.budget);
                 var ar = columnArray();
@@ -825,14 +935,14 @@
         return array;
     }
 
-    function saveCellData(projectId, year, month, day, value) {
+    function saveCellData(projectId, year, month, day, value, projectTypeId) {
 
         if (value == "") {
             value = "blank";
         }
 
         $.ajax({
-            url: "/phase/entry/save/" + projectId + "/" + year + "/" + month + "/" + day + "/" + value,
+            url: "/phase/entry/save/" + projectId + "/" + year + "/" + month + "/" + day + "/" + value + "/" + projectTypeId,
         }).success(function (data) {
             //alert('success!!');
         }).error(function (XMLHttpRequest, textStatus, errorThrown) {

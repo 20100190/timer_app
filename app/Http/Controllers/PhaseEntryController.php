@@ -186,14 +186,81 @@ class PhaseEntryController extends Controller
         }
         
         //phase
+        //Corp Tax
         $phaseCtrStr = "";
         $phaseCTR = Phase::select("name","color")->where([["project_type","=","9"]])->orderBy("order")->get();
         foreach($phaseCTR as $x){
             $phaseCtrStr .= $x["name"] . ",";                        
         }
         $phaseCtrStr = substr($phaseCtrStr, 0, -1);
+        
+        //BM
+        $phaseBmStr = "";
+        $phaseBM = Phase::select("name","color")->where([["project_type","=","5"]])->orderBy("order")->get();
+        foreach($phaseBM as $x){
+            $phaseBmStr .= $x["name"] . ",";                        
+        }
+        $phaseBmStr = substr($phaseBmStr, 0, -1);
+        
+        //AUD
+        $phaseAudStr = "";
+        $phaseAUD = Phase::select("name","color")->where([["project_type","=","4"]])->orderBy("order")->get();
+        foreach($phaseAUD as $x){
+            $phaseAudStr .= $x["name"] . ",";                        
+        }
+        $phaseAudStr = substr($phaseAudStr, 0, -1);
+        
+        //COMP
+        $phaseCompStr = "";
+        $phaseCOMP = Phase::select("name","color")->where([["project_type","=","7"]])->orderBy("order")->get();
+        foreach($phaseCOMP as $x){
+            $phaseCompStr .= $x["name"] . ",";                        
+        }
+        $phaseCompStr = substr($phaseCompStr, 0, -1);
+        
+        //OTH
+        $phaseOthStr = "";
+        $phaseOTH = Phase::select("name","color")->where([["project_type","=","22"]])->orderBy("order")->get();
+        foreach($phaseOTH as $x){
+            $phaseOthStr .= $x["name"] . ",";                        
+        }
+        $phaseOthStr = substr($phaseOthStr, 0, -1);
+        
+        //REV
+        $phaseRevStr = "";
+        $phaseREV = Phase::select("name","color")->where([["project_type","=","26"]])->orderBy("order")->get();
+        foreach($phaseREV as $x){
+            $phaseRevStr .= $x["name"] . ",";                        
+        }
+        $phaseRevStr = substr($phaseRevStr, 0, -1);
+        
+        //ITR
+        $phaseItrStr = "";
+        $phaseITR = Phase::select("name","color")->where([["project_type","=","14"]])->orderBy("order")->get();
+        foreach($phaseITR as $x){
+            $phaseItrStr .= $x["name"] . ",";                        
+        }
+        $phaseItrStr = substr($phaseItrStr, 0, -1);
 
-        $json = ["budget" => $res, "week" => $weekArray,"phaseCTR" => $phaseCtrStr,"color" => $resColor,"phaseCTRColor" => $phaseCTR];
+        $json = [
+            "budget" => $res, 
+            "week" => $weekArray,
+            "phaseCTR" => $phaseCtrStr,
+            "color" => $resColor,
+            "phaseCTRColor" => $phaseCTR,
+            "phaseBMColor" => $phaseBM,
+            "phaseBM" => $phaseBmStr,
+            "phaseAUDColor" => $phaseAUD,
+            "phaseAUD" => $phaseAudStr,
+            "phaseCOMPColor" => $phaseCOMP,
+            "phaseCOMP" => $phaseCompStr,
+            "phaseOTHColor" => $phaseOTH,
+            "phaseOTH" => $phaseOthStr,
+            "phaseREVColor" => $phaseREV,
+            "phaseREV" => $phaseRevStr,
+            "phaseITRColor" => $phaseITR,
+            "phaseITR" => $phaseItrStr,
+                ];
         
         return response()->json($json);
     }
@@ -204,6 +271,8 @@ class PhaseEntryController extends Controller
         $year = $request->year;
         $month = $request->month;
         $day = $request->day;
+        $projectTypeId = $request->projectTypeId;
+        
         //project idとyear,month,dayでdelete insert      
         //delete
         $phaseIdObj = ProjectPhase::where([["project_id","=",$projectId],["year","=",$year],["month","=",$month],["day","=",$day]])->delete();
@@ -211,14 +280,14 @@ class PhaseEntryController extends Controller
         if($value == "blank"){
             return;
         }
-      
+       
         //insert
         $valueArray = explode(";",$value);
         $valueCnt = count($valueArray);
         for($i=0; $i<$valueCnt; $i++){            
             //phase id
             $phaseId = 0;
-            $phaseIdObj = Phase::select("id")->where([["name","=",$valueArray[$i]]])->first();
+            $phaseIdObj = Phase::select("id")->where([["name","=",$valueArray[$i]],["project_type","=",$projectTypeId]])->first();
             $phaseId = $phaseIdObj["id"];
             
             $table = new ProjectPhase;
