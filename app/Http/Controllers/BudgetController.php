@@ -10,6 +10,7 @@ use App\Budget;
 use App\Staff;
 use App\Week;
 use App\RoleOrder;
+use App\ProjectPhase;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
@@ -667,6 +668,36 @@ class BudgetController extends Controller
                 ->groupBy("staff_id")
                 ->get();
         
+        //phase取得用
+        $phaseColorList = [];
+        $targetPhaseList = $this->getOverallDetailQuery($request, $startDate, $endDate)
+                ->select("project.id as project_id","client.name as client_name","project_name")   
+                ->groupBy("project.id")
+                ->groupBy("client.name")     
+                ->groupBy("project.project_name")
+                ->get();
+        foreach ($targetPhaseList as $idList) {
+            $dataPhase = $this->initArray();
+            $phaseListObj = ProjectPhase::join("phase","phase.id","=","project phase.phase_id")->where([["project_id","=",$idList["project_id"]]]);
+            if(!$phaseListObj->exists()){
+                continue;
+            }
+                        
+            $dataPhase[0] = $idList["project_id"];
+            $dataPhase[1] = $idList["client_name"];
+            $dataPhase[2] = $idList["project_name"];
+                        
+            $phaseList = $phaseListObj->get();
+            foreach ($phaseList as $yyy) {
+                if($dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] != ""){
+                    $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] .= ";";
+                }
+                $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] .= $yyy->color;                
+            }
+            
+            array_push($phaseColorList, $dataPhase);
+        }
+        
         //------------------------------
         
         $index = 2;
@@ -717,7 +748,8 @@ class BudgetController extends Controller
             "overallWeekTotal" => $overallWeekTotal,
             "overallPTotal" => $overallPersonalTotal,
             "clientList" => $res,
-            "targetAssignId" => $targetAssignId
+            "targetAssignId" => $targetAssignId,
+            "phaseColor" => $phaseColorList
         ];
         
         return response()->json($json);

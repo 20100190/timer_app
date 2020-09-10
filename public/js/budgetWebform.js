@@ -390,6 +390,13 @@ function getData() {
                 }
 
                 var backgroundColor = "e5e5e5";
+                //phase背景色設定
+                var phaseColorIndex = 9999;
+                for(var phaseRowCnt = 0; phaseRowCnt < data.phaseColor.length; phaseRowCnt++ ){
+                    if(client == data.phaseColor[phaseRowCnt][1] && project == data.phaseColor[phaseRowCnt][2]){
+                        phaseColorIndex = phaseRowCnt;
+                    }
+                }
 
                 if (oldClient != newClient || oldProject != newProject) {
                     var tr = document.createElement('tr');
@@ -469,6 +476,10 @@ function getData() {
                                 if (daysArray[c] != 0) {
                                     td.innerHTML = Math.ceil(daysArray[c]);
                                 }
+                                
+                                //背景色設定
+                                backgroundColor = getBackgroundColor(data.phaseColor,phaseColorIndex,c);
+                                
                                 td.style.backgroundColor = backgroundColor;
                                 td.align = "right";
                                 
@@ -644,6 +655,9 @@ function getData() {
                             if (daysArray[c] != 0) {
                                 td.innerHTML = Math.ceil(daysArray[c]);
                             }
+                            
+                            //背景色設定
+                            backgroundColor = getBackgroundColor(data.phaseColor,phaseColorIndex,c);
                             
                             td.style.backgroundColor = backgroundColor;
                             td.align = "right";
@@ -934,4 +948,16 @@ function clearShowFilter(){
     
     document.getElementById("filter_date_from").value = "";
     document.getElementById("filter_date_to").value = "";
+}
+
+function getBackgroundColor(phaseData,phaseColorIndex,c){
+    backgroundColor = "e5e5e5";
+    if (phaseColorIndex != 9999 && phaseData[phaseColorIndex][c + 10] != "") {                                    
+        backgroundColor = phaseData[phaseColorIndex][c + 10];
+        if(backgroundColor.match(";")){
+            backgroundColor = "yellow";
+        }
+    }
+    
+    return backgroundColor
 }
