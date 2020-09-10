@@ -70,7 +70,18 @@
         <div class="form-group">
             <label for="billing_title" class="col-md-1 control-label">Billing Title: </label>
             <div class="col-md-3">
-                <input class="form-control" name="billing_title" type="text" id="billing_title" value="{{$clien->billing_title}}">
+                <!--<input class="form-control" name="billing_title" type="text" id="billing_title" value="{{$clien->billing_title}}">-->
+                <select class="form-control" name="billing_title" id="billing_title">
+                    <option value="Partner" @if($clien->billing_title == "Partner") selected @endif>Partner</option>
+                    <option value="Senior Manager" @if($clien->billing_title == "Senior Manager") selected @endif>Senior Manager</option>
+                    <option value="Manager" @if($clien->billing_title == "Manager") selected @endif>Manager</option>
+                    <option value="Experienced Senior" @if($clien->billing_title == "Experienced Senior") selected @endif>Experienced Senior</option>
+                    <option value="Senior" @if($clien->billing_title == "Senior") selected @endif>Senior</option>
+                    <option value="Experienced Staff" @if($clien->billing_title == "Experienced Staff") selected @endif>Experienced Staff</option>
+                    <option value="Staff" @if($clien->billing_title == "Staff") selected @endif>Staff</option>                    
+                    <option value="HR" @if($clien->billing_title == "HR") selected @endif>HR</option>                    
+                    <option value="Accounting Assistant" @if($clien->billing_title == "Accounting Assistant") selected @endif>Accounting Assistant</option>                    
+                </select>
             </div>            
         </div>
         <div class="form-group">

@@ -66,7 +66,18 @@
         <div class="form-group">
             <label for="billing_title" class="col-md-1 control-label">Billing Title: </label>
             <div class="col-md-3">
-                <input class="form-control" name="billing_title" type="text" id="billing_title" value="{{old('billing_title')}}">
+                <!--<input class="form-control" name="billing_title" type="text" id="billing_title" value="{{old('billing_title')}}">-->
+                <select class="form-control" name="billing_title" id="billing_title">
+                    <option value="Partner">Partner</option>
+                    <option value="Senior Manager">Senior Manager</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Experienced Senior">Experienced Senior</option>
+                    <option value="Senior">Senior</option>
+                    <option value="Experienced Staff">Experienced Staff</option>
+                    <option value="Staff">Staff</option>                    
+                    <option value="HR">HR</option>                    
+                    <option value="Accounting Assistant">Accounting Assistant</option>                    
+                </select>
             </div>            
         </div>
         <div class="form-group">
