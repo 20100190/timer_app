@@ -60,10 +60,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
             
             .block-background-color {
-                padding: 40px 0px;
+                padding: 20px 0px 0px 0px;
                 /*border: 1px solid #333333;*/
                 width: 1020px;
-                height: 320px;
+                height: 300px;
                 background-color: #f6fafd;
             }
             
@@ -167,7 +167,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
         
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>        
+        <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>        -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/css/theme.default.min.css">
         <style type="text/css">
@@ -269,10 +269,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <li style="font-weight: bold" @if(Request::decodedPath() == "enter") class="active" @endif><a onclick="return movePageControl();" href="{{asset("budget/enter")}}" @if(isset($navigation_status[0]["intro"]) && $navigation_status[0]["intro"])  style="font-weight: bold;color:#292939"  @endif>&nbsp;Budget Entry</a></li>
                         <!--予算照会-->
                         <li style="font-weight: bold" @if(Request::decodedPath() == "show") class="active" @endif><a onclick="return movePageControl();" href="{{asset("budget/show")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Budget Report</a></li>
-                        <!--プロジェクトマスタ-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "project") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/project")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Project</a></li>
                         <!--Phase入力-->
                         <li style="font-weight: bold" @if(Request::decodedPath() == "input-phase") class="active" @endif><a onclick="return movePageControl();" href="{{asset("phase/enter")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Phase Entry</a></li>
+                        <!--プロジェクトマスタ-->
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "project") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/project")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Project</a></li>
+                        <!--Staffマスタ-->
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "staff") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/staff")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Staff</a></li>
 
                         <!--<li class="treeview">
                             <a href="#" style="font-weight: bold;color:#292939">                                

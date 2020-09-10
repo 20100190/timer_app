@@ -89,9 +89,9 @@
 <!--<form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px">-->
 <form method="POST" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px">
     <!--@csrf-->
-    <div class="block-background-color">
-        <div class="project-layout" style="float: left">        
-            <label>Client</label><br>
+    <div class="block-background-color" style="padding-left: 16px">
+        <div class="project-layout" style="float: left;">        
+            <label>Client<font style="color: red;vertical-align: middle">&nbsp;*</font></label><br>
             <select id="client" name="client" class="form-control">
                 <option value="blank"></option>
                 @foreach ($client as $clients)
@@ -101,7 +101,7 @@
         </div>
 
         <div class="project-layout" style="float: left;width: 150px">        
-            <label>Project Type</label><br>
+            <label>Project Type<font style="color: red;vertical-align: middle">&nbsp;*</font></label><br>
             <select id="project_type" name="project_type" class="form-control" style="width: 100%" onchange="getProjectName();">      
                 <option value="blank"></option>
                 @foreach ($projectType as $projectTypes)
@@ -111,7 +111,7 @@
         </div>
 
         <div class="project-layout" style="float: left;width: 133px">        
-            <label>Project Year</label><br>
+            <label>Project Year<font style="color: red;vertical-align: middle">&nbsp;*</font></label><br>
             <select id="project_year" name="project_year" class="form-control" style="width: 100%" onchange="getProjectName();">     
                 <option value="blank"></option>
                 <option value="2019">2019</option>
@@ -142,7 +142,7 @@
         <div style="clear: left"></div>
         
         <!--背景色-->
-        <div class="project-layout" style="float: left;width: 1200px;background-color: white; height: 40px">            
+        <div class="project-layout" style="float: left;width: 1200px;background-color: white; height: 40px;margin-left: -16px">            
         </div>
         
         <div style="clear: left"></div>
@@ -246,7 +246,7 @@
                     <td style="width: 120px"></td>                    
                     <td style="width: 120px"></td>                    
                     <td class="project-font-size" style="width: 50px;">Total</td>
-                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="total_budget">0</span></td>                       
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="total_budget" style="padding-right: 12px">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr style="height: 30px">
@@ -272,7 +272,7 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;"># of montl</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;"># of month(s)</td>                    
                     <td style="width: 60px;">
                         <input type="text" class="form-control form-control-sm" id="engagement_monthly" name="engagement_monthly" value="0" onchange="calc()" style="text-align: right;width: 100%">
                     </td>                        
@@ -282,7 +282,7 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;">Adjustmentws</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Adjustments</td>                    
                     <td style="width: 60px;text-align: right">
                         <input type="text" class="form-control form-control-sm" id="adjustments" name="adjustments" value="0" onchange="calc()" style="text-align: right;width: 100%">
                     </td>                       
@@ -293,7 +293,7 @@
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
                     <td class="project-font-size" colspan="2" style="width: 170px;">Engagement Fee</td>                    
-                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="engagement_total">0</span></td>                       
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="engagement_total" style="padding-right: 12px">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr style="height: 30px">
@@ -309,8 +309,8 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;">Defference</td>                    
-                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="defference">0</span></td>                       
+                    <td class="project-font-size" colspan="2" style="width: 170px;">Difference</td>                    
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="defference" style="padding-right: 12px">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr>
