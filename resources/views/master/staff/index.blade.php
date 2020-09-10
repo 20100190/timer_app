@@ -51,7 +51,7 @@ $(document).ready(function () {
 
 
                     <div class="table-responsive">
-                        <table id="xxx" class="table table-borderless">
+                        <table id="xxx" class="table table-borderless" style="font-family: Source Sans Pro;font-size: 14px">
                             <thead>                                
                                 <tr>
                                     <th>ID</th>
@@ -91,9 +91,9 @@ $(document).ready(function () {
 
                                     <td>{{ $item->billing_title}} </td>
                                     
-                                    <td>{{ $item->rate}} </td>
+                                    <td style="text-align: right">{{ $item->rate}} </td>
                                     
-                                    <td>{{ $item->extension}} </td>
+                                    <td style="text-align: right">{{ $item->extension}} </td>
                                     
                                     <td>{{ $item->email}} </td>
                                     
