@@ -57,3 +57,19 @@ Route::put("master/staff/{id}", "StaffController@update");
 //destroy
 Route::delete("master/staff/{id}", "StaffController@destroy");
 
+//Task
+//index
+Route::get("master/task/", "TaskController@index");
+//create
+Route::get("master/task/create", "TaskController@create");
+//show
+Route::get("master/task/{id}", "TaskController@show");
+//store
+Route::post("master/task/store", "TaskController@store");
+//edit
+Route::get("master/task/{id}/edit", "TaskController@edit");
+//update
+Route::put("master/task/{id}", "TaskController@update");
+//destroy
+Route::delete("master/task/{id}", "TaskController@destroy");
+
