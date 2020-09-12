@@ -478,9 +478,10 @@ function getData() {
                                 }
                                 
                                 //背景色設定
-                                backgroundColor = getBackgroundColor(data.phaseColor,phaseColorIndex,c);
-                                
+                                var {backgroundColor , fontColor} = getBackgroundColor(data.phaseColor,phaseColorIndex,c);
+                                                                                               
                                 td.style.backgroundColor = backgroundColor;
+                                td.style.color = fontColor;
                                 td.align = "right";
                                 
                                 if(document.getElementById("h_month" + (c+1)).innerHTML != ""){
@@ -656,10 +657,10 @@ function getData() {
                                 td.innerHTML = Math.ceil(daysArray[c]);
                             }
                             
-                            //背景色設定
-                            backgroundColor = getBackgroundColor(data.phaseColor,phaseColorIndex,c);
-                            
+                            //背景色設定                           
+                            var {backgroundColor, fontColor} = getBackgroundColor(data.phaseColor, phaseColorIndex, c);
                             td.style.backgroundColor = backgroundColor;
+                            td.style.color = fontColor;
                             td.align = "right";
                             
                             if (document.getElementById("h_month" + (c + 1)).innerHTML != "") {
@@ -951,13 +952,23 @@ function clearShowFilter(){
 }
 
 function getBackgroundColor(phaseData,phaseColorIndex,c){
+    var phaseFontColor = "black";
+    var targetColorArray = ["#a64d79","#3c78d8","#3d85c6","#e69138","#6aa84f","#f1c232","#741b47","#1155cc","#0b5394","#b45f06","#38761d","#bf9000","#134f5c","#45818e"];
+    var fontColor = "black";
+    
     backgroundColor = "e5e5e5";
     if (phaseColorIndex != 9999 && phaseData[phaseColorIndex][c + 10] != "") {                                    
         backgroundColor = phaseData[phaseColorIndex][c + 10];
         if(backgroundColor.match(";")){
             backgroundColor = "yellow";
         }
+        if(targetColorArray.includes(backgroundColor)){
+            fontColor = "white";
+        }
     }
     
-    return backgroundColor
+    return {
+        backgroundColor: backgroundColor,
+        fontColor: fontColor
+    };
 }
