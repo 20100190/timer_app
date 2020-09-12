@@ -107,7 +107,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 transform: translate(-50%, -50%);
                 z-index: 20;
             }   
-            
+            .table-sticky-locklist {
+                position: sticky;
+                top: 0;
+                z-index:1;
+                background-color: white
+            }            
         </style>
             
         
@@ -275,6 +280,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <li style="font-weight: bold" @if(Request::decodedPath() == "project") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/project")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Project</a></li>
                         <!--Staffマスタ-->
                         <li style="font-weight: bold" @if(Request::decodedPath() == "staff") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/staff")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Staff</a></li>
+                        <!--Taskマスタ-->
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "task") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/task")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Task</a></li>
 
                         <!--<li class="treeview">
                             <a href="#" style="font-weight: bold;color:#292939">                                
