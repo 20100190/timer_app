@@ -41,7 +41,7 @@ Route::get('/phase/enter', 'PhaseEntryController@index');
 Route::get('/phase/entry/{client}/{project}/{vic}/{pic}/{staff}/{role}/{year}/{month}/{day}', 'PhaseEntryController@storeInput');
 Route::get('/phase/entry/save/{projectId}/{year}/{month}/{day}/{value}/{projectTypeId}', 'PhaseEntryController@save');
 
-//Client
+//Staff
 //index
 Route::get("master/staff/", "StaffController@index");
 //create
@@ -73,3 +73,18 @@ Route::put("master/task/{id}", "TaskController@update");
 //destroy
 Route::delete("master/task/{id}", "TaskController@destroy");
 
+//Client
+//index
+Route::get("master/client/", "ClientController@index");
+//create
+Route::get("master/client/create", "ClientController@create");
+//show
+Route::get("master/client/{id}", "ClientController@show");
+//store
+Route::post("master/client/store", "ClientController@store");
+//edit
+Route::get("master/client/{id}/edit", "ClientController@edit");
+//update
+Route::put("master/client/{id}", "ClientController@update");
+//destroy
+Route::delete("master/client/{id}", "ClientController@destroy");

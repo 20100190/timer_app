@@ -4,10 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Client extends Model
+class ContactPerson extends Model
 {
-    protected $table = 'client';
-    protected $guarded = ['id'];
+    protected $table = 'contact person';
    //タイムスタンプの更新を無効にする
     public $timestamps = false;
 }
