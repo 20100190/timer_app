@@ -57,7 +57,8 @@ class ClientController extends Controller {
        
         $requestData = $request->all();
 
-        $maxClientId = Client::max('id');
+        $maxClientId = Client::orderBy("id","desc")->first()->id;
+        
         //$requestData["id"] = $maxClientId + 1; 
         
         $incorporationDate = "";
