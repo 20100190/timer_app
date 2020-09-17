@@ -284,6 +284,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <li style="font-weight: bold" @if(Request::decodedPath() == "task") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/task")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Task</a></li>
                         <!--Clientマスタ-->
                         <li style="font-weight: bold" @if(Request::decodedPath() == "client") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/client")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Client</a></li>
+                        <!--workマスタ-->
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "work") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/work")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Work</a></li>
+                        <!--workList-->
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "work") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/work-list")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Work List</a></li>
 
                         <!--<li class="treeview">
                             <a href="#" style="font-weight: bold;color:#292939">                                

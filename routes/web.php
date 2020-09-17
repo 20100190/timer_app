@@ -88,3 +88,13 @@ Route::get("master/client/{id}/edit", "ClientController@edit");
 Route::put("master/client/{id}", "ClientController@update");
 //destroy
 Route::delete("master/client/{id}", "ClientController@destroy");
+
+//work
+Route::get("master/work/", "WorkController@index");
+Route::get('/test3/getPhaseInfo/{client}/{project}/{group}', 'WorkController@getPhaseInfo');
+Route::post('master/work/', 'WorkController@save');
+
+//work list
+Route::get("master/work-list/", "WorkListController@index");
+Route::get('/test3/getWorkList/{client}/{project}/{group}', 'WorkListController@getWorkList');
+Route::post('master/work-list/', 'WorkListController@save');
