@@ -184,6 +184,7 @@ class ProjectController extends Controller
                 $queryObj->update($updateAssignItem);
             }else{
                 //insert
+                $table = new Assign;
                 $table->project_id = $projectId;
                 $table->staff_id = $_POST["assign" . $assignCnt];
                 $table->role = $_POST["role" . $assignCnt];
