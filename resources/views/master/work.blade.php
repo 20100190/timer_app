@@ -7,7 +7,7 @@
     <div id="filter_area" style="margin-top: 30px;">
         <div id="filter_left" style="float: left;height: 150px;margin-bottom: 50px">
             <div class="row entry-filter-bottom" style="zoom: 100%">
-                <div class="col col-md-2" >
+                <div class="col col-md-3" >
                     <span class="line-height">Client<font style="color: red;vertical-align: middle">&nbsp;&nbsp;&nbsp;*</font></span>
                 </div>
                 <div class="col col-md-3">
@@ -21,19 +21,19 @@
             </div>
 
             <div class="row entry-filter-bottom" style="zoom: 100%">
-                <div class="col col-md-2">
-                    <span class="line-height">Project<font style="color: red;vertical-align: middle">&nbsp;*</font></span>
+                <div class="col col-md-3">
+                    <span class="line-height">Project Type<font style="color: red;vertical-align: middle">&nbsp;*</font></span>
                 </div>
                 <div class="col col-md-1">
                     <select id="project" name="project" style="width: 200px">     
                         <option value="">&nbsp;</option>
                         @foreach ($project as $projects)
-                        <option value="{{$projects->project_name}}">{{$projects->project_name}}</option>
+                        <option value="{{$projects->id}}">{{$projects->project_type}}</option>
                         @endforeach
                     </select>
                 </div>                
             </div>
-            <div class="row entry-filter-bottom" style="zoom: 100%">
+            <!--<div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-2">
                     <span class="line-height">Group</span>
                 </div>
@@ -54,9 +54,12 @@
                         <option value="December">December</option>                        
                     </select>
                 </div>                
-            </div>
+            </div>-->
 
-            <div class="row entry-filter-bottom">                           
+            <div class="row entry-filter-bottom">    
+                <div class="col col-md-1" style="margin-left: 6px" >
+                </div>
+                
                 <div class="col col-md-3" >
                     <input type="button" class="btn btn-default" value="Clear" onclick="clearFilter()" style="background-color: white;width: 150px;margin-left: 85px">
                 </div>
@@ -75,7 +78,7 @@
     <div>
         @for($i=1;$i<=10;$i++)
         <div style="margin-bottom: 50px">
-            <div><label style="font-size: 20px;width: 85px"><input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="vertical-align: middle;border:solid 0px;" readonly></label><input type="button" id="contact_list{{$i}}" name="contact_list{{$i}}" class="btn btn-primary btn-sm" style="width: 150px" value="Add" onclick="appendPhase1Row(this)"></div>
+            <div><label style="font-size: 20px;width: 135px"><input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="vertical-align: middle;border:solid 0px;" readonly></label><input type="button" id="contact_list{{$i}}" name="contact_list{{$i}}" class="btn btn-primary btn-sm" style="width: 150px" value="Add" onclick="appendPhase1Row(this)"></div>
             <table border="0" id="phase_{{$i}}" class="table table-sm" style="font-size: 14px;table-layout: fixed;width: 650px">  
                 <thead>
                     <tr>
@@ -225,14 +228,14 @@
 
         var client = $("#client").val();
         var project = $("#project").val();
-        var group = $("#group").val();
+        //var group = $("#group").val();
         
-        if(group == ""){
-            group = "blank";
-        }            
+        //if(group == ""){
+        //    group = "blank";
+        //}            
 
         $.ajax({
-            url: "/test3/getPhaseInfo/" + client + "/" + project + "/" + group + "/",
+            url: "/test3/getPhaseInfo/" + client + "/" + project + "/" + "blank" + "/",
         }).success(function (data) {
             
            clearAllList();

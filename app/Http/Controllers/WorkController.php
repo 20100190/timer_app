@@ -26,21 +26,26 @@ class WorkController extends Controller {
      * @return \Illuminate\View\View
      */
     public function index(Request $request) {
+        return $this->showWork();
+    }
+    
+    public function showWork() {
         //client
         $client = Client::orderBy("name", "asc")->get();
-        //project
-        $project = Project::select("project_name")
-                        ->groupBy('project_name')
-                        ->orderBy('project_name', 'asc')->get();
+        //project type
+        $project = ProjectType::select("id", "project_type")
+                        ->groupBy('project_type', "id")
+                        ->orderBy('project_type', 'asc')->get();
 
         return view("master/work", compact("client", "project"));
     }
 
     public function getPhaseInfo(Request $request) {
         //project type
-        $projectType = explode(" - ", $request->project)[0];
+        $projectType = $request->project;
+        
         //phase
-        $projectTypeId = ProjectType::where("project_type", $projectType)->first()->id;
+        $projectTypeId = $request->project;//ProjectType::where("project_type", $projectType)->first()->id;
         $phaseData = Phase::where("project_type", $projectTypeId)->get();
         
         $group = $request->group;
@@ -48,10 +53,23 @@ class WorkController extends Controller {
             $group = "";
         }
 
-        $projectId = Project::where([["client_id", "=", $request->client], ["project_name", "=", $request->project]])->first()->id;
+        /*$projectId = "999";//Project::where([["client_id", "=", $request->client], ["project_name", "=", $request->project]])->first()->id;
 
         $phaseGroupList = PhaseGroup::where([['project_id', '=', $projectId],["group","=",$group]])->get();
         $phaseItemList = [];
+        foreach ($phaseGroupList as $items) {
+            //$phaseItemList = PhaseItems::where([['phase_group_id', '=', $items->id]])->get();            
+            array_push($phaseItemList, PhaseItems::where([['phase_group_id', '=', $items->id]])->get());
+        }*/
+        
+        
+        $phaseItemList = [];
+        $phaseIdArray = Phase::select("id")->where([['project_type', '=', $projectTypeId]])->get();
+        $phaseIdList = [];
+        foreach($phaseIdArray as $items){
+            array_push($phaseIdList,$items->id);
+        }
+        $phaseGroupList = PhaseGroup::whereIn("phase_id",$phaseIdList)->whereIn("group",["","January"])->where([["project_id","=",$request->client]])->get();
         foreach ($phaseGroupList as $items) {
             //$phaseItemList = PhaseItems::where([['phase_group_id', '=', $items->id]])->get();            
             array_push($phaseItemList, PhaseItems::where([['phase_group_id', '=', $items->id]])->get());
@@ -68,73 +86,120 @@ class WorkController extends Controller {
     public function save(Request $request) {
         
         //throw new Exception('ゼロによる除算。');
-        
-        $group = $request->group;
-        if(is_null($group)){
-            $group = "";
-        }
-
-        $projectId = Project::where([["client_id", "=", $request->client], ["project_name", "=", $request->project]])->first()->id;
-
-        //project type
-        $projectType = trim(explode(" - ", $request->project)[0]);
-        //phase
-        $projectTypeId = ProjectType::where("project_type", $projectType)->first()->id;       
-        
-        for ($i = 1; $i <= 10; $i++) {
-            if ($_POST["label_phase" . $i] != "") {
-                $this->insertPhaseGroupAndPhaseItems($projectId, $projectTypeId, $_POST["label_phase" . $i], $i,$group);
+            
+        //BMの場合、自動で12ヶ月分生成する為IDを取得
+        $BMProjectTypeId = 5;        
+        if ($request->project != $BMProjectTypeId) {
+            $this->savePhaseGroupAndItems($request, "");
+        } else {
+            $monthArray = $this->monthArray();
+            for ($i = 0; $i < count($monthArray); $i++) {
+                $this->savePhaseGroupAndItems($request, $monthArray[$i]);
             }
         }
 
-        $client = Client::orderBy("name", "asc")->get();
-        //project
-        $project = Project::select("project_name")
-                        ->groupBy('project_name')
-                        ->orderBy('project_name', 'asc')->get();
 
-        return view("master/work", compact("client", "project"));
+        //phase group登録　存在していない場合登録するのみ   
+        /*for ($i = 1; $i <= 10; $i++) {
+            $label_phase = $_POST["label_phase" . $i];
+            //$phaseId = Phase::where([["project_type", "=", $request->project], ["name", "=", $label_phase]])->first()->id;
+            $phaseGroupId = "";
+            if ($label_phase != "") {                
+                $phaseGroupId = $this->savePhaseGroup($request, $label_phase, $group);               
+                
+                $this->savePhaseItems($phaseGroupId,$i);               
+            }
+        }*/
+
+
+        return $this->showWork();
+    }
+    
+    public function savePhaseGroupAndItems($request,$group) {
+        //phase group登録　存在していない場合登録するのみ   
+        for ($i = 1; $i <= 10; $i++) {
+            $label_phase = $_POST["label_phase" . $i];
+            //$phaseId = Phase::where([["project_type", "=", $request->project], ["name", "=", $label_phase]])->first()->id;
+            $phaseGroupId = "";
+            if ($label_phase != "") {
+                $phaseGroupId = $this->savePhaseGroup($request, $label_phase, $group);
+
+                $this->savePhaseItems($phaseGroupId, $i);
+            }
+        }
     }
 
-    public function insertPhaseGroupAndPhaseItems($projectId, $projectTypeId, $label_phase, $index,$group) {
-
-        $phaseId = Phase::where([["project_type", "=", $projectTypeId], ["name", "=", $label_phase]])->first()->id;
-
-        //phase        
-        $queryObj = PhaseGroup::where([['project_id', '=', $projectId], ["phase_id", "=", $phaseId],["group","=",$group]]);
-        if ($queryObj->exists()) {
-            $phaseGroupId = $queryObj->first()->id;
-            $queryObj->delete();
-
-            $queryObj = PhaseItems::where([['phase_group_id', '=', $phaseGroupId]]);
-            $queryObj->delete();
+    public function savePhaseGroup($request,$label_phase,$group) {
+        $phaseGroupObj = PhaseGroup::Join("phase", "phase.id", "=", "phase group.phase_id")
+                ->select("phase group.id as id")
+                ->where([["phase group.project_id", "=", $request->client], ["phase.name", "=", $label_phase], ["project_type","=",$request->project]]);
+        if($group != ""){
+            $phaseGroupObj = $phaseGroupObj->where([["group","=",$group]]);
         }
+        if ($phaseGroupObj->exists()) {
+            foreach ($phaseGroupObj->get() as $items) {
+                $phaseGroupId = $items->id;
+            }
+        } else {
+            $phaseId = Phase::where([["project_type", "=", $request->project], ["name", "=", $label_phase]])->first()->id;
 
-        //phase group
-        $pTable = new PhaseGroup;
-        $pTable->project_id = $projectId;
-        $pTable->phase_id = $phaseId;
-        $pTable->group = $group;
+            $pTable = new PhaseGroup;
+            $pTable->project_id = $request->client;
+            $pTable->phase_id = $phaseId;
+            $pTable->group = $group;
 
-        $pTable->save();
+            $pTable->save();
 
-        $phaseGroupId = $pTable->id;
-
-        //task save
+            $phaseGroupId = $pTable->id;
+        }
+        
+        return $phaseGroupId;
+    }
+    
+    public function savePhaseItems($phaseGroupId,$index) {
         for ($taskCnt = 1; $taskCnt < 20; $taskCnt++) {
             if (!isset($_POST["phase" . $index . "_task" . $taskCnt])) {
                 break;
             }
 
-            //phase item
-            $table = new PhaseItems;
-            $table->phase_group_id = $phaseGroupId;
-            $table->name = $_POST["phase" . $index . "_task" . $taskCnt];
-            $table->order = $taskCnt;
-            $table->description = $_POST["phase" . $index . "_description" . $taskCnt];
+            $targetPhaseItem = PhaseItems::where([["phase_group_id", "=", $phaseGroupId], ["order", "=", $taskCnt]]);
+            if ($targetPhaseItem->exists()) {
+                //update
+                $updateItem = [
+                    "name" => $_POST["phase" . $index . "_task" . $taskCnt],
+                    "description" => $_POST["phase" . $index . "_description" . $taskCnt],
+                ];
+                $targetPhaseItem->update($updateItem);
+            } else {
+                //phase item
+                $table = new PhaseItems;
+                $table->phase_group_id = $phaseGroupId;
+                $table->name = $_POST["phase" . $index . "_task" . $taskCnt];
+                $table->is_standard = True;
+                $table->order = $taskCnt;
+                $table->description = $_POST["phase" . $index . "_description" . $taskCnt];
 
-            $table->save();
+                $table->save();
+            }
         }
+    }
+    
+    public function monthArray(){
+        $monthArray = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+        return $monthArray;
     }
 
 }
