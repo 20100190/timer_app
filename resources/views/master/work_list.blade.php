@@ -4,7 +4,7 @@
 <input type="hidden" id="receiveClientId" @if(isset($reqClientId)) value="{{$reqClientId}}" @else value="" @endif> 
 <input type="hidden" id="receiveProjectId" @if(isset($reqProjectId)) value="{{$reqProjectId}}" @else value="" @endif>
 
-<form action="work-list" method="POST" name="s" style="margin-left: 20px">
+<form action="" method="POST" name="s" style="margin-left: 20px">
     {{ csrf_field() }}  
     <div id="filter_area" style="margin-top: 30px;">
         <div id="filter_left" style="float: left;height: 150px;margin-bottom: 50px">
@@ -85,7 +85,7 @@
                 <thead>
                     <tr>
                         <th style="width: 30px">No</th>
-                        <th style="width: 50px;visibility: collapse">ID</th>
+                        <th style="width: 0px;visibility: collapse">ID</th>
                         <th style="width: 150px">Task</th>
                         <th style="width: 300px">Description</th>
                         <th style="width: 130px">Completion Due</th>
@@ -99,6 +99,7 @@
                         <th style="width: 150px">Planned Review</th>
                         <th style="width: 180px">2nd Reviewer Sign-Off</th>
                         <th style="width: 40px">&nbsp;</th>
+                        <th style="width: 0px;visibility: collapse">Memo</th>
                     </tr>
                 </thead>
                 <tbody id="phase{{$i}}_body"></tbody>
@@ -168,10 +169,10 @@
         if (!objTBL)
             return;
 
-        insertPhase1Row("", "", "", buttonIndex, "", "", "", "", "", "", "", "", "", "", "", true, 1);
+        insertPhase1Row("", "", "", buttonIndex, "", "", "", "", "", "", "", "", "", "", "", true, 1,"");
     }
 
-    function insertPhase1Row(id, name, description, buttonIndex, groupId, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, isClickBtnAdd, isStandard) {
+    function insertPhase1Row(id, name, description, buttonIndex, groupId, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, isClickBtnAdd, isStandard,memo) {
         // 最終行に新しい行を追加
         var phase1_tbody = document.getElementById("phase" + buttonIndex + "_body");
         var bodyLength = phase1_tbody.rows.length;
@@ -207,9 +208,8 @@
         var c12 = row.insertCell(11);
         var c13 = row.insertCell(12);
         var c14 = row.insertCell(13);
-        if (isClickBtnAdd || isStandard == 0) {
-            var c15 = row.insertCell(14);
-        }
+        var c15 = row.insertCell(14);
+        var c16 = row.insertCell(15);
 
         c1.style.cssText = "vertical-align: middle";
 
@@ -245,7 +245,7 @@
         if (!isClickBtnAdd || isStandard == 0) {
             readonlyStr = "readonly";
         }
-
+        
         // 各列に表示内容を設定
         c1.innerHTML = '<span class="seqno-phase' + buttonIndex + '">' + count + '</span>';
         c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'id" type="text" id="phase' + buttonIndex + '_id' + count + '" name="phase' + buttonIndex + '_id' + count + '" value="' + groupId + '" style="width: 100%" readonly>';
@@ -263,8 +263,11 @@
         c14.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff2 datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff2' + count + '" name="phase' + buttonIndex + '_review_signoff2' + count + '" value="' + reviewSignOff2 + '" style="width: 100%">';
         if (isClickBtnAdd || isStandard == 0) {
             c15.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
+        } else{
+            c15.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return doNotUseRow(this,' + buttonIndex + ',' + count +')" style="background-color: transparent"><img src="' + imagesUrl + "/not_use.png" + '"></button>';
         }
-
+        c16.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'memo datepicker1" type="text" id="phase' + buttonIndex + '_memo' + count + '" name="phase' + buttonIndex + '_memo' + count + '" value="' + memo + '" style="width: 100%;visibility:hidden">';
+  
         $('.datepicker1').datepicker({
             defaultViewDate: Date(),
             format: "mm/dd/yyyy",
@@ -273,7 +276,7 @@
             orientation: 'bottom left'
         });
     }
-
+    
     function deletePhase1Row(obj, buttonIndex) {
         delRowCommon(obj, "seqno-phase" + buttonIndex);
 
@@ -298,6 +301,7 @@
         reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "reviewer2", "phase" + buttonIndex + "_reviewer2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "plannedreview2", "phase" + buttonIndex + "_planned_review2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "reviewsignoff2", "phase" + buttonIndex + "_review_signoff2");
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "memo", "phase" + buttonIndex + "_memo");
 
         reOrderElementTag(tagElements, "delphase" + buttonIndex + "btn", "delPhase" + buttonIndex + "Btn");
 
@@ -384,6 +388,7 @@
                     var plannedReview2 = "";
                     var reviewSignOff2 = "";
                     var isStandard = "";
+                    var memo = "";
 
                     if (data.phase1Detail[cnt][cnt2].due_date != null) {
                         comp = convDateFormat(data.phase1Detail[cnt][cnt2].due_date);
@@ -428,13 +433,49 @@
                     if (data.phase1Detail[cnt][cnt2].is_standard != null) {
                         isStandard = data.phase1Detail[cnt][cnt2].is_standard;
                     }
+                    
+                    if (data.phase1Detail[cnt][cnt2].memo != null) {
+                        memo = data.phase1Detail[cnt][cnt2].memo;
+                    }
 
                     insertPhase1Row(parseInt(rowId), data.phase1Detail[cnt][cnt2].name, data.phase1Detail[cnt][cnt2].description,
-                            buttonIndex, data.phase1Detail[cnt][cnt2].id, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, false, isStandard);
+                            buttonIndex, data.phase1Detail[cnt][cnt2].id, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, false, isStandard,memo);
                 }
             }
-
-
+            
+            for(var blockCnt=1; blockCnt<=10; blockCnt++){
+                var tblTbody = document.getElementById('phase' + blockCnt + '_body');
+                for(var i=0, rowLen=tblTbody.rows.length; i<rowLen; i++){     
+                    var cells = tblTbody.rows[i].cells[15].children[0].value;    
+                    if(cells !== undefined && cells == "Disabled"){                        
+                        tblTbody.rows[i].cells[4].children[0].readOnly = true;
+                        tblTbody.rows[i].cells[6].children[0].readOnly = true;
+                        tblTbody.rows[i].cells[7].children[0].readOnly = true;
+                        tblTbody.rows[i].cells[9].children[0].readOnly = true;
+                        tblTbody.rows[i].cells[10].children[0].readOnly = true;
+                        tblTbody.rows[i].cells[12].children[0].readOnly = true;
+                        tblTbody.rows[i].cells[13].children[0].readOnly = true;
+                        var prepObj = tblTbody.rows[i].cells[5].children[0];
+                        prepObj.options[0].selected = true;
+                        prepObj.style.cssText = "background-color: " + "#DCDCDC";
+                        for(var cnt=1; cnt<prepObj.length; cnt++){
+                            prepObj.options[cnt].disabled = "disabled";                            
+                        }  
+                       
+                        prepObj = tblTbody.rows[i].cells[8].children[0];
+                        prepObj.style.cssText = "background-color: " + "#DCDCDC";
+                        for(var cnt=1; cnt<prepObj.length; cnt++){
+                            prepObj.options[cnt].disabled = "disabled";                            
+                        }  
+                        
+                        prepObj = tblTbody.rows[i].cells[11].children[0];
+                        prepObj.style.cssText = "background-color: " + "#DCDCDC";
+                        for(var cnt=1; cnt<prepObj.length; cnt++){
+                            prepObj.options[cnt].disabled = "disabled";                            
+                        }
+                    }
+                }
+            }
 
         }).error(function (XMLHttpRequest, textStatus, errorThrown) {
             clearAllList();
@@ -474,6 +515,70 @@
         $('#client').multiselect('select', "");
         $('#project').multiselect('select', "");
         $('#group').multiselect('select', "");
+    }
+    
+    function doNotUseRow(obj, buttonIndex,count) {
+        var backGroundColorDisabled = "#DCDCDC";
+        var backGroundColorEnable = "white";
+        var prepObj = document.getElementById('phase' + buttonIndex + '_prep' + count);
+        var reviewer1Obj = document.getElementById('phase' + buttonIndex + '_reviewer1' + count);
+        var reviewer2Obj = document.getElementById('phase' + buttonIndex + '_reviewer2' + count);
+        
+        //document.getElementById('phase' + buttonIndex + '_memo' + count).value = "";
+        if(document.getElementById('phase' + buttonIndex + '_memo' + count).value == ""){
+            document.getElementById('phase' + buttonIndex + '_memo' + count).value = "Disabled";
+            document.getElementById('phase' + buttonIndex + '_comp' + count).readOnly = true;
+            //document.getElementById('phase' + buttonIndex + '_prep' + count).disabled = true;            
+            prepObj.style.cssText = "background-color: " + backGroundColorDisabled;
+            prepObj.options[0].selected = true;
+            for(var i=1; i<prepObj.length; i++){
+                prepObj.options[i].disabled = "disabled";
+            }            
+            document.getElementById('phase' + buttonIndex + '_planned_prep' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_prep_signoff' + count).readOnly = true;
+            //document.getElementById('phase' + buttonIndex + '_reviewer1' + count).disabled = true;            
+            reviewer1Obj.style.cssText = "background-color: " + backGroundColorDisabled;
+            reviewer1Obj.options[0].selected = true;
+            for(var i=1; i<reviewer1Obj.length; i++){
+                reviewer1Obj.options[i].disabled = "disabled";
+            }   
+            document.getElementById('phase' + buttonIndex + '_planned_review1' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_review_signoff1' + count).readOnly = true;
+            //document.getElementById('phase' + buttonIndex + '_reviewer2' + count).disabled = true;
+            reviewer2Obj.style.cssText = "background-color: " + backGroundColorDisabled;
+            reviewer2Obj.options[0].selected = true;
+            for(var i=1; i<reviewer2Obj.length; i++){
+                reviewer2Obj.options[i].disabled = "disabled";
+            }  
+            document.getElementById('phase' + buttonIndex + '_planned_review2' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_review_signoff2' + count).readOnly = true;    
+        } else {
+            document.getElementById('phase' + buttonIndex + '_memo' + count).value = "";
+            document.getElementById('phase' + buttonIndex + '_comp' + count).readOnly = false;
+            //document.getElementById('phase' + buttonIndex + '_prep' + count).disabled = false;
+            var prepObj = document.getElementById('phase' + buttonIndex + '_prep' + count);
+            prepObj.style.cssText = "background-color: " + backGroundColorEnable;
+            for(var i=1; i<prepObj.length; i++){
+                prepObj.options[i].disabled = "";
+            }
+            document.getElementById('phase' + buttonIndex + '_planned_prep' + count).readOnly = false;
+            document.getElementById('phase' + buttonIndex + '_prep_signoff' + count).readOnly = false;
+            //document.getElementById('phase' + buttonIndex + '_reviewer1' + count).disabled = false;
+            reviewer1Obj.style.cssText = "background-color: " + backGroundColorEnable;
+            for(var i=1; i<reviewer1Obj.length; i++){
+                reviewer1Obj.options[i].disabled = "";
+            }   
+            document.getElementById('phase' + buttonIndex + '_planned_review1' + count).readOnly = false;
+            document.getElementById('phase' + buttonIndex + '_review_signoff1' + count).readOnly = false;
+            //document.getElementById('phase' + buttonIndex + '_reviewer2' + count).disabled = false;
+            reviewer2Obj.style.cssText = "background-color: " + backGroundColorEnable;
+            for(var i=1; i<reviewer2Obj.length; i++){
+                reviewer2Obj.options[i].disabled = "";
+            }   
+            document.getElementById('phase' + buttonIndex + '_planned_review2' + count).readOnly = false;
+            document.getElementById('phase' + buttonIndex + '_review_signoff2' + count).readOnly = false;                  
+        }
+        
     }
 
 
