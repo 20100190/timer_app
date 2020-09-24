@@ -332,7 +332,8 @@ function getData() {
                 var assign = data.clientList[s][6];
                 var budget = Math.ceil(data.clientList[s][7]);
                 var assigned = Math.ceil(data.clientList[s][8]);
-                var diff = Math.ceil(data.clientList[s][9]);               
+                var diff = Math.ceil(data.clientList[s][9]);        
+                var clientId = data.clientList[s][65];
                 
                 var row = data.clientList[s];
 
@@ -409,7 +410,7 @@ function getData() {
                             td.classList.add("column_row_block");
                         }
                         if (x == 1) {
-                            td.innerHTML = project + " Total";
+                            td.innerHTML = '<a href="' + location.protocol + "//" + location.host + "/master/work-list/" + clientId + "/" + project + '" target="_blank">' + project + " Total" + "</a>";
                             td.style.backgroundColor = backgroundColor;
                             td.classList.add("column_row_block");
                             td.classList.add("col2");
@@ -592,7 +593,7 @@ function getData() {
                         td.classList.add("column_row_block");
                     }
                     if (x == 1) {
-                        td.innerHTML = project + " Total";
+                        td.innerHTML ='<a href="' + location.protocol + "//" + location.host + "/master/work-list/" + clientId + "/" + project + '" target="_blank">' + project + " Total" + "</a>";
                         td.style.backgroundColor = backgroundColor;
                         td.classList.add("column_row_block");
                         td.classList.add("col2");

@@ -499,7 +499,7 @@ class BudgetController extends Controller
     
     public function initArray() {
         $data = [];
-        for ($s = 0; $s < 65; $s++) {
+        for ($s = 0; $s < 66; $s++) {
             $data[$s] = "";
         }
 
@@ -704,7 +704,7 @@ class BudgetController extends Controller
         
         foreach ($targetAssignIdList as $idList) {
             $data = $this->initArray();
-            $budgetDetail = Assign::select("client.name as client_id", "project.project_name as project_id", "assign.role as role_id", "staff.initial", "budget.year", "budget.month", "budget.day", "budget.working_days as working_days","client.fye", "client.vic_status","B.initial as pic","assign.budget_hour")//, "budget.no as no")//,"B.initial as pic")
+            $budgetDetail = Assign::select("client.name as client_id", "project.project_name as project_id", "assign.role as role_id", "staff.initial", "budget.year", "budget.month", "budget.day", "budget.working_days as working_days","client.fye", "client.vic_status","B.initial as pic","assign.budget_hour","client.id as client")//, "budget.no as no")//,"B.initial as pic")
                     ->leftjoin("project", "assign.project_id", "=", "project.id")
                     ->leftjoin("client", "client.id", "=", "project.client_id")
                     ->leftjoin("staff", "staff.id", "=", "assign.staff_id")
@@ -731,6 +731,8 @@ class BudgetController extends Controller
             }
             $data[$colAssignedHours] = $totalBudget;
             $data[$colDiff] = $data[$colBudget] - $data[$colAssignedHours];
+            $colClientId = "65";
+            $data[$colClientId] = $budgetDetail[0]["client"];
 
             if ($totalBudget != 0) {
                 array_push($res, $data);
