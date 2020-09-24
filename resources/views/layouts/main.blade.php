@@ -290,6 +290,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <li style="font-weight: bold" @if(Request::decodedPath() == "master/work-list") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/work-list")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Work List</a></li>
                         <!--task schedule-->
                         <li style="font-weight: bold" @if(Request::decodedPath() == "task-schedule") class="active" @endif><a onclick="return movePageControl();" href="{{asset("task-schedule")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Task Schedule</a></li>
+                        <!--Project List-->
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/project-list") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/project-list")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Project List</a></li>
 
                         <!--<li class="treeview">
                             <a href="#" style="font-weight: bold;color:#292939">                                

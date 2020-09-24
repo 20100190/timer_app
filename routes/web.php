@@ -104,3 +104,7 @@ Route::get("/task-schedule", "TaskListController@index");
 Route::get("/test3/getTaskScheduleData/{client}/{pic}/{staff}/{dateFrom}/{dateTo}/{status}", "TaskListController@getTaskScheduleData");
 Route::get('master/work-list/{client}/{project}', 'WorkListController@indexLink');
 Route::post('master/work-list/{client}/{project}', 'WorkListController@save');
+
+//project list
+Route::get("/master/project-list", "ProjectListController@index");
+Route::get("/master/project-list/save/{project}", "ProjectListController@save");
