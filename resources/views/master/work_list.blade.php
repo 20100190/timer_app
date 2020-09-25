@@ -295,9 +295,9 @@
         reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "prep", "phase" + buttonIndex + "_prep");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "plannedprep", "phase" + buttonIndex + "_planned_prep");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "prepsignoff", "phase" + buttonIndex + "_prep_signoff");
-        reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "reviewer", "phase" + buttonIndex + "_reviewer1");
-        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "plannedreview", "phase" + buttonIndex + "_planned_review1");
-        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "reviewsignoff", "phase" + buttonIndex + "_review_signoff1");
+        reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "reviewer1", "phase" + buttonIndex + "_reviewer1");
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "plannedreview1", "phase" + buttonIndex + "_planned_review1");
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "reviewsignoff1", "phase" + buttonIndex + "_review_signoff1");
         reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "reviewer2", "phase" + buttonIndex + "_reviewer2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "plannedreview2", "phase" + buttonIndex + "_planned_review2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "reviewsignoff2", "phase" + buttonIndex + "_review_signoff2");
@@ -512,9 +512,17 @@
     }
 
     function clearFilter() {
-        $('#client').multiselect('select', "");
-        $('#project').multiselect('select', "");
-        $('#group').multiselect('select', "");
+        var clientSelectedValue = document.getElementById("client").value;
+        var projectSelectedValue = document.getElementById("project").value;
+        var groupSelectedValue = document.getElementById("group").value;
+        $('#client').multiselect('deselect', clientSelectedValue);
+        $('#client').multiselect('select', "");   
+        
+        $('#project').multiselect('deselect', projectSelectedValue);
+        $('#project').multiselect('select', "");        
+        
+        $('#group').multiselect('deselect', groupSelectedValue);
+        $('#group').multiselect('select', "");       
     }
     
     function doNotUseRow(obj, buttonIndex,count) {
