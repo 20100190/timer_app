@@ -19,4 +19,15 @@ class Staff extends Model
         return $query->where([['status', '=', "Active"]])->orderBy("initial")->get();
     }
     
+    //承認権限 0: なし、1:あり
+    public function scopeHaveApprovalAuthority($query,$email) {
+        $isApprove = 0;        
+        $staffData = $query->where("email","=",$email)->get();
+        foreach($staffData as $item){
+            $isApprove = $item->permission_approve;            
+        }
+        
+        return $isApprove;
+    }
+    
 }

@@ -12,6 +12,7 @@ use App\Assign;
 use App\ProjectTask;
 use App\ProjectType;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class ProjectController extends Controller
 {
@@ -31,8 +32,27 @@ class ProjectController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
+    {        
+        return $this->commonView();
+    }
+    
+    public function indexLink(Request $request)
     {
-        //client
+        
+        $reqClient = $request->client_id;
+        $reqProject = $request->project;    
+        $reqProjectObj = explode(" - ",$reqProject);
+        
+        $projectObj = Project::where([['client_id', '=', $reqClient], ["project_type", "=", $reqProjectObj[0]], ["project_year", "=", $reqProjectObj[1]]]);
+        $projectApproved = $projectObj->first()->is_approval;
+        return $this->commonView()
+                ->with("reqClient", $reqClient)
+                ->with("reqProject", $reqProject)
+                ->with("isProjectApproved", $projectApproved);
+    }
+    
+    public function commonView(){
+         //client
         $clientData = Client::orderBy("name", "asc")->get();
 
         //pic
@@ -49,12 +69,16 @@ class ProjectController extends Controller
                 ->get();*/
         $projectTypeData = ProjectType::select("project_type")                
                 ->get();
+        
+        //権限
+        $isApproval = Staff::HaveApprovalAuthority(Auth::User()->email);
 
         return view('master/project')
                         ->with("client", $clientData)
                         ->with("pic", $picData)
                         ->with("task", $taskData)
-                        ->with("projectType", $projectTypeData);
+                        ->with("projectType", $projectTypeData)
+                        ->with("isApproval", $isApproval);
     }
     
     public function getTaskProjectInfo(Request $request) {

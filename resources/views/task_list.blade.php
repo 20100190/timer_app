@@ -3,7 +3,7 @@
 
 <div style="margin-left: 20px">
     <div id="filter_area" style="margin-top: 30px;">
-        <div id="filter_left" style="float: left;height: 300px;margin-bottom: 30px">
+        <div id="filter_left" style="float: left;height: 180px;margin-bottom: 30px">
             <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-3" >
                     <span class="line-height">Client</span>
@@ -43,7 +43,7 @@
                 </div>
             </div>      
                         
-            <div class="row entry-filter-bottom">
+           <!-- <div class="row entry-filter-bottom">
                 <div class="col col-md-3">
                     <span class="line-height">Date From</span>
                 </div>
@@ -72,7 +72,7 @@
                         <option value="Completed">Completed</option>
                     </select>
                 </div>                 
-            </div>
+            </div>-->
 
             <div class="row entry-filter-bottom">    
                 <div class="col col-md-3">
@@ -88,7 +88,39 @@
                     </button>
                 </div>
             </div>
-        </div>             
+        </div>        
+        <div id="filter_left" style="float: left;height: 180px;margin-bottom: 30px;margin-left: 100px">
+            <div class="row entry-filter-bottom">
+                <div class="col col-md-5">
+                    <span class="line-height">Date From</span>
+                </div>
+                <div class="col col-md-1">
+                    <input type="text" style="width:150px;hight:10px;" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="">                            
+                </div>                 
+            </div>
+            
+            <div class="row entry-filter-bottom">
+                <div class="col col-md-5">
+                    <span class="line-height">Date To</span>
+                </div>
+                <div class="col col-md-1">
+                    <input type="text" style="width:150px;hight:10px;" class="form-control datepicker1" id="filter_to" name="filter_to" placeholder="mm/dd/yyyy" value="">                            
+                </div>                 
+            </div>
+            
+            <div class="row entry-filter-bottom">
+                <div class="col col-md-5">
+                    <span class="line-height">Status</span>
+                </div>
+                <div class="col col-md-1">
+                    <select id="status" name="status" class="form-control" style="width:150px;hight:10px;">
+                        <option value=""></option>
+                        <option value="Imcomplete">Imcomplete</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>                 
+            </div>
+        </div>
     </div>
        
     <table class="table" id="task_schedule">

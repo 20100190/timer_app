@@ -22,14 +22,28 @@ class ProjectListController extends Controller {
      * @return \Illuminate\View\View
      */
     public function index(Request $request) {
-        $keyword = $request->get("search");
+        $reqClient = $request->get("client");
+        $reqProject = $request->get("project");
+        $reqApproval = $request->get("status");
         //$perPage = 25;
+        
+        $clientObj = Project::select("client.id as client_id","project.id as project_id","client.name as client_name","project.project_name","is_approval")
+                    ->leftJoin("client","client.id","=","project.client_id");
 
-        if (!empty($keyword)) {
-            $client = Project::select("client.id as client_id","project.id as project_id","client.name as client_name","project.project_name","is_approval")->leftJoin("client","client.id","=","project.client_id")->where("client.name", "LIKE", "%$keyword%")->orWhere("project_name", "LIKE", "%$keyword%")->Where("client.id","<>","0")->get();//paginate($perPage);
-        } else {
-            $client = Project::select("client.id as client_id","project.id as project_id","client.name as client_name","project.project_name","is_approval")->leftJoin("client","client.id","=","project.client_id")->Where("client.id","<>","0")->get();
+        if($reqClient != ""){
+            $clientObj = $clientObj->where("client.id", "=", $reqClient);
         }
+        
+        if($reqProject != ""){
+            $clientObj = $clientObj->Where("project_name", "=", $reqProject);
+        }
+        
+        if ($reqApproval != "") {
+            $clientObj = $clientObj->Where("is_approval", "=", $reqApproval);
+        }
+
+        $client = $clientObj->get();
+       
         
         //権限
         $isApprove = 0;        
@@ -38,7 +52,14 @@ class ProjectListController extends Controller {
             $isApprove = $item->permission_approve;            
         }
         
-        return view("master.project_list",compact("client","isApprove"));
+        //client
+        $clientList = Client::orderBy("name", "asc")->get();
+        //project
+        $projectList = Project::select("project_name")
+                        ->groupBy('project_name')
+                        ->orderBy('project_name', 'asc')->get();
+        
+        return view("master.project_list",compact("client","isApprove","projectList","clientList"));
     }
 
    

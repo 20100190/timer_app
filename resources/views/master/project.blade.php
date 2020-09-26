@@ -86,6 +86,9 @@
 
 @section('content') 
 
+<input type="hidden" id="reqClient" name="reqClient" @if(isset($reqClient)) value="{{$reqClient}}" @else value="" @endif>
+<input type="hidden" id="reqProject" name="reqProject" @if(isset($reqProject)) value="{{$reqProject}}" @else value="" @endif>
+
 <!--<form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px">-->
 <form method="POST" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px">
     <!--@csrf-->
@@ -324,8 +327,23 @@
                 <tr>
                     <td></td>                    
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        @if(isset($isApproval) && $isApproval == 1)
+                        @if(isset($isProjectApproved) && $isProjectApproved == 1)
+                        <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;background-color: #DCDCDC" disabled>
+                            <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                            <span id="savingText">Approved</span>
+                        </button>
+                        @else
+                        <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="saveApprove()" style="margin-top: 30px">
+                            <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                            <span id="savingText">Approve</span>
+                        </button>
+                        @endif                                               
+                        @endif
+                    </td>
+                    <td>                       
+                    </td>
                     <td>
                         <button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()" style="margin-top: 30px">
                             <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
@@ -338,7 +356,7 @@
 
     </div>    
 
-
+    
     <input type="hidden" id="staff_info" name="staff_info" value="">
     <input type="hidden" id="task_info" name="task_info" value="">
 

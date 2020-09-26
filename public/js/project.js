@@ -19,6 +19,21 @@ $(document).ready(function () {
     //$("#fye option:not(:selected)").prop('disabled', true);
     
      jQuery('#loader-bg').hide();
+     
+     var reqClient = document.getElementById("reqClient").value;
+     var reqProject = document.getElementById("reqProject").value;
+     if (reqClient != ""){
+         $("#client").val(reqClient);
+     }
+     if (reqProject != "") {
+         var projectStr = reqProject.split(" - ");
+         $("#project_type").val(projectStr[0]);
+         $("#project_year").val(projectStr[1]);
+         $("#harvest_project_name").val(reqProject);
+     }
+     if (reqClient != "" && reqProject != "") {        
+        loadTask();
+    }
 
 });
 
@@ -411,6 +426,14 @@ function loadTask() {
         
         //task情報セット
         $('#task_info').val(JSON.stringify(data.allTask));
+        
+        //approved
+        document.getElementById("btn_approve").disabled = false;
+        document.getElementById("savingText").innerHTML = "Approve";
+        if(data.project.is_approval == 1){
+            document.getElementById("btn_approve").disabled = true;
+            document.getElementById("savingText").innerHTML = "Approved";
+        }
 
         //project
         //初期化
