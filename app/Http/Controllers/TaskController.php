@@ -7,6 +7,7 @@ use Auth;
 use Validate;
 use DB;
 use App\Task;
+use App\Staff;
 
 //=======================================================================
 class TaskController extends Controller {
@@ -25,9 +26,11 @@ class TaskController extends Controller {
         } else {
             $task = Task::get();//paginate($perPage);
         }
-                
         
-        return view("master.task.index",compact("task"));
+        //編集権限
+        $isEdit = Staff::HaveEditAuthority(Auth::User()->email);                
+        
+        return view("master.task.index",compact("task","isEdit"));
     }
 
     /**

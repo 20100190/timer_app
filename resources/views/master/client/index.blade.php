@@ -24,13 +24,8 @@
     });
 </script>
 <div style="margin-left: 20px;margin-top: 20px">
-    <!--<div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">               
-                    <div class="panel-body">-->
 
-    <a href="{{ url("master/client/create") }}" class="btn btn-primary btn-sm" title="Add New clien" style="float: left;margin-top: 7px">
+    <a href="{{ url("master/client/create") }}" class="btn btn-primary btn-sm" title="Add New clien" @if($isEdit == 1) style="float: left;margin-top: 7px;" @else style="float: left;margin-top: 7px;visibility : collapse" @endif>
         Add New
     </a>
 
@@ -62,8 +57,10 @@
                     <th class="table-sticky-locklist" style="width: 350px">Group Companies</th>   
                     <th class="table-sticky-locklist" style="width: 150px">In-Charge</th> 
                     <th class="table-sticky-locklist" style="width:40px"> </th>
+                    @if($isEdit == 1) 
                     <th class="table-sticky-locklist" style="width:40px"> </th>
                     <th class="table-sticky-locklist" style="width:40px"> </th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +81,8 @@
                     <td>{{ $item->initial}}</td>
 
                     <td><a href="{{ url("/master/client/" . $item->id) }}" title="Show task"><button class="btn btn-xs" style="background-color: transparent;" ><img src="{{asset("image/view.png")}}" /></button></a></td>
+                   
+                    @if($isEdit == 1) 
                     <td><a href="{{ url("/master/client/" . $item->id . "/edit") }}" title="Edit task"><button class="btn btn-xs" style="background-color: transparent;" ><img src="{{asset("image/pencil.png")}}" /></button></a></td>
                     <td>
                         <form method="POST" action="/master/client/{{ $item->id }}" class="form-horizontal" style="display:inline;">
@@ -95,6 +94,7 @@
                             </button>
                         </form>
                     </td>
+                    @endif
                 </tr>
 
                 @endforeach

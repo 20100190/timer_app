@@ -29,9 +29,11 @@ class ClientController extends Controller {
         } else {
             $client = Client::select("client.id as id","name","fye","vic_status","group_companies","initial")->leftJoin("staff","staff.id","=","client.pic")->Where("client.id","<>","0")->get();//paginate($perPage);
         }
-                
         
-        return view("master.client.index",compact("client"));
+        //編集権限
+        $isEdit = Staff::HaveEditAuthority(Auth::User()->email);
+        
+        return view("master.client.index",compact("client","isEdit"));
     }
 
     /**

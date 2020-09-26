@@ -26,9 +26,10 @@ class StaffController extends Controller {
             $clien = Staff::paginate($perPage);
         }
         
+        //編集権限
+        $isEdit = Staff::HaveEditAuthority(Auth::User()->email);
         
-        
-        return view("master.staff.index",compact("clien"));
+        return view("master.staff.index",compact("clien","isEdit"));
     }
 
     /**

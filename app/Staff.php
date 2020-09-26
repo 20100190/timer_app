@@ -30,4 +30,15 @@ class Staff extends Model
         return $isApprove;
     }
     
+    //編集権限 0: なし、1:あり
+    public function scopeHaveEditAuthority($query,$email) {
+        $isEdit = 0;        
+        $staffData = $query->where("email","=",$email)->get();
+        foreach($staffData as $item){
+            $isEdit = $item->permission_edit;            
+        }
+        
+        return $isEdit;
+    }
+    
 }

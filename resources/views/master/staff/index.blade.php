@@ -30,7 +30,7 @@ $(document).ready(function () {
             <div class="panel panel-default">               
                 <div class="panel-body">-->
 
-                    <a href="{{ url("master/staff/create") }}" class="btn btn-primary btn-sm" title="Add New clien">
+                    <a href="{{ url("master/staff/create") }}" class="btn btn-primary btn-sm" title="Add New clien" @if($isEdit != 1) style="visibility : collapse" @endif>
                         Add New
                     </a>
 
@@ -103,7 +103,7 @@ $(document).ready(function () {
                                     
                                     <td>{{ $item->default_role}} </td>
                                         
-                                    <!--<td><a href="{{ url("/master/client/" . $item->id) }}" title="View client"><button class="btn btn-xs"  style="background-color: white"><img src="{{asset("image/view.png")}}" /></button></a></td>-->
+                                    @if($isEdit == 1)
                                     <td><a href="{{ url("/master/staff/" . $item->id . "/edit") }}" title="Edit staff"><button class="btn btn-xs" style="background-color: white" ><img src="{{asset("image/pencil.png")}}" /></button></a></td>
                                     <td>
                                         <form method="POST" action="/master/staff/{{ $item->id }}" class="form-horizontal" style="display:inline;">
@@ -115,6 +115,7 @@ $(document).ready(function () {
                                             </button>
                                         </form>
                                     </td>
+                                    @endif
                                 </tr>
 
                                 @endforeach
