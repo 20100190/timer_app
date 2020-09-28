@@ -236,8 +236,8 @@
                     <th class="project-font-size" style="width: 70px">Staff</th>
                     <th class="project-font-size" style="width: 120px">Role</th>
                     <th class="project-font-size" style="width: 100px">Budget Hours</th>
-                    <th class="project-font-size" style="width: 50px">Rate</th>
-                    <th class="project-font-size" style="width: 60px">Budget</th>                        
+                    <th class="project-font-size" style="width: 60px">Rate</th>
+                    <th class="project-font-size" style="width: 70px">Budget</th>                        
                     <th style="width:40px;"> </th>
                 </tr> 
             </thead>
@@ -249,7 +249,7 @@
                     <td style="width: 120px"></td>                    
                     <td style="width: 120px"></td>                    
                     <td class="project-font-size" style="width: 50px;">Total</td>
-                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="total_budget" style="padding-right: 12px">0</span></td>                       
+                    <td class="project-font-size" style="width: 60px;text-align: right"><div style="float: left;font-size: 12px;text-align: left">$</div><span id="total_budget" style="padding-right: 19px">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr style="height: 30px">
@@ -265,9 +265,9 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;">Engagement Fee / Month</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;vertical-align: middle">Engagement Fee / Month</td>                    
                     <td style="width: 60px;text-align: right">
-                        <input type="text" class="form-control form-control-sm" id="engagement_fee" name="engagement_fee" value="0" onchange="calc()" style="text-align: right;width: 100%">
+                        <div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input type="text" class="form-control form-control-sm" id="engagement_fee" name="engagement_fee" value="0" onchange="calc()" onfocus="removeCommaObj(this)" onblur="addCommaObj(this)" style="text-align: right;width: 60px">
                     </td>                        
                     <td style="width:40px;"> </td>
                 </tr>
@@ -275,9 +275,9 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;"># of month(s)</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;vertical-align: middle"># of month(s)</td>                    
                     <td style="width: 60px;">
-                        <input type="text" class="form-control form-control-sm" id="engagement_monthly" name="engagement_monthly" value="0" onchange="calc()" style="text-align: right;width: 100%">
+                        <div style="float: left;margin-right: 3px;margin-top: 7px">&nbsp;&nbsp;</div><input type="text" class="form-control form-control-sm" id="engagement_monthly" name="engagement_monthly" value="0" onchange="calc()" style="text-align: right;width: 60px">
                     </td>                        
                     <td style="width:40px;"> </td>
                 </tr>
@@ -285,9 +285,9 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;">Adjustments</td>                    
+                    <td class="project-font-size" colspan="2" style="width: 170px;vertical-align: middle">Adjustments</td>                    
                     <td style="width: 60px;text-align: right">
-                        <input type="text" class="form-control form-control-sm" id="adjustments" name="adjustments" value="0" onchange="calc()" style="text-align: right;width: 100%">
+                        <div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input type="text" class="form-control form-control-sm" id="adjustments" name="adjustments" value="0" onchange="calc()" style="text-align: right;width: 60px">
                     </td>                       
                     <td style="width:40px;"> </td>
                 </tr>
@@ -295,8 +295,8 @@
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;">Engagement Fee</td>                    
-                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="engagement_total" style="padding-right: 12px">0</span></td>                       
+                    <td class="project-font-size" colspan="2" style="width: 170px;vertical-align: middle">Engagement Fee</td>                    
+                    <td class="project-font-size" style="width: 60px;text-align: right"><div style="float: left;font-size: 12px;text-align: left">$</div><span id="engagement_total" style="padding-right: 19px;padding-top: 20px">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr style="height: 30px">
@@ -313,7 +313,7 @@
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
                     <td class="project-font-size" colspan="2" style="width: 170px;">Difference</td>                    
-                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="defference" style="padding-right: 12px">0</span></td>                       
+                    <td class="project-font-size" style="width: 60px;text-align: right"><div style="float: left;font-size: 12px;text-align: left">$</div><span id="defference" style="padding-right: 19px">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr>
@@ -321,7 +321,7 @@
                     <td style="width: 70px"></td>
                     <td style="width: 80px"></td>
                     <td class="project-font-size" colspan="2" style="width: 170px;">Realization</td>                    
-                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="realization">0%</span></td>                      
+                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="realization" style="padding-right: 8px">0%</span></td>                      
                     <td style="width:40px;"> </td>
                 </tr>
                 <tr>
@@ -339,7 +339,12 @@
                             <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
                             <span id="savingText">Approve</span>
                         </button>
-                        @endif                                               
+                        @endif     
+                        @else
+                        <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;visibility: hidden">
+                            <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                            <span id="savingText">Approve</span>
+                        </button>
                         @endif
                     </td>
                     <td>                       

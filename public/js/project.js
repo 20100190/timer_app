@@ -165,8 +165,8 @@ function appendBudgetRow()
     c2.innerHTML = '<select class="inpassign form-control form-control-sm" id="assign' + count + '" name="assign' + count + '" onchange="setStaffRate(this,' + count + ')">' + staffInitialOption + '</select>';
     c3.innerHTML = '<input class="inprole form-control form-control-sm" id="role' + count + '" name="role' + count + '" style="width: 100%" value="' + '" readonly>';
     c4.innerHTML = '<input class="inphours form-control form-control-sm" type="text" oninput="inputHarfCharPeriod(this)" onchange="calc()" id="hours' + count + '" name="hours' + count + '" value="0" style="text-align: right;width: 100%">';
-    c5.innerHTML = '<input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="0" style="text-align: right;width: 100%" readonly>';
-    c6.innerHTML = '<input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 100%"  readonly>';
+    c5.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="0" style="text-align: right;width: 50px" readonly>';
+    c6.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 60px"  readonly>';
     //c7.innerHTML = '<input class="edtBudgetBtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRowBudgetList(this)">';
     c7.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
 
@@ -191,7 +191,7 @@ function insertBudgetRow(staffId, role, hours) {
 
     // 各列にスタイルを設定
     c2.style.cssText = "width: 150px";
-    c1.style.cssText = "text-align:center;vertical-align: middle";
+    c1.style.cssText = "text-align:center;vertical-align: middle";  
 
     var staffInitialOption = "<option value=''></option>";
     var staffInfo = JSON.parse(document.getElementById("staff_info").value);
@@ -216,8 +216,8 @@ function insertBudgetRow(staffId, role, hours) {
     c2.innerHTML = '<select class="inpassign form-control form-control-sm" id="assign' + count + '" name="assign' + count + '" onchange="setStaffRate(this,' + count + ')">' + staffInitialOption + '</select>';
     c3.innerHTML = '<input class="inprole form-control form-control-sm" id="role' + count + '" name="role' + count + '" style="width: 100%" value="' + role + '" readonly>';
     c4.innerHTML = '<input class="inphours form-control form-control-sm" type="text" oninput="inputHarfCharPeriod(this)" onchange="calc()" id="hours' + count + '" name="hours' + count + '" value="' + hours + '" style="text-align: right;width: 100%">';
-    c5.innerHTML = '<input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="' + staffRate + '" style="text-align: right;width: 100%" readonly>';
-    c6.innerHTML = '<input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 100%"  readonly>';
+    c5.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="' + staffRate + '" style="text-align: right;width: 50px;float: left" readonly>';
+    c6.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 60px"  readonly>';
     //c7.innerHTML = '<input class="edtBudgetBtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRowBudgetList(this)">';
     c8.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
 
@@ -385,26 +385,27 @@ function calc() {
 
     var total = 0;
     for (var cnt = 1; cnt <= count; cnt++) {
-        document.getElementById("budget" + cnt).value = parseInt(document.getElementById("hours" + cnt).value) * parseInt(document.getElementById("rate" + cnt).value)
-        total += parseInt(document.getElementById("budget" + cnt).value);
+        var budgetAmount = parseInt(removeComma(document.getElementById("hours" + cnt).value)) * parseInt(removeComma(document.getElementById("rate" + cnt).value));        
+        document.getElementById("budget" + cnt).value = budgetAmount.toLocaleString();
+        total += parseInt(removeComma(document.getElementById("budget" + cnt).value));
 
     }
 
-    document.getElementById("total_budget").innerHTML = total;
+    document.getElementById("total_budget").innerHTML = total.toLocaleString();
     
-    var engTotal = (parseInt(document.getElementById("engagement_fee").value) * parseInt(document.getElementById("engagement_monthly").value)) + parseInt(document.getElementById("adjustments").value);
+    var engTotal = (parseInt(removeComma(document.getElementById("engagement_fee").value)) * parseInt(removeComma(document.getElementById("engagement_monthly").value))) + parseInt(removeComma(document.getElementById("adjustments").value));
     document.getElementById("engagement_total").innerHTML = 0;
     if (!isNaN(engTotal)) {
-        document.getElementById("engagement_total").innerHTML = engTotal;//(parseInt(document.getElementById("engagement_fee").value) * parseInt(document.getElementById("engagement_monthly").value)) + parseInt(document.getElementById("adjustments").value);
+        document.getElementById("engagement_total").innerHTML = engTotal.toLocaleString();//(parseInt(document.getElementById("engagement_fee").value) * parseInt(document.getElementById("engagement_monthly").value)) + parseInt(document.getElementById("adjustments").value);
     }
     
-    var defTotal = parseInt(document.getElementById("engagement_total").innerHTML) - total;
+    var defTotal = parseInt(removeComma(document.getElementById("engagement_total").innerHTML)) - total;
     document.getElementById("defference").innerHTML = 0;
     if (!isNaN(defTotal)) {
-        document.getElementById("defference").innerHTML = defTotal;//parseInt(document.getElementById("engagement_total").innerHTML) - total;
+        document.getElementById("defference").innerHTML = defTotal.toLocaleString();//parseInt(document.getElementById("engagement_total").innerHTML) - total;
     }
     
-    var realization = (new Decimal(parseInt(document.getElementById("engagement_total").innerHTML)).div(total).times(100).toFixed(1));
+    var realization = (new Decimal(parseInt(removeComma(document.getElementById("engagement_total").innerHTML))).div(total).times(100).toFixed(1));
     document.getElementById("realization").innerHTML = "0%";
     if (!isNaN(realization)) {
         document.getElementById("realization").innerHTML = realization + "%";
@@ -456,7 +457,7 @@ function loadTask() {
                 var endArray = data.project.end.split("-");
                 document.getElementById("ends_on").value = endArray[1] + "/" + endArray[2] + "/" + endArray[0];
             }
-            document.getElementById("engagement_fee").value = data.project.engagement_fee_unit;
+            document.getElementById("engagement_fee").value = data.project.engagement_fee_unit.toLocaleString();
             document.getElementById("engagement_monthly").value = data.project.invoice_per_year;
             document.getElementById("adjustments").value = data.project.adjustments;
             //document.getElementById("billable").selectedIndex = data.project.billable;
@@ -783,4 +784,15 @@ function inputHarfAlpha($this)
     $this.value=str;
 }
 
+function removeComma(obj){
+    obj = obj.replace(/,/g,"");
+    return obj;
+}
 
+function removeCommaObj(obj){
+    obj.value = removeComma(obj.value);    
+}
+
+function addCommaObj(obj){
+    obj.value = Number(obj.value).toLocaleString();  
+}

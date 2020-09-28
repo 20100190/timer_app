@@ -255,7 +255,7 @@ class ProjectController extends Controller
             $projectTable->end = $this->formatDate($request->input("ends_on"));
             $projectTable->billable = $request->input("billable");
             $projectTable->note = $request->input("note");
-            $projectTable->engagement_fee_unit = $request->input("engagement_fee");
+            $projectTable->engagement_fee_unit = str_replace(",","",$request->input("engagement_fee"));
             $projectTable->invoice_per_year = $request->input("engagement_monthly");
             $projectTable->adjustments = $request->input("adjustments");
 
@@ -269,7 +269,7 @@ class ProjectController extends Controller
                 "pic" => $request->input("pic"),
                 "billable" => $request->input("billable"),
                 "note" => $request->input("note"),
-                "engagement_fee_unit" => $request->input("engagement_fee"),
+                "engagement_fee_unit" => str_replace(",","",$request->input("engagement_fee")),
                 "invoice_per_year" => $request->input("engagement_monthly"),
                 "adjustments" => $request->input("adjustments"),
             ];
