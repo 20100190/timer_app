@@ -1,6 +1,6 @@
 $(document).ready(function () {
     jQuery('#loader-bg').hide();
-
+  
     var buttonWidth = "400px";
     var buttonWidth2 = "150px";
     $('#client').multiselect({
@@ -90,6 +90,13 @@ function loadTaskScheduleData() {
             var projectId = data.taskSchedule[cnt].project_id;
             insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId);
         }
+        
+        $('#task_schedule').tablesorter({
+            widgets: ['zebra'],
+            widgetOptions: {
+                zebra: ["normal-row", "alt-row"]
+            }
+        });
 
 
     }).error(function (XMLHttpRequest, textStatus, errorThrown) {

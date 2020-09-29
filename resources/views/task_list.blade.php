@@ -127,7 +127,7 @@
         <thead>
             <tr>
                 <th style="width: 20px">No.</th>
-                <th style="width: 50px">User</th>
+                <th style="width: 50px">Staff</th>
                 <th style="width: 20px">Link</th>
                 <th style="width: 100px">Due Date</th>
                 <th style="width: 200px">Client</th>
