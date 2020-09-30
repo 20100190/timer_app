@@ -550,7 +550,14 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet2'), {
         }
 
         if (value.match(";")) {
-            color = "yellow";
+            var splitValue = value.split(";");
+            var colorString = splitValue[splitValue.length -1];      
+            if(value.match("EXT")){
+                colorString = "EXT";
+            }
+            var {retCnt, retColor} = getPhaseColorAndIndex(phaseObj, colorString);            
+            color = retColor;
+            phaseCnt = retCnt;
         }
 
         var ar = columnArray();
@@ -697,7 +704,16 @@ function getProjectAllData() {
                     if (data.color[t][x] != "") {
                         var rowCnt = parseInt(t) + 1;
                         if (data.color[t][x].match(";")) {
-                            myspreadsheet.setStyle(ar[x] + rowCnt, 'background-color', "yellow");
+                            var splitValue = data.color[t][x].split(";");
+                            var colorString = splitValue[splitValue.length -1];     
+                            if (data.color[t][x].match("134f5c")) {
+                                colorString = "#134f5c";
+                            }
+                            myspreadsheet.setStyle(ar[x] + rowCnt, 'background-color', colorString);
+                            var targetColorArray = ["#a64d79","#3c78d8","#3d85c6","#e69138","#6aa84f","#f1c232","#741b47","#1155cc","#0b5394","#b45f06","#38761d","#bf9000","#134f5c","#45818e"];
+                            if(targetColorArray.includes(colorString)){
+                                myspreadsheet.setStyle(ar[x] + rowCnt, 'color', "white");
+                            }
                         } else {
                             myspreadsheet.setStyle(ar[x] + rowCnt, 'background-color', data.color[t][x]);
                             
