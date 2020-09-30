@@ -50,6 +50,9 @@ $(document).ready(function () {
         enableFiltering: true,
         includeSelectAllOption: true,
     });
+    $('#pic_or').multiselect({
+        buttonWidth: 70,        
+    });
     
     $('.datepicker1').datepicker({
             format: "mm/dd/yyyy",
@@ -116,6 +119,7 @@ function getData() {
     var role = "blank";
     var dateFromObj = document.getElementById("filter_date_from");
     var dateToObj = document.getElementById("filter_date_to");
+    var orValue = document.getElementById("pic_or").value;
 
     client = setDelimiter(clientObj);
     project = setDelimiter(projectObj);
@@ -134,8 +138,12 @@ function getData() {
         dateTo = dateToObj.value.split("/").join("-");
     }
     
+    if(orValue == ""){
+        orValue = "blank";
+    }
+    
     $.ajax({
-        url: "/budget/test3/data/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + dateFrom + "/" + dateTo,
+        url: "/budget/test3/data/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + dateFrom + "/" + dateTo + "/" + orValue,
         dataType: "json",
         success: data => {
             //初期化
@@ -950,6 +958,10 @@ function clearShowFilter(){
     
     document.getElementById("filter_date_from").value = "";
     document.getElementById("filter_date_to").value = "";
+    
+     var orValue = document.getElementById("pic_or").value;
+     $('#pic_or').multiselect('deselect', orValue);
+     $('#pic_or').multiselect('select', "");   
 }
 
 function getBackgroundColor(phaseData,phaseColorIndex,c){
@@ -960,8 +972,13 @@ function getBackgroundColor(phaseData,phaseColorIndex,c){
     backgroundColor = "e5e5e5";
     if (phaseColorIndex != 9999 && phaseData[phaseColorIndex][c + 10] != "") {                                    
         backgroundColor = phaseData[phaseColorIndex][c + 10];
-        if(backgroundColor.match(";")){
-            backgroundColor = "yellow";
+        if (backgroundColor.match(";")) {
+            var splitValue = backgroundColor.split(";");
+            var backgroundColorStr = splitValue[splitValue.length - 1];
+            if (backgroundColor.match("134f5c")) {
+                backgroundColorStr = "#134f5c";
+            }
+            backgroundColor = backgroundColorStr;
         }
         if(targetColorArray.includes(backgroundColor)){
             fontColor = "white";

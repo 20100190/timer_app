@@ -845,18 +845,28 @@ class BudgetController extends Controller
                     ->wherein('client.vic_status', $vicFilter);
         }
 
-        if ($request->pic != "blank") {
+        if ($request->orValue == "blank") {
+            if ($request->pic != "blank") {
+                $picArray = explode(",", $request->pic);
+                
+                $overallDetail = $overallDetail
+                        ->wherein('project.pic', $picArray);
+            }
+
+            if ($request->staff != "blank") {
+                $staffArray = explode(",", $request->staff);
+
+                $overallDetail = $overallDetail
+                        ->wherein('assign.staff_id', $staffArray);
+            }
+        } else {           
             $picArray = explode(",", $request->pic);
-
-            $overallDetail = $overallDetail
-                    ->wherein('project.pic', $picArray);
-        }
-
-        if ($request->staff != "blank") {
             $staffArray = explode(",", $request->staff);
-
-            $overallDetail = $overallDetail
-                    ->wherein('assign.staff_id', $staffArray);
+            $overallDetail = $overallDetail->where(function($query) use($picArray,$staffArray){                
+                $query->wherein('project.pic', $picArray);
+                $query->orwherein('assign.staff_id', $staffArray);
+            });
+            
         }
 
         if ($request->role != "blank") {

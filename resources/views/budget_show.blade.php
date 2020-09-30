@@ -116,11 +116,17 @@
                 <div class="col col-md-3">
                     <span class="line-height">PIC</span>
                 </div>
-                <div class="col col-md-1">
+                <div class="col col-md-5">
                     <select id="pic" name="pic" multiple="multiple" class="form-control" >                            
                         @foreach ($pic as $pic)
                         <option value="{{$pic->id}}">{{$pic->initial}}</option>
                         @endforeach
+                    </select>           
+                </div>
+                <div class="col col-md-3">
+                    <select id="pic_or" name="pic_or" class="form-control" >                            
+                        <option value="">&nbsp;</option>
+                        <option value="or">OR</option>
                     </select>           
                 </div>
             </div>
