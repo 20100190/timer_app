@@ -74,7 +74,7 @@
 
     <div style="clear: both"></div>
 
-    <div>
+    <div style="overflow-x: scroll">
         @for($i=1;$i<=10;$i++)
         <div style="margin-bottom: 50px">
             <div><label style="font-size: 20px;width: 85px">
@@ -98,6 +98,7 @@
                         <th style="width: 90px">Reviewer2</th>
                         <th style="width: 150px">Planned Review</th>
                         <th style="width: 180px">2nd Reviewer Sign-Off</th>
+                        <th style="width: 300px">Memo</th>
                         <th style="width: 40px">&nbsp;</th>
                         <th style="width: 0px;visibility: collapse">Memo</th>
                     </tr>
@@ -169,10 +170,10 @@
         if (!objTBL)
             return;
 
-        insertPhase1Row("", "", "", buttonIndex, "", "", "", "", "", "", "", "", "", "", "", true, 1,"");
+        insertPhase1Row("", "", "", buttonIndex, "", "", "", "", "", "", "", "", "", "", "", true, 1,"","");
     }
 
-    function insertPhase1Row(id, name, description, buttonIndex, groupId, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, isClickBtnAdd, isStandard,memo) {
+    function insertPhase1Row(id, name, description, buttonIndex, groupId, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, isClickBtnAdd, isStandard,memo,colMemo) {
         // 最終行に新しい行を追加
         var phase1_tbody = document.getElementById("phase" + buttonIndex + "_body");
         var bodyLength = phase1_tbody.rows.length;
@@ -210,6 +211,7 @@
         var c14 = row.insertCell(13);
         var c15 = row.insertCell(14);
         var c16 = row.insertCell(15);
+        var c17 = row.insertCell(16);
 
         c1.style.cssText = "vertical-align: middle";
 
@@ -261,12 +263,13 @@
         c12.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'reviewer2" type="text" id="phase' + buttonIndex + '_reviewer2' + count + '" name="phase' + buttonIndex + '_reviewer2' + count + '" value="' + reviewer2 + '" style="width: 100%">' + reviewer2StaffInitialOption + '</select>';
         c13.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedreview2 datepicker1" type="text" id="phase' + buttonIndex + '_planned_review2' + count + '" name="phase' + buttonIndex + '_planned_review2' + count + '" value="' + plannedReview2 + '" style="width: 100%">';
         c14.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff2 datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff2' + count + '" name="phase' + buttonIndex + '_review_signoff2' + count + '" value="' + reviewSignOff2 + '" style="width: 100%">';
+        c15.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'colmemo" type="text" id="phase' + buttonIndex + '_col_memo' + count + '" name="phase' + buttonIndex + '_col_memo' + count + '" value="' + colMemo + '" style="width: 100%">';
         if (isClickBtnAdd || isStandard == 0) {
-            c15.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
+            c16.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
         } else{
-            c15.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return doNotUseRow(this,' + buttonIndex + ',' + count +')" style="background-color: transparent"><img src="' + imagesUrl + "/not_use.png" + '"></button>';
+            c16.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return doNotUseRow(this,' + buttonIndex + ',' + count +')" style="background-color: transparent"><img src="' + imagesUrl + "/not_use.png" + '"></button>';
         }
-        c16.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'memo datepicker1" type="text" id="phase' + buttonIndex + '_memo' + count + '" name="phase' + buttonIndex + '_memo' + count + '" value="' + memo + '" style="width: 100%;visibility:hidden">';
+        c17.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'memo datepicker1" type="text" id="phase' + buttonIndex + '_memo' + count + '" name="phase' + buttonIndex + '_memo' + count + '" value="' + memo + '" style="width: 100%;visibility:hidden">';
   
         $('.datepicker1').datepicker({
             defaultViewDate: Date(),
@@ -301,6 +304,7 @@
         reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "reviewer2", "phase" + buttonIndex + "_reviewer2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "plannedreview2", "phase" + buttonIndex + "_planned_review2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "reviewsignoff2", "phase" + buttonIndex + "_review_signoff2");
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "_col_memo", "phase" + buttonIndex + "_col_memo");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "memo", "phase" + buttonIndex + "_memo");
 
         reOrderElementTag(tagElements, "delphase" + buttonIndex + "btn", "delPhase" + buttonIndex + "Btn");
@@ -389,6 +393,7 @@
                     var reviewSignOff2 = "";
                     var isStandard = "";
                     var memo = "";
+                    var colMemo = "";
 
                     if (data.phase1Detail[cnt][cnt2].due_date != null) {
                         comp = convDateFormat(data.phase1Detail[cnt][cnt2].due_date);
@@ -437,9 +442,13 @@
                     if (data.phase1Detail[cnt][cnt2].memo != null) {
                         memo = data.phase1Detail[cnt][cnt2].memo;
                     }
+                    
+                    if (data.phase1Detail[cnt][cnt2].col_memo != null) {
+                        colMemo = data.phase1Detail[cnt][cnt2].col_memo;
+                    }
 
                     insertPhase1Row(parseInt(rowId), data.phase1Detail[cnt][cnt2].name, data.phase1Detail[cnt][cnt2].description,
-                            buttonIndex, data.phase1Detail[cnt][cnt2].id, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, false, isStandard,memo);
+                            buttonIndex, data.phase1Detail[cnt][cnt2].id, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, false, isStandard,memo,colMemo);
                 }
             }
             

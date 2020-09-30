@@ -81,7 +81,7 @@ class WorkListController extends Controller {
                             ->where([["phase group.project_id", "=", $request->client], ["project_type", "=", $projectTypeId]])->get();
             foreach ($phaseGroupObj as $items) {
                 //$phaseItemList = PhaseItems::where([['phase_group_id', '=', $items->id]])->get();            
-                array_push($phaseItemList, PhaseItems::select("phase items.id as id", "name", "description", "due_date", "preparer", "planed_prep", "prep_sign_off", "reviewer", "planned_review", "review_sign_off", "reviewer2", "planned_review2", "review_sign_off2","is_standard","memo")
+                array_push($phaseItemList, PhaseItems::select("phase items.id as id", "name", "description", "due_date", "preparer", "planed_prep", "prep_sign_off", "reviewer", "planned_review", "review_sign_off", "reviewer2", "planned_review2", "review_sign_off2","is_standard","memo","col_memo")
                                 ->leftJoin("project phase item", "project phase item.phase_item_id", "=", "phase items.id")
                                 ->where([['phase_group_id', '=', $items->id]])->orderBy("order")->get());
             }
@@ -242,6 +242,7 @@ class WorkListController extends Controller {
                         $table->planned_review2 = $this->convDateFormat($_POST["phase" . $i . "_planned_review2" . $j]);
                         $table->review_sign_off2 = $this->convDateFormat($_POST["phase" . $i . "_review_signoff2" . $j]);
                         $table->memo = $_POST["phase" . $i . "_memo" . $j];
+                        $table->col_memo = $_POST["phase" . $i . "_col_memo" . $j];
                                                 
                         $table->save();            
                         
@@ -271,7 +272,8 @@ class WorkListController extends Controller {
                             "reviewer2" => $reviewer2,//$_POST["phase" . $i . "_reviewer2" . $j],
                             "planned_review2" => $this->convDateFormat($_POST["phase" . $i . "_planned_review2" . $j]),
                             "review_sign_off2" => $this->convDateFormat($_POST["phase" . $i . "_review_signoff2" . $j]),
-                            "memo" => $_POST["phase" . $i . "_memo" . $j]
+                            "memo" => $_POST["phase" . $i . "_memo" . $j],
+                            "col_memo" => $_POST["phase" . $i . "_col_memo" . $j],
                         ];
                         $queryObj->update($updateItem);
                     }                    
