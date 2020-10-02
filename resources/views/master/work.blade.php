@@ -59,7 +59,7 @@
             <div class="row entry-filter-bottom">    
                 <div class="col col-md-1" style="margin-left: 6px" >
                 </div>
-                
+
                 <div class="col col-md-3" >
                     <input type="button" class="btn btn-default" value="Clear" onclick="clearFilter()" style="background-color: white;width: 150px;margin-left: 85px">
                 </div>
@@ -92,10 +92,10 @@
         </div>
         @endfor
     </div>
-    
+
     <div class="form-group">            
         <div class="col-md-4">
-            <input class="btn btn-primary" type="submit" value="Update">
+            <input class="btn btn-primary" type="button" onclick="saveForm()" value="Update">
         </div>
     </div>  
 
@@ -130,22 +130,22 @@
 
     function appendPhase1Row(obj) {
         var buttonName = obj.name;
-        var buttonIndex = buttonName.replace("contact_list","")
+        var buttonIndex = buttonName.replace("contact_list", "")
         var objTBL = document.getElementById("phase_" + buttonIndex);
         if (!objTBL)
             return;
 
-        insertPhase1Row("", "", "",buttonIndex);
+        insertPhase1Row("", "", "", buttonIndex);
     }
 
-    function insertPhase1Row(id, name, description,buttonIndex) {
+    function insertPhase1Row(id, name, description, buttonIndex) {
         // 最終行に新しい行を追加
         var phase1_tbody = document.getElementById("phase" + buttonIndex + "_body");
         var bodyLength = phase1_tbody.rows.length;
         var count = bodyLength + 1;
         var row = phase1_tbody.insertRow(bodyLength);
-        
-        if(id != ""){
+
+        if (id != "") {
             count = id;
         }
 
@@ -156,7 +156,7 @@
         var c2 = row.insertCell(1);
         var c3 = row.insertCell(2);
         var c4 = row.insertCell(3);
-        
+
         c1.style.cssText = "vertical-align: middle";
 
         // 各列に表示内容を設定
@@ -165,8 +165,8 @@
         c3.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'description" type="text" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" value="' + description + '" style="width: 100%">';
         c4.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
     }
-    
-    function deletePhase1Row(obj,buttonIndex) {
+
+    function deletePhase1Row(obj, buttonIndex) {
         delRowCommon(obj, "seqno-phase" + buttonIndex);
 
         // id/name ふり直し
@@ -176,13 +176,13 @@
 
         var seq = 1;
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "task", "phase" + buttonIndex + "_task");
-        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "description", "phase" + buttonIndex + "_description");        
-        
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "description", "phase" + buttonIndex + "_description");
+
         reOrderElementTag(tagElements, "delphase" + buttonIndex + "btn", "delPhase" + buttonIndex + "Btn");
 
         //reOrderTaskNo();
     }
-    
+
     function delRowCommon(obj, seqNoId) {
         // 確認
         if (!confirm("この行を削除しますか？"))
@@ -222,14 +222,14 @@
             }
         }
     }
-  
+
 
     function loadPhaseData() {
 
         var client = $("#client").val();
         var project = $("#project").val();
         //var group = $("#group").val();
-        
+
         //if(group == ""){
         //    group = "blank";
         //}            
@@ -237,19 +237,19 @@
         $.ajax({
             url: "/test3/getPhaseInfo/" + client + "/" + project + "/" + "blank" + "/",
         }).success(function (data) {
-            
-           clearAllList();
-           
-           for(var i = 0; i < data.phase.length; i++){
-               document.getElementById("label_phase" + (parseInt(i) + 1)).value = data.phase[i].name;
-           }            
-            
+
+            clearAllList();
+
+            for (var i = 0; i < data.phase.length; i++) {
+                document.getElementById("label_phase" + (parseInt(i) + 1)).value = data.phase[i].name;
+            }
+
             //detail            
-            for (var cnt = 0; cnt < data.phase1Detail.length; cnt++) {               
+            for (var cnt = 0; cnt < data.phase1Detail.length; cnt++) {
                 for (var cnt2 = 0; cnt2 < data.phase1Detail[cnt].length; cnt2++) {
                     var buttonIndex = cnt + 1;
                     var rowId = cnt2 + 1;
-                    insertPhase1Row(parseInt(rowId),data.phase1Detail[cnt][cnt2].name,data.phase1Detail[cnt][cnt2].description,buttonIndex);
+                    insertPhase1Row(parseInt(rowId), data.phase1Detail[cnt][cnt2].name, data.phase1Detail[cnt][cnt2].description, buttonIndex);
                 }
             }
 
@@ -257,36 +257,93 @@
 
         }).error(function (XMLHttpRequest, textStatus, errorThrown) {
             clearAllList();
-            
+
             Swal.fire({
                 position: 'top',
                 icon: 'error',
                 title: 'Error',
                 html: "Project does not exist"
             });
-            
+
             //alert('error!!!');
             console.log("XMLHttpRequest : " + XMLHttpRequest.status);
             console.log("textStatus     : " + textStatus);
             console.log("errorThrown    : " + errorThrown.message);
         });
     }
-    
-    function clearAllList(){
-        for(var i=1; i<=10; i++){
+
+    function clearAllList() {
+        for (var i = 1; i <= 10; i++) {
             var table = document.getElementById("phase_" + parseInt(i));
             var label = document.getElementById("label_phase" + parseInt(i));
             //Label初期化
             label.value = "";
             //List初期化
-            while( table.rows[ 1 ] ) table.deleteRow( 1 );
-        }        
+            while (table.rows[ 1 ])
+                table.deleteRow(1);
+        }
+    }
+
+    function clearFilter() {
+        $('#client').multiselect('select', "");
+        $('#project').multiselect('select', "");
+        $('#group').multiselect('select', "");
+    }
+
+    function saveForm() {
+        //エラーチェック
+        //var errorText = getErrorText();
+        //if (errorText != "") {
+        //    showErrorToast(errorText);
+        //    return;
+        //}        
+
+        saveDetail();
+    }
+
+    function saveDetail() {
+        var params = $("form").serialize();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "/master/work",
+            type: "POST",
+            data: params,
+            timeout: 10000,
+            beforeSend: function (xhr, settings) {                
+                //処理中
+               // $("#savingSpinner").css("visibility", "visible");
+               // $("#savingText").html("保存中");
+               // $("#taskEnter").find(':input').attr('disabled', true);
+               // $("#btn_save").attr('disabled', true);
+
+            },
+            complete: function (xhr, textStatus) {               
+                //処理済              
+                showToast();
+            },
+            success: function (result, textStatus, xhr) {               
+              
+            },
+            error: function (data) {               
+                console.debug(data);
+            }
+        });
     }
     
-    function clearFilter(){
-        $('#client').multiselect('select',"");
-        $('#project').multiselect('select',"");
-        $('#group').multiselect('select',"");     
+    function showToast() {
+        Swal.fire({
+            position: 'top',
+            icon: 'success',
+            title: 'Saved',
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
 
 
