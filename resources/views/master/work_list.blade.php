@@ -111,7 +111,7 @@
 
     <div class="form-group">            
         <div class="col-md-4">
-            <input class="btn btn-primary" type="submit" value="Update">
+            <input class="btn btn-primary" type="button" onclick="saveForm()" value="Update">
         </div>
     </div>  
 
@@ -596,6 +596,62 @@
             document.getElementById('phase' + buttonIndex + '_review_signoff2' + count).readOnly = false;                  
         }
         
+    }
+    
+    function saveForm() {
+        //エラーチェック
+        //var errorText = getErrorText();
+        //if (errorText != "") {
+        //    showErrorToast(errorText);
+        //    return;
+        //}        
+
+        saveDetail();
+    }
+    
+    function saveDetail() {
+        var params = $("form").serialize();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "/master/work-list/",
+            type: "POST",
+            data: params,
+            timeout: 10000,
+            beforeSend: function (xhr, settings) {                
+                //処理中
+               // $("#savingSpinner").css("visibility", "visible");
+               // $("#savingText").html("保存中");
+               // $("#taskEnter").find(':input').attr('disabled', true);
+               // $("#btn_save").attr('disabled', true);
+
+            },
+            complete: function (xhr, textStatus) {               
+                //処理済              
+                showToast();
+            },
+            success: function (result, textStatus, xhr) {               
+              
+            },
+            error: function (data) {               
+                console.debug(data);
+            }
+        });
+    }
+    
+    function showToast() {
+        Swal.fire({
+            position: 'top',
+            icon: 'success',
+            title: 'Saved',
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
 
 
