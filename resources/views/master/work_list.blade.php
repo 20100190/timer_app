@@ -4,7 +4,7 @@
 <input type="hidden" id="receiveClientId" @if(isset($reqClientId)) value="{{$reqClientId}}" @else value="" @endif> 
 <input type="hidden" id="receiveProjectId" @if(isset($reqProjectId)) value="{{$reqProjectId}}" @else value="" @endif>
 
-<form action="" method="POST" name="s" style="margin-left: 20px">
+<form action="" method="POST" id="s" name="s" style="margin-left: 20px;overflow-x: scroll;">
     {{ csrf_field() }}  
     <div id="filter_area" style="margin-top: 30px;">
         <div id="filter_left" style="float: left;height: 150px;margin-bottom: 50px">
@@ -74,7 +74,7 @@
 
     <div style="clear: both"></div>
 
-    <div style="overflow-x: scroll">
+    <div style="">
         @for($i=1;$i<=10;$i++)
         <div style="margin-bottom: 50px">
             <div><label style="font-size: 20px;width: 85px">
@@ -125,6 +125,10 @@
     $(document).ready(function () {
         jQuery('#loader-bg').hide();
         var buttonWidth = "400px";
+        
+        var contents = document.getElementById("s");
+        var windowHt = $(window).innerHeight() - 50;        
+        contents.style.height = windowHt + "px";
 
         $('#client').multiselect({
             buttonWidth: buttonWidth,
@@ -162,6 +166,16 @@
         }
 
     });
+    
+    $(window).resize(function() { 
+        setHeight();
+    });
+    
+    function setHeight(){
+        var contents = document.getElementById("s");
+        var windowHt = $(window).innerHeight() - 50;        
+        contents.style.height = windowHt + "px";
+    }
 
     function appendPhase1Row(obj) {
         var buttonName = obj.name;
