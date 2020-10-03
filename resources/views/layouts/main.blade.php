@@ -232,7 +232,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span class="sr-only">Toggle navigation</span>
                     </a>
                     <ul class="nav navbar-nav">
-                        <li><a style="font-size: 20px;width: 200px" href="">Budget Webform</a></li>
+                        <li>
+                            <a style="font-size: 20px;" href="">Budget Webform 
+                                @if(Request::decodedPath() == "budget/enter") - Budget Entry @endif
+                                @if(Request::decodedPath() == "budget/show") - Budget Report @endif
+                                @if(Request::decodedPath() == "phase/enter") - Phase Entry @endif
+                                @if(Request::decodedPath() == "master/project") - Project @endif
+                                @if(Request::decodedPath() == "master/staff") - Staff @endif
+                                @if(Request::decodedPath() == "master/task") - Harvest Task @endif
+                                @if(Request::decodedPath() == "master/client") - Client @endif
+                                @if(Request::decodedPath() == "master/work") - Phase Standard @endif
+                                @if(Request::decodedPath() == "master/work-list") - Phase Tasks @endif
+                                @if(Request::decodedPath() == "task-schedule") - Task Schedule @endif
+                                @if(Request::decodedPath() == "master/project-list") - Project List @endif
+                            </a>
+                        </li>
                         <li @if(Request::decodedPath() == "budget/enter") class="active" @endif><a href="{{asset("budget/enter")}}">Entry</a></li>
                         <li @if(Request::decodedPath() == "budget/show") class="active" @endif><a href="{{asset("budget/show")}}">Report</a></li>                        
                         <!--<li @if(substr(Request::decodedPath(),0,6) == "master") class="dropdown active" @else class="dropdown" @endif>
@@ -282,13 +296,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!--Staffマスタ-->
                         <li style="font-weight: bold" @if(Request::decodedPath() == "master/staff") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/staff")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Staff</a></li>
                         <!--Taskマスタ-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/task") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/task")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Task</a></li>
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/task") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/task")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Harvest Task</a></li>
                         <!--Clientマスタ-->
                         <li style="font-weight: bold" @if(Request::decodedPath() == "master/client") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/client")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Client</a></li>
                         <!--workマスタ-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/work") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/work")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Work</a></li>
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/work") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/work")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Phase Standard</a></li>
                         <!--workList-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/work-list") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/work-list")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Work List</a></li>
+                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/work-list") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/work-list")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Phase Tasks</a></li>
                         <!--task schedule-->
                         <li style="font-weight: bold" @if(Request::decodedPath() == "task-schedule") class="active" @endif><a onclick="return movePageControl();" href="{{asset("task-schedule")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Task Schedule</a></li>
                         <!--Project List-->
