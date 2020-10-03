@@ -124,6 +124,25 @@ class ProjectListController extends Controller {
 
         //return redirect("master/project-list")->with("flash_message", "client updated!");
     }
+    
+    function projectDropdownStore(Request $request){
+        $clientId = $request->client;
+        
+        $projectListObj = Project::select("project_name")                
+                        ->groupBy('project_name')
+                        ->orderBy('project_name', 'asc');
+        if($clientId != "blank"){
+            $projectListObj  = $projectListObj->where("client_id","=",$clientId);
+        }
+        
+        $projectList = $projectListObj->get();
+                
+        $json = [];
+        $json = [
+            "projectData" => $projectList,
+            ];
+        return response()->json($json);
+    }
 
 }
 

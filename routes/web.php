@@ -110,3 +110,6 @@ Route::get("/master/project-list", "ProjectListController@index");
 Route::get("/master/project-list/save/{project}", "ProjectListController@save");
 Route::get('/master/project/{client_id}/{project}', 'ProjectController@indexLink');
 Route::get("/master/project-list/{client}/{project}/{status}", "ProjectListController@store");
+
+//dropdown project data
+Route::get("/project/data/{client}", "ProjectListController@projectDropdownStore");

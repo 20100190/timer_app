@@ -161,16 +161,51 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
     var c5 = row.insertCell(4);
 
     // 各列に表示内容を設定
-    c1.innerHTML = '<span>' + projectId + '</span>';
-    c2.innerHTML = '<span>' + clientName + '</span>';
-    c3.innerHTML = '<span>' + projectName + '</span>';    
-    c4.innerHTML = '<a href="project/' + clientId + '/' + projectName + '"' + ' target="_blank"><img src="' + '{{ URL::asset('/image') }}' + '/view.png"></a>';
+    c1.innerHTML = '<a href="project/' + clientId + '/' + projectName + '"' + ' target="_blank"><img src="' + '{{ URL::asset('/image') }}' + '/view.png"></a>';
+    c2.innerHTML = '<span>' + projectId + '</span>';
+    c3.innerHTML = '<span>' + clientName + '</span>';
+    c4.innerHTML = '<span>' + projectName + '</span>';   
     if(status != 1){
         c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px" onclick="approveProject(this,' + projectId + ')">Approve</button>';
     }else {        
         c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
     }
     
+    
+}
+
+function setProjectData(){
+    
+    var client = $('#client').val();
+    if(client == ""){
+        client = "blank";
+    }    
+    
+    $.ajax({
+        url: "/project/data/" + client + "/",
+    }).done(function (data) {        
+        $('#project').children().remove();
+        var project = document.getElementById('project');
+        document.createElement('option')
+        var option = document.createElement('option');
+        option.setAttribute('value', "blank");
+        option.innerHTML = "&nbsp;";
+        project.appendChild(option);
+        for(var i = 0; i < data.projectData.length; i++){
+            var option = document.createElement('option');
+            option.setAttribute('value', data.projectData[i].project_name);
+            option.innerHTML = data.projectData[i].project_name;
+            project.appendChild(option);
+        };
+        
+        $('#project').multiselect('rebuild');    
+
+    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        //alert('error!!!');
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+    });    
     
 }
 </script>
@@ -182,7 +217,7 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
                 <span class="line-height">Client</span>
             </div>
             <div class="col col-md-8">
-                <select id="client" name="client" class="form-control select2" data-display="static">    
+                <select id="client" name="client" class="form-control select2" data-display="static" onchange="setProjectData()">    
                     <option value="">&nbsp;</option>
                     @foreach ($clientList as $clients)
                     <option value="{{$clients->id}}">{{$clients->name}}</option>
@@ -251,10 +286,10 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
     <table id="xxx" class="table table-borderless" style="font-family: Source Sans Pro;font-size: 14px;width: 800px">
         <thead>                                
             <tr>
+                <th class="fixed-header" style="width: 50px">Link</th>
                 <th class="fixed-header" style="width: 100px;">Project ID</th>
                 <th class="fixed-header" style="width: 200px;">Client</th>
-                <th class="fixed-header" style="width: 200px;">Project</th>
-                <th class="fixed-header" style="width: 50px">Link</th>
+                <th class="fixed-header" style="width: 200px;">Project</th>                
                 @if($isApprove == 1)
                 <th class="fixed-header" style="width: 50px;text-align: center">Approve</th>                                    
                 @endif
