@@ -10,17 +10,22 @@
                 zebra: ["normal-row", "alt-row"]
             }
         });
-        /*
-         var x = document.getElementById("xxx");
-         var rowIndex = 0;
-         for(let row of x.rows){
-         if(rowIndex % 2 != 0){
-         for(let cell of row.cells){                     
-         cell.style.cssText = "background-color: #EAEAEA"; 
-         }        
-         }
-         rowIndex += 1;
-         }*/
+        
+        setHeight("");
+        
+    });
+    
+    function setHeight(addHeight){    
+        var windowHt = $(window).height();
+        var setHt = windowHt - 150;
+        if(addHeight != ""){
+            setHt += addHeight;
+        }
+        $('#task_table').parent().css('max-height', setHt);      
+    }
+    
+    $(window).resize(function() {           
+        setHeight("");
     });
 </script>
 <div style="margin-left: 20px;margin-top: 20px">
@@ -46,7 +51,7 @@
     <div style="clear: both"></div>
 
 
-    <div class="table-responsive" style="height: 700px">
+    <div class="table-responsive">
         <table id="task_table" class="table table-borderless" style="font-family: Source Sans Pro;font-size: 14px;width: 900px">
             <thead>                                
                 <tr>
