@@ -1,5 +1,12 @@
 @extends('layouts.main')
 @section("content")
+<style type="text/css">
+    .fixed-header {
+        position: sticky;
+        top:0;
+        z-index: 1
+    }
+</style>
 <script type="text/javascript">
 $(document).ready(function () {
     jQuery('#loader-bg').hide();
@@ -27,10 +34,26 @@ $(document).ready(function () {
     $('#xxx').tablesorter({
         widgets: ['zebra'],
         widgetOptions : {
+            //scroller_height: setHeight(true),
             zebra : [ "normal-row", "alt-row" ]
         }
     });   
+    
+    setHeight("");
 });
+
+$(window).resize(function() {    
+    setHeight("");
+});
+
+function setHeight(addHeight){    
+    var windowHt = $(window).height();
+    var setHt = windowHt - 270;
+    if(addHeight != ""){
+        setHt += addHeight;
+    }
+    $('#xxx').parent().css('max-height', setHt);      
+}
 
 
 function approveProject(obj,projectId){
@@ -63,28 +86,110 @@ function clearFilter() {
     $('#status').multiselect('deselect', groupSelectedValue);
     $('#status').multiselect('select', "");
 }
-</script>
-<div style="margin-left: 20px;margin-top: 20px">
-<!--<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">               
-                <div class="panel-body">-->
 
-<form method="GET" action="{{ url("master/project-list") }}" accept-charset="UTF-8" role="search">
-    <div id="filter_left" style="float: left;height: 120px;margin-bottom: 50px">
+function closeOverrall() {
+    var imagesUrl = '{{ URL::asset('/image') }}';
+    var acWidth = document.getElementById("filter_left").style.height;
+    var btnObj = document.getElementById("btn_open_close");
+    
+    if (acWidth == "30px") {
+        btnObj.src = imagesUrl + "/close.png"
+        document.getElementById("filter_left").style.height = "180px";   
+        //document.getElementById("btn_open_close").style.cssText = "margin-top: 50px";   
+        
+        document.getElementById("filter_left").style.visibility = "visible";
+        setHeight("");
+        
+    } else {
+        btnObj.src = imagesUrl + "/open.png"
+        document.getElementById("filter_left").style.height = "30px";
+        //document.getElementById("btn_open_close").style.cssText = "margin-top: 0px";     
+        
+        document.getElementById("filter_left").style.visibility = "hidden";       
+        setHeight(140);
+    }   
+    
+}
+
+function loadData(){
+    var client = $("#client").val();
+    var project = $("#project").val();
+    var status = $("#status").val();
+    
+    if(client == ""){
+        client = "blank";
+    }
+    if(project == ""){
+        project = "blank";
+    }
+    if(status == ""){
+        status = "blank";
+    }
+
+    $.ajax({
+        url: "/master/project-list/" + client + "/" + project + "/" + status + "/",
+    }).done(function (data) {        
+        $("#project-list-body").empty();
+        
+        for (var cnt = 0; cnt < data.listData.length; cnt++) {
+            insertProjectListRow(data.listData[cnt]["client_id"], data.listData[cnt]["project_id"], data.listData[cnt]["client_name"], data.listData[cnt]["project_name"], data.listData[cnt]["is_approval"]);
+        }      
+        
+        $('#xxx').trigger("update");
+   
+
+    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        //alert('error!!!');
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+    });
+}
+
+function insertProjectListRow(clientId, projectId, clientName, projectName, status) {
+    // 最終行に新しい行を追加
+    var specific_tbody = document.getElementById("project-list-body");
+    var bodyLength = specific_tbody.rows.length;
+    var count = bodyLength + 1;
+    var row = specific_tbody.insertRow(bodyLength);
+
+    // 列の追加
+    var c1 = row.insertCell(0);
+    var c2 = row.insertCell(1);
+    var c3 = row.insertCell(2);
+    var c4 = row.insertCell(3);
+    var c5 = row.insertCell(4);
+
+    // 各列に表示内容を設定
+    c1.innerHTML = '<span>' + projectId + '</span>';
+    c2.innerHTML = '<span>' + clientName + '</span>';
+    c3.innerHTML = '<span>' + projectName + '</span>';    
+    c4.innerHTML = '<a href="project/' + clientId + '/' + projectName + '"' + ' target="_blank"><img src="' + '{{ URL::asset('/image') }}' + '/view.png"></a>';
+    if(status != 1){
+        c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px" onclick="approveProject(this,' + projectId + ')">Approve</button>';
+    }else {        
+        c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
+    }
+    
+    
+}
+</script>
+<div id="div1" style="margin-left: 20px;margin-top: 20px">
+    <!--<form method="GET" action="{{ url("master/project-list") }}" accept-charset="UTF-8" role="search">-->
+    <div id="filter_left" style="float: left;height: 180px;margin-bottom: 0px">
         <div class="row entry-filter-bottom" style="zoom: 100%">
             <div class="col col-md-2" >
                 <span class="line-height">Client</span>
             </div>
-            <div class="col col-md-3">
+            <div class="col col-md-8">
                 <select id="client" name="client" class="form-control select2" data-display="static">    
                     <option value="">&nbsp;</option>
                     @foreach ($clientList as $clients)
                     <option value="{{$clients->id}}">{{$clients->name}}</option>
                     @endforeach
                 </select>
-            </div>  
+            </div>
+            
         </div>
 
         <div class="row entry-filter-bottom" style="zoom: 100%">
@@ -122,58 +227,40 @@ function clearFilter() {
         </div>-->
         <div class="row entry-filter-bottom">                           
             <div class="col col-md-2" >
-                <input type="button" class="btn btn-default" value="Clear" onclick="clearFilter()" style="background-color: white;width: 150px;margin-left: 109px">
+                <input type="button" id="clear" class="btn btn-default" value="Clear" onclick="clearFilter()" style="background-color: white;width: 150px;margin-left: 109px">
             </div>
             <div class="col col-md-1" style="margin-left: 180px;" >
-                <button class="btn btn-primary" type="submit" style="width: 150px">
+                <!--<button class="btn btn-primary" type="submit" style="width: 150px">
                     <span>Search</span>
-                </button>
+                </button>-->
+                <input class="btn btn-primary" type="button" value="Search" style="width: 150px" onclick="loadData()">
             </div>
         </div>
     </div>
-
+    <div style="float: left;">
+        <input type="image" id="btn_open_close" src="{{ URL::asset('/image') }}/close.png" onclick="closeOverrall();return;" style="height: 20px;width: 20px;margin-left: 115px;margin-top: 5px">
+    </div>
+<!--</form>-->
     
-</form>
 
-<div style="clear:both">
+<!--<br/>
+<br/>-->
 
-<br/>
-<br/>
-
-
-<div class="table-responsive">
+<div style="clear: both"></div>
+<div class="table-responsive" style="height: 3000px">    
     <table id="xxx" class="table table-borderless" style="font-family: Source Sans Pro;font-size: 14px;width: 800px">
         <thead>                                
             <tr>
-                <th style="width: 100px">Project ID</th>
-                <th style="width: 200px">Client</th>
-                <th style="width: 200px">Project</th>
-                <th style="width: 50px">Link</th>
+                <th class="fixed-header" style="width: 100px;">Project ID</th>
+                <th class="fixed-header" style="width: 200px;">Client</th>
+                <th class="fixed-header" style="width: 200px;">Project</th>
+                <th class="fixed-header" style="width: 50px">Link</th>
                 @if($isApprove == 1)
-                <th style="width: 50px">Approve</th>                                    
+                <th class="fixed-header" style="width: 50px;text-align: center">Approve</th>                                    
                 @endif
             </tr>
         </thead>
-        <tbody>
-            @foreach($client as $item)
-
-            <tr>
-
-                <td>{{ $item->project_id}} </td>
-
-                <td>{{ $item->client_name}} </td>
-
-                <td>{{ $item->project_name}} </td>
-                
-                <td><a href="project/{{$item->client_id}}/{{ $item->project_name}}" target="_blank"><img src="{{URL::asset('/image')}}/view.png"></a></td>                
-
-                @if($isApprove == 1)
-                <td><button class="btn btn-xs btn-primary" onclick="approveProject(this,{{ $item->project_id}})" @if($item->is_approval == 1) style="background-color: #DCDCDC" disabled @endif>Approve</button></td>
-                @endif
-            </tr>
-
-            @endforeach
-        </tbody>
+        <tbody id="project-list-body"></tbody>
     </table>
 
 </div>
