@@ -702,7 +702,7 @@ class BudgetController extends Controller
                         $dt = new \DateTime("now", new \DateTimeZone('America/Los_Angeles'));
                         $usDate = $dt->format('Ymd');
                         
-                        if (str_replace("-", "", $warningList->due_date) <= $usDate) {
+                        if (!is_null($warningList->due_date) && str_replace("-", "", $warningList->due_date) <= $usDate) {
                              $pColor = "#cc0000";
                         }
                     }
