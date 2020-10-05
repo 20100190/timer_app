@@ -11,6 +11,7 @@ use App\Staff;
 use App\Week;
 use App\RoleOrder;
 use App\ProjectPhase;
+use App\ProjectPhaseItem;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
@@ -682,7 +683,9 @@ class BudgetController extends Controller
             if(!$phaseListObj->exists()){
                 continue;
             }
-                        
+            
+            $warningProjectList = $this->warningProject($idList["project_id"]);
+
             $dataPhase[0] = $idList["project_id"];
             $dataPhase[1] = $idList["client_name"];
             $dataPhase[2] = $idList["project_name"];
@@ -692,7 +695,19 @@ class BudgetController extends Controller
                 if($dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] != ""){
                     $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] .= ";";
                 }
-                $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] .= $yyy->color;                
+                $pColor = $yyy->color;
+                foreach ($warningProjectList as $warningList){
+                    if ($warningList->color == $pColor) {
+                        $pColor = "#e06666";
+                        $dt = new \DateTime("now", new \DateTimeZone('America/Los_Angeles'));
+                        $usDate = $dt->format('Ymd');
+                        
+                        if (str_replace("-", "", $warningList->due_date) <= $usDate) {
+                             $pColor = "#cc0000";
+                        }
+                    }
+                }
+                $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] .= $pColor;//$yyy->color;                
             }
             
             array_push($phaseColorList, $dataPhase);
@@ -702,7 +717,7 @@ class BudgetController extends Controller
         
         $index = 2;
         
-        foreach ($targetAssignIdList as $idList) {
+        foreach ($targetAssignIdList as $idList) { 
             $data = $this->initArray();
             $budgetDetail = Assign::select("client.name as client_id", "project.project_name as project_id", "assign.role as role_id", "staff.initial", "budget.year", "budget.month", "budget.day", "budget.working_days as working_days","client.fye", "client.vic_status","B.initial as pic","assign.budget_hour","client.id as client")//, "budget.no as no")//,"B.initial as pic")
                     ->leftjoin("project", "assign.project_id", "=", "project.id")
@@ -712,7 +727,7 @@ class BudgetController extends Controller
                     ->leftjoin("staff as B", "B.id", "=", "project.pic")
                     ->where([['assign_id', '=', $idList["assign_id"]],["ymd",">=",$startDateAll],["ymd","<=",$endDateAll]])                   
                     ->get();
-
+                                    
             $data[$colClient] = $budgetDetail[0]["client_id"];
             $data[$colProject] = $budgetDetail[0]["project_id"];
             $data[$colFye] = $budgetDetail[0]["fye"];
@@ -756,6 +771,28 @@ class BudgetController extends Controller
         
         return response()->json($json);
         
+    }
+    
+    function warningProject($projectId) {
+        //ワーニング背景色
+        $warningPhase = ProjectPhaseItem::select("project phase item.project_id","due_date", "phase.color","planed_prep","prep_sign_off","planned_review","review_sign_off","planned_review2","review_sign_off2")
+                ->leftJoin("phase items", "phase items.id", "=", "project phase item.phase_item_id")
+                ->leftJoin("phase group", "phase items.phase_group_id", "=", "phase group.id")
+                ->leftJoin("phase", "phase group.phase_id", "=", "phase.id")
+                ->where([["project phase item.project_id", "=", $projectId]])                
+                ->where(function($query) {
+                    $query->where(function($query){
+                        $query->whereRaw("planed_prep <= CURDATE() and prep_sign_off is null");
+                    });
+                    $query->orWhere(function($query){
+                        $query->whereRaw("planned_review <= CURDATE() and review_sign_off is null");
+                    });
+                    $query->orWhere(function($query) {
+                        $query->whereRaw("planned_review2 <= CURDATE() and review_sign_off2 is null");
+                    });
+                 });
+                
+        return $warningPhase->get();
     }
 
     function getOverallDetailQuery($request, $dateFrom, $dateTo) {
