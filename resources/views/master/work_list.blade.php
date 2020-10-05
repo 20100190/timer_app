@@ -633,7 +633,7 @@
         });
 
         $.ajax({
-            url: "/master/work-list/",
+            url: "/master/work-list",
             type: "POST",
             data: params,
             timeout: 10000,
