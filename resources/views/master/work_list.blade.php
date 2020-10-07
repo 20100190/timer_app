@@ -86,19 +86,19 @@
                     <tr>
                         <th style="width: 30px">No</th>
                         <th style="width: 0px;visibility: collapse">ID</th>
-                        <th style="width: 150px">Task</th>
-                        <th style="width: 300px">Description</th>
+                        <th style="width: 250px">Task</th>
+                        <th style="width: 400px">Description</th>
                         <th style="width: 130px">Completion Due</th>
                         <th style="width: 90px">Preparer</th>
                         <th style="width: 130px">Planned Prep</th>
-                        <th style="width: 130px">Prep Sign-Off</th>
+                        <th style="width: 120px">Prep Sign-Off</th>
                         <th style="width: 90px">Reviewer</th>
-                        <th style="width: 130px">Planned Review</th>
-                        <th style="width: 180px">Reviewer Sign-Off</th>
+                        <th style="width: 120px">Planned Review</th>
+                        <th style="width: 140px">Reviewer Sign-Off</th>
                         <th style="width: 90px">Reviewer2</th>
-                        <th style="width: 150px">Planned Review</th>
+                        <th style="width: 130px">Planned Review2</th>
                         <th style="width: 180px">2nd Reviewer Sign-Off</th>
-                        <th style="width: 300px">Memo</th>
+                        <th style="width: 400px">Memo</th>
                         <th style="width: 40px">&nbsp;</th>
                         <th style="width: 0px;visibility: collapse">Memo</th>
                     </tr>
@@ -184,7 +184,7 @@
         if (!objTBL)
             return;
 
-        insertPhase1Row("", "", "", buttonIndex, "", "", "", "", "", "", "", "", "", "", "", true, 1,"","");
+        insertPhase1Row("", "", "", buttonIndex, "", "", "", "", "", "", "", "", "", "", "", true, 0,"","");
     }
 
     function insertPhase1Row(id, name, description, buttonIndex, groupId, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, isClickBtnAdd, isStandard,memo,colMemo) {
@@ -258,9 +258,9 @@
         }
 
         var readonlyStr = "";
-        if (!isClickBtnAdd || isStandard == 0) {
-            readonlyStr = "readonly";
-        }
+        if (!isClickBtnAdd && isStandard == 1) {
+            readonlyStr = "readonly";        
+        }         
         
         // 各列に表示内容を設定
         c1.innerHTML = '<span class="seqno-phase' + buttonIndex + '">' + count + '</span>';
