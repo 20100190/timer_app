@@ -92,7 +92,7 @@
 <!--<form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px">-->
 <form method="POST" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px">
     <!--@csrf-->
-    <div class="block-background-color" style="padding-left: 16px">
+    <div class="block-background-color" style="padding-left: 16px;width: 1150px">
         <div class="project-layout" style="float: left;">        
             <label>Client<font style="color: red;vertical-align: middle">&nbsp;*</font></label><br>
             <select id="client" name="client" class="form-control">
@@ -117,14 +117,9 @@
             <label>Project Year<font style="color: red;vertical-align: middle">&nbsp;*</font></label><br>
             <select id="project_year" name="project_year" class="form-control" style="width: 100%" onchange="getProjectName();">     
                 <option value="blank"></option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>            
+                @for($i=2019;$i<=2030;$i++)
+                <option value="{{$i}}">{{$i}}</option>
+                @endfor                
             </select>
         </div>
 
@@ -135,8 +130,15 @@
 
         <div class="project-layout" style="float: left">   
             <label>&nbsp;</label><br>            
-            <button class="btn btn-primary" type="button" style="width: 65px" onclick="loadTask()">                
+            <button class="btn btn-primary" type="button" style="width: 65px" onclick="loadTask('search')">                
                 <span id="loadingText">Search</span>
+            </button>
+        </div>
+        
+        <div class="project-layout" style="float: left">   
+            <label>&nbsp;</label><br>            
+            <button class="btn btn-primary" type="button" style="width: 100px" onclick="loadTask('duplicate')">                
+                <span id="loadingText">Duplicate</span>
             </button>
         </div>
         <div class="project-layout" style="float: left;width: 1200px; height: 20px">            
@@ -237,7 +239,7 @@
                     <th class="project-font-size" style="width: 120px">Role</th>
                     <th class="project-font-size" style="width: 100px">Budget Hours</th>
                     <th class="project-font-size" style="width: 60px">Rate</th>
-                    <th class="project-font-size" style="width: 70px">Budget</th>                        
+                    <th class="project-font-size" style="width: 83px">Budget</th>                        
                     <th style="width:40px;"> </th>
                 </tr> 
             </thead>
@@ -260,106 +262,256 @@
                     <td style="width: 50px"></td>
                     <td style="width: 60px"></td>                        
                     <td style="width:40px;"> </td>
-                </tr>
-                <tr>
-                    <td style="text-align:right; width:40px;"></td>
-                    <td style="width: 70px"></td>
-                    <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;vertical-align: middle">Engagement Fee / Month</td>                    
-                    <td style="width: 60px;text-align: right">
-                        <div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input type="text" class="form-control form-control-sm" id="engagement_fee" name="engagement_fee" value="0" onchange="calc()" onfocus="removeCommaObj(this)" onblur="addCommaObj(this)" style="text-align: right;width: 60px">
-                    </td>                        
-                    <td style="width:40px;"> </td>
-                </tr>
-                <tr>
-                    <td style="text-align:right; width:40px;"></td>
-                    <td style="width: 70px"></td>
-                    <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;vertical-align: middle"># of month(s)</td>                    
-                    <td style="width: 60px;">
-                        <div style="float: left;margin-right: 3px;margin-top: 7px">&nbsp;&nbsp;</div><input type="text" class="form-control form-control-sm" id="engagement_monthly" name="engagement_monthly" value="0" onchange="calc()" style="text-align: right;width: 60px">
-                    </td>                        
-                    <td style="width:40px;"> </td>
-                </tr>
-                <tr style="border-bottom:1px #000000 solid;">
-                    <td style="text-align:right; width:40px;"></td>
-                    <td style="width: 70px"></td>
-                    <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;vertical-align: middle">Adjustments</td>                    
-                    <td style="width: 60px;text-align: right">
-                        <div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input type="text" class="form-control form-control-sm" id="adjustments" name="adjustments" value="0" onchange="calc()" style="text-align: right;width: 60px">
-                    </td>                       
-                    <td style="width:40px;"> </td>
-                </tr>
-                <tr>
-                    <td style="text-align:right; width:40px;"></td>
-                    <td style="width: 70px"></td>
-                    <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;vertical-align: middle">Engagement Fee</td>                    
-                    <td class="project-font-size" style="width: 60px;text-align: right"><div style="float: left;font-size: 12px;text-align: left">$</div><span id="engagement_total" style="padding-right: 19px;padding-top: 20px">0</span></td>                       
-                    <td style="width:40px;"> </td>
-                </tr>
-                <tr style="height: 30px">
-                    <td style="text-align:right; width:40px;"></td>
-                    <td style="width: 70px"></td>
-                    <td style="width: 80px"></td>
-                    <td style="width: 120px"></td>
-                    <td style="width: 50px"></td>
-                    <td style="width: 60px"></td>                      
-                    <td style="width:40px;"> </td>
-                </tr>
-                <tr>
-                    <td style="text-align:right; width:40px;"></td>
-                    <td style="width: 70px"></td>
-                    <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;">Difference</td>                    
-                    <td class="project-font-size" style="width: 60px;text-align: right"><div style="float: left;font-size: 12px;text-align: left">$</div><span id="defference" style="padding-right: 19px">0</span></td>                       
-                    <td style="width:40px;"> </td>
-                </tr>
-                <tr>
-                    <td style="text-align:right; width:40px;"></td>
-                    <td style="width: 70px"></td>
-                    <td style="width: 80px"></td>
-                    <td class="project-font-size" colspan="2" style="width: 170px;">Realization</td>                    
-                    <td class="project-font-size" style="width: 60px;text-align: right"><span id="realization" style="padding-right: 8px">0%</span></td>                      
-                    <td style="width:40px;"> </td>
-                </tr>
-                <tr>
-                    <td></td>                    
-                    <td></td>
-                    <td>
-                        @if(isset($isApproval) && $isApproval == 1)
-                        @if(isset($isProjectApproved) && $isProjectApproved == 1)
-                        <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;background-color: #DCDCDC" disabled>
-                            <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                            <span id="savingText">Approved</span>
-                        </button>
-                        @else
-                        <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="saveApprove()" style="margin-top: 30px">
-                            <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                            <span id="savingText">Approve</span>
-                        </button>
-                        @endif     
-                        @else
-                        <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;visibility: hidden">
-                            <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                            <span id="savingText">Approve</span>
-                        </button>
-                        @endif
-                    </td>
-                    <td>                       
-                    </td>
-                    <td>
-                        <button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()" style="margin-top: 30px">
-                            <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
-                            <span id="savingText">Save</span>
-                        </button>
-                    </td>
-                </tr>
+                </tr>                
             </tfoot>
         </table>
-
+       
+       
+        <!--<table border="0" id="budget_engagement" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 650px">
+            <thead>
+                <tr>
+                    <th class="project-font-size" style="text-align:center; width:30px;">No</th>
+                    <th class="project-font-size" style="text-align:center; width:130px;">Type</th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_1">Jan-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_2">Feb-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_3">Mar-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_4">Apr-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_5">May-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_6">Jun-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_7">Jul-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_8">Aug-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_9">Sep-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_10">Oct-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_11">Nov-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_12">Dec-20</span></th>
+                    <th class="project-font-size" style="width: 100px;text-align: center">Total</th>
+                    <th style="width:40px;"> </th>
+                    <th style="width:40px;"> </th>
+                </tr> 
+            </thead>
+            <tbody id="budget_engagement_body">                
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="project-font-size" style="text-align:center; width:130px;">Total</td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_jan" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_feb" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_mar" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_apr" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_may" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_jun" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_jul" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_aug" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_sep" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_oct" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_nov" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_dec" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_grand" value="0" style="text-align: right" readonly></td>
+                    <td style="width:40px;"> </td>
+                </tr> 
+            </tfoot>
+        </table>-->
+        
+        <!--<table border="0" id="budget_list_2" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 650px">
+            <thead>
+                <tr>
+                    <th class="project-font-size" style="text-align:center; width:40px;"></th>
+                    <th class="project-font-size" style="width: 70px"></th>
+                    <th class="project-font-size" style="width: 120px"></th>
+                    <th class="project-font-size" style="width: 100px"></th>
+                    <th class="project-font-size" style="width: 60px"></th>
+                    <th class="project-font-size" style="width: 70px"></th>                        
+                    <th style="width:40px;"> </th>
+                </tr> 
+            </thead>
+            <tr>
+                <td style="text-align:right; width:40px;"></td>
+                <td style="width: 70px"></td>
+                <td style="width: 80px"></td>
+                <td class="project-font-size" colspan="2" style="width: 170px;">Difference</td>                    
+                <td class="project-font-size" style="width: 60px;text-align: right"><div style="float: left;font-size: 12px;text-align: left">$</div><span id="defference" style="padding-right: 19px">0</span></td>                       
+                <td style="width:40px;"> </td>
+            </tr>
+            <tr>
+                <td style="text-align:right; width:40px;"></td>
+                <td style="width: 70px"></td>
+                <td style="width: 80px"></td>
+                <td class="project-font-size" colspan="2" style="width: 170px;">Realization</td>                    
+                <td class="project-font-size" style="width: 60px;text-align: right"><span id="realization" style="padding-right: 8px">0%</span></td>                      
+                <td style="width:40px;"> </td>
+            </tr>
+            <tr>
+                <td></td>                    
+                <td></td>
+                <td>
+                    @if(isset($isApproval) && $isApproval == 1)
+                    @if(isset($isProjectApproved) && $isProjectApproved == 1)
+                    <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;background-color: #DCDCDC" disabled>
+                        <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="savingText">Approved</span>
+                    </button>
+                    @else
+                    <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="saveApprove()" style="margin-top: 30px">
+                        <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="savingText">Approve</span>
+                    </button>
+                    @endif     
+                    @else
+                    <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;visibility: hidden">
+                        <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="savingText">Approve</span>
+                    </button>
+                    @endif
+                </td>
+                <td>                       
+                </td>
+                <td>
+                    <button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()" style="margin-top: 30px">
+                        <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="savingText">Save</span>
+                    </button>
+                </td>
+            </tr>
+        </table>-->
     </div>    
+    
+    <div style="clear: both"></div>
+    
+    <div>
+            <label style="font-size: 20;margin-right: 25px;float:left">Engagement Fee</label>
+            <input type="button" id="engegementFee" name="engegementFee" value="Add" class="btn btn-primary btn-sm project-button" style="width: 147px;float: left" onclick="appendEngagementRow('',0,0,0,0,0,0,0,0,0,0,0,0)">
+            <label style="font-size: 14;margin-left: 25px;float:left;margin-top: 6px;margin-right: 10px">Start</label>
+            <select id="start_month" name="start_month" class="form-control" style="width: 100px;float:left;margin-right: 20px" onchange="setEngagementHeader()">
+                <option value="1">Jan</option>
+                <option value="2">Feb</option>
+                <option value="3">Mar</option>
+                <option value="4">Apr</option>
+                <option value="5">May</option>
+                <option value="6">Jun</option>
+                <option value="7">Jul</option>
+                <option value="8">Aug</option>
+                <option value="9">Sep</option>
+                <option value="10">Oct</option>
+                <option value="11">Nov</option>
+                <option value="12">Dec</option>
+            </select>
+            <select id="engagement_year" name="engagement_year" class="form-control" style="width: 100px;" onchange="setEngagementHeader()">     
+                <option value="blank"></option>
+                @for($i=2019;$i<=2030;$i++)
+                <option value="{{$i}}">{{$i}}</option>
+                @endfor                
+            </select>
+        </div>
+    
+    <table border="0" id="budget_engagement" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 650px">
+            <thead>
+                <tr>
+                    <th class="project-font-size" style="text-align:center; width:30px;">No</th>
+                    <th class="project-font-size" style="text-align:center; width:200px;">Type</th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_1">Jan-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_2">Feb-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_3">Mar-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_4">Apr-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_5">May-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_6">Jun-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_7">Jul-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_8">Aug-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_9">Sep-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_10">Oct-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_11">Nov-20</span></th>
+                    <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_12">Dec-20</span></th>
+                    <th class="project-font-size" style="width: 100px;text-align: center">Total</th>
+                    <th style="width:40px;"> </th>
+                    <th style="width:40px;"> </th>
+                </tr> 
+            </thead>
+            <tbody id="budget_engagement_body">                
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="project-font-size" style="text-align:center; width:130px;"></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center;vertical-align: middle">Total</td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_jan" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_feb" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_mar" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_apr" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_may" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_jun" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_jul" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_aug" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_sep" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_oct" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_nov" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_dec" value="0" style="text-align: right" readonly></td>
+                    <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_grand" value="0" style="text-align: right" readonly></td>
+                    <td style="width:40px;"> </td>
+                </tr> 
+            </tfoot>
+        </table>
+    
+    <table border="0" id="budget_list_2" class="table table-sm" style="margin-left: 360px;font-size: 12px;table-layout: fixed;width: 650px">
+        <thead>
+            <tr>
+                <th class="project-font-size" style="text-align:center; width:40px;"></th>
+                <th class="project-font-size" style="width: 70px"></th>
+                <th class="project-font-size" style="width: 120px"></th>
+                <th class="project-font-size" style="width: 100px"></th>
+                <th class="project-font-size" style="width: 60px"></th>
+                <th class="project-font-size" style="width: 70px"></th>                        
+                <th style="width:40px;"> </th>
+            </tr> 
+        </thead>
+        <tr>
+            <td style="text-align:right; width:40px;"></td>
+            <td style="width: 70px"></td>
+            <td style="width: 80px"></td>
+            <td class="project-font-size" colspan="2" style="width: 170px;">Difference</td>                    
+            <td class="project-font-size" style="width: 60px;text-align: right"><div style="float: left;font-size: 12px;text-align: left">$</div><span id="defference" style="padding-right: 19px">0</span></td>                       
+            <td style="width:40px;"> </td>
+        </tr>
+        <tr>
+            <td style="text-align:right; width:40px;"></td>
+            <td style="width: 70px"></td>
+            <td style="width: 80px"></td>
+            <td class="project-font-size" colspan="2" style="width: 170px;">Realization</td>                    
+            <td class="project-font-size" style="width: 60px;text-align: right"><span id="realization" style="padding-right: 8px">0%</span></td>                      
+            <td style="width:40px;"> </td>
+        </tr>
+        <tr>
+            <td></td>                    
+            <td></td>
+            <td>
+                @if(isset($isApproval) && $isApproval == 1)
+                @if(isset($isProjectApproved) && $isProjectApproved == 1)
+                <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;background-color: #DCDCDC" disabled>
+                    <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                    <span id="savingText">Approved</span>
+                </button>
+                @else
+                <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="saveApprove()" style="margin-top: 30px">
+                    <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                    <span id="savingText">Approve</span>
+                </button>
+                @endif     
+                @else
+                <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;visibility: hidden">
+                    <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                    <span id="savingText">Approve</span>
+                </button>
+                @endif
+            </td>
+            <td>                       
+            </td>
+            <td>
+                <button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()" style="margin-top: 30px">
+                    <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                    <span id="savingText">Save</span>
+                </button>
+            </td>
+        </tr>
+    </table>  
+    
 
     
     <input type="hidden" id="staff_info" name="staff_info" value="">

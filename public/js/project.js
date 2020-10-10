@@ -166,7 +166,7 @@ function appendBudgetRow()
     c3.innerHTML = '<input class="inprole form-control form-control-sm" id="role' + count + '" name="role' + count + '" style="width: 100%" value="' + '" readonly>';
     c4.innerHTML = '<input class="inphours form-control form-control-sm" type="text" oninput="inputHarfCharPeriod(this)" onchange="calc()" id="hours' + count + '" name="hours' + count + '" value="0" style="text-align: right;width: 100%">';
     c5.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="0" style="text-align: right;width: 50px" readonly>';
-    c6.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 60px"  readonly>';
+    c6.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 73px"  readonly>';
     //c7.innerHTML = '<input class="edtBudgetBtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRowBudgetList(this)">';
     c7.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
 
@@ -217,7 +217,7 @@ function insertBudgetRow(staffId, role, hours) {
     c3.innerHTML = '<input class="inprole form-control form-control-sm" id="role' + count + '" name="role' + count + '" style="width: 100%" value="' + role + '" readonly>';
     c4.innerHTML = '<input class="inphours form-control form-control-sm" type="text" oninput="inputHarfCharPeriod(this)" onchange="calc()" id="hours' + count + '" name="hours' + count + '" value="' + hours + '" style="text-align: right;width: 100%">';
     c5.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="' + staffRate + '" style="text-align: right;width: 50px;float: left" readonly>';
-    c6.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 60px"  readonly>';
+    c6.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 73px"  readonly>';
     //c7.innerHTML = '<input class="edtBudgetBtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRowBudgetList(this)">';
     c8.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
 
@@ -393,26 +393,26 @@ function calc() {
 
     document.getElementById("total_budget").innerHTML = total.toLocaleString();
     
-    var engTotal = (parseInt(removeComma(document.getElementById("engagement_fee").value)) * parseInt(removeComma(document.getElementById("engagement_monthly").value))) + parseInt(removeComma(document.getElementById("adjustments").value));
-    document.getElementById("engagement_total").innerHTML = 0;
+    var engTotal = document.getElementById("total_grand").value;//(parseInt(removeComma(document.getElementById("engagement_fee").value)) * parseInt(removeComma(document.getElementById("engagement_monthly").value))) + parseInt(removeComma(document.getElementById("adjustments").value));
+    /*document.getElementById("engagement_total").innerHTML = 0;
     if (!isNaN(engTotal)) {
         document.getElementById("engagement_total").innerHTML = engTotal.toLocaleString();//(parseInt(document.getElementById("engagement_fee").value) * parseInt(document.getElementById("engagement_monthly").value)) + parseInt(document.getElementById("adjustments").value);
-    }
+    }*/
     
-    var defTotal = parseInt(removeComma(document.getElementById("engagement_total").innerHTML)) - total;
+    var defTotal = parseInt(removeComma(engTotal)) - total;
     document.getElementById("defference").innerHTML = 0;
     if (!isNaN(defTotal)) {
         document.getElementById("defference").innerHTML = defTotal.toLocaleString();//parseInt(document.getElementById("engagement_total").innerHTML) - total;
     }
     
-    var realization = (new Decimal(parseInt(removeComma(document.getElementById("engagement_total").innerHTML))).div(total).times(100).toFixed(1));
+    var realization = (new Decimal(parseInt(removeComma(engTotal))).div(total).times(100).toFixed(1));
     document.getElementById("realization").innerHTML = "0%";
     if (!isNaN(realization)) {
         document.getElementById("realization").innerHTML = realization + "%";
     }
 }
 
-function loadTask() {
+function loadTask(buttonType) {
 
     var client = $("#client").val();
     var type = $("#project_type").val();
@@ -431,7 +431,7 @@ function loadTask() {
         //approved
         document.getElementById("btn_approve").disabled = false;
         document.getElementById("savingText").innerHTML = "Approve";
-        if(data.project.is_approval == 1){
+        if(data.project != null && data.project.is_approval == 1){
             document.getElementById("btn_approve").disabled = true;
             document.getElementById("savingText").innerHTML = "Approved";
         }
@@ -440,9 +440,9 @@ function loadTask() {
         //初期化
         document.getElementById("starts_on").value = "";
         document.getElementById("ends_on").value = "";
-        document.getElementById("engagement_fee").value = 0;
-        document.getElementById("engagement_monthly").value = 0;
-        document.getElementById("adjustments").value = 0;
+        //document.getElementById("engagement_fee").value = 0;
+        //document.getElementById("engagement_monthly").value = 0;
+        //document.getElementById("adjustments").value = 0;
         document.getElementById("billable").selectedIndex = 0;
         document.getElementById("note").value = "";
         document.getElementById("pic").selectedIndex = 0;
@@ -457,9 +457,9 @@ function loadTask() {
                 var endArray = data.project.end.split("-");
                 document.getElementById("ends_on").value = endArray[1] + "/" + endArray[2] + "/" + endArray[0];
             }
-            document.getElementById("engagement_fee").value = data.project.engagement_fee_unit.toLocaleString();
-            document.getElementById("engagement_monthly").value = data.project.invoice_per_year;
-            document.getElementById("adjustments").value = data.project.adjustments;
+            //document.getElementById("engagement_fee").value = data.project.engagement_fee_unit.toLocaleString();
+            //document.getElementById("engagement_monthly").value = data.project.invoice_per_year;
+            //document.getElementById("adjustments").value = data.project.adjustments;
             //document.getElementById("billable").selectedIndex = data.project.billable;
             $("#billable").val(data.project.billable);  
             document.getElementById("note").value = data.project.note;
@@ -492,9 +492,36 @@ function loadTask() {
         for (var cnt = 0; cnt < data.budget.length; cnt++) {
             insertBudgetRow(data.budget[cnt]["staff_id"], data.budget[cnt]["role"], data.budget[cnt]["budget_hour"]);
         }
+        
+        //engagement
+        //初期化
+        $("#budget_engagement_body").empty();
+        var startMonth = "1";
+        var startYear = "2020";
+        //totalEngagementColumn();
+        for (var cnt = 0; cnt < data.engagement.length; cnt++) {
+            appendEngagementRow(data.engagement[cnt]["type"],Number(data.engagement[cnt]["col1"]).toLocaleString(),data.engagement[cnt]["col2"],data.engagement[cnt]["col3"],data.engagement[cnt]["col4"],data.engagement[cnt]["col5"],data.engagement[cnt]["col6"],data.engagement[cnt]["col7"],data.engagement[cnt]["col8"],data.engagement[cnt]["col9"],data.engagement[cnt]["col10"],data.engagement[cnt]["col11"],data.engagement[cnt]["col12"]);
+            calcEngagementFeeDetail(parseInt(cnt)+1);
+            
+            startMonth = data.engagement[cnt].start_month;
+            startYear = data.engagement[cnt].start_year;
+        }
+        totalEngagementColumn();
+        
+        document.getElementById("start_month").selectedIndex = parseInt(startMonth) -1;
+        document.getElementById("engagement_year").value = startYear;
+        
+        setEngagementHeader();
 
         //計算実行
         calc();
+        
+        //duplicate時初期化
+        if(buttonType == "duplicate"){
+            document.getElementById("project_year").selectedIndex = 0;
+            document.getElementById("starts_on").value = "";
+            document.getElementById("ends_on").value = "";
+        }
 
 
     }).error(function (XMLHttpRequest, textStatus, errorThrown) {
@@ -782,6 +809,313 @@ function inputHarfAlpha($this)
         str=str.replace(/[^a-zA-Z]/,"");
     }
     $this.value=str;
+}
+
+function appendEngagementRow(type,jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec){
+    var objTBL = document.getElementById("budget_engagement");
+    if (!objTBL)
+        return;
+
+    // 最終行に新しい行を追加
+    var specific_tbody = document.getElementById("budget_engagement_body");
+    var bodyLength = specific_tbody.rows.length;
+    var count = bodyLength + 1;
+    var row = specific_tbody.insertRow(bodyLength);
+
+    // 列の追加
+    var c1 = row.insertCell(0);
+    var c2 = row.insertCell(1);
+    var c3 = row.insertCell(2);
+    var c4 = row.insertCell(3);
+    var c5 = row.insertCell(4);
+    var c6 = row.insertCell(5);   
+    var c7 = row.insertCell(6);
+    var c8 = row.insertCell(7);
+    var c9 = row.insertCell(8);
+    var c10 = row.insertCell(9);
+    var c11 = row.insertCell(10);
+    var c12 = row.insertCell(11);
+    var c13 = row.insertCell(12);
+    var c14 = row.insertCell(13);
+    var c15 = row.insertCell(14);
+    var c16 = row.insertCell(15);
+    var c17 = row.insertCell(16);
+    
+    // 各列にスタイルを設定
+    //c2.style.cssText = "width: 150px";
+    c1.style.cssText = "vertical-align: middle;text-align: center";
+    c16.style.cssText = "vertical-align: middle";
+   
+    // 各列に表示内容を設定
+    c1.innerHTML = '<span class="seqnoengagement">' + count + '</span>';
+    c2.innerHTML = '<input class="inpengagementtype form-control form-control-sm" id="type' + count + '" name="type' + count + '" style="width: 100%" value="' + type + '">';
+    c3.innerHTML = '<input class="inpengagementjan form-control form-control-sm" id="jan' + count + '" name="jan' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + jan + '">';
+    c4.innerHTML = '<input class="inpengagementfeb form-control form-control-sm" id="feb' + count + '" name="feb' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + feb + '">';
+    c5.innerHTML = '<input class="inpengagementmar form-control form-control-sm" id="mar' + count + '" name="mar' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + mar + '">';
+    c6.innerHTML = '<input class="inpengagementapr form-control form-control-sm" id="apr' + count + '" name="apr' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + apr + '">';
+    c7.innerHTML = '<input class="inpengagementmay form-control form-control-sm" id="may' + count + '" name="may' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + may + '">';
+    c8.innerHTML = '<input class="inpengagementjun form-control form-control-sm" id="jun' + count + '" name="jun' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + jun + '">';
+    c9.innerHTML = '<input class="inpengagementjul form-control form-control-sm" id="jul' + count + '" name="jul' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + jul + '">';
+    c10.innerHTML = '<input class="inpengagementaug form-control form-control-sm" id="aug' + count + '" name="aug' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + aug + '">';
+    c11.innerHTML = '<input class="inpengagementsep form-control form-control-sm" id="sep' + count + '" name="sep' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + sep + '">';
+    c12.innerHTML = '<input class="inpengagementoct form-control form-control-sm" id="oct' + count + '" name="oct' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + oct + '">';
+    c13.innerHTML = '<input class="inpengagementnov form-control form-control-sm" id="nov' + count + '" name="nov' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + nov + '">';
+    c14.innerHTML = '<input class="inpengagementdec form-control form-control-sm" id="dec' + count + '" name="dec' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + dec + '">';
+    c15.innerHTML = '<input class="inpengagementtotal form-control form-control-sm" id="total' + count + '" name="total' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" value="' + 0 + '" readonly>';        
+    c16.innerHTML = '<a><img src="'+ imagesUrl + "/duplicate.png" +'" id="copyBtnEngagement' + count + '" value="Copy" onclick="copyRowEngagementList(' + count + ');return;"></a>';
+    c17.innerHTML = '<input class="delEngagementBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnEngagement' + count + '" value="Delete" onclick="delRowEngagementList(this)">';
+}
+
+function calcEngagementFee(obj,count){
+    addCommaObj(obj);
+    calcEngagementFeeDetail(count);
+    calc();
+    /*
+    //計算
+    var totalObj = document.getElementById("total" + count);
+    var janValue = document.getElementById("jan" + count);
+    var febValue = document.getElementById("feb" + count);
+    var marValue = document.getElementById("mar" + count);
+    var aprValue = document.getElementById("apr" + count);
+    var mayValue = document.getElementById("may" + count);
+    var junValue = document.getElementById("jun" + count);
+    var julValue = document.getElementById("jul" + count);
+    var augValue = document.getElementById("aug" + count);
+    var sepValue = document.getElementById("sep" + count);
+    var octValue = document.getElementById("oct" + count);
+    var novValue = document.getElementById("nov" + count);
+    var decValue = document.getElementById("dec" + count);
+    
+    totalObj.value = parseInt(removeFormat(janValue)) + parseInt(removeFormat(febValue)) + parseInt(removeFormat(marValue)) + parseInt(removeFormat(aprValue))
+            + parseInt(removeFormat(mayValue)) + parseInt(removeFormat(junValue)) + parseInt(removeFormat(julValue)) + parseInt(removeFormat(augValue)) + parseInt(removeFormat(sepValue))
+            + parseInt(removeFormat(octValue)) + parseInt(removeFormat(novValue)) + parseInt(removeFormat(decValue));
+    addCommaObj(totalObj);
+    
+    totalEngagementColumn();*/
+}
+
+function calcEngagementFeeDetail(count) {
+    //計算
+    var totalObj = document.getElementById("total" + count);
+    var janValue = document.getElementById("jan" + count);
+    var febValue = document.getElementById("feb" + count);
+    var marValue = document.getElementById("mar" + count);
+    var aprValue = document.getElementById("apr" + count);
+    var mayValue = document.getElementById("may" + count);
+    var junValue = document.getElementById("jun" + count);
+    var julValue = document.getElementById("jul" + count);
+    var augValue = document.getElementById("aug" + count);
+    var sepValue = document.getElementById("sep" + count);
+    var octValue = document.getElementById("oct" + count);
+    var novValue = document.getElementById("nov" + count);
+    var decValue = document.getElementById("dec" + count);
+
+    totalObj.value = parseInt(removeFormat(janValue)) + parseInt(removeFormat(febValue)) + parseInt(removeFormat(marValue)) + parseInt(removeFormat(aprValue))
+            + parseInt(removeFormat(mayValue)) + parseInt(removeFormat(junValue)) + parseInt(removeFormat(julValue)) + parseInt(removeFormat(augValue)) + parseInt(removeFormat(sepValue))
+            + parseInt(removeFormat(octValue)) + parseInt(removeFormat(novValue)) + parseInt(removeFormat(decValue));
+    addCommaObj(totalObj);
+
+    totalEngagementColumn();
+}
+
+function totalEngagementColumn(){
+    var objTaskTBL = document.getElementById("budget_engagement_body");
+    var cnt = objTaskTBL.rows.length;
+    var totalJan = 0, totalFeb = 0, totalMar = 0, totalApr = 0, totalMay = 0,
+            totalJun = 0, totalJul = 0, totalAug = 0, totalSep = 0, totalOct = 0, totalNov = 0, totalDec = 0, totalGrand = 0;
+        
+    for (var count = 1; count <= cnt; count++) {
+        var janValue = document.getElementById("jan" + count);
+        var febValue = document.getElementById("feb" + count);
+        var marValue = document.getElementById("mar" + count);
+        var aprValue = document.getElementById("apr" + count);
+        var mayValue = document.getElementById("may" + count);
+        var junValue = document.getElementById("jun" + count);
+        var julValue = document.getElementById("jul" + count);
+        var augValue = document.getElementById("aug" + count);
+        var sepValue = document.getElementById("sep" + count);
+        var octValue = document.getElementById("oct" + count);
+        var novValue = document.getElementById("nov" + count);
+        var decValue = document.getElementById("dec" + count);
+        
+        totalJan += parseInt(removeComma(janValue.value));
+        totalFeb += parseInt(removeComma(febValue.value));
+        totalMar += parseInt(removeComma(marValue.value));
+        totalApr += parseInt(removeComma(aprValue.value));
+        totalMay += parseInt(removeComma(mayValue.value));
+        totalJun += parseInt(removeComma(junValue.value));
+        totalJul += parseInt(removeComma(julValue.value));
+        totalAug += parseInt(removeComma(augValue.value));
+        totalSep += parseInt(removeComma(sepValue.value));
+        totalOct += parseInt(removeComma(octValue.value));
+        totalNov += parseInt(removeComma(novValue.value));
+        totalDec += parseInt(removeComma(decValue.value));
+        
+        totalGrand += parseInt(removeComma(janValue.value)) + parseInt(removeComma(febValue.value)) + parseInt(removeComma(marValue.value))
+                + parseInt(removeComma(aprValue.value)) + parseInt(removeComma(mayValue.value)) + parseInt(removeComma(junValue.value))
+                + parseInt(removeComma(julValue.value)) + parseInt(removeComma(augValue.value)) + parseInt(removeComma(sepValue.value))
+                + parseInt(removeComma(octValue.value)) + parseInt(removeComma(novValue.value)) + parseInt(removeComma(decValue.value));
+    }
+    
+    var totalJanObj = document.getElementById("total_jan");
+    var totalFebObj = document.getElementById("total_feb");
+    var totalMarObj = document.getElementById("total_mar");
+    var totalAprObj = document.getElementById("total_apr");
+    var totalMayObj = document.getElementById("total_may");
+    var totalJunObj = document.getElementById("total_jun");
+    var totalJulObj = document.getElementById("total_jul");
+    var totalAugObj = document.getElementById("total_aug");
+    var totalSepObj = document.getElementById("total_sep");
+    var totalOctObj = document.getElementById("total_oct");
+    var totalNovObj = document.getElementById("total_nov");
+    var totalDecObj = document.getElementById("total_dec");
+    var totalGrandObj = document.getElementById("total_grand");
+    
+    totalJanObj.value = totalJan;
+    totalFebObj.value = totalFeb;
+    totalMarObj.value = totalMar;
+    totalAprObj.value = totalApr;
+    totalMayObj.value = totalMay;
+    totalJunObj.value = totalJun;
+    totalJulObj.value = totalJul;
+    totalAugObj.value = totalAug;
+    totalSepObj.value = totalSep;
+    totalOctObj.value = totalOct;
+    totalNovObj.value = totalNov;
+    totalDecObj.value = totalDec;
+    totalGrandObj.value = totalGrand;
+    
+    addCommaObj(totalJanObj);
+    addCommaObj(totalFebObj);
+    addCommaObj(totalMarObj);
+    addCommaObj(totalAprObj);
+    addCommaObj(totalMayObj);
+    addCommaObj(totalJunObj);
+    addCommaObj(totalJulObj);
+    addCommaObj(totalAugObj);
+    addCommaObj(totalSepObj);
+    addCommaObj(totalOctObj);
+    addCommaObj(totalNovObj);
+    addCommaObj(totalDecObj);
+    addCommaObj(totalGrandObj);
+}
+
+function copyRowEngagementList(count) {
+    var janValue = document.getElementById("jan" + count);
+    var febValue = document.getElementById("feb" + count);
+    var marValue = document.getElementById("mar" + count);
+    var aprValue = document.getElementById("apr" + count);
+    var mayValue = document.getElementById("may" + count);
+    var junValue = document.getElementById("jun" + count);
+    var julValue = document.getElementById("jul" + count);
+    var augValue = document.getElementById("aug" + count);
+    var sepValue = document.getElementById("sep" + count);
+    var octValue = document.getElementById("oct" + count);
+    var novValue = document.getElementById("nov" + count);
+    var decValue = document.getElementById("dec" + count);
+    var totalObj = document.getElementById("total" + count);
+    
+    febValue.value = janValue.value;
+    marValue.value = janValue.value;
+    aprValue.value = janValue.value;
+    mayValue.value = janValue.value;
+    junValue.value = janValue.value;
+    julValue.value = janValue.value;
+    augValue.value = janValue.value;
+    sepValue.value = janValue.value;
+    octValue.value = janValue.value;
+    novValue.value = janValue.value;
+    decValue.value = janValue.value;   
+    
+    totalObj.value = parseInt(removeFormat(janValue)) + parseInt(removeFormat(febValue)) + parseInt(removeFormat(marValue)) + parseInt(removeFormat(aprValue))
+            + parseInt(removeFormat(mayValue)) + parseInt(removeFormat(junValue)) + parseInt(removeFormat(julValue)) + parseInt(removeFormat(augValue)) + parseInt(removeFormat(sepValue))
+            + parseInt(removeFormat(octValue)) + parseInt(removeFormat(novValue)) + parseInt(removeFormat(decValue));
+    addCommaObj(totalObj);
+    
+    totalEngagementColumn()
+}
+
+function setEngagementHeader() {
+    var selStart = document.getElementById("start_month").value;
+    var header1 = document.getElementById("header_1");
+    var header2 = document.getElementById("header_2");
+    var header3 = document.getElementById("header_3");
+    var header4 = document.getElementById("header_4");
+    var header5 = document.getElementById("header_5");
+    var header6 = document.getElementById("header_6");
+    var header7 = document.getElementById("header_7");
+    var header8 = document.getElementById("header_8");
+    var header9 = document.getElementById("header_9");
+    var header10 = document.getElementById("header_10");
+    var header11 = document.getElementById("header_11");
+    var header12 = document.getElementById("header_12");
+    
+    var selYear = document.getElementById("engagement_year").value.slice(-2);
+    
+    var thisYear = selYear;
+    var nextYear = parseInt(selYear) + 1;
+    
+    if(selStart == "1"){
+        header1.innerHTML = "Jan-" + thisYear; header2.innerHTML = "Feb-" + thisYear; header3.innerHTML = "Mar-" + thisYear; header4.innerHTML = "Apr-" + thisYear;
+        header5.innerHTML = "May-" + thisYear; header6.innerHTML = "Jun-" + thisYear; header7.innerHTML = "Jul-" + thisYear; header8.innerHTML = "Aug-" + thisYear;
+        header9.innerHTML = "Sep-" + thisYear; header10.innerHTML = "Oct-" + thisYear; header11.innerHTML = "Nov-" + thisYear; header12.innerHTML = "Dec-" + thisYear;
+    } else if(selStart == "2"){
+        header1.innerHTML = "Feb-20"; header2.innerHTML = "Mar-" + thisYear; header3.innerHTML = "Apr-" + thisYear; header4.innerHTML = "May-" + thisYear;
+        header5.innerHTML = "Jun-" + thisYear; header6.innerHTML = "Jul-" + thisYear; header7.innerHTML = "Aug-" + thisYear; header8.innerHTML = "Sep-" + thisYear;
+        header9.innerHTML = "Oct-" + thisYear; header10.innerHTML = "Nov-" + thisYear; header11.innerHTML = "Dec-" + thisYear;header12.innerHTML = "Jan-" + nextYear;
+    } else if(selStart == "3"){
+        header1.innerHTML = "Mar-" + thisYear; header2.innerHTML = "Apr-" + thisYear; header3.innerHTML = "May-" + thisYear; header4.innerHTML = "Jun-" + thisYear;
+        header5.innerHTML = "Jul-" + thisYear; header6.innerHTML = "Aug-" + thisYear; header7.innerHTML = "Sep-" + thisYear; header8.innerHTML = "Oct-" + thisYear;
+        header9.innerHTML = "Nov-" + thisYear; header10.innerHTML = "Dec-" + thisYear;header11.innerHTML = "Jan-" + nextYear;header12.innerHTML = "Feb-" + nextYear;
+    } else if(selStart == "4"){
+        header1.innerHTML = "Apr-" + thisYear; header2.innerHTML = "May-" + thisYear; header3.innerHTML = "Jun-" + thisYear; header4.innerHTML = "Jul-" + thisYear;
+        header5.innerHTML = "Aug-" + thisYear; header6.innerHTML = "Sep-" + thisYear; header7.innerHTML = "Oct-" + thisYear; header8.innerHTML = "Nov-" + thisYear;
+        header9.innerHTML = "Dec-" + thisYear;header10.innerHTML = "Jan-" + nextYear;header11.innerHTML = "Feb-" + nextYear;header12.innerHTML = "Mar-" + nextYear;
+    }  else if(selStart == "5"){
+        header1.innerHTML = "May-" + thisYear; header2.innerHTML = "Jun-" + thisYear; header3.innerHTML = "Jul-" + thisYear; header4.innerHTML = "Aug-" + thisYear;
+        header5.innerHTML = "Sep-" + thisYear; header6.innerHTML = "Oct-" + thisYear; header7.innerHTML = "Nov-" + thisYear; header8.innerHTML = "Dec-" + thisYear;
+        header9.innerHTML = "Jan-" + nextYear;header10.innerHTML = "Feb-" + nextYear;header11.innerHTML = "Mar-" + nextYear;header12.innerHTML = "Apr-" + nextYear;
+    } else if(selStart == "6"){
+        header1.innerHTML = "Jun-" + thisYear; header2.innerHTML = "Jul-" + thisYear; header3.innerHTML = "Aug-" + thisYear; header4.innerHTML = "Sep-" + thisYear; 
+        header5.innerHTML = "Oct-" + thisYear; header6.innerHTML = "Nov-" + thisYear; header7.innerHTML = "Dec-" + thisYear; header8.innerHTML = "Jan-" + nextYear;
+        header9.innerHTML = "Feb-" + nextYear;header10.innerHTML = "Mar-" + nextYear;header11.innerHTML = "Apr-" + nextYear;header12.innerHTML = "May-" + nextYear;
+    } else if(selStart == "7"){
+        header1.innerHTML = "Jul-" + thisYear; header2.innerHTML = "Aug-" + thisYear; header3.innerHTML = "Sep-" + thisYear; header4.innerHTML = "Oct-" + thisYear;
+        header5.innerHTML = "Nov-" + thisYear; header6.innerHTML = "Dec-" + thisYear; header7.innerHTML = "Jan-" + nextYear; header8.innerHTML = "Feb-" + nextYear;
+        header9.innerHTML = "Mar-" + nextYear;header10.innerHTML = "Apr-" + nextYear;header11.innerHTML = "May-" + nextYear;header12.innerHTML = "Jun-" + nextYear;
+    } else if(selStart == "8"){
+        header1.innerHTML = "Aug-" + thisYear; header2.innerHTML = "Sep-" + thisYear; header3.innerHTML = "Oct-" + thisYear; header4.innerHTML = "Nov-" + thisYear;
+        header5.innerHTML = "Dec-" + thisYear; header6.innerHTML = "Jan-" + nextYear; header7.innerHTML = "Feb-" + nextYear; header8.innerHTML = "Mar-" + nextYear;
+        header9.innerHTML = "Apr-" + nextYear;header10.innerHTML = "May-" + nextYear;header11.innerHTML = "Jun-" + nextYear;header12.innerHTML = "Jul-" + nextYear;
+    } else if(selStart == "9"){
+        header1.innerHTML = "Sep-" + thisYear; header2.innerHTML = "Oct-" + thisYear; header3.innerHTML = "Nov-" + thisYear; header4.innerHTML = "Dec-" + thisYear;
+        header5.innerHTML = "Jan-" + nextYear; header6.innerHTML = "Feb-" + nextYear; header7.innerHTML = "Mar-" + nextYear; header8.innerHTML = "Apr-" + nextYear;
+        header9.innerHTML = "May-" + nextYear;header10.innerHTML = "Jun-" + nextYear;header11.innerHTML = "Jul-" + nextYear;header12.innerHTML = "Aug-" + nextYear;
+    } else if(selStart == "10"){
+        header1.innerHTML = "Oct-" + thisYear; header2.innerHTML = "Nov-" + thisYear; header3.innerHTML = "Dec-" + thisYear; header4.innerHTML = "Jan-" + nextYear;
+        header5.innerHTML = "Feb-" + nextYear; header6.innerHTML = "Mar-" + nextYear; header7.innerHTML = "Apr-" + nextYear; header8.innerHTML = "May-" + nextYear;
+        header9.innerHTML = "Jun-" + nextYear;header10.innerHTML = "Jul-" + nextYear;header11.innerHTML = "Aug-" + nextYear;header12.innerHTML = "Sep-" + nextYear;
+    } else if(selStart == "11"){
+        header1.innerHTML = "Nov-" + thisYear; header2.innerHTML = "Dec-" + thisYear; header3.innerHTML = "Jan-" + nextYear; header4.innerHTML = "Feb-" + nextYear;
+        header5.innerHTML = "Mar-" + nextYear; header6.innerHTML = "Apr-" + nextYear; header7.innerHTML = "May-" + nextYear; header8.innerHTML = "Jun-" + nextYear;
+        header9.innerHTML = "Jul-" + nextYear;header10.innerHTML = "Aug-" + nextYear;header11.innerHTML = "Aug-" + nextYear;header12.innerHTML = "Oct-" + nextYear;
+    } else if(selStart == "12"){
+        header1.innerHTML = "Dec-" + thisYear; header2.innerHTML = "Jan-" + nextYear; header3.innerHTML = "Feb-" + nextYear; header4.innerHTML = "Mar-" + nextYear;
+        header5.innerHTML = "Apr-" + nextYear; header6.innerHTML = "May-" + nextYear; header7.innerHTML = "Jun-" + nextYear; header8.innerHTML = "Jul-" + nextYear;
+        header9.innerHTML = "Aug-" + nextYear;header10.innerHTML = "Aug-" + nextYear;header11.innerHTML = "Oct-" + nextYear;header12.innerHTML = "Nov-" + nextYear;
+    }            
+}
+
+
+
+function removeFormat(obj) {
+    var retVal = 0;
+    
+    if(obj.value != ""){
+        retVal = removeComma(obj.value);
+    }
+    
+    return retVal;
 }
 
 function removeComma(obj){

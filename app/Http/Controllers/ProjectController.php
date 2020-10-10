@@ -11,6 +11,7 @@ use App\Task;
 use App\Assign;
 use App\ProjectTask;
 use App\ProjectType;
+use App\Engagement;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
@@ -119,6 +120,9 @@ class ProjectController extends Controller
         //fye
         $fye = Client::select("fye")->where([['id', '=', $request->client]])->first();
         
+        //engagement fee
+        $engagement = Engagement::where([["project_id","=",$projectId]])->get();
+        
         $json = [
             "task" => $data,
             "staff" => $staffData,
@@ -126,6 +130,7 @@ class ProjectController extends Controller
             "project" => $projectData,
             "client" => $fye,
             "allTask" => $allTask,
+            "engagement" => $engagement,
                 ];
 
         return response()->json($json);
@@ -138,6 +143,40 @@ class ProjectController extends Controller
         $projectId = $this->saveProjectTable($request);
         //task
         $this->saveTaskTable($projectId, $request);
+        
+        //engagement fee
+        $engObj = Engagement::where([["project_id","=",$projectId]]);
+        $engObj->delete();
+        for ($engCnt = 1; $engCnt < 20; $engCnt++) {
+            if (!isset($_POST["type" . $engCnt])) {
+                break;
+            }
+            
+            if($_POST["type" . $engCnt] == ""){
+                continue;
+            }
+            
+            $engTable = new Engagement;
+            $engTable->project_id = $projectId;
+            $engTable->no = $engCnt;
+            $engTable->type = $_POST["type" . $engCnt];
+            $engTable->col1 = str_replace(",","",$_POST["jan" . $engCnt]);
+            $engTable->col2 = $_POST["feb" . $engCnt];
+            $engTable->col3 = $_POST["mar" . $engCnt];
+            $engTable->col4 = $_POST["apr" . $engCnt];
+            $engTable->col5 = $_POST["may" . $engCnt];
+            $engTable->col6 = $_POST["jun" . $engCnt];
+            $engTable->col7 = $_POST["jul" . $engCnt];
+            $engTable->col8 = $_POST["aug" . $engCnt];
+            $engTable->col9 = $_POST["sep" . $engCnt];
+            $engTable->col10 = $_POST["oct" . $engCnt];
+            $engTable->col11 = $_POST["nov" . $engCnt];
+            $engTable->col12 = $_POST["dec" . $engCnt];
+            $engTable->start_month = $_POST["start_month"];
+            $engTable->start_year = $_POST["engagement_year"];
+            
+            $engTable->save();
+        }
         
         //assign
         /*$table = new Assign;
@@ -255,9 +294,9 @@ class ProjectController extends Controller
             $projectTable->end = $this->formatDate($request->input("ends_on"));
             $projectTable->billable = $request->input("billable");
             $projectTable->note = $request->input("note");
-            $projectTable->engagement_fee_unit = str_replace(",","",$request->input("engagement_fee"));
-            $projectTable->invoice_per_year = $request->input("engagement_monthly");
-            $projectTable->adjustments = $request->input("adjustments");
+            $projectTable->engagement_fee_unit = 0;//str_replace(",","",$request->input("engagement_fee"));
+            $projectTable->invoice_per_year = 0;//$request->input("engagement_monthly");
+            $projectTable->adjustments = 0;//$request->input("adjustments");
 
             $projectTable->save();
         } else {
@@ -269,9 +308,9 @@ class ProjectController extends Controller
                 "pic" => $request->input("pic"),
                 "billable" => $request->input("billable"),
                 "note" => $request->input("note"),
-                "engagement_fee_unit" => str_replace(",","",$request->input("engagement_fee")),
-                "invoice_per_year" => $request->input("engagement_monthly"),
-                "adjustments" => $request->input("adjustments"),
+                //"engagement_fee_unit" => str_replace(",","",$request->input("engagement_fee")),
+                //"invoice_per_year" => $request->input("engagement_monthly"),
+                //"adjustments" => $request->input("adjustments"),
             ];
 
             if ($request->input("starts_on") != "") {
