@@ -6,7 +6,7 @@
     {{ csrf_field() }}  
     <div id="filter_area" style="margin-top: 30px;">
         <div id="filter_left" style="float: left;height: 150px;margin-bottom: 50px">
-            <div class="row entry-filter-bottom" style="zoom: 100%">
+            <!--<div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-3" >
                     <span class="line-height">Client<font style="color: red;vertical-align: middle">&nbsp;&nbsp;&nbsp;*</font></span>
                 </div>
@@ -18,7 +18,7 @@
                         @endforeach
                     </select>
                 </div>  
-            </div>
+            </div>-->
 
             <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-3">
@@ -83,8 +83,8 @@
                 <thead>
                     <tr>
                         <th style="width: 50px">No</th>
-                        <th style="width: 150px">Task</th>
-                        <th style="width: 300px">Description</th>
+                        <th style="width: 350px">Task</th>
+                        <th style="width: 550px">Description</th>
                     </tr>
                 </thead>
                 <tbody id="phase{{$i}}_body"></tbody>
@@ -162,7 +162,8 @@
         // 各列に表示内容を設定
         c1.innerHTML = '<span class="seqno-phase' + buttonIndex + '">' + count + '</span>';
         c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" value="' + name + '" style="width: 100%">';
-        c3.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'description" type="text" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" value="' + description + '" style="width: 100%">';
+        //c3.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'description" type="text" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" value="' + description + '" style="width: 100%">';
+        c3.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'description" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" style="width: 100%">' + description + '</textarea>';
         c4.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
     }
 

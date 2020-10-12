@@ -48,10 +48,10 @@ class WorkController extends Controller {
         $projectTypeId = $request->project;//ProjectType::where("project_type", $projectType)->first()->id;
         $phaseData = Phase::where("project_type", $projectTypeId)->get();
         
-        $group = $request->group;
-        if($group == "blank"){
-            $group = "";
-        }
+        //$group = $request->group;
+        //if($group == "blank"){
+        //    $group = "";
+       // }
 
         /*$projectId = "999";//Project::where([["client_id", "=", $request->client], ["project_name", "=", $request->project]])->first()->id;
 
@@ -69,7 +69,7 @@ class WorkController extends Controller {
         foreach($phaseIdArray as $items){
             array_push($phaseIdList,$items->id);
         }
-        $phaseGroupList = PhaseGroup::whereIn("phase_id",$phaseIdList)->whereIn("group",["","January"])->where([["project_id","=",$request->client]])->get();
+        $phaseGroupList = PhaseGroup::whereIn("phase_id",$phaseIdList)->whereIn("group",["","January"])->get();
         foreach ($phaseGroupList as $items) {
             //$phaseItemList = PhaseItems::where([['phase_group_id', '=', $items->id]])->get();            
             array_push($phaseItemList, PhaseItems::where([['phase_group_id', '=', $items->id]])->get());
@@ -131,8 +131,9 @@ class WorkController extends Controller {
 
     public function savePhaseGroup($request,$label_phase,$group) {
         $phaseGroupObj = PhaseGroup::Join("phase", "phase.id", "=", "phase group.phase_id")
+                ->leftJoin("project_type", "project_type.id", "=", "phase.project_type")
                 ->select("phase group.id as id")
-                ->where([["phase group.project_id", "=", $request->client], ["phase.name", "=", $label_phase], ["project_type","=",$request->project]]);
+                ->where([["phase.project_type", "=", $request->project], ["phase.name", "=", $label_phase]]);
         if($group != ""){
             $phaseGroupObj = $phaseGroupObj->where([["group","=",$group]]);
         }
@@ -144,7 +145,7 @@ class WorkController extends Controller {
             $phaseId = Phase::where([["project_type", "=", $request->project], ["name", "=", $label_phase]])->first()->id;
 
             $pTable = new PhaseGroup;
-            $pTable->project_id = $request->client;
+            $pTable->project_id = $request->project;//$request->client;
             $pTable->phase_id = $phaseId;
             $pTable->group = $group;
 
