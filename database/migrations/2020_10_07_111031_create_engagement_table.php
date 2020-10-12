@@ -32,7 +32,7 @@ class CreateEngagementTable extends Migration {
             $table->integer('col11')->nullable();
             $table->integer('col12')->nullable();
             $table->string('start_month',3)->nullable();
-            $table->integer('start_year',4)->nullable();
+            $table->integer('start_year')->nullable();
             
         });
     }
