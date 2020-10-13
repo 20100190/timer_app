@@ -412,6 +412,22 @@ function calc() {
     }
 }
 
+function clickDuplicate(){
+    Swal.fire({
+        title: 'Duplicate',
+        text: "Do you want to copy the project?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        if (result.value) {
+            loadTask("duplicate");
+        }
+    });
+}
+
 function loadTask(buttonType) {
 
     var client = $("#client").val();
