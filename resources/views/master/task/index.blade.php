@@ -62,8 +62,8 @@
         <thead>                                
             <tr>
                 <th class="table-sticky-locklist" style="width: 70px">ID</th>
-                <th class="table-sticky-locklist" style="width: 350px">Tasks</th>
                 <th class="table-sticky-locklist" style="width: 200px">Project Type</th>
+                <th class="table-sticky-locklist" style="width: 350px">Tasks</th>                
                 <th class="table-sticky-locklist" style="width: 150px">Standard Task</th>
                 @if($isEdit == 1)
                 <th class="table-sticky-locklist" style="width: 50px"></th>   
@@ -77,10 +77,10 @@
             <tr>
 
                 <td>{{ $item->id}} </td>
-
-                <td>{{ $item->name}} </td>
-
+                
                 <td>{{ $item->project_type}} </td>
+
+                <td>{{ $item->name}} </td>                
 
                 <td><input type="checkbox" @if($item->is_standard == "TRUE") checked="checked" @endif disabled></td>
                 @if($isEdit == 1)

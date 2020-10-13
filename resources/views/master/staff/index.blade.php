@@ -104,13 +104,13 @@ $(document).ready(function () {
                                     <td>{{ $item->default_role}} </td>
                                         
                                     @if($isEdit == 1)
-                                    <td><a href="{{ url("/master/staff/" . $item->id . "/edit") }}" title="Edit staff"><button class="btn btn-xs" style="background-color: white" ><img src="{{asset("image/pencil.png")}}" /></button></a></td>
+                                    <td><a href="{{ url("/master/staff/" . $item->id . "/edit") }}" title="Edit staff"><button class="btn btn-xs" style="background-color: transparent;" ><img src="{{asset("image/pencil.png")}}" /></button></a></td>
                                     <td>
                                         <form method="POST" action="/master/staff/{{ $item->id }}" class="form-horizontal" style="display:inline;">
                                             {{ csrf_field() }}
 
                                             {{ method_field("DELETE") }}
-                                            <button type="submit" class="btn btn-xs" style="background-color: white" title="Delete User" onclick="return confirm('Confirm delete')">
+                                            <button type="submit" class="btn btn-xs" style="background-color: transparent;" title="Delete User" onclick="return confirm('Confirm delete')">
                                                 <img src="{{asset("image/delete.png")}}" />
                                             </button>
                                         </form>
