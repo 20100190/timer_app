@@ -125,8 +125,8 @@
                 </div>
                 <div class="col col-md-3">
                     <select id="pic_or" name="pic_or" class="form-control" >                            
-                        <option value="">&nbsp;</option>
-                        <option value="or">OR</option>
+                        <option value="">And</option>
+                        <option value="or">Or</option>
                     </select>           
                 </div>
             </div>
