@@ -13,7 +13,7 @@
                     <span class="line-height">Client<font style="color: red;vertical-align: middle">&nbsp;&nbsp;&nbsp;*</font></span>
                 </div>
                 <div class="col col-md-3">
-                    <select id="client" name="client" class="form-control select2" data-display="static">    
+                    <select id="client" name="client" class="form-control select2" data-display="static" onchange="setProjectData()">    
                         <option value="">&nbsp;</option>
                         @foreach ($client as $clients)
                         <option value="{{$clients->id}}">{{$clients->name}}</option>

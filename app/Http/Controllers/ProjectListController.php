@@ -126,13 +126,13 @@ class ProjectListController extends Controller {
     }
     
     function projectDropdownStore(Request $request){
-        $clientId = $request->client;
-        
+        $clientId = explode(",",$request->client);
+                
         $projectListObj = Project::select("project_name")                
                         ->groupBy('project_name')
                         ->orderBy('project_name', 'asc');
         if($clientId != "blank"){
-            $projectListObj  = $projectListObj->where("client_id","=",$clientId);
+            $projectListObj  = $projectListObj->wherein("client_id",$clientId);
         }
         
         $projectList = $projectListObj->get();

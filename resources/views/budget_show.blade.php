@@ -91,7 +91,7 @@
                     <span class="line-height">Client</span>
                 </div>
                 <div class="col col-md-3">
-                    <select id="client" name="client" multiple="multiple" class="form-control">            
+                    <select id="client" name="client" multiple="multiple" class="form-control" onchange="setProjectData(true)">            
                         @foreach ($client as $clients)
                         <option value="{{$clients->id}}">{{$clients->name}}</option>
                         @endforeach

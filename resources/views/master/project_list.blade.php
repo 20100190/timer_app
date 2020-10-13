@@ -174,6 +174,7 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
     
 }
 
+/*
 function setProjectData(){
     
     var client = $('#client').val();
@@ -208,6 +209,7 @@ function setProjectData(){
     });    
     
 }
+*/
 </script>
 <div id="div1" style="margin-left: 20px;margin-top: 20px">
     <!--<form method="GET" action="{{ url("master/project-list") }}" accept-charset="UTF-8" role="search">-->
@@ -217,7 +219,7 @@ function setProjectData(){
                 <span class="line-height">Client</span>
             </div>
             <div class="col col-md-8">
-                <select id="client" name="client" class="form-control select2" data-display="static" onchange="setProjectData()">    
+                <select id="client" name="client" class="form-control select2" data-display="static" onchange="setProjectData(false)">    
                     <option value="">&nbsp;</option>
                     @foreach ($clientList as $clients)
                     <option value="{{$clients->id}}">{{$clients->name}}</option>

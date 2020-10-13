@@ -355,6 +355,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!--decimal.js-->
         <script type="text/javascript" src="{{ asset('js/decimal.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
+        
+        <!--共通-->
+        <script src="{{asset("js/bwCommon.js")}}"></script>
 
 
     </body>
