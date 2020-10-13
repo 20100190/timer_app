@@ -140,8 +140,8 @@ function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,u
    
     // 各列に表示内容を設定
     c1.innerHTML = '<span>' + parseInt(cnt + 1) + '</span>';
-    c2.innerHTML = '<span>' + user + '</span>';
-    c3.innerHTML = '<a href="master/work-list/' + clientId + "/" + projectName + '" target="_blank"><img src="' + imagesUrl + "/view.png" + '"></a>';
+    c2.innerHTML = '<a href="master/work-list/' + clientId + "/" + projectName + '" target="_blank"><img src="' + imagesUrl + "/view.png" + '"></a>';
+    c3.innerHTML = '<span>' + user + '</span>';    
     c4.innerHTML = '<span>' + dueDate + '</span>';
     c5.innerHTML = '<span>' + client + '</span>';
     c6.innerHTML = '<span>' + projectName + '</span>';

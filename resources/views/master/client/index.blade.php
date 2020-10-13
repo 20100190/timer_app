@@ -56,12 +56,12 @@
             <thead>                                
                 <tr>
                     <th class="table-sticky-locklist" style="width: 70px">ID</th>
+                    <th class="table-sticky-locklist" style="width:40px"> </th>
                     <th class="table-sticky-locklist" style="width: 350px">Client Name</th>
                     <th class="table-sticky-locklist" style="width: 200px">FYE</th>
                     <th class="table-sticky-locklist" style="width: 150px">VIC Status</th>   
                     <th class="table-sticky-locklist" style="width: 350px">Group Companies</th>   
-                    <th class="table-sticky-locklist" style="width: 150px">In-Charge</th> 
-                    <th class="table-sticky-locklist" style="width:40px"> </th>
+                    <th class="table-sticky-locklist" style="width: 150px">In-Charge</th>                     
                     @if($isEdit == 1) 
                     <th class="table-sticky-locklist" style="width:40px"> </th>
                     <th class="table-sticky-locklist" style="width:40px"> </th>
@@ -75,6 +75,8 @@
 
                     <td>{{ $item->id}} </td>
 
+                    <td style="text-align: center"><a href="{{ url("/master/client/" . $item->id) }}" title="Show task"><button class="btn btn-xs" style="background-color: transparent;" ><img src="{{asset("image/view.png")}}" /></button></a></td>
+                    
                     <td>{{ $item->name}} </td>
 
                     <td>{{ $item->fye}} </td>
@@ -84,8 +86,6 @@
                     <td>{{ $item->group_companies}}</td>
 
                     <td>{{ $item->initial}}</td>
-
-                    <td><a href="{{ url("/master/client/" . $item->id) }}" title="Show task"><button class="btn btn-xs" style="background-color: transparent;" ><img src="{{asset("image/view.png")}}" /></button></a></td>
                    
                     @if($isEdit == 1) 
                     <td><a href="{{ url("/master/client/" . $item->id . "/edit") }}" title="Edit task"><button class="btn btn-xs" style="background-color: transparent;" ><img src="{{asset("image/pencil.png")}}" /></button></a></td>
