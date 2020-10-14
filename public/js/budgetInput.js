@@ -64,6 +64,7 @@ $('.datepicker1').datepicker({
 
 var maskStr = "#,##0.0";
 var spreadsheetWidth = "80";
+var size = window.innerHeight - 350;
 
 var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //data: data,
@@ -73,7 +74,7 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet'), {
     //lazyLoading: true,
     //pagenation: 10,
     tableWidth: '100%',
-    tableHeight: "490px",
+    tableHeight: size + "px",
     freezeColumns: 10,
     contextMenu:function() { return false; },
     columns: [
