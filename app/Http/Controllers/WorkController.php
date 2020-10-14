@@ -162,6 +162,10 @@ class WorkController extends Controller {
             if (!isset($_POST["phase" . $index . "_task" . $taskCnt])) {
                 break;
             }
+            
+            if($_POST["phase" . $index . "_task" . $taskCnt] == "" && $_POST["phase" . $index . "_description" . $taskCnt] == ""){
+                continue;
+            }
 
             $targetPhaseItem = PhaseItems::where([["phase_group_id", "=", $phaseGroupId], ["order", "=", $taskCnt]]);
             if ($targetPhaseItem->exists()) {

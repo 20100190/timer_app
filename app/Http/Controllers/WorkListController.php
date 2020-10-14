@@ -142,9 +142,9 @@ class WorkListController extends Controller {
                     break;
                 }
                 
-                //if ($_POST["phase" . $i . "_id" . $j] != "") {
-                //    continue;
-               // }
+                if ($_POST["phase" . $i . "_task" . $j] == "" && $_POST["phase" . $i . "_description" . $j] == "") {
+                    continue;
+                }
 
                 //phase group
                 $phaseGroupObj = PhaseGroup::Join("phase", "phase.id", "=", "phase group.phase_id")

@@ -253,31 +253,7 @@ class ClientController extends Controller {
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id) {
-        /*$this->validate($request, [
-            "name" => "nullable|max:200", //string('name',200)->nullable()
-            "fye" => "nullable|max:5", //string('fye',5)->nullable()
-            "vic_status" => "nullable|max:3", //string('vic_status',3)->nullable()
-            "group_companies" => "nullable", //integer('group_companies')->nullable()
-            "website" => "nullable|max:300", //string('website',300)->nullable()
-            "address_us" => "nullable|max:300", //string('address_us',300)->nullable()
-            "address_jp" => "nullable|max:300", //string('address_jp',300)->nullable()
-            "mailing_address" => "nullable|max:20", //string('mailing_address',20)->nullable()
-            "tel1" => "nullable|max:50", //string('tel1',50)->nullable()
-            "tel2" => "nullable|max:50", //string('tel2',50)->nullable()
-            "tel3" => "nullable|max:50", //string('tel3',50)->nullable()
-            "fax" => "nullable|integer", //integer('fax')->nullable()
-            "fax" => "nullable|max:50", //string('fax',50)->nullable()
-            "federal_id" => "nullable|max:20", //string('federal_id',20)->nullable()
-            "state_id" => "nullable|max:20", //string('state_id',20)->nullable()
-            "edd_id" => "nullable|max:20", //string('edd_id',20)->nullable()
-            "note" => "nullable|max:300", //string('note',300)->nullable()
-            "pic" => "nullable|integer", //integer('pic')->nullable()
-            "nature_of_business" => "nullable|integer", //integer('nature_of_business')->nullable()
-            "incorporation_date" => "nullable|date", //date('incorporation_date')->nullable()
-            "incorporation_state" => "nullable|max:50", //string('incorporation_state',50)->nullable()
-            "business_started" => "nullable|date", //date('business_started')->nullable()
-        ]);*/
+    public function update(Request $request, $id) {        
         $requestData = $request->all();
        
         $client = Client::where("id","=",$id);
@@ -328,6 +304,10 @@ class ClientController extends Controller {
             if (!isset($_POST["contact_person" . $contactCnt])) {
                 break;
             }
+            
+            if($_POST["contact_person" . $contactCnt] == "" && $_POST["contact_person_jp" . $contactCnt] == "" && $_POST["title" . $contactCnt] == "" && $_POST["telephone" . $contactCnt] == "" && $_POST["cellphone" . $contactCnt] == "" && $_POST["fax" . $contactCnt] == "" && $_POST["email" . $contactCnt] == ""){
+                continue;
+            }
 
             $pTable = new ContactPerson;
             $pTable->client_id = $id;            
@@ -350,6 +330,10 @@ class ClientController extends Controller {
             if (!isset($_POST["us_name" . $usCnt])) {
                 break;
             }
+            
+            if($_POST["us_name" . $usCnt] == "" && $_POST["us_percent" . $usCnt] == ""){
+                continue;
+            }
 
             $pTable = new Shareholders;
             $pTable->client_id = $id;
@@ -368,6 +352,10 @@ class ClientController extends Controller {
             if (!isset($_POST["foreign_name" . $foreignCnt])) {
                 break;
             }
+            
+            if($_POST["foreign_name" . $foreignCnt] == "" && $_POST["foreign_percent" . $foreignCnt] == ""){
+                continue;
+            }
 
             $pTable = new Shareholders;
             $pTable->client_id = $id;
@@ -385,6 +373,10 @@ class ClientController extends Controller {
         for ($officerCnt = 1; $officerCnt < 20; $officerCnt++) {
             if (!isset($_POST["officer_name" . $officerCnt])) {
                 break;
+            }
+            
+            if($_POST["officer_name" . $officerCnt] == "" && $_POST["officer_title" . $officerCnt] == ""){
+                continue;
             }
 
             $pTable = new Officers;
