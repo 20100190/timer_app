@@ -1,3 +1,7 @@
+window.onresize = function(){
+    myspreadsheet.options.tableHeight = "1000px";    
+}
+
 $(document).ready(function () {
     jQuery('#loader-bg').hide();
 
@@ -88,6 +92,7 @@ var filterOptions = function (o, cell, x, y, value, config) {
 
 var maskStr = "#,##0.0";
 var spreadsheetWidth = "80";
+var size = window.innerHeight - 350;
 
 var myspreadsheet = jexcel(document.getElementById('spreadsheet2'), {
     //data: data,
@@ -97,7 +102,7 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet2'), {
     //lazyLoading: true,
     //pagenation: 10,
     tableWidth: '100%',
-    tableHeight: "490px",
+    tableHeight: size + "px",//"490px",
     freezeColumns: 4,
     contextMenu: function () {
         return false;
@@ -485,7 +490,7 @@ var myspreadsheet = jexcel(document.getElementById('spreadsheet2'), {
         },
     ],
     onload: function (instance) {
-
+        
     },
     onchange: function (instance, cell, c, r, value) {
         var projectId = myspreadsheet.getValueFromCoords(0, r);
