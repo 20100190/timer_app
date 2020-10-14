@@ -70,7 +70,7 @@ function closeOverrall() {
         btnObj.src = imagesUrl + "/close.png"
         document.getElementById("div1").style.height = "40%";
         document.getElementById("div1").style.minHeight = "350px";
-        document.getElementById("div2").style.height = "40%";
+        document.getElementById("div2").style.height = "49%";
         document.getElementById("div3").style.height = "300px";
         
         document.getElementById("div3").style.zIndex = "10";        
@@ -79,7 +79,7 @@ function closeOverrall() {
         btnObj.src = imagesUrl + "/open.png"
         document.getElementById("div1").style.height = "0%";
         document.getElementById("div1").style.minHeight = "0px";
-        document.getElementById("div2").style.height = "80%";
+        document.getElementById("div2").style.height = "89%";
         document.getElementById("div3").style.height = "0px";
         
         document.getElementById("div3").style.zIndex = "0";
@@ -416,6 +416,7 @@ function getData() {
                             td.innerHTML = client;
                             td.style.backgroundColor = backgroundColor;                            
                             td.classList.add("column_row_block");
+                            td.classList.add("border-left-style-list");
                         }
                         if (x == 1) {
                             td.innerHTML = '<a href="' + location.protocol + "//" + location.host + "/master/work-list/" + clientId + "/" + project + '" target="_blank">' + project + " Total" + "</a>";
@@ -520,6 +521,7 @@ function getData() {
                             if (f == 0) {
                                 xtd.style.backgroundColor = "white";
                                 xtd.classList.add("column_row_block");
+                                xtd.classList.add("border-left-style-list");
                             }
                             if (f == 1) {
                                 xtd.style.backgroundColor = "white";
@@ -599,6 +601,7 @@ function getData() {
                         td.innerHTML = client;
                         td.style.backgroundColor = backgroundColor;
                         td.classList.add("column_row_block");
+                        td.classList.add("border-left-style-list");
                     }
                     if (x == 1) {
                         td.innerHTML ='<a href="' + location.protocol + "//" + location.host + "/master/work-list/" + clientId + "/" + project + '" target="_blank">' + project + " Total" + "</a>";
@@ -693,6 +696,7 @@ function getData() {
                         if (f == 0) {
                             xtd.style.backgroundColor = "white";
                             xtd.classList.add("column_row_block");
+                            xtd.classList.add("border-left-style-list");
                             if(x == detailArray.length - 1){
                                 xtd.style.borderBottom = "solid 1px lightgray";
                             }
