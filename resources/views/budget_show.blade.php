@@ -252,7 +252,7 @@
                         <td class="column1_block col5" style="background-color: white"></td>
                         <td class="column1_block col6" style="background-color: white"></td>
                         <td class="column1_block col7" style="background-color: white"></td>
-                        <td class="column1_block col8 font-bold border-top-style-list header-background-color">Overrall</td>
+                        <td class="column1_block col8 font-bold border-top-style-list header-background-color border-left-style-list">Overrall</td>
                         <td class="column1_block col9 font-bold border-top-style-list header-background-color">Total</td>
                         <td class="column1_block col10 border-top-style-list header-background-color"></td>
                         @for($i=1;$i<=52;$i++)
@@ -269,7 +269,7 @@
                         <td class="column2_block col5" style="background-color: white"></td>
                         <td class="column2_block col6" style="background-color: white"></td>
                         <td class="column2_block col7" style="background-color: white"></td>
-                        <td class="column2_block col8 font-bold border-bottom-style-list header-background-color" style="text-align: center">Name</td>
+                        <td class="column2_block col8 font-bold border-bottom-style-list header-background-color border-left-style-list" style="text-align: center">Name</td>
                         <td class="column2_block col9 font-bold border-bottom-style-list header-background-color" style="text-align: center">Total</td>
                         <td class="column2_block col10 font-bold border-bottom-style-list header-background-color" style="text-align: center">Unassigned hours</td>
 
@@ -287,7 +287,7 @@
                         <td class="column_row_block col5" style="background-color: white;"></td>
                         <td class="column_row_block col6" style="background-color: white;"></td>
                         <td class="column_row_block col7" style="background-color: white;"></td>
-                        <td class="column_row_block col8" style="background-color: white;"><span id="ot_initial{{$x}}"></span></td>
+                        <td class="column_row_block col8 border-left-style-list" style="background-color: white;"><span id="ot_initial{{$x}}"></span></td>
                         <td class="column_row_block col9" style="background-color: white;text-align: right"><span id="ot_ptotal{{$x}}"></span></td>
                         <td class="column_row_block col10" style="background-color: white;text-align: right"><span id="ot_uh{{$x}}"></span></td>
 
@@ -306,7 +306,7 @@
                         <td class="column_row_block col5" style="background-color: white;"></td>
                         <td class="column_row_block col6" style="background-color: white;"></td>
                         <td class="column_row_block col7" style="background-color: white;"></td>
-                        <td class="column_row_block col8 border-top-style-list border-bottom-style-list" style="background-color: white;"></td>
+                        <td class="column_row_block col8 border-top-style-list border-bottom-style-list border-left-style-list" style="background-color: white;"></td>
                         <td class="column_row_block col9 border-top-style-list border-bottom-style-list" style="background-color: white;text-align: right"><span id="otAll">0</span></td>
                         <td class="column_row_block col10 border-top-style-list border-bottom-style-list" style="background-color: white;text-align: right;"></td>
                         @for($i=1;$i<=52;$i++)
@@ -318,12 +318,12 @@
         </div>
     </div>
 
-    <div id="div2" style="overflow: scroll;height: 40%;margin-left: 20px;">  
+    <div id="div2" style="overflow: scroll;height: 47%;margin-left: 20px;">  
         <div style="width: 100%">
             <table class="font1" border="0" id="budget_list" style="table-layout: fixed;width:100%">
                 <thead>
                     <tr style="height: 30px">
-                        <td class="column1_block font-bold border-top-style-list header-background-color" style="width: 250px;left: 0px;text-align:center">Client</td>
+                        <td class="column1_block font-bold border-top-style-list header-background-color border-left-style-list" style="width: 250px;left: 0px;text-align:center">Client</td>
                         <td class="column1_block col2 font-bold border-top-style-list header-background-color" style="text-align: center">Project</td>
                         <td class="column1_block col3 font-bold border-top-style-list header-background-color" style="text-align: center">FYE</td>
                         <td class="column1_block col4 font-bold border-top-style-list header-background-color" style="text-align: center">VIC</td>
@@ -338,7 +338,7 @@
                         @endfor                          
                     </tr>
                     <tr style="height: 30px">
-                        <td class="column2_block border-bottom-style-list header-background-color" style="left: 0px;"></td>
+                        <td class="column2_block border-bottom-style-list header-background-color border-left-style-list" style="left: 0px;"></td>
                         <td class="column2_block col2 border-bottom-style-list header-background-color"></td>
                         <td class="column2_block col3 border-bottom-style-list header-background-color"></td>
                         <td class="column2_block col4 border-bottom-style-list header-background-color"></td>

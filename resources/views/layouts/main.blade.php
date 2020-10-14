@@ -79,6 +79,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 border-bottom: solid 1px lightgray;
             }
             
+            .border-left-style-list {
+                border-left: solid 1px lightgray;
+            }
+            
             .project-font-size {
                 font-size: 14px;
             }
