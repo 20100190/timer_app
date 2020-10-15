@@ -77,8 +77,10 @@
     <div style="">
         @for($i=1;$i<=10;$i++)
         <div style="margin-bottom: 50px">
-            <div><label style="font-size: 20px;width: 85px">
-                    <input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="vertical-align: middle;border:solid 0px;" readonly></label>
+            <div>
+                <label style="font-size: 20px;width: 455px"><input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="width: 100px;vertical-align: middle;border:solid 0px;" readonly><span id="label_phase_desc{{$i}}" style="vertical-align: middle"></span></label>
+                <!--<label style="font-size: 20px;width: 85px">
+                    <input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="vertical-align: middle;border:solid 0px;" readonly></label>-->
                 <input type="button" id="contact_list{{$i}}" name="contact_list{{$i}}" class="btn btn-primary btn-sm" style="width: 150px" value="Add" onclick="appendPhase1Row(this)">
             </div>
             <table border="0" id="phase_{{$i}}" class="table table-sm" style="font-size: 14px;table-layout: fixed;width: 650px">  
@@ -388,6 +390,7 @@
 
             for (var i = 0; i < data.phase.length; i++) {
                 document.getElementById("label_phase" + (parseInt(i) + 1)).value = data.phase[i].name;
+                document.getElementById("label_phase_desc" + (parseInt(i) + 1)).innerHTML = data.phase[i].description;
             }
 
             //detail            
@@ -613,7 +616,7 @@
     }
         
     function getErrorWorkList() {
-        var isError = "false";
+        var isError = "true";
         //phase1 to phase 10
         for(var tableCnt=1; tableCnt<= 10; tableCnt++){
             var tableObj = document.getElementById("phase_" + tableCnt);
@@ -640,10 +643,18 @@
                 }                    
                 //--------------------------------------------------------------------
                 //planned prep < planned review < planned review2　以外はエラー
-                if(compFromToDate(rev1.value,prep.value) || compFromToDate(rev2.value,rev1.value) || compFromToDate(rev2.value,prep.value)){
-                    isError = "true";
+                //if(compFromToDate(rev1.value,prep.value) || compFromToDate(rev2.value,rev1.value) || compFromToDate(rev2.value,prep.value)){
+                //    isError = "false";
+                //}
+                if(rev1.value != "" && prep.value != "" && !compFromToDate(rev1.value,prep.value)){
+                    isError = "false";
                 }
-                
+                if(rev2.value != "" && rev1.value != "" && !compFromToDate(rev2.value,rev1.value)){
+                    isError = "false";
+                }
+                if(rev2.value != "" && prep.value != "" && !compFromToDate(rev2.value,prep.value)){
+                    isError = "false";
+                }
             }
         }
         

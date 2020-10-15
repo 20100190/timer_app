@@ -78,7 +78,7 @@
     <div>
         @for($i=1;$i<=10;$i++)
         <div style="margin-bottom: 50px">
-            <div><label style="font-size: 20px;width: 135px"><input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="vertical-align: middle;border:solid 0px;" readonly></label><input type="button" id="contact_list{{$i}}" name="contact_list{{$i}}" class="btn btn-primary btn-sm" style="width: 150px" value="Add" onclick="appendPhase1Row(this)"></div>
+            <div><label style="font-size: 20px;width: 455px"><input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="width: 100px;vertical-align: middle;border:solid 0px;" readonly><span id="label_phase_desc{{$i}}" style="vertical-align: middle"></span></label><input type="button" id="contact_list{{$i}}" name="contact_list{{$i}}" class="btn btn-primary btn-sm" style="width: 150px" value="Add" onclick="appendPhase1Row(this)"></div>
             <table border="0" id="phase_{{$i}}" class="table table-sm" style="font-size: 14px;table-layout: fixed;width: 650px">  
                 <thead>
                     <tr>
@@ -243,6 +243,7 @@
 
             for (var i = 0; i < data.phase.length; i++) {
                 document.getElementById("label_phase" + (parseInt(i) + 1)).value = data.phase[i].name;
+                document.getElementById("label_phase_desc" + (parseInt(i) + 1)).innerHTML = data.phase[i].description;
             }
 
             //detail            
@@ -277,8 +278,10 @@
         for (var i = 1; i <= 10; i++) {
             var table = document.getElementById("phase_" + parseInt(i));
             var label = document.getElementById("label_phase" + parseInt(i));
+            var desc = document.getElementById("label_phase_desc" + parseInt(i));
             //Label初期化
             label.value = "";
+            desc.innerHTML = "";
             //List初期化
             while (table.rows[ 1 ])
                 table.deleteRow(1);

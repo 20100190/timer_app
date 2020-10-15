@@ -137,7 +137,7 @@ class WorkListController extends Controller {
                 continue;
             }
 
-            for ($j = 1; $j <= 20; $j++) { //明細数
+            for ($j = 1; $j <= 50; $j++) { //明細数
                 if (!isset($_POST["phase" . $i . "_id" . $j])) {
                     break;
                 }

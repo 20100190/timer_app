@@ -158,7 +158,7 @@ class WorkController extends Controller {
     }
     
     public function savePhaseItems($phaseGroupId,$index) {
-        for ($taskCnt = 1; $taskCnt < 20; $taskCnt++) {
+        for ($taskCnt = 1; $taskCnt < 50; $taskCnt++) {
             if (!isset($_POST["phase" . $index . "_task" . $taskCnt])) {
                 break;
             }
