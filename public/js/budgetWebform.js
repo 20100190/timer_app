@@ -53,6 +53,9 @@ $(document).ready(function () {
     $('#pic_or').multiselect({
         buttonWidth: 70,        
     });
+    $('#sel_status').multiselect({
+        buttonWidth: 150,        
+    });
     
     $('.datepicker1').datepicker({
             format: "mm/dd/yyyy",
@@ -120,6 +123,7 @@ function getData() {
     var dateFromObj = document.getElementById("filter_date_from");
     var dateToObj = document.getElementById("filter_date_to");
     var orValue = document.getElementById("pic_or").value;
+    var status = document.getElementById("sel_status").value;
 
     client = setDelimiter(clientObj);
     project = setDelimiter(projectObj);
@@ -140,10 +144,10 @@ function getData() {
     
     if(orValue == ""){
         orValue = "blank";
-    }
-    
+    }    
+   
     $.ajax({
-        url: "/budget/test3/data/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + dateFrom + "/" + dateTo + "/" + orValue,
+        url: "/budget/test3/data/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + dateFrom + "/" + dateTo + "/" + orValue + "/" + status,
         dataType: "json",
         success: data => {
             //初期化

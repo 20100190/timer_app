@@ -229,6 +229,19 @@
                 </div>
             </div>
             
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-3">
+                    <span class="line-height">Status</span>
+                </div>
+                <div class="col col-md-1">
+                    <select id="sel_status" name="sel_status" class="form-control" >                                                    
+                        <option value="All">All</option>                        
+                        <option value="Active">Active</option>       
+                        <option value="Inactive">Inactive</option>    
+                    </select>
+                </div>
+            </div>
+            
             <div class="row entry-filter-bottom" style="zoom: 100%;margin-top: 93px">
                 <div class="col col-md-3">                    
                 </div>

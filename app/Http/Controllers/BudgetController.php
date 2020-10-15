@@ -803,7 +803,21 @@ class BudgetController extends Controller
                 ->leftjoin("client", "project.client_id", "=", "client.id")
                 ->leftjoin("staff as B", "B.id", "=", "project.pic")
                 ->leftjoin("role_order", "role_order.role", "=", "assign.role");;
-
+        
+        if($request->status == "Inactive"){
+            $overallDetail = $overallDetail
+                    ->where(function($query) {
+                        $query->where(function($query){
+                            $query->where([["staff.status","=","Inactive"],["B.status","=","Inactive"]]);
+                        });
+                        $query->orWhere(function($query){
+                            $query->where([["staff.status","=","Inactive"],["B.status","=","Active"]]);
+                        });
+                    });
+        } else if($request->status == "Active"){
+            $overallDetail = $overallDetail->where([["staff.status","=","Active"],["B.status","=","Active"]]);
+        }
+        
         if ($request->client != "blank") {
             $overallDetail = $overallDetail
                     ->wherein('client.id', explode(",", $request->client));
