@@ -247,19 +247,23 @@
         c1.style.cssText = "vertical-align: middle";
         
         var prepBackgroundColor = "background-color: transparent";
-        if(comp != "" && compFromToDate(planndPrep,comp)){
+        if(comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,planndPrep)){
             prepBackgroundColor = "background-color: #cc0000";
         }else if(prepSignOff == "" && compFromToDate(nowDate,planndPrep)){
             prepBackgroundColor = "background-color: #e06666";
         }
         
         var rev1BackgroundColor = "background-color: transparent";
-        if(reviewSignOff == "" && compFromToDate(nowDate,plannedReview)){
+        if(comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,plannedReview)){
+            rev1BackgroundColor = "background-color: #cc0000";
+        }else if(reviewSignOff == "" && compFromToDate(nowDate,plannedReview)){
             rev1BackgroundColor = "background-color: #e06666";
         }
         
         var rev2BackgroundColor = "background-color: transparent";
-        if(reviewSignOff2 == "" && compFromToDate(nowDate,plannedReview2)){
+        if(comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,plannedReview2)){
+            rev2BackgroundColor = "background-color: #cc0000";
+        }else if(reviewSignOff2 == "" && compFromToDate(nowDate,plannedReview2)){
             rev2BackgroundColor = "background-color: #e06666";
         }
 
