@@ -77,7 +77,7 @@
     <div style="">
         @for($i=1;$i<=10;$i++)
         <div style="margin-bottom: 50px">
-            <div>
+            <div style="width: 2000px">
                 <label style="font-size: 20px;width: 455px"><input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="width: 100px;vertical-align: middle;border:solid 0px;" readonly><span id="label_phase_desc{{$i}}" style="vertical-align: middle"></span></label>
                 
                 <input type="button" id="contact_list{{$i}}" name="contact_list{{$i}}" class="btn btn-primary btn-sm" style="width: 150px" value="Add" onclick="appendPhase1Row(this)">

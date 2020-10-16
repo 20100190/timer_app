@@ -76,9 +76,8 @@ class WorkListController extends Controller {
         }
             
         $phaseItemList = [];
-        if($projectPhaseItemList->exists()){
-            $phaseGroupObj = PhaseItems::select("phase group.id as id")->distinct()->leftJoin("phase group", "phase group.id", "=", "phase items.phase_group_id")
-                    ->leftJoin("phase", "phase group.phase_id", "=", "phase.id")->get();
+        if($projectPhaseItemList->exists()){            
+            $phaseGroupObj = $projectPhaseItemList->select("phase group.id as id")->distinct()->get();
             foreach ($phaseGroupObj as $items) {                
                 array_push($phaseItemList, PhaseItems::select("phase items.id as id", "name", "description", "due_date", "preparer", "planed_prep", "prep_sign_off", "reviewer", "planned_review", "review_sign_off", "reviewer2", "planned_review2", "review_sign_off2","is_standard","memo","col_memo")
                                 ->leftJoin("project phase item", "project phase item.phase_item_id", "=", "phase items.id")
@@ -236,7 +235,8 @@ class WorkListController extends Controller {
                         //insert
                         $table = new ProjectPhaseItem;
                         $table->project_id = $projectId;
-                        $table->phase_item_id = $targetPhaseItem;//$_POST["phase" . $i . "_id" . $j];
+                        //$table->phase_item_id = $targetPhaseItem;//$_POST["phase" . $i . "_id" . $j];
+                        $table->phase_item_id = $_POST["phase" . $i . "_id" . $j];
                         $table->memo = "";
                         $table->due_date = $this->convDateFormat($_POST["phase" . $i . "_comp" . $j]);
                         
