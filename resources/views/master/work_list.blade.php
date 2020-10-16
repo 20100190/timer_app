@@ -79,9 +79,20 @@
         <div style="margin-bottom: 50px">
             <div>
                 <label style="font-size: 20px;width: 455px"><input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="width: 100px;vertical-align: middle;border:solid 0px;" readonly><span id="label_phase_desc{{$i}}" style="vertical-align: middle"></span></label>
-                <!--<label style="font-size: 20px;width: 85px">
-                    <input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="vertical-align: middle;border:solid 0px;" readonly></label>-->
+                
                 <input type="button" id="contact_list{{$i}}" name="contact_list{{$i}}" class="btn btn-primary btn-sm" style="width: 150px" value="Add" onclick="appendPhase1Row(this)">
+                
+                <input type="button" id="cd_expand{{$i}}" name="cd_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 80px;width: 110px" value="Expand" onclick="expandColumn({{$i}},1)">
+                <input type="button" id="pr_expand{{$i}}" name="pr_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 80px" value="Expand" onclick="expandColumn({{$i}},2)">
+                <input type="button" id="pp_expand{{$i}}" name="pp_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},3)">
+                <input type="button" id="ps_expand{{$i}}" name="ps_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},4)">
+                <input type="button" id="rr_expand{{$i}}" name="rr_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 80px" value="Expand" onclick="expandColumn({{$i}},5)">
+                <input type="button" id="pre_expand{{$i}}" name="pre_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 92px" value="Expand" onclick="expandColumn({{$i}},6)">
+                <input type="button" id="rsi_expand{{$i}}" name="rsi_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},7)">
+                <input type="button" id="rr2_expand{{$i}}" name="rr2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 85px" value="Expand" onclick="expandColumn({{$i}},8)">
+                <input type="button" id="pre2_expand{{$i}}" name="pre2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},9)">
+                <input type="button" id="rsi2_expand{{$i}}" name="rsi2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},10)">
+                <input type="button" id="me_expand{{$i}}" name="me_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 80px" value="Expand" onclick="expandColumn({{$i}},11)">
             </div>
             <table border="0" id="phase_{{$i}}" class="table table-sm" style="font-size: 14px;table-layout: fixed;width: 650px">  
                 <thead>
@@ -195,6 +206,10 @@
         var bodyLength = phase1_tbody.rows.length;
         var count = bodyLength + 1;
         var row = phase1_tbody.insertRow(bodyLength);
+        
+        //YMD
+        var now_jpn = moment();
+        var nowDate = now_jpn.format("MM/DD/YYYY");       
 
         if (id != "") {
             count = id;
@@ -230,6 +245,23 @@
         var c17 = row.insertCell(16);
 
         c1.style.cssText = "vertical-align: middle";
+        
+        var prepBackgroundColor = "background-color: transparent";
+        if(comp != "" && compFromToDate(planndPrep,comp)){
+            prepBackgroundColor = "background-color: #cc0000";
+        }else if(prepSignOff == "" && compFromToDate(nowDate,planndPrep)){
+            prepBackgroundColor = "background-color: #e06666";
+        }
+        
+        var rev1BackgroundColor = "background-color: transparent";
+        if(reviewSignOff == "" && compFromToDate(nowDate,plannedReview)){
+            rev1BackgroundColor = "background-color: #e06666";
+        }
+        
+        var rev2BackgroundColor = "background-color: transparent";
+        if(reviewSignOff2 == "" && compFromToDate(nowDate,plannedReview2)){
+            rev2BackgroundColor = "background-color: #e06666";
+        }
 
         var prepStaffInitialOption = "<option value=''></option>";
         var staffInfo = JSON.parse(document.getElementById("staff_info").value);
@@ -272,13 +304,13 @@
         c5.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'comp datepicker1" type="text" id="phase' + buttonIndex + '_comp' + count + '" name="phase' + buttonIndex + '_comp' + count + '" value="' + comp + '" style="width: 100%">';
         c6.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'prep" type="text" id="phase' + buttonIndex + '_prep' + count + '" name="phase' + buttonIndex + '_prep' + count + '" value="' + prep + '" style="width: 100%">' + prepStaffInitialOption + '</select>';
         c7.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedprep datepicker1" type="text" id="phase' + buttonIndex + '_planned_prep' + count + '" name="phase' + buttonIndex + '_planned_prep' + count + '" value="' + planndPrep + '" style="width: 100%">';
-        c8.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'prepsignoff datepicker1" type="text" id="phase' + buttonIndex + '_prep_signoff' + count + '" name="phase' + buttonIndex + '_prep_signoff' + count + '" value="' + prepSignOff + '" style="width: 100%">';
+        c8.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'prepsignoff datepicker1" type="text" id="phase' + buttonIndex + '_prep_signoff' + count + '" name="phase' + buttonIndex + '_prep_signoff' + count + '" value="' + prepSignOff + '" style="width: 100%;' + prepBackgroundColor + '" onchange="setPhaseBackground(this)">';
         c9.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'reviewer" type="text" id="phase' + buttonIndex + '_reviewer1' + count + '" name="phase' + buttonIndex + '_reviewer1' + count + '" value="' + reviewer + '" style="width: 100%">' + reviewerStaffInitialOption + '</select>';
         c10.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedreview datepicker1" type="text" id="phase' + buttonIndex + '_planned_review1' + count + '" name="phase' + buttonIndex + '_planned_review1' + count + '" value="' + plannedReview + '" style="width: 100%">';
-        c11.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff1' + count + '" name="phase' + buttonIndex + '_review_signoff1' + count + '" value="' + reviewSignOff + '" style="width: 100%">';
+        c11.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff1' + count + '" name="phase' + buttonIndex + '_review_signoff1' + count + '" value="' + reviewSignOff + '" style="width: 100%;' + rev1BackgroundColor + '" onchange="setPhaseBackground(this)">';
         c12.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'reviewer2" type="text" id="phase' + buttonIndex + '_reviewer2' + count + '" name="phase' + buttonIndex + '_reviewer2' + count + '" value="' + reviewer2 + '" style="width: 100%">' + reviewer2StaffInitialOption + '</select>';
         c13.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedreview2 datepicker1" type="text" id="phase' + buttonIndex + '_planned_review2' + count + '" name="phase' + buttonIndex + '_planned_review2' + count + '" value="' + plannedReview2 + '" style="width: 100%">';
-        c14.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff2 datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff2' + count + '" name="phase' + buttonIndex + '_review_signoff2' + count + '" value="' + reviewSignOff2 + '" style="width: 100%">';
+        c14.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff2 datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff2' + count + '" name="phase' + buttonIndex + '_review_signoff2' + count + '" value="' + reviewSignOff2 + '" style="width: 100%;' + rev2BackgroundColor + '" onchange="setPhaseBackground(this)">';
         c15.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'colmemo" type="text" id="phase' + buttonIndex + '_col_memo' + count + '" name="phase' + buttonIndex + '_col_memo' + count + '" value="' + colMemo + '" style="width: 100%">';
         if (isClickBtnAdd || isStandard == 0) {
             c16.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
@@ -734,6 +766,65 @@
             showConfirmButton: false,
             timer: 1500
         });
+    }
+    
+    function expandColumn(phaseCnt, colNo) {
+        var tableObj = document.getElementById("phase_" + phaseCnt);
+        var cellObj = null;
+        var copyObj = null;
+                
+        for(var rowCnt=1; rowCnt<tableObj.rows.length; rowCnt++){
+            if(colNo == 1){
+                copyObj = document.getElementById('phase' + phaseCnt + '_comp1');
+                cellObj = document.getElementById('phase' + phaseCnt + '_comp' + rowCnt);
+                cellObj.value = copyObj.value;
+            }else if(colNo == 2){
+                copyObj = document.getElementById('phase' + phaseCnt + '_prep1');
+                cellObj = document.getElementById('phase' + phaseCnt + '_prep' + rowCnt);
+                cellObj.selectedIndex = copyObj.selectedIndex;
+            }else if(colNo == 3){
+                copyObj = document.getElementById('phase' + phaseCnt + '_planned_prep1');
+                cellObj = document.getElementById('phase' + phaseCnt + '_planned_prep' + rowCnt);
+                cellObj.value = copyObj.value;
+            }else if(colNo == 4){
+                copyObj = document.getElementById('phase' + phaseCnt + '_prep_signoff1');
+                cellObj = document.getElementById('phase' + phaseCnt + '_prep_signoff' + rowCnt);
+                cellObj.value = copyObj.value;
+            }else if(colNo == 5){
+                copyObj = document.getElementById('phase' + phaseCnt + '_reviewer11');
+                cellObj = document.getElementById('phase' + phaseCnt + '_reviewer1' + rowCnt);
+                cellObj.selectedIndex = copyObj.selectedIndex;
+            }else if(colNo == 6){
+                copyObj = document.getElementById('phase' + phaseCnt + '_planned_review11');
+                cellObj = document.getElementById('phase' + phaseCnt + '_planned_review1' + rowCnt);
+                cellObj.value = copyObj.value;
+            }else if(colNo == 7){
+                copyObj = document.getElementById('phase' + phaseCnt + '_review_signoff11');
+                cellObj = document.getElementById('phase' + phaseCnt + '_review_signoff1' + rowCnt);
+                cellObj.value = copyObj.value;
+            }else if(colNo == 8){
+                copyObj = document.getElementById('phase' + phaseCnt + '_reviewer21');
+                cellObj = document.getElementById('phase' + phaseCnt + '_reviewer2' + rowCnt);
+                cellObj.selectedIndex = copyObj.selectedIndex;
+            }else if(colNo == 9){
+                copyObj = document.getElementById('phase' + phaseCnt + '_planned_review21');
+                cellObj = document.getElementById('phase' + phaseCnt + '_planned_review2' + rowCnt);
+                cellObj.value = copyObj.value;
+            }else if(colNo == 10){
+                copyObj = document.getElementById('phase' + phaseCnt + '_review_signoff21');
+                cellObj = document.getElementById('phase' + phaseCnt + '_review_signoff2' + rowCnt);
+                cellObj.value = copyObj.value;
+            }else if(colNo == 11){
+                copyObj = document.getElementById('phase' + phaseCnt + '_col_memo1');
+                cellObj = document.getElementById('phase' + phaseCnt + '_col_memo' + rowCnt);
+                cellObj.value = copyObj.value;
+            }
+            
+        }
+    }
+    
+    function setPhaseBackground(obj) {
+        obj.style.backgroundColor = "transparent";
     }
 
 

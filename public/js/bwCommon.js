@@ -39,6 +39,7 @@ function setProjectData(isMulti) {
 }
 
 //from, to : mm/dd/yyyy形式の文字列
+//fromよりtoが大きい場合True
 function compFromToDate(fromDate, toDate) {
     var isBiggerThanToDate = false;
     var fromDateArray = fromDate.split("/");
@@ -47,7 +48,7 @@ function compFromToDate(fromDate, toDate) {
     var date1 = new Date(fromDateArray[2], fromDateArray[0], fromDateArray[1], 00, 00, 00);
     var date2 = new Date(toDateArray[2], toDateArray[0], toDateArray[1], 00, 00, 00);
     
-    isBiggerThanToDate = date1 > date2;
+    isBiggerThanToDate = date1 >= date2;
     
     return isBiggerThanToDate;
 }
