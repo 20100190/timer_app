@@ -245,8 +245,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 @if(Request::decodedPath() == "master/staff") - Staff @endif
                                 @if(Request::decodedPath() == "master/task") - Harvest Task @endif
                                 @if(Request::decodedPath() == "master/client") - Client @endif
-                                @if(Request::decodedPath() == "master/work") - Phase Standard @endif
-                                @if(Request::decodedPath() == "master/work-list") - Phase Tasks @endif
+                                @if(Request::decodedPath() == "master/work") - Phase Standard @endif                                
+                                @if(strpos(Request::decodedPath(),"master/work-list") !== false) - Phase Tasks @endif
                                 @if(Request::decodedPath() == "task-schedule") - Task Schedule @endif
                                 @if(Request::decodedPath() == "master/project-list") - Project List @endif
                             </a>
