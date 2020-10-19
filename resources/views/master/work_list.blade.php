@@ -124,13 +124,20 @@
 
     <div class="form-group">            
         <div class="col-md-4">
-            <input class="btn btn-primary" type="button" onclick="saveForm()" value="Update">
+            <input class="btn btn-primary" id="btn_update" name="btn_update" type="button" onclick="saveForm('update')" value="Update">
+        </div>
+    </div>  
+    
+    <div class="form-group">            
+        <div class="col-md-4">
+            <input class="btn btn-primary" id="btn_monthly_data" name="btn_monthly_data" type="button" onclick="saveForm('monthlyData')" value="Monthly Data">
         </div>
     </div>  
 
     <input type="hidden" value="" id="postArray" name="postArray">
     <input type="hidden" id="budget_info" name="budget_info" value="">
     <input type="hidden" id="staff_info" name="staff_info" value="">
+    <input type="hidden" id="clicked_button" name="clicked_button" value="">
 
 </form>
 
@@ -159,9 +166,11 @@
                     $('#group').multiselect('enable');
                     if (!element.val().match("BM ")) {
                         $('#group').multiselect('disable');
+                        $('#group').multiselect('deselect', $("#group").val());
+                        $("#group").multiselect('select', "");
                     }
                 }
-                $("#group").multiselect('select', element.val());
+                //$("#group").multiselect('select', element.val());
             }
         });
         $('#group').multiselect({
@@ -246,22 +255,22 @@
 
         c1.style.cssText = "vertical-align: middle";
         
-        var prepBackgroundColor = "background-color: transparent";
-        if(comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,planndPrep)){
+        var prepBackgroundColor = "background-color: transparent";        
+        if(prepSignOff == "" && comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,planndPrep)){
             prepBackgroundColor = "background-color: #cc0000";
         }else if(prepSignOff == "" && compFromToDate(nowDate,planndPrep)){
             prepBackgroundColor = "background-color: #e06666";
         }
         
         var rev1BackgroundColor = "background-color: transparent";
-        if(comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,plannedReview)){
+        if(reviewSignOff == "" && comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,plannedReview)){
             rev1BackgroundColor = "background-color: #cc0000";
         }else if(reviewSignOff == "" && compFromToDate(nowDate,plannedReview)){
             rev1BackgroundColor = "background-color: #e06666";
         }
         
         var rev2BackgroundColor = "background-color: transparent";
-        if(comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,plannedReview2)){
+        if(reviewSignOff2 == "" && comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,plannedReview2)){
             rev2BackgroundColor = "background-color: #cc0000";
         }else if(reviewSignOff2 == "" && compFromToDate(nowDate,plannedReview2)){
             rev2BackgroundColor = "background-color: #e06666";
@@ -403,9 +412,24 @@
             }
         }
     }
-
-
+    
     function loadPhaseData() {
+        var project = $("#project").val();
+        var group = $("#group").val();
+        if(project.match("BM ") && group == ""){
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'Error',
+                html: "select group"
+            });
+            return;
+        }
+        
+        loadPhaseDataDetail();
+    }
+
+    function loadPhaseDataDetail() {
 
         var client = $("#client").val();
         var project = $("#project").val();
@@ -697,7 +721,8 @@
         return isError;
     }
 
-    function saveForm() {
+    function saveForm(btnValue) {
+        document.getElementById("clicked_button").value = btnValue;
         //エラーチェック
         var isError = getErrorWorkList();
         if (isError == "confirm") {
@@ -727,7 +752,7 @@
         }        
     }
 
-    function saveDetail() {
+    function saveDetail() {        
         var params = $("form").serialize();
 
         $.ajaxSetup({
