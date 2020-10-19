@@ -732,7 +732,7 @@
         if (isError == "confirm") {
             Swal.fire({
                 title: 'Warning',
-                text: "Save Phase Task?",
+                text: "Planned Prep, Review(2) date are not set before Completion Due.\n Is it ok to save this?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
