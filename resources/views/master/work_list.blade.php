@@ -184,6 +184,10 @@
         if (receiveClientId != "" || receiveProjectId != "") {
             $('#client').multiselect('select', receiveClientId);
             $('#project').multiselect('select', receiveProjectId);
+            if(receiveProjectId.match("BM ")){
+                $('#group').multiselect('select', "January");
+            }
+            
             loadPhaseData();
         }
 
