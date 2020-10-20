@@ -263,21 +263,21 @@
         if(prepSignOff == "" && comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,planndPrep)){
             prepBackgroundColor = "background-color: #cc0000";
         }else if(prepSignOff == "" && compFromToDate(nowDate,planndPrep)){
-            prepBackgroundColor = "background-color: #e06666";
+            prepBackgroundColor = "background-color: #f4cccc";
         }
         
         var rev1BackgroundColor = "background-color: transparent";
         if(reviewSignOff == "" && comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,plannedReview)){
             rev1BackgroundColor = "background-color: #cc0000";
         }else if(reviewSignOff == "" && compFromToDate(nowDate,plannedReview)){
-            rev1BackgroundColor = "background-color: #e06666";
+            rev1BackgroundColor = "background-color: #f4cccc";
         }
         
         var rev2BackgroundColor = "background-color: transparent";
         if(reviewSignOff2 == "" && comp != "" && compFromToDate(nowDate,comp) && compFromToDate(nowDate,plannedReview2)){
             rev2BackgroundColor = "background-color: #cc0000";
         }else if(reviewSignOff2 == "" && compFromToDate(nowDate,plannedReview2)){
-            rev2BackgroundColor = "background-color: #e06666";
+            rev2BackgroundColor = "background-color: #f4cccc";
         }
 
         var prepStaffInitialOption = "<option value=''></option>";
