@@ -37,7 +37,7 @@
             </div>
             <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-2">
-                    <span class="line-height">Group</span>
+                    <span class="line-height">Month</span>
                 </div>
                 <div class="col col-md-1">
                     <select id="group" name="group" style="width: 200px">     
@@ -82,17 +82,17 @@
                 
                 <input type="button" id="contact_list{{$i}}" name="contact_list{{$i}}" class="btn btn-primary btn-sm" style="width: 150px" value="Add" onclick="appendPhase1Row(this)">
                 
-                <input type="button" id="cd_expand{{$i}}" name="cd_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 80px;width: 110px" value="Expand" onclick="expandColumn({{$i}},1)">
-                <input type="button" id="pr_expand{{$i}}" name="pr_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 80px" value="Expand" onclick="expandColumn({{$i}},2)">
-                <input type="button" id="pp_expand{{$i}}" name="pp_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},3)">
+                <input type="button" id="cd_expand{{$i}}" name="cd_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 80px;width: 110px" value="Copy All" onclick="expandColumn({{$i}},1)">
+                <input type="button" id="pr_expand{{$i}}" name="pr_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 80px" value="Copy All" onclick="expandColumn({{$i}},2)">
+                <input type="button" id="pp_expand{{$i}}" name="pp_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Copy All" onclick="expandColumn({{$i}},3)">
                 <!--<input type="button" id="ps_expand{{$i}}" name="ps_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},4)">-->
-                <input type="button" id="rr_expand{{$i}}" name="rr_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 126px;width: 80px" value="Expand" onclick="expandColumn({{$i}},5)">
-                <input type="button" id="pre_expand{{$i}}" name="pre_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 92px" value="Expand" onclick="expandColumn({{$i}},6)">
+                <input type="button" id="rr_expand{{$i}}" name="rr_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 126px;width: 80px" value="Copy All" onclick="expandColumn({{$i}},5)">
+                <input type="button" id="pre_expand{{$i}}" name="pre_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 92px" value="Copy All" onclick="expandColumn({{$i}},6)">
                 <!--<input type="button" id="rsi_expand{{$i}}" name="rsi_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},7)">-->
-                <input type="button" id="rr2_expand{{$i}}" name="rr2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 126px;width: 85px" value="Expand" onclick="expandColumn({{$i}},8)">
-                <input type="button" id="pre2_expand{{$i}}" name="pre2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},9)">
+                <input type="button" id="rr2_expand{{$i}}" name="rr2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 126px;width: 85px" value="Copy All" onclick="expandColumn({{$i}},8)">
+                <input type="button" id="pre2_expand{{$i}}" name="pre2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Copy All" onclick="expandColumn({{$i}},9)">
                 <!--<input type="button" id="rsi2_expand{{$i}}" name="rsi2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},10)">-->
-                <input type="button" id="me_expand{{$i}}" name="me_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 126px;width: 80px" value="Expand" onclick="expandColumn({{$i}},11)">
+                <input type="button" id="me_expand{{$i}}" name="me_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 126px;width: 80px" value="Copy All" onclick="expandColumn({{$i}},11)">
             </div>
             <table border="0" id="phase_{{$i}}" class="table table-sm" style="font-size: 14px;table-layout: fixed;width: 650px">  
                 <thead>
@@ -130,7 +130,7 @@
     
     <div class="form-group">            
         <div class="col-md-4">
-            <input class="btn btn-primary" id="btn_monthly_data" name="btn_monthly_data" type="button" onclick="saveForm('monthlyData')" value="Monthly Data">
+            <input class="btn btn-primary" id="btn_monthly_data" name="btn_monthly_data" type="button" onclick="saveForm('monthlyData')" value="Annualize">
         </div>
     </div>  
 
