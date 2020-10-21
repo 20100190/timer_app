@@ -724,10 +724,22 @@
         
         return isError;
     }
-
+    
     function saveForm(btnValue) {
         document.getElementById("clicked_button").value = btnValue;
-        //エラーチェック
+        //入力　エラーチェック
+        var isErrorEntry = getErrorEntry();
+        if(isErrorEntry){
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'Error',
+                html: "need to enter assign information"
+            });
+            return;
+        }
+        
+        //妥当性　エラーチェック
         var isError = getErrorWorkList();
         if (isError == "confirm") {
             Swal.fire({
@@ -858,6 +870,65 @@
     
     function setPhaseBackground(obj) {
         obj.style.backgroundColor = "transparent";
+    }
+    
+    function getErrorEntry(){
+        var isError = false;
+        var errorColor = "yellow";
+        var defaultColor = "transparent";
+        for(var tableCnt=1; tableCnt<= 10; tableCnt++){
+            var tableObj = document.getElementById("phase_" + tableCnt);
+            if(typeof tableObj === "undefined"){
+                break;
+            }
+            
+            for(var rowCnt=1; rowCnt<tableObj.rows.length; rowCnt++){
+                var prep = document.getElementById("phase" + tableCnt + "_prep" + rowCnt);
+                var rev1 = document.getElementById("phase" + tableCnt + "_reviewer1" + rowCnt);
+                var rev2 = document.getElementById("phase" + tableCnt + "_reviewer2" + rowCnt);
+                
+                var prepDate = document.getElementById("phase" + tableCnt + "_planned_prep" + rowCnt);
+                var rev1Date = document.getElementById("phase" + tableCnt + "_planned_review1" + rowCnt);
+                var rev2Date = document.getElementById("phase" + tableCnt + "_planned_review2" + rowCnt);
+            
+                var prepSignOff = document.getElementById("phase" + tableCnt + "_prep_signoff" + rowCnt);
+                var rev1SignOff = document.getElementById("phase" + tableCnt + "_review_signoff1" + rowCnt);
+                var rev2SignOff = document.getElementById("phase" + tableCnt + "_review_signoff2" + rowCnt);
+                
+                prep.style.backgroundColor = defaultColor;
+                rev1.style.backgroundColor = defaultColor;
+                rev2.style.backgroundColor = defaultColor;
+            
+                //preparerチェック
+                if(prep.value == "" && prepDate.value != ""){
+                    prep.style.backgroundColor = errorColor;
+                    isError = true;
+                }
+                if(prep.value == "" && prepSignOff.value != ""){
+                    prep.style.backgroundColor = errorColor;
+                    isError = true;
+                }
+                //reviewer1チェック
+                if(rev1.value == "" && rev1Date.value != ""){
+                    rev1.style.backgroundColor = errorColor;
+                    isError = true;
+                }
+                if(rev1.value == "" && rev1SignOff.value != ""){
+                    rev1.style.backgroundColor = errorColor;
+                    isError = true;
+                }
+                //reviewer2チェック
+                if(rev2.value == "" && rev2Date.value != ""){
+                    rev2.style.backgroundColor = errorColor;
+                    isError = true;
+                }
+                if(rev2.value == "" && rev2SignOff.value != ""){
+                    rev2.style.backgroundColor = errorColor;
+                    isError = true;
+                }
+            }
+        }
+        return isError;
     }
 
 
