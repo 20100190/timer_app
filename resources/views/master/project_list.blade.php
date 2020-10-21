@@ -91,21 +91,25 @@ function closeOverrall() {
     var imagesUrl = '{{ URL::asset('/image') }}';
     var acWidth = document.getElementById("filter_left").style.height;
     var btnObj = document.getElementById("btn_open_close");
+    var closeArea = document.getElementById("close_area");
     
     if (acWidth == "30px") {
         btnObj.src = imagesUrl + "/close.png"
-        document.getElementById("filter_left").style.height = "180px";   
+        document.getElementById("filter_left").style.height = "180px";  
+        closeArea.style.height = "150px";  
         //document.getElementById("btn_open_close").style.cssText = "margin-top: 50px";   
         
         document.getElementById("filter_left").style.visibility = "visible";
+        document.getElementById("add_new").style.visibility = "visible";
         setHeight("");
         
     } else {
         btnObj.src = imagesUrl + "/open.png"
         document.getElementById("filter_left").style.height = "30px";
         //document.getElementById("btn_open_close").style.cssText = "margin-top: 0px";     
-        
-        document.getElementById("filter_left").style.visibility = "hidden";       
+        closeArea.style.height = "30px";  
+        document.getElementById("filter_left").style.visibility = "hidden";  
+        document.getElementById("add_new").style.visibility = "hidden";
         setHeight(140);
     }   
     
@@ -271,11 +275,13 @@ function setProjectData(){
                     <span>Search</span>
                 </button>-->
                 <input class="btn btn-primary" type="button" value="Search" style="width: 150px" onclick="loadData()">
-            </div>
+            </div>            
         </div>
     </div>
-    <div style="float: left;">
+    <div id="close_area" style="float: left;">
         <input type="image" id="btn_open_close" src="{{ URL::asset('/image') }}/close.png" onclick="closeOverrall();return;" style="height: 20px;width: 20px;margin-left: 115px;margin-top: 5px">
+       <br><br><br><br><br>       
+       <a href="{{ url("/master/project/") }}" class="btn btn-primary" target="_blank" type="button" id="add_new" style="margin-top: 10px;margin-left: 50px;width: 100px" onclick="">Add New</a>
     </div>
 <!--</form>-->
     
