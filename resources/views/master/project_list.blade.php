@@ -278,6 +278,7 @@ function setProjectData(){
             </div>            
         </div>
     </div>
+    
     <div id="close_area" style="float: left;">
         <input type="image" id="btn_open_close" src="{{ URL::asset('/image') }}/close.png" onclick="closeOverrall();return;" style="height: 20px;width: 20px;margin-left: 115px;margin-top: 5px">
        <br><br><br><br><br>       
