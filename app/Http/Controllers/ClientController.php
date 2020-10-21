@@ -258,13 +258,13 @@ class ClientController extends Controller {
        
         $client = Client::where("id","=",$id);
         
-        $incorporationDate = "";
+        $incorporationDate = NULL;
         if($request->input("incorporation_date") != ""){
             $bArray = explode("/",$request->input("incorporation_date"));
             $incorporationDate = $bArray[2] . "-" . $bArray[0] . "-" . $bArray[1];
         }
         
-        $businessStartedDate = "";
+        $businessStartedDate = NULL;
         if($request->input("business_started") != ""){
             $bArray = explode("/",$request->input("business_started"));
             $businessStartedDate = $bArray[2] . "-" . $bArray[0] . "-" . $bArray[1];
