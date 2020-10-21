@@ -285,7 +285,23 @@
                     </tr>
                     <tr>
                         <th style="vertical-align: middle;">FYE</th>
-                        <td style="vertical-align: middle;"><input class="form-control" name="fye" type="text" id="fye" value="{{$client->fye}}"></td>
+                        <td style="vertical-align: middle;">                            
+                            <select id="fye" name="fye" class="form-control">  
+                                <option value=""></option>
+                                <option value="1/31" @if($client->fye == "1/31") selected @endif>1/31</option>
+                                <option value="2/28" @if($client->fye == "2/28") selected @endif>2/28</option>
+                                <option value="3/31" @if($client->fye == "3/31") selected @endif>3/31</option>
+                                <option value="4/30" @if($client->fye == "4/30") selected @endif>4/30</option>
+                                <option value="5/31" @if($client->fye == "5/31") selected @endif>5/31</option>
+                                <option value="6/30" @if($client->fye == "6/30") selected @endif>6/30</option>
+                                <option value="7/31" @if($client->fye == "7/31") selected @endif>7/31</option>
+                                <option value="8/31" @if($client->fye == "8/31") selected @endif>8/31</option>
+                                <option value="9/30" @if($client->fye == "9/30") selected @endif>9/30</option>
+                                <option value="10/31" @if($client->fye == "10/31") selected @endif>10/31</option>
+                                <option value="11/30" @if($client->fye == "11/30") selected @endif>11/30</option>
+                                <option value="12/31" @if($client->fye == "12/31") selected @endif>12/31</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th style="vertical-align: middle;">Vic Status</th>

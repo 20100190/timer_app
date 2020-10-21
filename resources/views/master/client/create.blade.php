@@ -280,7 +280,23 @@
                     </tr>
                     <tr>
                         <th style="vertical-align: middle;">FYE</th>
-                        <td style="vertical-align: middle;"><input class="form-control" name="fye" type="text" id="fye" value=""></td>
+                        <td style="vertical-align: middle;">
+                            <select id="fye" name="fye" class="form-control">  
+                                <option value=""></option>
+                                <option value="1/31">1/31</option>
+                                <option value="2/28">2/28</option>
+                                <option value="3/31">3/31</option>
+                                <option value="4/30">4/30</option>
+                                <option value="5/31">5/31</option>
+                                <option value="6/30">6/30</option>
+                                <option value="7/31">7/31</option>
+                                <option value="8/31">8/31</option>
+                                <option value="9/30">9/30</option>
+                                <option value="10/31">10/31</option>
+                                <option value="11/30">11/30</option>
+                                <option value="12/31">12/31</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th style="vertical-align: middle;">Vic Status</th>
