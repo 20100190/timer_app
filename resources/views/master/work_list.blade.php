@@ -130,7 +130,7 @@
     
     <div class="form-group">            
         <div class="col-md-4">
-            <input class="btn btn-primary" id="btn_monthly_data" name="btn_monthly_data" type="button" onclick="saveForm('monthlyData')" value="Annualize">
+            <input class="btn btn-primary" id="btn_monthly_data" name="btn_monthly_data" type="button" onclick="saveAnnualize()" value="Annualize">
         </div>
     </div>  
 
@@ -536,15 +536,19 @@
             for (var blockCnt = 1; blockCnt <= 10; blockCnt++) {
                 var tblTbody = document.getElementById('phase' + blockCnt + '_body');
                 for (var i = 0, rowLen = tblTbody.rows.length; i < rowLen; i++) {
-                    var cells = tblTbody.rows[i].cells[15].children[0].value;
+                    var cells = tblTbody.rows[i].cells[16].children[0].value;
                     if (cells !== undefined && cells == "Disabled") {
                         tblTbody.rows[i].cells[4].children[0].readOnly = true;
                         tblTbody.rows[i].cells[6].children[0].readOnly = true;
                         tblTbody.rows[i].cells[7].children[0].readOnly = true;
+                        tblTbody.rows[i].cells[7].children[0].style.backgroundColor = "#DCDCDC";
                         tblTbody.rows[i].cells[9].children[0].readOnly = true;
                         tblTbody.rows[i].cells[10].children[0].readOnly = true;
+                        tblTbody.rows[i].cells[10].children[0].style.backgroundColor = "#DCDCDC";
                         tblTbody.rows[i].cells[12].children[0].readOnly = true;
                         tblTbody.rows[i].cells[13].children[0].readOnly = true;
+                        tblTbody.rows[i].cells[13].children[0].style.backgroundColor = "#DCDCDC";
+                        tblTbody.rows[i].cells[14].children[0].readOnly = true;
                         var prepObj = tblTbody.rows[i].cells[5].children[0];
                         prepObj.options[0].selected = true;
                         prepObj.style.cssText = "background-color: " + "#DCDCDC";
@@ -565,8 +569,8 @@
                         }
                     }
                 }
-            }
-
+            }            
+          
         }).error(function (XMLHttpRequest, textStatus, errorThrown) {
             clearAllList();
 
@@ -626,6 +630,7 @@
         if (document.getElementById('phase' + buttonIndex + '_memo' + count).value == "") {
             document.getElementById('phase' + buttonIndex + '_memo' + count).value = "Disabled";
             document.getElementById('phase' + buttonIndex + '_comp' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_comp' + count).value = "";
             //document.getElementById('phase' + buttonIndex + '_prep' + count).disabled = true;            
             prepObj.style.cssText = "background-color: " + backGroundColorDisabled;
             prepObj.options[0].selected = true;
@@ -633,7 +638,10 @@
                 prepObj.options[i].disabled = "disabled";
             }
             document.getElementById('phase' + buttonIndex + '_planned_prep' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_planned_prep' + count).value = "";
             document.getElementById('phase' + buttonIndex + '_prep_signoff' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_prep_signoff' + count).style.backgroundColor = "#DCDCDC";
+            document.getElementById('phase' + buttonIndex + '_prep_signoff' + count).value = "";
             //document.getElementById('phase' + buttonIndex + '_reviewer1' + count).disabled = true;            
             reviewer1Obj.style.cssText = "background-color: " + backGroundColorDisabled;
             reviewer1Obj.options[0].selected = true;
@@ -641,7 +649,10 @@
                 reviewer1Obj.options[i].disabled = "disabled";
             }
             document.getElementById('phase' + buttonIndex + '_planned_review1' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_planned_review1' + count).value = "";
             document.getElementById('phase' + buttonIndex + '_review_signoff1' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_review_signoff1' + count).style.backgroundColor = "#DCDCDC";
+            document.getElementById('phase' + buttonIndex + '_review_signoff1' + count).value = "";
             //document.getElementById('phase' + buttonIndex + '_reviewer2' + count).disabled = true;
             reviewer2Obj.style.cssText = "background-color: " + backGroundColorDisabled;
             reviewer2Obj.options[0].selected = true;
@@ -649,7 +660,14 @@
                 reviewer2Obj.options[i].disabled = "disabled";
             }
             document.getElementById('phase' + buttonIndex + '_planned_review2' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_planned_review2' + count).value = "";
             document.getElementById('phase' + buttonIndex + '_review_signoff2' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_review_signoff2' + count).style.backgroundColor = "#DCDCDC";
+            document.getElementById('phase' + buttonIndex + '_review_signoff2' + count).value = "";
+            
+            document.getElementById('phase' + buttonIndex + '_col_memo' + count).value = "";
+            document.getElementById('phase' + buttonIndex + '_col_memo' + count).readOnly = true;
+            document.getElementById('phase' + buttonIndex + '_col_memo' + count).style.backgroundColor = "#DCDCDC";
         } else {
             document.getElementById('phase' + buttonIndex + '_memo' + count).value = "";
             document.getElementById('phase' + buttonIndex + '_comp' + count).readOnly = false;
@@ -661,6 +679,7 @@
             }
             document.getElementById('phase' + buttonIndex + '_planned_prep' + count).readOnly = false;
             document.getElementById('phase' + buttonIndex + '_prep_signoff' + count).readOnly = false;
+            document.getElementById('phase' + buttonIndex + '_prep_signoff' + count).style.backgroundColor = "transparent";            
             //document.getElementById('phase' + buttonIndex + '_reviewer1' + count).disabled = false;
             reviewer1Obj.style.cssText = "background-color: " + backGroundColorEnable;
             for (var i = 1; i < reviewer1Obj.length; i++) {
@@ -668,6 +687,7 @@
             }
             document.getElementById('phase' + buttonIndex + '_planned_review1' + count).readOnly = false;
             document.getElementById('phase' + buttonIndex + '_review_signoff1' + count).readOnly = false;
+            document.getElementById('phase' + buttonIndex + '_review_signoff1' + count).style.backgroundColor = "transparent";
             //document.getElementById('phase' + buttonIndex + '_reviewer2' + count).disabled = false;
             reviewer2Obj.style.cssText = "background-color: " + backGroundColorEnable;
             for (var i = 1; i < reviewer2Obj.length; i++) {
@@ -675,6 +695,10 @@
             }
             document.getElementById('phase' + buttonIndex + '_planned_review2' + count).readOnly = false;
             document.getElementById('phase' + buttonIndex + '_review_signoff2' + count).readOnly = false;
+            document.getElementById('phase' + buttonIndex + '_review_signoff2' + count).style.backgroundColor = "transparent";
+           
+            document.getElementById('phase' + buttonIndex + '_col_memo' + count).readOnly = false;
+            document.getElementById('phase' + buttonIndex + '_col_memo' + count).style.backgroundColor = "transparent";
         }
 
     }
@@ -761,7 +785,8 @@
                 position: 'top',
                 icon: 'error',
                 title: 'Error',
-                html: "Error"
+                width: '400px',
+                html: "Planned review(2) date(s) must be set after planned prep date<br>Planned review 2 date must be set after planned review date"
             });
         } else {
             saveDetail();        
@@ -819,6 +844,11 @@
         var copyObj = null;
                 
         for(var rowCnt=1; rowCnt<tableObj.rows.length; rowCnt++){
+            
+            if(document.getElementById('phase' + phaseCnt + '_memo' + rowCnt).value == "Disabled"){
+                continue;
+            }
+            
             if(colNo == 1){
                 copyObj = document.getElementById('phase' + phaseCnt + '_comp1');
                 cellObj = document.getElementById('phase' + phaseCnt + '_comp' + rowCnt);
@@ -929,6 +959,23 @@
             }
         }
         return isError;
+    }
+    
+    function saveAnnualize() {
+       Swal.fire({
+           title: 'Warning',
+           html: "Are you sure to annualize the tasks? <br> All existing data in other months will be overwritten and can not be restored. <br> It is strongly recommended to use this function only at the time of creating a yearly task list.",
+           icon: 'warning',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Yes',
+           width: '500px'
+       }).then((result) => {
+           if (result.value) {
+                saveForm('monthlyData');
+           }
+       });
     }
 
 
