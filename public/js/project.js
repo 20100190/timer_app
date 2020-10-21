@@ -124,7 +124,7 @@ function insertTaskRow(name, status, taskId, isNew) {
     //c2.innerHTML = '<input class="inpname form-control form-control-sm" type="text"   id="task_name' + count + '" name="task_name' + count + '" value="' + name + '" style="width: 100%">';
     c2.innerHTML = taskNameObj;
     c3.innerHTML = '<img src="'+ imagesUrl + "/arrow.png" +'" style="width: 20px;height: 20px;margin-top: 8px">';
-    c4.innerHTML = '<input class="delbtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnTask' + count + '" value="Delete" onclick="deleteRow(this)">';
+    c4.innerHTML = '<input class="delbtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnTask' + count + '" value="Delete" onclick="deleteRow(this);return false;">';
     c5.innerHTML = '<input class="inporder" type="text" id="order' + count + '" name="order' + count + '" value="' + count + '" style="width: 20px">';
     c6.innerHTML = '<input class="inptaskid" type="text" id="task_id' + count + '" name="task_id' + count + '" value="' + taskId + '" style="width: 20px">';
 }
@@ -168,7 +168,7 @@ function appendBudgetRow()
     c5.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="0" style="text-align: right;width: 50px" readonly>';
     c6.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 73px"  readonly>';
     //c7.innerHTML = '<input class="edtBudgetBtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRowBudgetList(this)">';
-    c7.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
+    c7.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this);return false;">';
 
 }
 
@@ -219,7 +219,7 @@ function insertBudgetRow(staffId, role, hours) {
     c5.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inprate form-control form-control-sm" type="text" onchange="calc()" id="rate' + count + '" name="rate' + count + '" value="' + staffRate + '" style="text-align: right;width: 50px;float: left" readonly>';
     c6.innerHTML = '<div style="float: left;margin-right: 3px;margin-top: 7px">$</div><input class="inpbudget form-control form-control-sm" type="text" id="budget' + count + '" name="budget' + count + '" value="0" style="text-align: right;width: 73px"  readonly>';
     //c7.innerHTML = '<input class="edtBudgetBtn btn btn-success btn-sm" type="button" id="edtBtn' + count + '" value="確定" onclick="editRowBudgetList(this)">';
-    c8.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this)">';
+    c8.innerHTML = '<input class="delBudgetBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnBudget' + count + '" value="Delete" onclick="delRowBudgetList(this);return false;">';
 
 }
 
@@ -861,6 +861,7 @@ function appendEngagementRow(type,jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,de
     //c2.style.cssText = "width: 150px";
     c1.style.cssText = "vertical-align: middle;text-align: center";
     c16.style.cssText = "vertical-align: middle";
+    c17.style.cssText = "vertical-align: middle";
    
     // 各列に表示内容を設定
     c1.innerHTML = '<span class="seqnoengagement">' + count + '</span>';
@@ -878,8 +879,41 @@ function appendEngagementRow(type,jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,de
     c13.innerHTML = '<input class="inpengagementnov form-control form-control-sm" id="nov' + count + '" name="nov' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + nov + '">';
     c14.innerHTML = '<input class="inpengagementdec form-control form-control-sm" id="dec' + count + '" name="dec' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + dec + '">';
     c15.innerHTML = '<input class="inpengagementtotal form-control form-control-sm" id="total' + count + '" name="total' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" value="' + 0 + '" readonly>';        
-    c16.innerHTML = '<a><img src="'+ imagesUrl + "/duplicate.png" +'" id="copyBtnEngagement' + count + '" value="Copy" onclick="copyRowEngagementList(' + count + ');return;"></a>';
-    c17.innerHTML = '<input class="delEngagementBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnEngagement' + count + '" value="Delete" onclick="delRowEngagementList(this)">';
+    //c16.innerHTML = '<a><img src="'+ imagesUrl + "/duplicate.png" +'" id="copyBtnEngagement' + count + '" value="Copy" onclick="copyRowEngagementList(' + count + ');return;"></a>';    
+    c16.innerHTML = '<input class="copyEngagementBtn btn btn-sm" type="image" src="'+ imagesUrl + "/duplicate.png" +'" id="copyBtnEngagement' + count + '" value="Copy" onclick="copyRowEngagementList(this);return false;">';
+    //c17.innerHTML = '<a><img src="'+ imagesUrl + "/delete.png" +'" id="deleteBtnEngagement' + count + '" value="Copy" onclick="delRowEngagementList(this);return;"></a>';
+    c17.innerHTML = '<input class="delEngagementBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnEngagement' + count + '" value="Delete" onclick="delRowEngagementList(this);return false;">';
+}
+
+function delRowEngagementList(obj) {
+    delRowCommon(obj, "seqnoengagement");
+
+    // id/name ふり直し
+    var tagElements = document.getElementsByTagName("input");
+    if (!tagElements)
+        return false;
+
+    reOrderElementTag(tagElements, "inpengagementtype", "type");    
+    reOrderElementTag(tagElements, "inpengagementjan", "jan");
+    reOrderElementTag(tagElements, "inpengagementfeb", "feb");
+    reOrderElementTag(tagElements, "inpengagementmar", "mar");
+    reOrderElementTag(tagElements, "inpengagementapr", "apr");
+    reOrderElementTag(tagElements, "inpengagementmay", "may");
+    reOrderElementTag(tagElements, "inpengagementjun", "jun");
+    reOrderElementTag(tagElements, "inpengagementjul", "jul");
+    reOrderElementTag(tagElements, "inpengagementaug", "aug");
+    reOrderElementTag(tagElements, "inpengagementsep", "sep");
+    reOrderElementTag(tagElements, "inpengagementoct", "oct");
+    reOrderElementTag(tagElements, "inpengagementnov", "nov");
+    reOrderElementTag(tagElements, "inpengagementdec", "dec");
+    reOrderElementTag(tagElements, "inpengagementtotal", "total");
+
+    reOrderElementTag(tagElements, "copyEngagementBtn", "copyBtnEngagement");
+    reOrderElementTag(tagElements, "delEngagementBtn", "delBtnEngagement");
+
+    //再計算
+    totalEngagementColumn();
+    calc();
 }
 
 function calcEngagementFee(obj,count){
@@ -1017,19 +1051,21 @@ function totalEngagementColumn(){
 }
 
 function copyRowEngagementList(count) {
-    var janValue = document.getElementById("jan" + count);
-    var febValue = document.getElementById("feb" + count);
-    var marValue = document.getElementById("mar" + count);
-    var aprValue = document.getElementById("apr" + count);
-    var mayValue = document.getElementById("may" + count);
-    var junValue = document.getElementById("jun" + count);
-    var julValue = document.getElementById("jul" + count);
-    var augValue = document.getElementById("aug" + count);
-    var sepValue = document.getElementById("sep" + count);
-    var octValue = document.getElementById("oct" + count);
-    var novValue = document.getElementById("nov" + count);
-    var decValue = document.getElementById("dec" + count);
-    var totalObj = document.getElementById("total" + count);
+    var objId = count.id;
+    var index = objId.replace("copyBtnEngagement","");
+    var janValue = document.getElementById("jan" + index);
+    var febValue = document.getElementById("feb" + index);
+    var marValue = document.getElementById("mar" + index);
+    var aprValue = document.getElementById("apr" + index);
+    var mayValue = document.getElementById("may" + index);
+    var junValue = document.getElementById("jun" + index);
+    var julValue = document.getElementById("jul" + index);
+    var augValue = document.getElementById("aug" + index);
+    var sepValue = document.getElementById("sep" + index);
+    var octValue = document.getElementById("oct" + index);
+    var novValue = document.getElementById("nov" + index);
+    var decValue = document.getElementById("dec" + index);
+    var totalObj = document.getElementById("total" + index);
     
     febValue.value = janValue.value;
     marValue.value = janValue.value;
