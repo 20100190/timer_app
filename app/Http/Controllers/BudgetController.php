@@ -684,7 +684,8 @@ class BudgetController extends Controller
                 continue;
             }
             
-            $warningProjectList = $this->warningProject($idList["project_id"]);
+            //$warningProjectList = $this->warningProject($idList["project_id"]);
+            $warningProjectList = $this->warningProject($idList["project_id"],$weekArray);
 
             $dataPhase[0] = $idList["project_id"];
             $dataPhase[1] = $idList["client_name"];
@@ -696,7 +697,15 @@ class BudgetController extends Controller
                     $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] .= ";";
                 }
                 $pColor = $yyy->color;
-                foreach ($warningProjectList as $warningList){
+                foreach($warningProjectList as $warningList){
+                    if($warningList["year"] == $yyy->year && $warningList["month"] == $yyy->month && $warningList["day"] == $yyy->day){
+                        $pColor = $warningList["errorColor"];
+                        if($warningList["errorColor"] == "#cc0000"){
+                            break;
+                        }                        
+                    }
+                }
+                /*foreach ($warningProjectList as $warningList){
                     if ($warningList->color == $pColor) {
                         $pColor = "#e06666";
                         $dt = new \DateTime("now", new \DateTimeZone('America/Los_Angeles'));
@@ -706,7 +715,7 @@ class BudgetController extends Controller
                              $pColor = "#cc0000";
                         }
                     }
-                }
+                }*/
                 $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] .= $pColor;//$yyy->color;                
             }
             
@@ -766,14 +775,39 @@ class BudgetController extends Controller
             "overallPTotal" => $overallPersonalTotal,
             "clientList" => $res,
             "targetAssignId" => $targetAssignId,
-            "phaseColor" => $phaseColorList
+            "phaseColor" => $phaseColorList,
+            "warningProj" => $warningProjectList
         ];
         
         return response()->json($json);
         
     }
     
-    function warningProject($projectId) {
+    function getErrorRow($targetDate, $dueDate,$usDate,$weekArray) {
+        $res = [];
+        $errorColor = "#f4cccc";
+        if ($dueDate <= $usDate) {
+            $errorColor = "#cc0000";
+        }
+        $res["errorColor"] = $errorColor;
+        $weekCnt = 0;
+        //何週目か割り出し
+        foreach ($weekArray as $weekItems) {
+            $weekymd = $weekItems["year"] . sprintf('%02d', $weekItems["month"]) . sprintf('%02d', $weekItems["day"]);
+            $weekCnt += 1;
+            if ($targetDate < $weekymd) {
+                break;
+            }
+        }
+
+        $res["year"] = $weekArray[$weekCnt - 2]["year"];
+        $res["month"] = $weekArray[$weekCnt - 2]["month"];
+        $res["day"] = $weekArray[$weekCnt - 2]["day"];
+        
+        return $res;
+    }
+
+    function warningProject($projectId,$weekArray) {
         //ワーニング背景色
         $warningPhase = ProjectPhaseItem::select("project phase item.project_id","due_date", "phase.color","planed_prep","prep_sign_off","planned_review","review_sign_off","planned_review2","review_sign_off2")
                 ->leftJoin("phase items", "phase items.id", "=", "project phase item.phase_item_id")
@@ -792,7 +826,56 @@ class BudgetController extends Controller
                     });
                  });
                 
-        return $warningPhase->get();
+        //return $warningPhase->get();
+        $warningData = $warningPhase->get();
+        $retArray = [];
+        foreach($warningData as $items) {
+            $errorColor = "";
+            $res = [];
+            $dueDate = $items["due_date"];     
+            $prepDate = $items["planed_prep"];
+            $prepSignoff = $items["prep_sign_off"];
+            $rev1Date = $items["planned_review"];
+            $rev1Signoff = $items["review_sign_off"];
+            $rev2Date = $items["planned_review2"];
+            $rev2Signoff = $items["review_sign_off2"];
+            
+            if(!is_null($dueDate)){
+                $dueDate = str_replace("-", "", $dueDate);
+            }
+            
+            if(!is_null($prepDate)){
+                $prepDate = str_replace("-", "", $prepDate);
+            }    
+            
+            if(!is_null($rev1Date)){
+                $rev1Date = str_replace("-", "", $rev1Date);
+            }    
+            
+            if(!is_null($rev2Date)){
+                $rev2Date = str_replace("-", "", $rev2Date);
+            }    
+                            
+            $dt = new \DateTime("now", new \DateTimeZone('America/Los_Angeles'));
+            $usDate = $dt->format('Ymd');
+            
+            //prepDateが当日以降
+            if (!is_null($prepDate) && $prepDate <= $usDate && is_null($prepSignoff)) { 
+                $res = $this->getErrorRow($prepDate, $dueDate,$usDate,$weekArray);
+                array_push($retArray, $res);
+            }
+            
+            if (!is_null($rev1Date) && $rev1Date <= $usDate && is_null($rev1Signoff)) {    
+                $res = $this->getErrorRow($rev1Date, $dueDate,$usDate,$weekArray);
+                array_push($retArray, $res);
+            }
+            
+            if (!is_null($rev2Date) && $rev2Date <= $usDate && is_null($rev2Signoff)) {   
+                $res = $this->getErrorRow($rev2Date, $dueDate,$usDate,$weekArray);
+                array_push($retArray, $res);
+            }
+        }
+        return $retArray;
     }
 
     function getOverallDetailQuery($request, $dateFrom, $dateTo) {
