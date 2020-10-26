@@ -776,7 +776,7 @@ class BudgetController extends Controller
             "clientList" => $res,
             "targetAssignId" => $targetAssignId,
             "phaseColor" => $phaseColorList,
-            "warningProj" => $warningProjectList
+            //"warningProj" => $warningProjectList
         ];
         
         return response()->json($json);
