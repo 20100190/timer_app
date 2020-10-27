@@ -428,7 +428,7 @@
                 position: 'top',
                 icon: 'error',
                 title: 'Error',
-                html: "select group"
+                html: "Select Month"
             });
             return;
         }
