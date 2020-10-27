@@ -495,7 +495,7 @@
                 </button>
                 @endif     
                 @else
-                <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;visibility: hidden">
+                <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button"  onclick="saveApprove()" style="margin-top: 30px;visibility: hidden">
                     <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
                     <span id="savingText">Approve</span>
                 </button>
@@ -516,6 +516,7 @@
     
     <input type="hidden" id="staff_info" name="staff_info" value="">
     <input type="hidden" id="task_info" name="task_info" value="">
+    <input type="hidden" id="rec_project_id" name="rec_project_id" value="">
 
 </form>
 

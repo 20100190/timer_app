@@ -444,6 +444,9 @@ function loadTask(buttonType) {
         //task情報セット
         $('#task_info').val(JSON.stringify(data.allTask));
         
+        //project id 保持
+        $('#rec_project_id').val(data.project.id);
+        
         //approved
         document.getElementById("btn_approve").disabled = false;
         document.getElementById("savingText").innerHTML = "Approve";
@@ -773,6 +776,27 @@ function saveDetail(){
             console.debug(data);
         }
     });
+}
+
+function saveApprove(){
+    var projectId = document.getElementById("rec_project_id").value;
+    var obj = document.getElementById("btn_approve");    
+    obj.style.backgroundColor = "background-color: #DCDCDC";
+    obj.disabled = true;
+    
+    $.ajax({
+        url: "/master/project-list/save/" + projectId,
+        dataType: "json",
+        success: data => {
+            Swal.fire({
+                position: 'top',
+                icon: 'success',
+                title: 'Approved',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        },        
+    });    
 }
 
 function showToast() {
