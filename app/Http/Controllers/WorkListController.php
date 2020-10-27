@@ -108,11 +108,20 @@ class WorkListController extends Controller {
           } */
 
         $staffData = Staff::ActiveStaffOrderByInitial();
+        
+        //Annualizeされているか
+        $annualizeCount = ProjectPhaseItem::select("phase group.group")
+                ->leftJoin("phase items","project phase item.phase_item_id","=","phase items.id")
+                ->leftJoin("phase group","phase items.phase_group_id","=","phase group.id")
+                ->where("project phase item.project_id","=",$projectId)
+                ->groupBy("phase group.group")                
+                ->get()->count();
 
         $json = [
             "phase" => $phaseData,
             "phase1Detail" => $phaseItemList,
             "staff" => $staffData,
+            "annualize" => $annualizeCount,
         ];
 
         return response()->json($json);

@@ -92,7 +92,10 @@
                 <input type="button" id="rr2_expand{{$i}}" name="rr2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 126px;width: 85px" value="Copy All" onclick="expandColumn({{$i}},8)">
                 <input type="button" id="pre2_expand{{$i}}" name="pre2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Copy All" onclick="expandColumn({{$i}},9)">
                 <!--<input type="button" id="rsi2_expand{{$i}}" name="rsi2_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 16px;width: 90px" value="Expand" onclick="expandColumn({{$i}},10)">-->
-                <input type="button" id="me_expand{{$i}}" name="me_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 126px;width: 80px" value="Copy All" onclick="expandColumn({{$i}},11)">
+                <!--<input type="button" id="me_expand{{$i}}" name="me_expand{{$i}}" class="btn btn-primary btn-sm" style="margin-left: 126px;width: 80px" value="Copy All" onclick="expandColumn({{$i}},11)">-->
+                @if($i == 1)
+                <input class="btn btn-primary btn-sm" id="btn_monthly_data" name="btn_monthly_data" type="button" style="height: 30px;margin-left: 126px;background-color: #483d8b" onclick="saveAnnualize()" value="Annualize">
+                @endif
             </div>
             <table border="0" id="phase_{{$i}}" class="table table-sm" style="font-size: 14px;table-layout: fixed;width: 650px">  
                 <thead>
@@ -128,11 +131,11 @@
         </div>
     </div>  
     
-    <div class="form-group">            
+    <!--<div class="form-group">            
         <div class="col-md-4">
             <input class="btn btn-primary" id="btn_monthly_data" name="btn_monthly_data" type="button" onclick="saveAnnualize()" value="Annualize">
         </div>
-    </div>  
+    </div>  -->
 
     <input type="hidden" value="" id="postArray" name="postArray">
     <input type="hidden" id="budget_info" name="budget_info" value="">
@@ -570,6 +573,12 @@
                     }
                 }
             }            
+            
+            //annualize
+            document.getElementById("btn_monthly_data").style.backgroundColor = "#483d8b";
+            if(data.annualize > 1){
+                document.getElementById("btn_monthly_data").style.backgroundColor = "#DCDCDC";                
+            }
           
         }).error(function (XMLHttpRequest, textStatus, errorThrown) {
             clearAllList();
@@ -974,6 +983,7 @@
        }).then((result) => {
            if (result.value) {
                 saveForm('monthlyData');
+                document.getElementById("btn_monthly_data").style.backgroundColor = "#DCDCDC";
            }
        });
     }
