@@ -77,7 +77,7 @@
 
     <div>
         @for($i=1;$i<=10;$i++)
-        <div style="margin-bottom: 50px">
+        <div style="margin-bottom: 50px" id="div_table{{$i}}">
             <div><label style="font-size: 20px;width: 455px"><input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="width: 100px;vertical-align: middle;border:solid 0px;" readonly><span id="label_phase_desc{{$i}}" style="vertical-align: middle"></span></label><input type="button" id="contact_list{{$i}}" name="contact_list{{$i}}" class="btn btn-primary btn-sm" style="width: 150px" value="Add" onclick="appendPhase1Row(this)"></div>
             <table border="0" id="phase_{{$i}}" class="table table-sm" style="font-size: 14px;table-layout: fixed;width: 650px">  
                 <thead>
@@ -156,15 +156,18 @@
         var c2 = row.insertCell(1);
         var c3 = row.insertCell(2);
         var c4 = row.insertCell(3);
-
+                
         c1.style.cssText = "vertical-align: middle";
 
         // 各列に表示内容を設定
         c1.innerHTML = '<span class="seqno-phase' + buttonIndex + '">' + count + '</span>';
         c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" value="' + name + '" style="width: 100%">';
         //c3.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'description" type="text" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" value="' + description + '" style="width: 100%">';
-        c3.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'description" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" style="width: 100%">' + description + '</textarea>';
-        c4.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
+        c3.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'description" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" style="width: 100%;resize: none">' + description + '</textarea>';
+        c4.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';       
+        
+        $('#phase' + buttonIndex + '_description' + count).autosize(); 
+        
     }
 
     function deletePhase1Row(obj, buttonIndex) {
@@ -254,8 +257,17 @@
                     insertPhase1Row(parseInt(rowId), data.phase1Detail[cnt][cnt2].name, data.phase1Detail[cnt][cnt2].description, buttonIndex);
                 }
             }
-
-
+            
+            //使わないブロックは非表示
+            /*for(var s=1; s<=10; s++){
+                var title = document.getElementById("label_phase" + s).value;
+                var tableObj = document.getElementById("div_table" + s);
+                tableObj.style.cssText = "";
+                if(title == ""){                    
+                    tableObj.style.visibility = "hidden";
+                    tableObj.style.height = "0px";
+                }
+            }*/
 
         }).error(function (XMLHttpRequest, textStatus, errorThrown) {
             clearAllList();
@@ -349,8 +361,8 @@
             timer: 1500
         });
     }
-
-
+    
+   
 </script>
 
 @endsection
