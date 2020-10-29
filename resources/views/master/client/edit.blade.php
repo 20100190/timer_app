@@ -248,6 +248,88 @@
             }
         }
     }
+    
+    function isCheckClientError() {
+         //妥当性　エラーチェック
+        var isError = false;
+        var name = $("#name").val();
+        var fye = $("#fye").val();      
+        var vic = $("#vic_status").val();
+        var address = $("#address_us").val();
+        var mAddress = $("#mailing_address").val();
+        var tel = $("#tel1").val();
+        var defaultColor = "transparent";
+        var errorColor = "red";
+        
+        $("#name").css("background-color",defaultColor);
+        if(name == ""){
+            isError = true;
+            $("#name").css("background-color",errorColor);
+        }
+        
+        $("#fye").css("background-color",defaultColor);
+        if(fye == ""){
+            isError = true;
+            $("#fye").css("background-color",errorColor);
+        }
+        
+        $("#vic_status").css("background-color",defaultColor);
+        if(vic == ""){
+            isError = true;
+            $("#vic_status").css("background-color",errorColor);
+        }
+        
+        $("#address_us").css("background-color",defaultColor);
+        if(address == ""){
+            isError = true;
+            $("#address_us").css("background-color",errorColor);
+        }
+        
+        $("#mailing_address").css("background-color",defaultColor);
+        if(mAddress == ""){
+            isError = true;
+            $("#mailing_address").css("background-color",errorColor);
+        }
+        
+        $("#tel1").css("background-color",defaultColor);
+        if(tel == ""){
+            isError = true;
+            $("#tel1").css("background-color",errorColor);
+        }
+        
+        //contact
+        var objContactTBL = document.getElementById("contact_person_body");
+        var cnt = objContactTBL.rows.length;
+        for (var count = 1; count <= cnt; count++) {
+            document.getElementById("contact_person" + count).style.backgroundColor = defaultColor;
+            if(document.getElementById("contact_person" + count).value == ""){
+                document.getElementById("contact_person" + count).style.backgroundColor = errorColor;
+                isError = true;
+            }
+            
+            document.getElementById("email" + count).style.backgroundColor = defaultColor;
+            if(document.getElementById("email" + count).value == ""){
+                document.getElementById("email" + count).style.backgroundColor = errorColor;
+                isError = true;
+            }
+        }
+        return isError;
+    }
+    
+    function saveClient() {
+        var isError = isCheckClientError();
+        if (isError) {
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'Error',
+                width: '400px',
+                html: "Error"
+            });
+            return;
+        }
+        document.clientForm.submit();
+    }
 
 </script>
 <div style="margin-left: 20px;margin-top: 20px">
@@ -268,7 +350,7 @@
     </ul>
     @endif
 
-    <form method="POST" action="/master/client/{{ $client->id }}" class="form-horizontal">
+    <form method="POST" name="clientForm" action="/master/client/{{ $client->id }}" class="form-horizontal">
         {{ csrf_field() }}
         {{ method_field("PUT") }}
 
@@ -511,7 +593,7 @@
 
         <div class="form-group">            
             <div class="col-md-4">
-                <input class="btn btn-primary" type="submit" value="Update">
+                <input class="btn btn-primary" type="button" onclick="saveClient()" value="Update">
             </div>
         </div>   
     </form>

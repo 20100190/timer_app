@@ -248,6 +248,88 @@
         }
     }
     
+    function isCheckClientError() {
+         //妥当性　エラーチェック
+        var isError = false;
+        var name = $("#name").val();
+        var fye = $("#fye").val();      
+        var vic = $("#vic_status").val();
+        var address = $("#address_us").val();
+        var mAddress = $("#mailing_address").val();
+        var tel = $("#tel1").val();
+        var defaultColor = "transparent";
+        var errorColor = "red";
+        
+        $("#name").css("background-color",defaultColor);
+        if(name == ""){
+            isError = true;
+            $("#name").css("background-color",errorColor);
+        }
+        
+        $("#fye").css("background-color",defaultColor);
+        if(fye == ""){
+            isError = true;
+            $("#fye").css("background-color",errorColor);
+        }
+        
+        $("#vic_status").css("background-color",defaultColor);
+        if(vic == ""){
+            isError = true;
+            $("#vic_status").css("background-color",errorColor);
+        }
+        
+        $("#address_us").css("background-color",defaultColor);
+        if(address == ""){
+            isError = true;
+            $("#address_us").css("background-color",errorColor);
+        }
+        
+        $("#mailing_address").css("background-color",defaultColor);
+        if(mAddress == ""){
+            isError = true;
+            $("#mailing_address").css("background-color",errorColor);
+        }
+        
+        $("#tel1").css("background-color",defaultColor);
+        if(tel == ""){
+            isError = true;
+            $("#tel1").css("background-color",errorColor);
+        }
+        
+        //contact
+        var objContactTBL = document.getElementById("contact_person_body");
+        var cnt = objContactTBL.rows.length;
+        for (var count = 1; count <= cnt; count++) {
+            document.getElementById("contact_person" + count).style.backgroundColor = defaultColor;
+            if(document.getElementById("contact_person" + count).value == ""){
+                document.getElementById("contact_person" + count).style.backgroundColor = errorColor;
+                isError = true;
+            }
+            
+            document.getElementById("email" + count).style.backgroundColor = defaultColor;
+            if(document.getElementById("email" + count).value == ""){
+                document.getElementById("email" + count).style.backgroundColor = errorColor;
+                isError = true;
+            }
+        }
+        return isError;
+    }
+    
+    function saveClient() {
+        var isError = isCheckClientError();
+        if (isError) {
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                title: 'Error',
+                width: '400px',
+                html: "Error"
+            });
+            return;
+        }
+        document.clientForm.submit();
+    }
+    
 </script>
 <div style="margin-left: 20px;margin-top: 20px">
     <!--<div class="container">
@@ -268,18 +350,18 @@
     @endif
 
 
-    <form method="POST" action="/master/client/store" class="form-horizontal">
+    <form method="POST" name="clientForm" action="/master/client/store" class="form-horizontal">
         {{ csrf_field() }}
 
         <div style="float: left;margin-right: 50px">
             <table class="table table-borderless">                                
                 <tbody>                    
                     <tr>
-                        <th style="vertical-align: middle;">Name</th>
+                        <th style="vertical-align: middle;">Name<font style="color: red;vertical-align: middle">&nbsp;*</font></th>
                         <td style="vertical-align: middle;"><input class="form-control" name="name" type="text" id="name" value=""></td>
                     </tr>
                     <tr>
-                        <th style="vertical-align: middle;">FYE</th>
+                        <th style="vertical-align: middle;">FYE<font style="color: red;vertical-align: middle">&nbsp;*</font></th>
                         <td style="vertical-align: middle;">
                             <select id="fye" name="fye" class="form-control">  
                                 <option value=""></option>
@@ -299,7 +381,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th style="vertical-align: middle;">Vic Status</th>
+                        <th style="vertical-align: middle;">Vic Status<font style="color: red;vertical-align: middle">&nbsp;*</font></th>
                         <td style="vertical-align: middle;">                            
                             <select id="vic_status" name="vic_status" class="form-control" >                            
                                 <option value="VIC">VIC</option>
@@ -317,7 +399,7 @@
                         <td style="vertical-align: middle;"><input class="form-control" name="website" type="text" id="website" value=""></td>
                     </tr>
                     <tr>
-                        <th style="vertical-align: middle;">Address US</th>
+                        <th style="vertical-align: middle;">Address US<font style="color: red;vertical-align: middle">&nbsp;*</font></th>
                         <td style="vertical-align: middle;"><input class="form-control" name="address_us" type="text" id="address_us" value=""></td>
                     </tr>
                     <tr>
@@ -325,11 +407,11 @@
                         <td style="vertical-align: middle;"><input class="form-control" name="address_jp" type="text" id="address_jp" value=""></td>
                     </tr>
                     <tr>
-                        <th style="vertical-align: middle;">Mailing Address</th>
+                        <th style="vertical-align: middle;">Mailing Address<font style="color: red;vertical-align: middle">&nbsp;*</font></th>
                         <td style="vertical-align: middle;"><input class="form-control" name="mailing_address" type="text" id="mailing_address" value=""></td>
                     </tr>
                     <tr>
-                        <th style="vertical-align: middle;">Tel1</th>
+                        <th style="vertical-align: middle;">Tel1<font style="color: red;vertical-align: middle">&nbsp;*</font></th>
                         <td style="vertical-align: middle;"><input class="form-control" name="tel1" type="text" id="tel1" value=""></td>
                     </tr>
                     <tr>
@@ -467,7 +549,7 @@
 
         <div class="form-group">            
             <div class="col-md-4">
-                <input class="btn btn-primary" type="submit" value="Create">
+                <input class="btn btn-primary" type="button" value="Create" onclick="saveClient()">
             </div>
         </div>   
     </form>
