@@ -156,6 +156,7 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
     var bodyLength = specific_tbody.rows.length;
     var count = bodyLength + 1;
     var row = specific_tbody.insertRow(bodyLength);
+    var isApprove = document.getElementById("is-approve").value;
 
     // 列の追加
     var c1 = row.insertCell(0);
@@ -169,12 +170,13 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
     c2.innerHTML = '<span>' + projectId + '</span>';
     c3.innerHTML = '<span>' + clientName + '</span>';
     c4.innerHTML = '<span>' + projectName + '</span>';   
-    if(status != 1){
-        c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px" onclick="approveProject(this,' + projectId + ')">Approve</button>';
-    }else {        
-        c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
+    if(isApprove == 1){
+        if(status != 1){
+            c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px" onclick="approveProject(this,' + projectId + ')">Approve</button>';
+        }else {        
+            c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
+        }        
     }
-    
     
 }
 
@@ -299,15 +301,16 @@ function setProjectData(){
                 <th class="fixed-header" style="width: 100px;">Project ID</th>
                 <th class="fixed-header" style="width: 200px;">Client</th>
                 <th class="fixed-header" style="width: 200px;">Project</th>                
-                @if($isApprove == 1)
-                <th class="fixed-header" style="width: 50px;text-align: center">Approve</th>                                    
-                @endif
+                
+                <th class="fixed-header" style="width: 50px;text-align: center">@if($isApprove == 1) Approve @else &nbsp; @endif</th>                                    
+               
             </tr>
         </thead>
         <tbody id="project-list-body"></tbody>
     </table>
 
 </div>
+            <input type="hidden" id="is-approve" name="is-approve" value="{{$isApprove}}">
 </div>
 
                 <!--</div>
