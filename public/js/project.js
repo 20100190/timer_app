@@ -445,7 +445,9 @@ function loadTask(buttonType) {
         $('#task_info').val(JSON.stringify(data.allTask));
         
         //project id 保持
-        $('#rec_project_id').val(data.project.id);
+        if(data.project != null){
+            $('#rec_project_id').val(data.project.id);            
+        }        
         
         //approved
         document.getElementById("btn_approve").disabled = false;
