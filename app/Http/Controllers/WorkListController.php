@@ -143,6 +143,18 @@ class WorkListController extends Controller {
             if ($_POST["label_phase" . $i] == "") {
                 continue;
             }
+            
+            //standard以外のitems,project phase itemsを削除
+            //--------------------------
+            $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i]);
+            $delTargetObj = PhaseItems::where([["phase_group_id","=",$phaseGroupId],["is_standard","=",0]]);
+            $delItemArray = [];
+            foreach($delTargetObj->get() as $delItemID){
+                array_push($delItemArray,$delItemID->id);
+            }
+            $delProPhaseObj = ProjectPhaseItem::wherein("phase_item_id",$delItemArray)->delete();
+            $delTargetObj->delete();
+            //----------------------------
 
             for ($j = 1; $j <= 50; $j++) { //明細数
                 if (!isset($_POST["phase" . $i . "_id" . $j])) {
@@ -153,33 +165,14 @@ class WorkListController extends Controller {
                     continue;
                 }
 
-                //phase group
-                $phaseGroupObj = PhaseGroup::Join("phase", "phase.id", "=", "phase group.phase_id")
-                        ->select("phase group.id as id")
-                        ->where([["phase group.project_id", "=", $projectTypeId], ["phase.name", "=", $_POST["label_phase" . $i]]]);
-                if ($groupVal != "") {
-                    $phaseGroupObj = $phaseGroupObj->where([["group", "=", $groupVal]]);
-                }
-                if ($phaseGroupObj->exists()) {
-                    //foreach ($phaseGroupObj->get() as $items) {
-                    //    $phaseGroupId = $items->id;
-                    //}
-                    $phaseGroupId = $phaseGroupObj->first()->id;
-                } else {
-                    $phaseId = Phase::where([["project_type", "=", $projectTypeId], ["name", "=", $_POST["label_phase" . $i]]])->first()->id;
-
-                    $pTable = new PhaseGroup;
-                    $pTable->project_id = $request->client;
-                    $pTable->phase_id = $phaseId;
-                    $pTable->group = $groupVal;
-
-                    $pTable->save();
-
-                    $phaseGroupId = $pTable->id;
-                }
+                //phase group              
+                $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i]);
 
                 //phase item                
-                $targetPhaseItem = PhaseItems::where([["id", "=", $_POST["phase" . $i . "_id" . $j]]]);
+                $targetPhaseItem = PhaseItems::where([["phase_group_id", "=", $phaseGroupId],["order","=",$j]]);
+                
+                //$targetPhaseItem = PhaseItems::where([["id", "=", $_POST["phase" . $i . "_id" . $j]]]);
+                
                 if ($targetPhaseItem->exists()) {
                     //update
                     $updateItem = [
@@ -201,34 +194,33 @@ class WorkListController extends Controller {
             }
         }
 
-        //-------------------------------------------------------------
+        //-------------------------------------------------------------        
+        //project phase item        
         for ($i = 1; $i <= 10; $i++) {  //phase
             if ($_POST["label_phase" . $i] == "") {
                 continue;
             }
+                        
 
-            for ($j = 1; $j <= 20; $j++) { //明細数
+            for ($j = 1; $j <= 50; $j++) { //明細数
                 if (!isset($_POST["phase" . $i . "_comp" . $j])) {
                     break;
                 }
-                //if ($_POST["phase" . $i . "_comp" . $j] != "" || $_POST["phase" . $i . "_prep" . $j] != "" 
-                //        || $_POST["phase" . $i . "_planned_prep" . $j] != "" || $_POST["phase" . $i . "_prep_signoff" . $j] != ""
-                //        || $_POST["phase" . $i . "_reviewer1" . $j] != "" || $_POST["phase" . $i . "_planned_review1" . $j] != "" 
-                //        || $_POST["phase" . $i . "_review_signoff1" . $j] != "" || $_POST["phase" . $i . "_reviewer2" . $j] != ""
-                //        || $_POST["phase" . $i . "_planned_review2" . $j] != "" || $_POST["phase" . $i . "_review_signoff2" . $j] != "") {
+                
+                $reqPhaseItemId = $_POST["phase" . $i . "_id" . $j];
+                if ($reqPhaseItemId == "") {
+                    $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i]);
+                    $reqPhaseItemId = PhaseItems::where([["phase_group_id", "=", $phaseGroupId],["order","=",$j]])->first()->id;
+                }
 
-                $queryObj = ProjectPhaseItem::where([["phase_item_id", "=", $_POST["phase" . $i . "_id" . $j]], ["project_id", "=", $projectId]]);
+                $queryObj = ProjectPhaseItem::where([["phase_item_id", "=", $reqPhaseItemId], ["project_id", "=", $projectId]]);
                 $projectPhaseItemId = "";
                 if ($queryObj->exists()) {
                     $projectPhaseItemId = $queryObj->first()->id;
                 }
 
                 if ($projectPhaseItemId == "") {
-                    $targetPhaseItem = "";
-                    //phase item id
-                    //$phaseGroupObj = PhaseGroup::Join("phase", "phase.id", "=", "phase group.phase_id")
-                    //    ->select("phase group.id as id")
-                    //    ->where([["phase group.project_id", "=", $request->client], ["phase.name", "=", $_POST["label_phase" . $i]], ["project_type", "=", $projectTypeId]]);
+                    $targetPhaseItem = "";                    
                     $phaseGroupObj = PhaseGroup::Join("phase", "phase.id", "=", "phase group.phase_id")
                             ->select("phase group.id as id")
                             ->where([["phase group.project_id", "=", $projectTypeId], ["phase.name", "=", $_POST["label_phase" . $i]]]);
@@ -242,9 +234,8 @@ class WorkListController extends Controller {
 
                     //insert
                     $table = new ProjectPhaseItem;
-                    $table->project_id = $projectId;
-                    //$table->phase_item_id = $targetPhaseItem;//$_POST["phase" . $i . "_id" . $j];
-                    $table->phase_item_id = $_POST["phase" . $i . "_id" . $j];
+                    $table->project_id = $projectId;                    
+                    $table->phase_item_id = $targetPhaseItem;
                     $table->memo = "";
                     $table->due_date = $this->convDateFormat($_POST["phase" . $i . "_comp" . $j]);
 
@@ -307,7 +298,7 @@ class WorkListController extends Controller {
                 //}                
             }
         }
-
+       
         //Monthly Data Expand
         if ($_POST["clicked_button"] == "monthlyData") {
             $this->expandMonthlyData($request, "February",1);
@@ -568,6 +559,32 @@ class WorkListController extends Controller {
                 }
             }
         }
+    }
+    
+    function getProjectGroupId($projectTypeId,$labelPhase) {
+        $phaseGroupObj = PhaseGroup::Join("phase", "phase.id", "=", "phase group.phase_id")
+                ->select("phase group.id as id")
+                ->where([["phase group.project_id", "=", $projectTypeId], ["phase.name", "=", $labelPhase]]);
+        $phaseGroupId = "";
+        if ($phaseGroupObj->exists()) {
+            //foreach ($phaseGroupObj->get() as $items) {
+            //    $phaseGroupId = $items->id;
+            //}
+            $phaseGroupId = $phaseGroupObj->first()->id;
+        } else {
+            $phaseId = Phase::where([["project_type", "=", $projectTypeId], ["name", "=", $labelPhase]])->first()->id;
+
+            $pTable = new PhaseGroup;
+            $pTable->project_id = $request->client;
+            $pTable->phase_id = $phaseId;
+            $pTable->group = "";
+
+            $pTable->save();
+
+            $phaseGroupId = $pTable->id;
+        }
+
+        return $phaseGroupId;
     }
 
 }

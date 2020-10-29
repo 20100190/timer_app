@@ -72,7 +72,7 @@ class WorkController extends Controller {
         $phaseGroupList = PhaseGroup::whereIn("phase_id",$phaseIdList)->whereIn("group",["","January"])->get();
         foreach ($phaseGroupList as $items) {
             //$phaseItemList = PhaseItems::where([['phase_group_id', '=', $items->id]])->get();            
-            array_push($phaseItemList, PhaseItems::where([['phase_group_id', '=', $items->id]])->get());
+            array_push($phaseItemList, PhaseItems::where([['phase_group_id', '=', $items->id],["is_standard","=",1]])->get());
         }
 
         $json = [
@@ -123,6 +123,10 @@ class WorkController extends Controller {
             $phaseGroupId = "";
             if ($label_phase != "") {
                 $phaseGroupId = $this->savePhaseGroup($request, $label_phase, $group);
+                
+                //phase items削除
+                $delObj = PhaseItems::where([['phase_group_id', '=', $phaseGroupId]]);
+                $delObj->delete();
 
                 $this->savePhaseItems($phaseGroupId, $i);
             }

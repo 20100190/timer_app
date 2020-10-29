@@ -325,9 +325,9 @@
         c6.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'prep" type="text" id="phase' + buttonIndex + '_prep' + count + '" name="phase' + buttonIndex + '_prep' + count + '" value="' + prep + '" style="width: 100%">' + prepStaffInitialOption + '</select>';
         c7.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedprep datepicker1" type="text" id="phase' + buttonIndex + '_planned_prep' + count + '" name="phase' + buttonIndex + '_planned_prep' + count + '" value="' + planndPrep + '" style="width: 100%">';
         c8.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'prepsignoff datepicker1" type="text" id="phase' + buttonIndex + '_prep_signoff' + count + '" name="phase' + buttonIndex + '_prep_signoff' + count + '" value="' + prepSignOff + '" style="width: 100%;' + prepBackgroundColor + '" onchange="setPhaseBackground(this)">';
-        c9.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'reviewer" type="text" id="phase' + buttonIndex + '_reviewer1' + count + '" name="phase' + buttonIndex + '_reviewer1' + count + '" value="' + reviewer + '" style="width: 100%">' + reviewerStaffInitialOption + '</select>';
-        c10.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedreview datepicker1" type="text" id="phase' + buttonIndex + '_planned_review1' + count + '" name="phase' + buttonIndex + '_planned_review1' + count + '" value="' + plannedReview + '" style="width: 100%">';
-        c11.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff1' + count + '" name="phase' + buttonIndex + '_review_signoff1' + count + '" value="' + reviewSignOff + '" style="width: 100%;' + rev1BackgroundColor + '" onchange="setPhaseBackground(this)">';
+        c9.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'reviewer1" type="text" id="phase' + buttonIndex + '_reviewer1' + count + '" name="phase' + buttonIndex + '_reviewer1' + count + '" value="' + reviewer + '" style="width: 100%">' + reviewerStaffInitialOption + '</select>';
+        c10.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedreview1 datepicker1" type="text" id="phase' + buttonIndex + '_planned_review1' + count + '" name="phase' + buttonIndex + '_planned_review1' + count + '" value="' + plannedReview + '" style="width: 100%">';
+        c11.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff1 datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff1' + count + '" name="phase' + buttonIndex + '_review_signoff1' + count + '" value="' + reviewSignOff + '" style="width: 100%;' + rev1BackgroundColor + '" onchange="setPhaseBackground(this)">';
         c12.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'reviewer2" type="text" id="phase' + buttonIndex + '_reviewer2' + count + '" name="phase' + buttonIndex + '_reviewer2' + count + '" value="' + reviewer2 + '" style="width: 100%">' + reviewer2StaffInitialOption + '</select>';
         c13.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedreview2 datepicker1" type="text" id="phase' + buttonIndex + '_planned_review2' + count + '" name="phase' + buttonIndex + '_planned_review2' + count + '" value="' + plannedReview2 + '" style="width: 100%">';
         c14.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff2 datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff2' + count + '" name="phase' + buttonIndex + '_review_signoff2' + count + '" value="' + reviewSignOff2 + '" style="width: 100%;' + rev2BackgroundColor + '" onchange="setPhaseBackground(this)">';
@@ -372,7 +372,7 @@
         reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "reviewer2", "phase" + buttonIndex + "_reviewer2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "plannedreview2", "phase" + buttonIndex + "_planned_review2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "reviewsignoff2", "phase" + buttonIndex + "_review_signoff2");
-        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "_col_memo", "phase" + buttonIndex + "_col_memo");
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "colmemo", "phase" + buttonIndex + "_col_memo");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "memo", "phase" + buttonIndex + "_memo");
 
         reOrderElementTag(tagElements, "delphase" + buttonIndex + "btn", "delPhase" + buttonIndex + "Btn");
@@ -433,10 +433,10 @@
             return;
         }
         
-        loadPhaseDataDetail();
+        loadPhaseDataDetail("");
     }
 
-    function loadPhaseDataDetail() {
+    function loadPhaseDataDetail(submitType) {
 
         var client = $("#client").val();
         var project = $("#project").val();
@@ -594,6 +594,11 @@
             console.log("XMLHttpRequest : " + XMLHttpRequest.status);
             console.log("textStatus     : " + textStatus);
             console.log("errorThrown    : " + errorThrown.message);
+        }).done(function(){
+            if(submitType != "") {
+                saveForm('monthlyData');
+                document.getElementById("btn_monthly_data").style.backgroundColor = "#DCDCDC";
+            }
         });
     }
 
@@ -601,8 +606,10 @@
         for (var i = 1; i <= 10; i++) {
             var table = document.getElementById("phase_" + parseInt(i));
             var label = document.getElementById("label_phase" + parseInt(i));
+            var desc = document.getElementById("label_phase_desc" + parseInt(i));
             //Label初期化
             label.value = "";
+            desc.innerHTML = "";
             //List初期化
             while (table.rows[ 1 ])
                 table.deleteRow(1);
@@ -982,8 +989,10 @@
            width: '500px'
        }).then((result) => {
            if (result.value) {
-                saveForm('monthlyData');
-                document.getElementById("btn_monthly_data").style.backgroundColor = "#DCDCDC";
+               var groupSelectedValue = document.getElementById("group").value;
+               $('#group').multiselect('deselect', groupSelectedValue);
+               $('#group').multiselect('select', "January");
+               loadPhaseDataDetail("monthly");              
            }
        });
     }
