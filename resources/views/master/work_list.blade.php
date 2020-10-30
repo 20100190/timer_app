@@ -320,7 +320,7 @@
         c1.innerHTML = '<span class="seqno-phase' + buttonIndex + '">' + count + '</span>';
         c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'id" type="text" id="phase' + buttonIndex + '_id' + count + '" name="phase' + buttonIndex + '_id' + count + '" value="' + groupId + '" style="width: 100%" readonly>';
         c3.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" value="' + name + '" style="width: 100%;font-weight: bold" ' + readonlyStr + '>';
-        c4.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'description" type="text" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" value="' + description + '" style="width: 100%" ' + readonlyStr + '>';
+        c4.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'description" type="text" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" style="resize: none;width: 100%" ' + readonlyStr + '>' + description + '</textarea>';
         c5.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'comp datepicker1" type="text" id="phase' + buttonIndex + '_comp' + count + '" name="phase' + buttonIndex + '_comp' + count + '" value="' + comp + '" style="width: 100%">';
         c6.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'prep" type="text" id="phase' + buttonIndex + '_prep' + count + '" name="phase' + buttonIndex + '_prep' + count + '" value="' + prep + '" style="width: 100%">' + prepStaffInitialOption + '</select>';
         c7.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedprep datepicker1" type="text" id="phase' + buttonIndex + '_planned_prep' + count + '" name="phase' + buttonIndex + '_planned_prep' + count + '" value="' + planndPrep + '" style="width: 100%">';
@@ -331,7 +331,7 @@
         c12.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'reviewer2" type="text" id="phase' + buttonIndex + '_reviewer2' + count + '" name="phase' + buttonIndex + '_reviewer2' + count + '" value="' + reviewer2 + '" style="width: 100%">' + reviewer2StaffInitialOption + '</select>';
         c13.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'plannedreview2 datepicker1" type="text" id="phase' + buttonIndex + '_planned_review2' + count + '" name="phase' + buttonIndex + '_planned_review2' + count + '" value="' + plannedReview2 + '" style="width: 100%">';
         c14.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff2 datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff2' + count + '" name="phase' + buttonIndex + '_review_signoff2' + count + '" value="' + reviewSignOff2 + '" style="width: 100%;' + rev2BackgroundColor + '" onchange="setPhaseBackground(this)">';
-        c15.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'colmemo" type="text" id="phase' + buttonIndex + '_col_memo' + count + '" name="phase' + buttonIndex + '_col_memo' + count + '" value="' + colMemo + '" style="width: 100%">';
+        c15.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'colmemo" type="text" id="phase' + buttonIndex + '_col_memo' + count + '" name="phase' + buttonIndex + '_col_memo' + count + '" style="resize: none;width: 100%">' + colMemo + '</textarea>';
         if (isClickBtnAdd || isStandard == 0) {
             c16.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
         } else {
@@ -346,6 +346,9 @@
             autoclose: true,
             orientation: 'bottom left'
         });
+        
+        $('#phase' + buttonIndex + '_description' + count).autosize(); 
+        $('#phase' + buttonIndex + '_col_memo' + count).autosize(); 
     }
 
     function deletePhase1Row(obj, buttonIndex) {
