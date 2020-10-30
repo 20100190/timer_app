@@ -134,8 +134,8 @@ class WorkListController extends Controller {
         $projectType = Project::where([["client_id", "=", $request->client], ["project_name", "=", $request->project]])->first()->project_type;
         $projectTypeId = ProjectType::where([["project_type", "=", $projectType]])->first()->id;
         $groupVal = "";
-        if (!isset($request->group)) {
-            $groupVal = ""; //$request->group;
+        if (isset($request->group)) {
+            $groupVal = $request->group;
         }
 
         //この画面で追加された行の情報を登録
@@ -146,7 +146,7 @@ class WorkListController extends Controller {
             
             //standard以外のitems,project phase itemsを削除
             //--------------------------
-            $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i]);
+            $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i],$groupVal);
             $delTargetObj = PhaseItems::where([["phase_group_id","=",$phaseGroupId],["is_standard","=",0]]);
             $delItemArray = [];
             foreach($delTargetObj->get() as $delItemID){
@@ -166,7 +166,7 @@ class WorkListController extends Controller {
                 }
 
                 //phase group              
-                $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i]);
+                $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i],$groupVal);
 
                 //phase item                
                 $targetPhaseItem = PhaseItems::where([["phase_group_id", "=", $phaseGroupId],["order","=",$j]]);
@@ -209,7 +209,7 @@ class WorkListController extends Controller {
                 
                 $reqPhaseItemId = $_POST["phase" . $i . "_id" . $j];
                 if ($reqPhaseItemId == "") {
-                    $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i]);
+                    $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i],$groupVal);
                     $reqPhaseItemId = PhaseItems::where([["phase_group_id", "=", $phaseGroupId],["order","=",$j]])->first()->id;
                 }
 
@@ -451,8 +451,14 @@ class WorkListController extends Controller {
 
                 $phaseItemId = PhaseGroup::select("phase items.id as id")->leftJoin("phase items", "phase group.id", "=", "phase items.phase_group_id")
                                 ->leftJoin("phase", "phase.id", "=", "phase group.phase_id")
-                                ->where([["phase group.group", "=", $group], ["phase items.order", "=", $j], ["phase.name", "=", $_POST["label_phase" . $i]]])->first()->id;
+                                ->where([["phase group.group", "=", $group], ["phase items.order", "=", $j], ["phase.name", "=", $_POST["label_phase" . $i]]]);
 
+                if(!$phaseItemId->exists()){
+                    continue;
+                }
+                
+                $phaseItemId = $phaseItemId->first()->id;
+                
                 $phaseItemObj = ProjectPhaseItem::where([["phase_item_id", "=", $phaseItemId]]);
 
                 if (!$phaseItemObj->exists()) {
@@ -561,10 +567,13 @@ class WorkListController extends Controller {
         }
     }
     
-    function getProjectGroupId($projectTypeId,$labelPhase) {
+    function getProjectGroupId($projectTypeId,$labelPhase,$groupVal) {
         $phaseGroupObj = PhaseGroup::Join("phase", "phase.id", "=", "phase group.phase_id")
                 ->select("phase group.id as id")
                 ->where([["phase group.project_id", "=", $projectTypeId], ["phase.name", "=", $labelPhase]]);
+        if($groupVal != ""){
+            $phaseGroupObj = $phaseGroupObj->where([["group", "=", $groupVal]]);
+        }
         $phaseGroupId = "";
         if ($phaseGroupObj->exists()) {
             //foreach ($phaseGroupObj->get() as $items) {

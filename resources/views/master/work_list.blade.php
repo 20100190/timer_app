@@ -360,11 +360,13 @@
             return false;
 
         var selectTagElements = document.getElementsByTagName("select");
+        
+        var textareaTagElements = document.getElementsByTagName("textarea");
 
         var seq = 1;
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "id", "phase" + buttonIndex + "_id");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "task", "phase" + buttonIndex + "_task");
-        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "description", "phase" + buttonIndex + "_description");
+        reOrderElementTag(textareaTagElements, "inpphase" + buttonIndex + "description", "phase" + buttonIndex + "_description");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "comp", "phase" + buttonIndex + "_comp");
         reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "prep", "phase" + buttonIndex + "_prep");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "plannedprep", "phase" + buttonIndex + "_planned_prep");
@@ -375,7 +377,7 @@
         reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "reviewer2", "phase" + buttonIndex + "_reviewer2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "plannedreview2", "phase" + buttonIndex + "_planned_review2");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "reviewsignoff2", "phase" + buttonIndex + "_review_signoff2");
-        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "colmemo", "phase" + buttonIndex + "_col_memo");
+        reOrderElementTag(textareaTagElements, "inpphase" + buttonIndex + "colmemo", "phase" + buttonIndex + "_col_memo");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "memo", "phase" + buttonIndex + "_memo");
 
         reOrderElementTag(tagElements, "delphase" + buttonIndex + "btn", "delPhase" + buttonIndex + "Btn");
