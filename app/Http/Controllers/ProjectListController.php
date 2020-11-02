@@ -82,7 +82,7 @@ class ProjectListController extends Controller {
             $clientObj = $clientObj->Where("is_approval", "=", $reqApproval);
         }
 
-        $clientData = $clientObj->get();
+        $clientData = $clientObj->orderBy("project.id","asc")->get();
 
 
         //権限

@@ -297,6 +297,7 @@ class ProjectController extends Controller
             $projectTable->engagement_fee_unit = 0;//str_replace(",","",$request->input("engagement_fee"));
             $projectTable->invoice_per_year = 0;//$request->input("engagement_monthly");
             $projectTable->adjustments = 0;//$request->input("adjustments");
+            $projectTable->is_approval = 0;//$request->input("adjustments");
 
             $projectTable->save();
         } else {
