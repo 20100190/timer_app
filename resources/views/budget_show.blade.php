@@ -73,7 +73,22 @@
     .header-background-color {
         background-color: #e2efda;
     }    
-    
+    a.p:hover {
+        position: relative;
+        text-decoration: none;
+    }
+    a.p span {
+        display: none;
+        position: absolute;
+        top: 1em;
+        left: 20px;
+    }
+    a.p:hover span {
+        border: none;
+        display: block;
+        width: 210px;
+        z-index: 10;
+    }
 </style>      
 
 @section('content')   
@@ -252,7 +267,7 @@
             
         </div>       
     </div>
-    <div id="div1" style="overflow: hidden;height: 400px;margin-left: 20px;min-height: 350px;margin-right: 20px;position: relative";>          
+    <div id="div1" style="overflow: hidden;height: 400px;margin-left: 20px;min-height: 350px;margin-right: 20px;position: relative";>           
         <div style="width: 100%;float: left">
             <table class="font1" border="0" id="summary_list" style="table-layout: fixed;width:98%;">
                 <thead>
@@ -331,6 +346,8 @@
         </div>
     </div>
 
+     <a href="#" class="p" style="margin-left: 20px">Legend<span><img style="" src="{{ URL::asset('/image') }}/legend.jpg"></span></a>
+     
     <div id="div2" style="overflow: scroll;height: 47%;margin-left: 20px;">  
         <div style="width: 100%">
             <table class="font1" border="0" id="budget_list" style="table-layout: fixed;width:100%">
