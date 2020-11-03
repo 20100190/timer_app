@@ -153,7 +153,7 @@ class WorkListController extends Controller {
                 array_push($delItemArray,$delItemID->id);
             }
             $delProPhaseObj = ProjectPhaseItem::wherein("phase_item_id",$delItemArray)->where([["project_id","=",$projectId]])->delete();
-            $delTargetObj->delete();
+            //$delTargetObj->delete();
             //----------------------------
 
             for ($j = 1; $j <= 50; $j++) { //明細数
@@ -169,7 +169,7 @@ class WorkListController extends Controller {
                 $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i],$groupVal);
 
                 //phase item                
-                $targetPhaseItem = PhaseItems::where([["phase_group_id", "=", $phaseGroupId],["order","=",$j]]);
+                $targetPhaseItem = PhaseItems::where([["phase_group_id", "=", $phaseGroupId],["order","=",$j],["name","=",$_POST["phase" . $i . "_task" . $j]]]);
                 
                 //$targetPhaseItem = PhaseItems::where([["id", "=", $_POST["phase" . $i . "_id" . $j]]]);
                 
