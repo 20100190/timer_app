@@ -76,7 +76,7 @@
 
     <div style="">
         @for($i=1;$i<=10;$i++)
-        <div style="margin-bottom: 50px">
+        <div id="div_phase_table{{$i}}" style="margin-bottom: 50px">
             <div style="width: 2000px">
                 <label style="font-size: 20px;width: 455px"><input type="text" id="label_phase{{$i}}" name="label_phase{{$i}}" style="width: 100px;vertical-align: middle;border:solid 0px;" readonly><span id="label_phase_desc{{$i}}" style="vertical-align: middle"></span></label>
                 
@@ -157,6 +157,7 @@
             buttonWidth: buttonWidth,
             maxHeight: 700,
             enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
             includeSelectAllOption: true,
         });
         $('#project').multiselect({
@@ -440,6 +441,18 @@
         
         loadPhaseDataDetail("");
     }
+    
+    function visibleTable(hiddenNo,status){
+        for(var cnt=hiddenNo; cnt <= 10; cnt++){
+            document.getElementById("div_phase_table" + cnt).style.visibility = status;
+            document.getElementById("div_phase_table" + cnt).style.marginBottom = "50px";
+            document.getElementById("div_phase_table" + cnt).style.height = "";
+            if(status == "hidden"){
+                document.getElementById("div_phase_table" + cnt).style.marginBottom = "0px";
+                document.getElementById("div_phase_table" + cnt).style.height = "0px";
+            }            
+        }
+    }
 
     function loadPhaseDataDetail(submitType) {
 
@@ -456,6 +469,15 @@
         }).success(function (data) {
 
             clearAllList();
+            
+            //不要な枠を非表示
+            visibleTable(1,"visible");
+            var projectType = $("#project").val().split(" - ")[0];
+            if(projectType == "AUD"){
+                visibleTable(7,"hidden");              
+            }else if(projectType == "BM"){
+                visibleTable(5,"hidden");              
+            }
 
             //staff情報セット
             $('#staff_info').val(JSON.stringify(data.staff));
