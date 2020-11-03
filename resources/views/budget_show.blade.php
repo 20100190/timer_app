@@ -346,7 +346,7 @@
         </div>
     </div>
 
-     <a href="#" class="p" style="margin-left: 20px">Legend<span><img style="" src="{{ URL::asset('/image') }}/legend.jpg"></span></a>
+     <a href="#" class="p" style="margin-left: 20px">Legend<span><img style="" src="{{ URL::asset('/image') }}/legend.JPG"></span></a>
      
     <div id="div2" style="overflow: scroll;height: 47%;margin-left: 20px;">  
         <div style="width: 100%">
