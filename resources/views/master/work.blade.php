@@ -2,7 +2,7 @@
 
 @section('content') 
 
-<form action="work" method="POST" name="s" style="margin-left: 20px">
+<form action="work" method="POST" name="s" style="margin-left: 20px;overflow-y:hidden;">
     {{ csrf_field() }}  
     <div id="filter_area" style="margin-top: 30px;">
         <div id="filter_left" style="float: left;height: 150px;margin-bottom: 50px">
@@ -229,6 +229,18 @@
             }
         }
     }
+    
+    function visibleTable(hiddenNo,status){
+        for(var cnt=hiddenNo; cnt <= 10; cnt++){
+            document.getElementById("div_table" + cnt).style.visibility = status;
+            document.getElementById("div_table" + cnt).style.marginBottom = "50px";
+            document.getElementById("div_table" + cnt).style.height = "";
+            if(status == "hidden"){
+                document.getElementById("div_table" + cnt).style.marginBottom = "0px";
+                document.getElementById("div_table" + cnt).style.height = "0px";
+            }            
+        }
+    }
 
 
     function loadPhaseData() {
@@ -246,6 +258,15 @@
         }).success(function (data) {
 
             clearAllList();
+            
+            //不要な枠を非表示
+            visibleTable(1,"visible");
+            var projectType = $("#project").val().split(" - ")[0];
+            if(projectType == "4"){
+                visibleTable(7,"hidden");              
+            }else if(projectType == "5"){
+                visibleTable(5,"hidden");              
+            }
 
             for (var i = 0; i < data.phase.length; i++) {
                 document.getElementById("label_phase" + (parseInt(i) + 1)).value = data.phase[i].name;
