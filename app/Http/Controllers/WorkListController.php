@@ -459,7 +459,7 @@ class WorkListController extends Controller {
                 
                 $phaseItemId = $phaseItemId->first()->id;
                 
-                $phaseItemObj = ProjectPhaseItem::where([["phase_item_id", "=", $phaseItemId]]);
+                $phaseItemObj = ProjectPhaseItem::where([["phase_item_id", "=", $phaseItemId],["project_id","=",$projectId]]);
 
                 if (!$phaseItemObj->exists()) {
                     //insert
