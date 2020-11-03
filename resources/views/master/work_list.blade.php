@@ -320,7 +320,8 @@
         // 各列に表示内容を設定
         c1.innerHTML = '<span class="seqno-phase' + buttonIndex + '">' + count + '</span>';
         c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'id" type="text" id="phase' + buttonIndex + '_id' + count + '" name="phase' + buttonIndex + '_id' + count + '" value="' + groupId + '" style="width: 100%" readonly>';
-        c3.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" value="' + name + '" style="width: 100%;font-weight: bold" ' + readonlyStr + '>';
+        //c3.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" value="' + name + '" style="width: 100%;font-weight: bold" ' + readonlyStr + '>';
+        c3.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '"  style="resize: none;width: 100%;font-weight: bold" ' + readonlyStr + '>' + name + '</textarea>';
         c4.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'description" type="text" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" style="resize: none;width: 100%" ' + readonlyStr + '>' + description + '</textarea>';
         c5.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'comp datepicker1" type="text" id="phase' + buttonIndex + '_comp' + count + '" name="phase' + buttonIndex + '_comp' + count + '" value="' + comp + '" style="width: 100%">';
         c6.innerHTML = '<select class="form-control inpphase' + buttonIndex + 'prep" type="text" id="phase' + buttonIndex + '_prep' + count + '" name="phase' + buttonIndex + '_prep' + count + '" value="' + prep + '" style="width: 100%">' + prepStaffInitialOption + '</select>';
@@ -366,7 +367,7 @@
 
         var seq = 1;
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "id", "phase" + buttonIndex + "_id");
-        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "task", "phase" + buttonIndex + "_task");
+        reOrderElementTag(textareaTagElements, "inpphase" + buttonIndex + "task", "phase" + buttonIndex + "_task");
         reOrderElementTag(textareaTagElements, "inpphase" + buttonIndex + "description", "phase" + buttonIndex + "_description");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "comp", "phase" + buttonIndex + "_comp");
         reOrderElementTag(selectTagElements, "inpphase" + buttonIndex + "prep", "phase" + buttonIndex + "_prep");

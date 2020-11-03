@@ -161,8 +161,8 @@
 
         // 各列に表示内容を設定
         c1.innerHTML = '<span class="seqno-phase' + buttonIndex + '">' + count + '</span>';
-        c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" value="' + name + '" style="width: 100%">';
-        //c3.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'description" type="text" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" value="' + description + '" style="width: 100%">';
+        //c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" value="' + name + '" style="width: 100%">';        
+        c2.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" style="width: 100%;resize: none">' + name + '</textarea>';
         c3.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'description" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" style="width: 100%;resize: none">' + description + '</textarea>';
         c4.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';       
         
@@ -177,10 +177,12 @@
         var tagElements = document.getElementsByTagName("input");
         if (!tagElements)
             return false;
+        
+        var textareaTagElements = document.getElementsByTagName("textarea");
 
         var seq = 1;
-        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "task", "phase" + buttonIndex + "_task");
-        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "description", "phase" + buttonIndex + "_description");
+        reOrderElementTag(textareaTagElements, "inpphase" + buttonIndex + "task", "phase" + buttonIndex + "_task");
+        reOrderElementTag(textareaTagElements, "inpphase" + buttonIndex + "description", "phase" + buttonIndex + "_description");
 
         reOrderElementTag(tagElements, "delphase" + buttonIndex + "btn", "delPhase" + buttonIndex + "Btn");
 
