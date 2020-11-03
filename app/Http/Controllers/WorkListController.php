@@ -152,7 +152,7 @@ class WorkListController extends Controller {
             foreach($delTargetObj->get() as $delItemID){
                 array_push($delItemArray,$delItemID->id);
             }
-            $delProPhaseObj = ProjectPhaseItem::wherein("phase_item_id",$delItemArray)->delete();
+            $delProPhaseObj = ProjectPhaseItem::wherein("phase_item_id",$delItemArray)->where([["project_id","=",$projectId]])->delete();
             $delTargetObj->delete();
             //----------------------------
 
