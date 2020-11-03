@@ -349,6 +349,7 @@
             orientation: 'bottom left'
         });
         
+        $('#phase' + buttonIndex + '_task' + count).autosize(); 
         $('#phase' + buttonIndex + '_description' + count).autosize(); 
         $('#phase' + buttonIndex + '_col_memo' + count).autosize(); 
     }

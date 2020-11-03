@@ -166,6 +166,7 @@
         c3.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'description" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" style="width: 100%;resize: none">' + description + '</textarea>';
         c4.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';       
         
+        $('#phase' + buttonIndex + '_task' + count).autosize(); 
         $('#phase' + buttonIndex + '_description' + count).autosize(); 
         
     }
