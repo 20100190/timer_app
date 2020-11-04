@@ -74,7 +74,7 @@ function closeOverrall() {
         document.getElementById("div1").style.height = "40%";
         document.getElementById("div1").style.minHeight = "350px";
         document.getElementById("div2").style.height = "49%";
-        document.getElementById("div3").style.height = "300px";
+        document.getElementById("div3").style.height = "400px";
         document.getElementById("div3").style.visibility = "visible";
         document.getElementById("div3").style.zIndex = "10";        
         
