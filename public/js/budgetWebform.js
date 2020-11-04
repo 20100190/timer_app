@@ -75,7 +75,7 @@ function closeOverrall() {
         document.getElementById("div1").style.minHeight = "350px";
         document.getElementById("div2").style.height = "49%";
         document.getElementById("div3").style.height = "300px";
-        
+        document.getElementById("div3").style.visibility = "visible";
         document.getElementById("div3").style.zIndex = "10";        
         
     } else {
@@ -84,7 +84,7 @@ function closeOverrall() {
         document.getElementById("div1").style.minHeight = "0px";
         document.getElementById("div2").style.height = "89%";
         document.getElementById("div3").style.height = "0px";
-        
+        document.getElementById("div3").style.visibility = "hidden";
         document.getElementById("div3").style.zIndex = "0";
         
     }
