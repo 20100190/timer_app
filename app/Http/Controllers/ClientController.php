@@ -104,7 +104,7 @@ class ClientController extends Controller {
         //$queryObj = ContactPerson::where([['client_id', '=', $maxClientId + 1; ]]);
         //$queryObj->delete();
         
-        $id = $maxClientId + 1;
+        $id = $table->id;//$maxClientId + 1;
         
         for ($contactCnt = 1; $contactCnt < 20; $contactCnt++) {
             if (!isset($_POST["contact_person" . $contactCnt])) {
