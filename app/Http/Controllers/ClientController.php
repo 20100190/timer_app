@@ -76,7 +76,7 @@ class ClientController extends Controller {
        
         
         $table = new Client;
-        $table->id = $maxClientId + 1; 
+        //$table->id = $maxClientId + 1; 
         $table->name = $request->input("name");
         $table->fye = $request->input("fye");
         $table->vic_status = $request->input("vic_status");
