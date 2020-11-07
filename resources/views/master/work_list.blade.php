@@ -165,6 +165,7 @@
             maxHeight: 700,
             enableFiltering: true,
             includeSelectAllOption: true,
+            enableCaseInsensitiveFiltering: true,
             onChange: function (element, checked) {
                 if (checked == true) {
                     $('#group').multiselect('enable');

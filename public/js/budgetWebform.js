@@ -17,12 +17,14 @@ $(document).ready(function () {
         buttonWidth: buttonWidth,
         maxHeight: "500",
         enableFiltering: true,
+        enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,                
     });
     $('#project').multiselect({
         buttonWidth: buttonWidth, 
         maxHeight: "500",
         enableFiltering: true,
+        enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,                
     });
     $('#fye').multiselect({

@@ -17,6 +17,7 @@ $(document).ready(function () {
         buttonWidth: buttonWidth,
         maxHeight: 700,
         enableFiltering: true,
+        enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,
     });
     
@@ -24,6 +25,7 @@ $(document).ready(function () {
         buttonWidth: buttonWidth,
         maxHeight: 700,
         enableFiltering: true,
+        enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,
     });
     $('#status').multiselect({
