@@ -59,6 +59,7 @@
                 <tr><th>Incorporation Date</th><td>{{$clien->incorporation_date}} </td></tr>
                 <tr><th>Incorporation State</th><td>{{$clien->incorporation_state}} </td></tr>
                 <tr><th>Business Started</th><td>{{$clien->business_started}} </td></tr>
+                <tr><th>Archive</th><td>@if($clien->is_archive == 1) True @else False @endif </td></tr>
             </tbody>
         </table>
     </div>

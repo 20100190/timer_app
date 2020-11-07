@@ -425,7 +425,7 @@
                     <tr>
                         <th style="vertical-align: middle;">Fax</th>
                         <td style="vertical-align: middle;"><input class="form-control" name="fax" type="text" id="fax" value=""></td>
-                    </tr>                                
+                    </tr>  
                 </tbody>
             </table>
         </div>    
@@ -474,6 +474,16 @@
                     <tr>
                         <th style="vertical-align: middle;">Business Started</th>
                         <td style="vertical-align: middle;"><input class="form-control datepicker1" name="business_started" type="text" id="business_started" value=""></td>
+                    </tr>
+                    <tr style="height: 30px"></tr>
+                    <tr>
+                        <th style="vertical-align: middle;">Archive</th>
+                        <td style="vertical-align: middle;">
+                            <select id="archive" name="archive" class="form-control" >
+                            <option value="1">True</option>
+                            <option value="0" selected>False</option>                            
+                            </select>
+                        </td>
                     </tr>
                 </tbody>
             </table>

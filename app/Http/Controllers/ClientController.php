@@ -98,6 +98,7 @@ class ClientController extends Controller {
         $table->incorporation_date = $incorporationDate;
         $table->incorporation_state = $request->input("incorporation_state");
         $table->business_started = $businessStartedDate;
+        $table->is_archive = $request->input("archive");
         
         $table->save();
         
@@ -292,6 +293,7 @@ class ClientController extends Controller {
             "incorporation_date" => $incorporationDate,
             "incorporation_state" => $request->input("incorporation_state"),
             "business_started" => $businessStartedDate,
+            "is_archive" => $request->input("archive"),
         ];
 
         $client->update($updateItem);

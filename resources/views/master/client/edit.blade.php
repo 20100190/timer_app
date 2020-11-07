@@ -482,6 +482,16 @@
                         <th style="vertical-align: middle;">Business Started</th>
                         <td style="vertical-align: middle;"><input class="form-control datepicker1" name="business_started" type="text" id="business_started" value="{{$client->business_started}}"></td>
                     </tr>
+                    <tr style="height: 30px"></tr>
+                    <tr>
+                        <th style="vertical-align: middle;">Archive</th>
+                        <td style="vertical-align: middle;">
+                            <select id="archive" name="archive" class="form-control" >
+                                <option value="1" @if($client->is_archive == 1) selected @endif>True</option>
+                                <option value="0" @if($client->is_archive != 1) selected @endif>False</option>                            
+                            </select>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
