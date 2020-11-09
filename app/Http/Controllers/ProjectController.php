@@ -314,15 +314,15 @@ class ProjectController extends Controller
                 //"adjustments" => $request->input("adjustments"),
             ];
 
-            if ($request->input("starts_on") != "") {
+            //if ($request->input("starts_on") != "") {
                 $start = ["start" => $this->formatDate($request->input("starts_on"))];
                 $updateItem = $updateItem + $start;
-            }
+            //}
 
-            if ($request->input("ends_on") != "") {
+            //if ($request->input("ends_on") != "") {
                 $end = ["end" => $this->formatDate($request->input("ends_on"))];
                 $updateItem = $updateItem + $end;
-            }
+            //}
 
             $projectObj->update($updateItem);
         }
@@ -388,7 +388,7 @@ class ProjectController extends Controller
     }
     
     public function formatDate($dateStr) {
-        $dateJp = "";
+        $dateJp = NULL;
 
         if ($dateStr != "") {
             $dateArray = explode("/", $dateStr);
