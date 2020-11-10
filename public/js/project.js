@@ -547,6 +547,12 @@ function loadTask(buttonType) {
         }
 
 
+    }).done((data, textStatus, jqXHR) => {
+        
+        if(buttonType == "duplicate"){
+            showDuplicateToast();
+        }
+        
     }).error(function (XMLHttpRequest, textStatus, errorThrown) {
         //alert('error!!!');
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
@@ -831,6 +837,16 @@ function showErrorToast(errorText) {
         icon: 'error',
         title: 'Error',
         html: errorText
+    });
+}
+
+function showDuplicateToast() {
+    Swal.fire({
+        position: 'top',
+        icon: 'success',
+        title: 'Duplicate',
+        showConfirmButton: false,
+        timer: 1500
     });
 }
 
