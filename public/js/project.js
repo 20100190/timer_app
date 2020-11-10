@@ -624,6 +624,18 @@ function getErrorText(){
         errorText += "Budget Hour is required.<br>";
     }
     
+    //starts on 未入力チェック
+    var startsOnVal = document.getElementById("starts_on").value;
+    if(startsOnVal == ""){
+        errorText += "Starts on is required.<br>";
+    }
+    
+    //ends on 未入力チェック
+    var endsOnVal = document.getElementById("ends_on").value;
+    if(endsOnVal == ""){
+        errorText += "Ends on is required.<br>";
+    }
+    
     if(isTaskError){
         errorText += "Task field is required.<br>";
     }
