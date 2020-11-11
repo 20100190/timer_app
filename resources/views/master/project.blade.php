@@ -195,6 +195,13 @@
                 <option value="NO">No</option>              
             </select>
         </div>
+         <div class="project-layout" style="margin-top: 20px;float: left;width: 181px">        
+            <label>Status</label><br>
+            <select id="is_archive" name="is_archive" class="form-control" style="width: 100%">            
+                <option value="0">Active</option>
+                <option value="1">Archived</option>              
+            </select>
+        </div>
 
         <div style="clear: left"></div>
 

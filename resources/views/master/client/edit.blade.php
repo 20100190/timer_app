@@ -484,11 +484,11 @@
                     </tr>
                     <tr style="height: 30px"></tr>
                     <tr>
-                        <th style="vertical-align: middle;">Archive</th>
+                        <th style="vertical-align: middle;">Status</th>
                         <td style="vertical-align: middle;">
                             <select id="archive" name="archive" class="form-control" >
-                                <option value="1" @if($client->is_archive == 1) selected @endif>True</option>
-                                <option value="0" @if($client->is_archive != 1) selected @endif>False</option>                            
+                                <option value="1" @if($client->is_archive == 1) selected @endif>Archived</option>
+                                <option value="0" @if($client->is_archive != 1) selected @endif>Active</option>                            
                             </select>
                         </td>
                     </tr>

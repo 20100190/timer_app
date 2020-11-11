@@ -298,6 +298,7 @@ class ProjectController extends Controller
             $projectTable->invoice_per_year = 0;//$request->input("engagement_monthly");
             $projectTable->adjustments = 0;//$request->input("adjustments");
             $projectTable->is_approval = 0;//$request->input("adjustments");
+            $projectTable->is_archive = $request->input("is_archive");
 
             $projectTable->save();
         } else {
@@ -309,6 +310,7 @@ class ProjectController extends Controller
                 "pic" => $request->input("pic"),
                 "billable" => $request->input("billable"),
                 "note" => $request->input("note"),
+                "is_archive" => $request->input("is_archive"),
                 //"engagement_fee_unit" => str_replace(",","",$request->input("engagement_fee")),
                 //"invoice_per_year" => $request->input("engagement_monthly"),
                 //"adjustments" => $request->input("adjustments"),

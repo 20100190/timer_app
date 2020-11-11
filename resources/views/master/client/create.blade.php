@@ -477,11 +477,11 @@
                     </tr>
                     <tr style="height: 30px"></tr>
                     <tr>
-                        <th style="vertical-align: middle;">Archive</th>
+                        <th style="vertical-align: middle;">Status</th>
                         <td style="vertical-align: middle;">
                             <select id="archive" name="archive" class="form-control" >
-                            <option value="1">True</option>
-                            <option value="0" selected>False</option>                            
+                            <option value="0" selected>Active</option>
+                            <option value="1">Archived</option>                            
                             </select>
                         </td>
                     </tr>

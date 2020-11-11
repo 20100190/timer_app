@@ -470,6 +470,7 @@ function loadTask(buttonType) {
         document.getElementById("note").value = "";
         document.getElementById("pic").selectedIndex = 0;
         document.getElementById("fye").selectedIndex = 0;
+        document.getElementById("is_archive").selectedIndex = 0;
 
         if (data.project !== null) {
             if (data.project.start != "") {
@@ -487,7 +488,10 @@ function loadTask(buttonType) {
             $("#billable").val(data.project.billable);  
             document.getElementById("note").value = data.project.note;
             //document.getElementById("pic").selectedIndex = data.project.pic - 1;
-            $("#pic").val(data.project.pic);            
+            $("#pic").val(data.project.pic);  
+            if(data.project.is_archive == 1){
+                $("#is_archive").val(data.project.is_archive);  
+            }            
         }
         
         if (document.getElementById("starts_on").value == "") {
