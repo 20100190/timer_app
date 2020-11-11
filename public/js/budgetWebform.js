@@ -58,6 +58,9 @@ $(document).ready(function () {
     $('#sel_status').multiselect({
         buttonWidth: 150,        
     });
+    $('#sel_archive').multiselect({
+        buttonWidth: 150,        
+    });
     
     $('.datepicker1').datepicker({
             format: "mm/dd/yyyy",
@@ -125,7 +128,12 @@ function getData() {
     var dateFromObj = document.getElementById("filter_date_from");
     var dateToObj = document.getElementById("filter_date_to");
     var orValue = document.getElementById("pic_or").value;
-    var status = document.getElementById("sel_status").value;
+    //var status = document.getElementById("sel_status").value;
+    //var archiveStatus = document.getElementById("sel_archive").value;
+    var clientAS = document.getElementById("archive_client").checked;
+    var projectAS = document.getElementById("archive_project").checked;
+    var picAS = document.getElementById("archive_pic").checked;
+    var staffAS = document.getElementById("archive_staff").checked;
 
     client = setDelimiter(clientObj);
     project = setDelimiter(projectObj);
@@ -149,7 +157,7 @@ function getData() {
     }    
    
     $.ajax({
-        url: "/budget/test3/data/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + dateFrom + "/" + dateTo + "/" + orValue + "/" + status,
+        url: "/budget/test3/data/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + dateFrom + "/" + dateTo + "/" + orValue + "/" + clientAS + "/" + projectAS + "/" + picAS + "/" + staffAS ,// + status + "/" + archiveStatus,
         dataType: "json",
         success: data => {
             //初期化

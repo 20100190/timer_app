@@ -100,68 +100,92 @@
         <input type="image" id="btn_open_close" src="{{ URL::asset('/image') }}/close.png" onclick="closeOverrall()">
     </div>
     <div id="div3" style="width: 730px;height: 400px;position: absolute;margin-top: 0px;margin-left: 20px;z-index: 10;background-color: white">
-        <div id="filter_left" style="float: left">
+        <div id="filter_left" style="width: 470px;float: left">
             <div class="row entry-filter-bottom" style="zoom: 100%">
-                <div class="col col-md-3">
+                <div class="col col-md-2">
                     <span class="line-height">Client</span>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-md-7">
                     <select id="client" name="client" multiple="multiple" class="form-control" onchange="setProjectData(true)">            
                         @foreach ($client as $clients)
                         <option value="{{$clients->id}}">{{$clients->name}}</option>
                         @endforeach
                     </select>
-                </div>           
+                </div>  
+                <div class="col col-md-1">
+                    <input class="form-check-input" type="checkbox" id="archive_client" name="archive_client" style="margin-left: 16px;margin-top: 8px" checked>
+                </div>
+                <div class="col col-md-1">
+                    <p style="margin-top: 4px">Active</p>
+                </div>
             </div>
             
             <div class="row entry-filter-bottom" style="zoom: 100%">
-                <div class="col col-md-3">
+                <div class="col col-md-2">
                     <span class="line-height">Project</span>
                 </div>
-                <div class="col col-md-1">
+                <div class="col col-md-7">
                     <select id="project" name="project" multiple="multiple" style="width: 200px;">                        
                         @foreach ($project as $projects)
                         <option value="{{$projects->project_name}}">{{$projects->project_name}}</option>
                         @endforeach
                     </select>
                 </div>
+                <div class="col col-md-1">
+                    <input class="form-check-input" type="checkbox" id="archive_project" name="archive_project" style="margin-left: 16px;margin-top: 8px" checked>
+                </div>
+                <div class="col col-md-1">
+                    <p style="margin-top: 4px">Active</p>
+                </div>
             </div>
             
             <div class="row entry-filter-bottom" style="zoom: 100%">
-                <div class="col col-md-3">
+                <div class="col col-md-2">
                     <span class="line-height">PIC</span>
                 </div>
-                <div class="col col-md-5">
+                <div class="col col-md-4">
                     <select id="pic" name="pic" multiple="multiple" class="form-control" >                            
                         @foreach ($pic as $pic)
                         <option value="{{$pic->id}}">{{$pic->initial}}</option>
                         @endforeach
                     </select>           
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-md-1">
                     <select id="pic_or" name="pic_or" class="form-control" >                            
                         <option value="">And</option>
                         <option value="or">Or</option>
                     </select>           
                 </div>
+                <div class="col col-md-2">
+                    <input class="form-check-input" type="checkbox" id="archive_pic" name="archive_pic" style="margin-left: 50px;margin-top: 8px" checked>
+                </div>
+                <div class="col col-md-1">
+                    <p style="margin-top: 4px;margin-left: -10px">Active</p>
+                </div>
             </div>
             
             <div class="row entry-filter-bottom" style="zoom: 100%">
-                <div class="col col-md-3">
+                <div class="col col-md-2">
                     <span class="line-height">Staff</span>
                 </div>
-                <div class="col col-md-1">
+                <div class="col col-md-3">
                     <select id="sel_staff" name="sel_staff" multiple="multiple" class="form-control" >                            
                         @foreach ($staff as $staff)
                         <option value="{{$staff->id}}">{{$staff->initial}}</option>
                         @endforeach
                     </select>
                 </div>
+                <div class="col col-md-2">
+                    <input class="form-check-input" type="checkbox" id="archive_staff" name="archive_staff" style="margin-left: 43px;margin-top: 8px" checked>
+                </div>
+                <div class="col col-md-1">
+                    <p style="margin-top: 4px;margin-left: -15px">Active</p>
+                </div>
             </div>
             
             <div class="row entry-filter-bottom">
-                <div class="col col-md-3">
-                    <span class="line-height">Date From</span>
+                <div class="col col-md-2">
+                    <span class="line-height">DateFrom</span>
                 </div>
                 <div class="col col-md-1">
                     <input type="text" style="width:150px;margin-right: 20px" class="form-control datepicker1" id="filter_date_from" name="filter_date_from" placeholder="mm/dd/yyyy" value="">                            
@@ -169,8 +193,8 @@
             </div>
             
             <div class="row entry-filter-bottom">
-                <div class="col col-md-3">
-                    <span class="line-height">Date To</span>
+                <div class="col col-md-2">
+                    <span class="line-height">DateTo</span>
                 </div>
                 <div class="col col-md-4">
                     <input type="text" style="width:150px;margin-right: 20px" class="form-control datepicker1" id="filter_date_to" name="filter_date_to" placeholder="mm/dd/yyyy" value="">                            
@@ -181,7 +205,7 @@
             </div> 
             <div class="row entry-filter-bottom">
                 <div class="col">
-                    <button id="btn_load" name="btn_load" class="btn btn-default" type="button" style="background-color: white;width: 150px;margin-left: 121px" onclick="clearShowFilter()">
+                    <button id="btn_load" name="btn_load" class="btn btn-default" type="button" style="background-color: white;width: 150px;margin-left: 98px" onclick="clearShowFilter()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
                         <span id="loadingText">Clear</span>
                     </button>
@@ -243,7 +267,7 @@
                     </select>
                 </div>
             </div>
-            
+            <!--
             <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-3">
                     <span class="line-height">Status</span>
@@ -257,6 +281,19 @@
                 </div>
             </div>
             
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-3">
+                    <span class="line-height">Archive</span>
+                </div>
+                <div class="col col-md-1">
+                    <select id="sel_archive" name="sel_archive" class="form-control" >                                                    
+                        <option value="blank">All</option>                        
+                        <option value="0">未アーカイブ</option>       
+                        <option value="1">アーカイブ済</option>    
+                    </select>
+                </div>
+            </div>
+            -->
             <div class="row entry-filter-bottom" style="zoom: 100%;margin-top: 93px">
                 <div class="col col-md-3">                    
                 </div>

@@ -613,14 +613,24 @@ class BudgetController extends Controller
         //対象のAssign取得
         $targetAssignIdList = $this->getOverallDetailQuery($request, $startDate, $endDate)
                 ->select("assign_id","client.name","role_order.order")
-                ->where("working_days","<>","0")
+                ->where("working_days","<>","0")                
                 ->orderBy("client.name")
                 ->orderBy("project.id")
                 ->orderBy("role_order.order")
                 ->groupBy("assign_id")
                 ->groupBy("client.name")     
-                ->groupBy("role_order.order")
-                ->get();
+                ->groupBy("role_order.order");
+                //->get();
+        
+        if($request->clientAS == "true"){
+            $targetAssignIdList->where([["client.is_archive","<>",1]]);
+        }
+        
+        if($request->projectAS == "true"){
+            $targetAssignIdList->where([["project.is_archive","<>",1]]);
+        }
+        
+        $targetAssignIdList = $targetAssignIdList->get();
         
         $targetAssignId = "";
         foreach($targetAssignIdList as $idList){
@@ -886,18 +896,8 @@ class BudgetController extends Controller
                 ->leftjoin("client", "project.client_id", "=", "client.id")
                 ->leftjoin("staff as B", "B.id", "=", "project.pic")
                 ->leftjoin("role_order", "role_order.role", "=", "assign.role");;
-        
-        if($request->status == "Inactive"){
-            $overallDetail = $overallDetail
-                    ->where(function($query) {
-                        $query->where(function($query){
-                            $query->where([["staff.status","=","Inactive"],["B.status","=","Inactive"]]);
-                        });
-                        $query->orWhere(function($query){
-                            $query->where([["staff.status","=","Inactive"],["B.status","=","Active"]]);
-                        });
-                    });
-        } else if($request->status == "Active"){
+                
+        if($request->picAS == "true" || $request->staffAS == "true"){
             $overallDetail = $overallDetail->where([["staff.status","=","Active"],["B.status","=","Active"]]);
         }
         
