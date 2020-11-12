@@ -452,11 +452,11 @@ function loadTask(buttonType) {
         //approved
         document.getElementById("btn_approve").disabled = false;
         document.getElementById("savingText").innerHTML = "Approve";
-        //$("#taskEnter").find('input,textarea,select,button').prop('disabled', false);        
+        $("#taskEnter").find('input,textarea,select,button').prop('disabled', false);        
         if(data.project != null && data.project.is_approval == 1){
             document.getElementById("btn_approve").disabled = true;
             document.getElementById("savingText").innerHTML = "Approved";
-            //$("#taskEnter").find('input,textarea,select,button').prop('disabled', true);            
+            $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);            
         }
         document.getElementById("btn_approve").disabled = false;
 
