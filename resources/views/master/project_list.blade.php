@@ -63,7 +63,7 @@ function approveProject(obj,projectId){
     obj.disabled = true;
     
     $.ajax({
-        url: "project-list/save/" + projectId,
+        url: "project-list/save/" + projectId + "/Approve",
         dataType: "json",
         success: data => {
             Swal.fire({
