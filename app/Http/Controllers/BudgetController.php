@@ -727,11 +727,18 @@ class BudgetController extends Controller
                     }
                 }*/
                 $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] .= $pColor;//$yyy->color;                
-            }
+            }            
             
+            foreach($warningProjectList as $warningList){
+                if($dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $warningList["year"], $warningList["month"], $warningList["day"])] != ""){
+                    $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $warningList["year"], $warningList["month"], $warningList["day"])] .= ";";
+                }
+                $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $warningList["year"], $warningList["month"], $warningList["day"])] .= $warningList["errorColor"];//$yyy->color;                
+            }
+
             array_push($phaseColorList, $dataPhase);
         }
-        
+       
         //------------------------------
         
         $index = 2;
@@ -835,7 +842,7 @@ class BudgetController extends Controller
                         $query->whereRaw("planned_review2 <= CURDATE() and review_sign_off2 is null");
                     });
                  });
-                
+                 
         //return $warningPhase->get();
         $warningData = $warningPhase->get();
         $retArray = [];
