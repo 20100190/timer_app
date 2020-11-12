@@ -107,7 +107,7 @@ Route::post('master/work-list/{client}/{project}', 'WorkListController@save');
 
 //project list
 Route::get("/master/project-list", "ProjectListController@index");
-Route::get("/master/project-list/save/{project}", "ProjectListController@save");
+Route::get("/master/project-list/save/{project}/{status}", "ProjectListController@save");
 Route::get('/master/project/{client_id}/{project}', 'ProjectController@indexLink');
 Route::get("/master/project-list/{client}/{project}/{status}", "ProjectListController@store");
 

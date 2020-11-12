@@ -452,12 +452,13 @@ function loadTask(buttonType) {
         //approved
         document.getElementById("btn_approve").disabled = false;
         document.getElementById("savingText").innerHTML = "Approve";
-        $("#taskEnter").find('input,textarea,select,button').prop('disabled', false);        
+        //$("#taskEnter").find('input,textarea,select,button').prop('disabled', false);        
         if(data.project != null && data.project.is_approval == 1){
             document.getElementById("btn_approve").disabled = true;
             document.getElementById("savingText").innerHTML = "Approved";
-            $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);            
+            //$("#taskEnter").find('input,textarea,select,button').prop('disabled', true);            
         }
+        document.getElementById("btn_approve").disabled = false;
 
         //project
         //初期化
@@ -807,11 +808,20 @@ function saveDetail(){
 function saveApprove(){
     var projectId = document.getElementById("rec_project_id").value;
     var obj = document.getElementById("btn_approve");    
-    obj.style.backgroundColor = "background-color: #DCDCDC";
-    obj.disabled = true;
+    var appText = document.getElementById("savingText").innerHTML;
+    
+    if(appText == "Approve"){
+        obj.style.backgroundColor = "#DCDCDC";
+        document.getElementById("savingText").innerHTML = "Approved";
+        //obj.disabled = true;
+    }else {
+        obj.style.backgroundColor = "#3c8dbc";
+        document.getElementById("savingText").innerHTML = "Approve";
+    }
+    
     
     $.ajax({
-        url: "/master/project-list/save/" + projectId,
+        url: "/master/project-list/save/" + projectId + "/" + appText,
         dataType: "json",
         success: data => {
             Swal.fire({

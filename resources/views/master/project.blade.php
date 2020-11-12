@@ -491,7 +491,7 @@
             <td>
                 @if(isset($isApproval) && $isApproval == 1)
                 @if(isset($isProjectApproved) && $isProjectApproved == 1)
-                <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="" style="margin-top: 30px;background-color: #DCDCDC" disabled>
+                <button id="btn_approve" name="btn_approve" class="btn btn-primary project-button" type="button" onclick="saveApprove()" style="margin-top: 30px;background-color: #DCDCDC">
                     <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
                     <span id="savingText">Approved</span>
                 </button>

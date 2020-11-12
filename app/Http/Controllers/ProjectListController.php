@@ -111,10 +111,15 @@ class ProjectListController extends Controller {
      */
     public function save(Request $request) {
         $projectId = $request->project;
+        $status = $request->status;
+        $approved = 1;
+        if($status == "Approved"){
+            $approved = 0;
+        }
 
         $queryObj = Project::where("id", "=", $projectId);
         $updateItem = [
-            "is_approval" => 1,
+            "is_approval" => $approved,
         ];
         $queryObj->update($updateItem);
 
