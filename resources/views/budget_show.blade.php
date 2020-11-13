@@ -150,17 +150,17 @@
                         @endforeach
                     </select>           
                 </div>
-                <div class="col col-md-1">
+                <div class="col col-md-2">
                     <select id="pic_or" name="pic_or" class="form-control" >                            
                         <option value="">And</option>
                         <option value="or">Or</option>
                     </select>           
                 </div>
                 <div class="col col-md-2">
-                    <input class="form-check-input" type="checkbox" id="archive_pic" name="archive_pic" style="margin-left: 50px;margin-top: 8px" checked>
+                    <input class="form-check-input" type="checkbox" id="archive_pic" name="archive_pic" style="margin-left: 58px;margin-top: 8px" checked>
                 </div>
                 <div class="col col-md-1">
-                    <p style="margin-top: 4px;margin-left: -10px">Active</p>
+                    <p style="margin-top: 4px;">Active</p>
                 </div>
             </div>
             
@@ -168,18 +168,18 @@
                 <div class="col col-md-2">
                     <span class="line-height">Staff</span>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-md-7">
                     <select id="sel_staff" name="sel_staff" multiple="multiple" class="form-control" >                            
                         @foreach ($staff as $staff)
                         <option value="{{$staff->id}}">{{$staff->initial}}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="col col-md-2">
-                    <input class="form-check-input" type="checkbox" id="archive_staff" name="archive_staff" style="margin-left: 43px;margin-top: 8px" checked>
+                <div class="col col-md-1">
+                    <input class="form-check-input" type="checkbox" id="archive_staff" name="archive_staff" style="margin-left: 17px;margin-top: 8px" checked>
                 </div>
                 <div class="col col-md-1">
-                    <p style="margin-top: 4px;margin-left: -15px">Active</p>
+                    <p style="margin-top: 4px;margin-left: 2px">Active</p>
                 </div>
             </div>
             
