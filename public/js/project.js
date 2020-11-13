@@ -647,6 +647,12 @@ function getErrorText(){
         errorText += "Ends on is required.<br>";
     }
     
+    //project year 未入力
+    var projectYearVal = document.getElementById("project_year").value;
+    if(projectYearVal == "blank"){
+        errorText += "Project Year is required.<br>";
+    }    
+    
     if(isTaskError){
         errorText += "Task field is required.<br>";
     }
