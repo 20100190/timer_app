@@ -178,26 +178,27 @@ function getData() {
 
                 if (mnt != data.week[i].month) {
                     var monthEng = getMonthEng(data.week[i].month);
-                    document.getElementById("h_month" + (i + 1)).innerHTML = monthEng;//data.week[i].month;
-                    document.getElementById("h2_month" + (i + 1)).innerHTML = monthEng;//data.week[i].month;
+                    var yearStr = String(data.week[i].year).slice(-2);
+                    document.getElementById("h_month" + (i + 1)).innerHTML = monthEng + "-" + yearStr;//data.week[i].month;
+                    document.getElementById("h2_month" + (i + 1)).innerHTML = monthEng + "-" + yearStr;//data.week[i].month;
                 }
                 
                 var bkColor = "#e2efda";
                 var rowWidth = "40";
                 //overall total style       
-                document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";";
-                document.getElementById("td_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";";
+                document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";white-space: nowrap;";
+                document.getElementById("td_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";white-space: nowrap;";
                 if (document.getElementById("h2_month" + (i + 1)).innerHTML != "") {
-                    document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray";
-                    document.getElementById("td_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray";
+                    document.getElementById("td_h2_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray;white-space: nowrap";
+                    document.getElementById("td_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray;white-space: nowrap";
                 }
                 
                 //client list style
-                document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";";
-                document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";";
+                document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";white-space: nowrap;";
+                document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";white-space: nowrap;";
                 if (document.getElementById("h_month" + (i + 1)).innerHTML != "") {
-                    document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray";
-                    document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray";
+                    document.getElementById("td_h_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray;white-space: nowrap";
+                    document.getElementById("td_d_month" + (i + 1)).style.cssText = "width: "+ rowWidth +"px;z-index: 0;text-align: center;background-color: "+ bkColor +";border-left: solid 1px lightgray;white-space: nowrap";
                 }
 
                 mnt = data.week[i].month;
