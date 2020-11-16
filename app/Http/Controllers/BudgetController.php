@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 
 class BudgetController extends Controller
-{
+{    
     /**
      * Create a new controller instance.
      *
@@ -235,8 +235,20 @@ class BudgetController extends Controller
         
         if ($loginUserInitial != "" && $loginUserInitial == $requestPIC && ($request->client == "blank" || in_array("0",explode(",", $request->client)))) {
             //clientがブランクまたはTOPCが指定されていれば
-            $comments = $comments
-                    ->orWhere('project.client_id', "=", 0);
+            //$comments = $comments
+            //        ->orWhere('project.client_id', "=", 0);
+            $comments = $comments->orwhere(function($query) use($request) {
+                if ($request->staff != "blank") {
+                    $staffArray = explode(",", $request->staff);
+                    $query->where(function($query) use($staffArray) {
+                        $query->wherein('assign.staff_id', $staffArray);
+                    });
+                }
+
+                $query->where(function($query) {
+                    $query->Where('project.client_id', "=", 0);
+                });
+            });
         }
    
         $comments = $comments
