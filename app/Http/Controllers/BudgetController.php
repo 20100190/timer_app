@@ -250,6 +250,9 @@ class BudgetController extends Controller
                 });
             });
         }
+        
+        $comments = $comments
+                    ->where([["client.is_archive","<>",1]]); 
    
         $comments = $comments
                 ->orderBy("client", "asc")
