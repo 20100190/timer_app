@@ -584,10 +584,52 @@ class BudgetController extends Controller
         return $weekNo + 1;
     }
     
+    function getDateRange($dateFrom, $dateTo){
+        //Date From Toを指定されない場合は当年
+        //Fromが指定された場合は以降1年
+        //Toが指定された場合は以前1年
+        $retDateFrom = [];//$dateFrom;
+        $retDateTo = [];//$dateTo;
+        if($dateFrom == "blank" && $dateTo == "blank"){
+            $calendarArray = Week::where([["year", "=", date("Y")]])->get();            
+            array_push($retDateFrom,sprintf('%02d', $calendarArray[0]["month"]));
+            array_push($retDateFrom,sprintf('%02d', $calendarArray[0]["day"]));
+            array_push($retDateFrom,$calendarArray[0]["year"]);
+            
+            array_push($retDateTo,sprintf('%02d', $calendarArray[51]["month"]));
+            array_push($retDateTo,sprintf('%02d', $calendarArray[51]["day"]));  
+            array_push($retDateTo,$calendarArray[51]["year"]);
+        } else if($dateFrom != "blank" || $dateTo == "blank") {  
+            $dateFrom = explode("-", $dateFrom);  
+            $calendarArray = $this->getWeek($dateFrom[2], intval($dateFrom[0]), intval($dateFrom[1]));                   
+            array_push($retDateFrom,sprintf('%02d', $calendarArray[0]["month"]));
+            array_push($retDateFrom,sprintf('%02d', $calendarArray[0]["day"]));
+            array_push($retDateFrom,$calendarArray[0]["year"]);
+            
+            array_push($retDateTo,sprintf('%02d', $calendarArray[51]["month"]));
+            array_push($retDateTo,sprintf('%02d', $calendarArray[51]["day"]));   
+            array_push($retDateTo,$calendarArray[51]["year"]);
+        } else if($dateFrom == "blank" || $dateTo != "blank"){
+            $calendarArray = Week::where([["year", "=", date("Y")]])->get();            
+            array_push($retDateFrom,sprintf('%02d', $calendarArray[0]["month"]));
+            array_push($retDateFrom,sprintf('%02d', $calendarArray[0]["day"]));
+            array_push($retDateFrom,$calendarArray[0]["year"]);
+            
+            array_push($retDateTo,sprintf('%02d', $calendarArray[51]["month"]));
+            array_push($retDateTo,sprintf('%02d', $calendarArray[51]["day"]));  
+            array_push($retDateTo,$calendarArray[51]["year"]);
+        }
+        
+        return [$retDateFrom,$retDateTo];
+    }
+    
     function getDetailData(Request $request) {
-        $dateFrom = explode("-", $request->from);
-        $dateTo = explode("-", $request->to);
-       
+        $requestDateFrom = explode("-", $request->from);        
+        $requestDateTo = explode("-", $request->to);
+        
+        list($dateFrom,$dateTo) = $this->getDateRange($request->from, $request->to);        
+       //var_dump($dateFrom);
+       //var_dump($dateTo);
         //row setting
         $colClient = 0;
         $colProject = 1;
@@ -600,13 +642,24 @@ class BudgetController extends Controller
         $colAssignedHours = 8;
         $colDiff = 9;
         $colWeek = 10;
-
-        $weekArray = $this->getWeek($dateFrom[2], intval($dateFrom[0]), intval($dateFrom[1]));
+        
+        if($request->from != "blank"){
+            $dateFrom = $requestDateFrom;
+        }
+        
+        if($request->to != "blank"){
+            $dateTo = $requestDateTo;
+        }
+        
+        $weekArray = $this->getWeek($dateFrom[2], intval($dateFrom[0]), intval($dateFrom[1]));        
         $startDateAll = $weekArray[0]["year"] . sprintf('%02d', $weekArray[0]["month"]) . sprintf('%02d', $weekArray[0]["day"]);
         $endDateAll = $weekArray[51]["year"] . sprintf('%02d', $weekArray[51]["month"]) . sprintf('%02d', $weekArray[51]["day"]);        
-        $startDate = $dateFrom[2] . $dateFrom[0] . $dateFrom[1];
-        $endDate = $dateTo[2] . $dateTo[0] . $dateTo[1];
-
+        $startDate = $dateFrom[2] . $dateFrom[0] . $dateFrom[1];        
+        $endDate = $dateTo[2] . $dateTo[0] . $dateTo[1];       
+        /*var_dump($startDateAll);
+        var_dump($endDateAll);
+        var_dump($startDate);
+        var_dump($endDate);*/
 
         $res = [];
         

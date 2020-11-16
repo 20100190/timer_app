@@ -143,8 +143,10 @@ function getData() {
     staff = setDelimiter(staffObj);
     role = setDelimiter(roleObj);
 
-    dateFrom = "01-06-2020"
-    dateTo = "12-31-2020"
+    //dateFrom = "01-06-2020"
+    dateFrom = "blank";
+    //dateTo = "12-31-2020"
+    dateTo = "blank";
     if (dateFromObj.value != "") {
         dateFrom = dateFromObj.value.split("/").join("-");
     }
