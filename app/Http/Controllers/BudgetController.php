@@ -769,7 +769,7 @@ class BudgetController extends Controller
             $dataPhase[1] = $idList["client_name"];
             $dataPhase[2] = $idList["project_name"];
                         
-            $phaseList = $phaseListObj->get();
+            $phaseList = $phaseListObj->get();            
             foreach ($phaseList as $yyy) {
                 if($dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] != ""){
                     $dataPhase[$colWeek - 1 + $this->getWeekNo($weekArray, $yyy->year, $yyy->month, $yyy->day)] .= ";";
@@ -874,7 +874,7 @@ class BudgetController extends Controller
         if ($dueDate <= $usDate) {
             $errorColor = "#cc0000";
         }
-        $res["errorColor"] = $errorColor;
+        //$res["errorColor"] = $errorColor;
         $weekCnt = 0;
         //何週目か割り出し
         foreach ($weekArray as $weekItems) {
@@ -885,10 +885,13 @@ class BudgetController extends Controller
             }
         }        
       
+        if ($weekCnt != 1) {
+            $res["errorColor"] = $errorColor;
             $res["year"] = $weekArray[$weekCnt - 2]["year"];
             $res["month"] = $weekArray[$weekCnt - 2]["month"];
             $res["day"] = $weekArray[$weekCnt - 2]["day"];
-      
+        }
+
         return $res;
     }
 
@@ -947,17 +950,24 @@ class BudgetController extends Controller
             //prepDateが当日以降
             if (!is_null($prepDate) && $prepDate <= $usDate && is_null($prepSignoff)) {
                 $res = $this->getErrorRow($prepDate, $dueDate, $usDate, $weekArray);
-                array_push($retArray, $res);
+                if($res != []){
+                    array_push($retArray, $res);
+                }
+                
             }
 
             if (!is_null($rev1Date) && $rev1Date <= $usDate && is_null($rev1Signoff)) {
                 $res = $this->getErrorRow($rev1Date, $dueDate, $usDate, $weekArray);
+                if($res != []){
                 array_push($retArray, $res);
+                }
             }
 
             if (!is_null($rev2Date) && $rev2Date <= $usDate && is_null($rev2Signoff)) {
                 $res = $this->getErrorRow($rev2Date, $dueDate, $usDate, $weekArray);
+                if($res != []){
                 array_push($retArray, $res);
+                }
             }
         }
         return $retArray;
