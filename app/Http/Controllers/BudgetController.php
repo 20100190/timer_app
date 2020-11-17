@@ -884,11 +884,18 @@ class BudgetController extends Controller
                 break;
             }
         }
-
-        $res["year"] = $weekArray[$weekCnt - 2]["year"];
-        $res["month"] = $weekArray[$weekCnt - 2]["month"];
-        $res["day"] = $weekArray[$weekCnt - 2]["day"];
         
+        try {
+            $res["year"] = $weekArray[$weekCnt - 2]["year"];
+            $res["month"] = $weekArray[$weekCnt - 2]["month"];
+            $res["day"] = $weekArray[$weekCnt - 2]["day"];
+        } catch (Exception $ex) {
+            var_dump("getErrorRow" + $weekArray);
+            var_dump($targetDate);
+            var_dump($dueDate);
+            var_dump($usDate);
+        }
+
         return $res;
     }
 
