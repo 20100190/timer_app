@@ -946,18 +946,39 @@ class BudgetController extends Controller
             
             //prepDateが当日以降
             if (!is_null($prepDate) && $prepDate <= $usDate && is_null($prepSignoff)) { 
-                $res = $this->getErrorRow($prepDate, $dueDate,$usDate,$weekArray);
-                array_push($retArray, $res);
+                try {
+                    $res = $this->getErrorRow($prepDate, $dueDate, $usDate, $weekArray);
+                    array_push($retArray, $res);                    
+                } catch (Exception $ex) {
+                    var_dump("prep" + $weekArray);
+                    var_dump($prepDate);
+                    var_dump($dueDate);
+                    var_dump($usDate);
+                }                
             }
             
-            if (!is_null($rev1Date) && $rev1Date <= $usDate && is_null($rev1Signoff)) {    
-                $res = $this->getErrorRow($rev1Date, $dueDate,$usDate,$weekArray);
-                array_push($retArray, $res);
+            if (!is_null($rev1Date) && $rev1Date <= $usDate && is_null($rev1Signoff)) {   
+                try {
+                    $res = $this->getErrorRow($rev1Date, $dueDate, $usDate, $weekArray);
+                    array_push($retArray, $res);
+                } catch (Exception $ex) {
+                    var_dump("rev1" + $weekArray);
+                    var_dump($rev1Date);
+                    var_dump($dueDate);
+                    var_dump($usDate);
+                }
             }
             
             if (!is_null($rev2Date) && $rev2Date <= $usDate && is_null($rev2Signoff)) {   
-                $res = $this->getErrorRow($rev2Date, $dueDate,$usDate,$weekArray);
-                array_push($retArray, $res);
+                try {
+                    $res = $this->getErrorRow($rev2Date, $dueDate, $usDate, $weekArray);
+                    array_push($retArray, $res);
+                } catch (Exception $ex) {
+                    var_dump("rev2" + $weekArray);
+                    var_dump($rev2Date);
+                    var_dump($dueDate);
+                    var_dump($usDate);
+                }
             }
         }
         return $retArray;
