@@ -113,7 +113,7 @@ class ProjectListController extends Controller {
         $projectId = $request->project;
         $status = $request->status;
         $approved = 1;
-        if($status == "Approved"){
+        if($status == "Unapprove"){
             $approved = 0;
         }
 

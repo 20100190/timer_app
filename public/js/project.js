@@ -455,7 +455,7 @@ function loadTask(buttonType) {
         $("#taskEnter").find('input,textarea,select,button').prop('disabled', false);        
         if(data.project != null && data.project.is_approval == 1){
             document.getElementById("btn_approve").disabled = true;
-            document.getElementById("savingText").innerHTML = "Approved";
+            document.getElementById("savingText").innerHTML = "Unapprove";
             $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);            
         }
         document.getElementById("btn_approve").disabled = false;
@@ -818,13 +818,17 @@ function saveApprove(){
     
     if(appText == "Approve"){
         obj.style.backgroundColor = "#DCDCDC";
-        document.getElementById("savingText").innerHTML = "Approved";
+        document.getElementById("savingText").innerHTML = "Unapprove";
         //obj.disabled = true;
     }else {
         obj.style.backgroundColor = "#3c8dbc";
         document.getElementById("savingText").innerHTML = "Approve";
     }
     
+    var message = "Approved";
+    if(appText == "Unapprove"){
+        message = "Unapproved";
+    }
     
     $.ajax({
         url: "/master/project-list/save/" + projectId + "/" + appText,
@@ -833,7 +837,7 @@ function saveApprove(){
             Swal.fire({
                 position: 'top',
                 icon: 'success',
-                title: 'Approved',
+                title: message,
                 showConfirmButton: false,
                 timer: 1500
             });
