@@ -253,6 +253,9 @@ class BudgetController extends Controller
         
         $comments = $comments
                     ->where([["client.is_archive","<>",1]]); 
+        
+        $comments = $comments
+                    ->where([["project.is_archive","<>",1]]); 
    
         $comments = $comments
                 ->orderBy("client", "asc")
@@ -983,8 +986,12 @@ class BudgetController extends Controller
                 ->leftjoin("staff as B", "B.id", "=", "project.pic")
                 ->leftjoin("role_order", "role_order.role", "=", "assign.role");;
                 
-        if($request->picAS == "true" || $request->staffAS == "true"){
-            $overallDetail = $overallDetail->where([["staff.status","=","Active"],["B.status","=","Active"]]);
+        if($request->picAS == "true"){
+            $overallDetail = $overallDetail->where([["B.status","=","Active"]]);
+        }
+        
+        if($request->staffAS == "true"){
+            $overallDetail = $overallDetail->where([["staff.status","=","Active"]]);
         }
         
         if ($request->client != "blank") {
