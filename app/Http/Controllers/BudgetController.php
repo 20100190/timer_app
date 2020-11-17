@@ -757,7 +757,8 @@ class BudgetController extends Controller
                 ->get();
         foreach ($targetPhaseList as $idList) {
             $dataPhase = $this->initArray();
-            $phaseListObj = ProjectPhase::join("phase","phase.id","=","project phase.phase_id")->where([["project_id","=",$idList["project_id"]]]);
+            $phaseListObj = ProjectPhase::join("phase","phase.id","=","project phase.phase_id")
+                    ->where([["project_id","=",$idList["project_id"]],["ymd",">=",$startDate],["ymd","<=",$endDate]]);
             if(!$phaseListObj->exists()){
                 continue;
             }
