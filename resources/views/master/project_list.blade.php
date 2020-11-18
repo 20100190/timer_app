@@ -178,6 +178,12 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
         }else {        
             c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
         }        
+    }else {
+        if(status != 1){
+            c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 70px" onclick="approveProject(this,' + projectId + ')" disabled>Unapprove</button>';
+        }else {        
+            c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 70px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
+        }       
     }
     
 }
@@ -304,7 +310,7 @@ function setProjectData(){
                 <th class="fixed-header" style="width: 200px;">Client</th>
                 <th class="fixed-header" style="width: 200px;">Project</th>                
                 
-                <th class="fixed-header" style="width: 50px;text-align: center">@if($isApprove == 1) Approve @else &nbsp; @endif</th>                                    
+                <th class="fixed-header" style="width: 50px;text-align: center">Approve</th>                                    
                
             </tr>
         </thead>
