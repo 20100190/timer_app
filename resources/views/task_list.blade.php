@@ -95,7 +95,7 @@
                     <span class="line-height">Date From</span>
                 </div>
                 <div class="col col-md-1">
-                    <input type="text" style="width:150px;hight:10px;" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="">                            
+                    <input type="text" style="width:150px;hight:10px;" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="" autocomplete="off">                            
                 </div>                 
             </div>
             
@@ -104,7 +104,7 @@
                     <span class="line-height">Date To</span>
                 </div>
                 <div class="col col-md-1">
-                    <input type="text" style="width:150px;hight:10px;" class="form-control datepicker1" id="filter_to" name="filter_to" placeholder="mm/dd/yyyy" value="">                            
+                    <input type="text" style="width:150px;hight:10px;" class="form-control datepicker1" id="filter_to" name="filter_to" placeholder="mm/dd/yyyy" value="" autocomplete="off">                            
                 </div>                 
             </div>
             

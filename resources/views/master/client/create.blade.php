@@ -350,7 +350,7 @@
     @endif
 
 
-    <form method="POST" name="clientForm" action="/master/client/store" class="form-horizontal">
+    <form method="POST" name="clientForm" action="/master/client/store" class="form-horizontal" autocomplete="off">
         {{ csrf_field() }}
 
         <div style="float: left;margin-right: 50px">

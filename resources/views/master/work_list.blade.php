@@ -4,7 +4,7 @@
 <input type="hidden" id="receiveClientId" @if(isset($reqClientId)) value="{{$reqClientId}}" @else value="" @endif> 
        <input type="hidden" id="receiveProjectId" @if(isset($reqProjectId)) value="{{$reqProjectId}}" @else value="" @endif>
 
-       <form action="" method="POST" id="s" name="s" style="margin-left: 20px;overflow-x: scroll;">
+       <form action="" method="POST" id="s" name="s" style="margin-left: 20px;overflow-x: scroll;"  autocomplete="off">
     {{ csrf_field() }}  
     <div id="filter_area" style="margin-top: 30px;">
         <div id="filter_left" style="float: left;height: 150px;margin-bottom: 50px">

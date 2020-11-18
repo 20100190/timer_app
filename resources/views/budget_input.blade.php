@@ -2,7 +2,7 @@
 
 @section('content') 
 
-<form action="test3/save" method="POST" name="s" style="margin-left: 20px">
+<form action="test3/save" method="POST" name="s" style="margin-left: 20px" autocomplete="off">
     {{ csrf_field() }}  
     <div id="filter_area" style="margin-top: 30px;">
         <div id="filter_left" style="float: left;height: 200px;margin-bottom: 30px">

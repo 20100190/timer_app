@@ -350,7 +350,7 @@
     </ul>
     @endif
 
-    <form method="POST" name="clientForm" action="/master/client/{{ $client->id }}" class="form-horizontal">
+    <form method="POST" name="clientForm" action="/master/client/{{ $client->id }}" class="form-horizontal" autocomplete="off">
         {{ csrf_field() }}
         {{ method_field("PUT") }}
 
