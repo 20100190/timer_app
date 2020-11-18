@@ -263,7 +263,7 @@
             //不要な枠を非表示
             visibleTable(1,"visible");
             var projectType = $("#project").val().split(" - ")[0];
-            if(projectType == "4"){
+            if(projectType == "4" || projectType == "7" || projectType == "26"){
                 visibleTable(7,"hidden");              
             }else if(projectType == "5"){
                 visibleTable(5,"hidden");              
