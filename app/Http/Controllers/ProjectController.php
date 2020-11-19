@@ -45,7 +45,11 @@ class ProjectController extends Controller
         $reqProjectObj = explode(" - ",$reqProject);
         
         $projectObj = Project::where([['client_id', '=', $reqClient], ["project_type", "=", $reqProjectObj[0]], ["project_year", "=", $reqProjectObj[1]]]);
-        $projectApproved = $projectObj->first()->is_approval;
+        $projectApproved = "0";
+        if ($projectObj->exists()) {
+            $projectObj->first()->is_approval;
+        }
+
         return $this->commonView()
                 ->with("reqClient", $reqClient)
                 ->with("reqProject", $reqProject)

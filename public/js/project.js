@@ -449,6 +449,16 @@ function loadTask(buttonType) {
             $('#rec_project_id').val(data.project.id);            
         }        
         
+        var param1 = document.getElementById("project_type").value;
+        var param2 = document.getElementById("project_year").value;
+        var param3 = document.getElementById("reqClient").value;
+        if(param3 == ""){
+            param3 = document.getElementById("client").value;
+        }
+        
+        //パラメータ書き換え
+        history.replaceState('','',"/master/project/" + param3 + "/" + param1 + " - " + param2);
+        
         //approved
         document.getElementById("btn_approve").disabled = false;
         document.getElementById("savingText").innerHTML = "Approve";
