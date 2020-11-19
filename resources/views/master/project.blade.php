@@ -255,9 +255,9 @@
                 <tr>
                     <td style="text-align:right; width:40px;"></td>
                     <td style="width: 70px"></td>
-                    <td style="width: 120px"></td>                    
-                    <td style="width: 120px"></td>                    
-                    <td class="project-font-size" style="width: 50px;">Total</td>
+                    <td style="width: 120px;text-align: right">Total</td>                    
+                    <td class="project-font-size" style="width: 120px;text-align: right"><span id="total_hours" style="padding-right: 12px">0</span></td>                    
+                    <td class="project-font-size" style="width: 50px;"></td>
                     <td class="project-font-size" style="width: 60px;text-align: right"><div style="float: left;font-size: 12px;text-align: left">$</div><span id="total_budget" style="padding-right: 19px">0</span></td>                       
                     <td style="width:40px;"> </td>
                 </tr>

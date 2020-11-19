@@ -384,14 +384,16 @@ function calc() {
     var count = objTBL.rows.length;
 
     var total = 0;
+    var totalHour = 0;
     for (var cnt = 1; cnt <= count; cnt++) {
         var budgetAmount = parseInt(removeComma(document.getElementById("hours" + cnt).value)) * parseInt(removeComma(document.getElementById("rate" + cnt).value));        
         document.getElementById("budget" + cnt).value = budgetAmount.toLocaleString();
-        total += parseInt(removeComma(document.getElementById("budget" + cnt).value));
-
+        total += parseInt(removeComma(document.getElementById("budget" + cnt).value));        
+        totalHour += parseFloat(removeComma(document.getElementById("hours" + cnt).value));
     }
 
     document.getElementById("total_budget").innerHTML = total.toLocaleString();
+    document.getElementById("total_hours").innerHTML = totalHour.toLocaleString();
     
     var engTotal = document.getElementById("total_grand").value;//(parseInt(removeComma(document.getElementById("engagement_fee").value)) * parseInt(removeComma(document.getElementById("engagement_monthly").value))) + parseInt(removeComma(document.getElementById("adjustments").value));
     /*document.getElementById("engagement_total").innerHTML = 0;
