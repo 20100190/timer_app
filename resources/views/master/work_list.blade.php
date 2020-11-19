@@ -798,13 +798,24 @@
     function saveForm(btnValue) {
         document.getElementById("clicked_button").value = btnValue;
         //入力　エラーチェック
-        var isErrorEntry = getErrorEntry();
-        if(isErrorEntry){
+        var {isError, isBlankDateError} = getErrorEntry();
+        var errorText = "";
+        if(isError){
+            errorText = errorText + "need to enter assign information";
+        }
+        if(isBlankDateError){
+            if(errorText != ""){
+                errorText = errorText + "<br>";
+            }
+            errorText = errorText + "need to enter date";
+        }
+        
+        if(errorText != ""){
             Swal.fire({
                 position: 'top',
                 icon: 'error',
                 title: 'Error',
-                html: "need to enter assign information"
+                html: errorText,
             });
             return;
         }
@@ -950,6 +961,7 @@
     
     function getErrorEntry(){
         var isError = false;
+        var isBlankDateError = false;
         var errorColor = "yellow";
         var defaultColor = "transparent";
         for(var tableCnt=1; tableCnt<= 10; tableCnt++){
@@ -974,7 +986,10 @@
                 prep.style.backgroundColor = defaultColor;
                 rev1.style.backgroundColor = defaultColor;
                 rev2.style.backgroundColor = defaultColor;
-            
+                prepDate.style.backgroundColor = defaultColor;
+                rev1Date.style.backgroundColor = defaultColor;
+                rev2Date.style.backgroundColor = defaultColor;
+                            
                 //preparerチェック
                 if(prep.value == "" && prepDate.value != ""){
                     prep.style.backgroundColor = errorColor;
@@ -1002,9 +1017,32 @@
                     rev2.style.backgroundColor = errorColor;
                     isError = true;
                 }
+                
+                //assignされているのに、PlanDateがブランク
+                //preparerチェック
+                if(prep.value != "" && prepDate.value == ""){
+                    prepDate.style.backgroundColor = errorColor;
+                    isBlankDateError = true;
+                }
+               
+                //reviewer1チェック
+                if(rev1.value != "" && rev1Date.value == ""){
+                    rev1Date.style.backgroundColor = errorColor;
+                    isBlankDateError = true;
+                }
+                
+                //reviewer2チェック
+                if(rev2.value != "" && rev2Date.value == ""){
+                    rev2Date.style.backgroundColor = errorColor;
+                    isBlankDateError = true;
+                }               
             }
         }
-        return isError;
+        //return isError;
+        return {
+            isError : isError,
+            isBlankDateError : isBlankDateError
+        };
     }
     
     function saveAnnualize() {
