@@ -31,7 +31,7 @@ Route::get('/budget/test3/save/{client}/{project}/{staff}/{year}/{month}/{day}/{
 Route::get('/budget/test3/data/{client}/{project}/{fye}/{vic}/{pic}/{staff}/{role}/{from}/{to}/{orValue}/{clientAS}/{projectAS}/{picAS}/{staffAS}', 'BudgetController@getDetailData');
 Route::get('/test3/role', 'BudgetController@storeRole');
 Route::get('/budget/test3/project/{id}', 'BudgetController@storeProject');
-Route::get('/budget/test3/input/{client}/{project}/{fye}/{vic}/{pic}/{staff}/{role}/{year}/{month}/{day}', 'BudgetController@storeInput');
+Route::get('/budget/test3/input/{client}/{project}/{fye}/{vic}/{pic}/{staff}/{role}/{year}/{month}/{day}/{clientAS}/{projectAS}/{picAS}/{staffAS}', 'BudgetController@storeInput');
 Route::get('/test3/input2/{client}', 'BudgetController@storeInput2');
 
 Route::get('/test3/getProjectInfo/{client}/{type}/{year}', 'ProjectController@getTaskProjectInfo');

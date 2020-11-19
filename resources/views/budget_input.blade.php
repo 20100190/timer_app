@@ -10,25 +10,37 @@
                 <div class="col col-md-2" >
                     <span class="line-height">Client</span>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-md-7">
                     <select id="client" name="client" multiple="multiple" class="form-control select2" data-display="static" onchange="setProjectData(true)">                           
                         @foreach ($client as $clients)
                         <option value="{{$clients->id}}">{{$clients->name}}</option>
                         @endforeach
                     </select>
-                </div>  
+                </div>
+                <div class="col col-md-2">
+                    <input class="form-check-input" type="checkbox" id="archive_client" name="archive_client" style="margin-left: 50px;margin-top: 8px" checked>
+                </div>
+                <div class="col col-md-1">
+                    <p style="margin-top: 4px;margin-left: -30px">Active</p>
+                </div>
             </div>
 
             <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-2">
                     <span class="line-height">Project</span>
                 </div>
-                <div class="col col-md-1">
+                <div class="col col-md-7">
                     <select id="project" name="project" multiple="multiple" style="width: 200px">                          
                         @foreach ($project as $projects)
                         <option value="{{$projects->project_name}}">{{$projects->project_name}}</option>
                         @endforeach
                     </select>
+                </div>
+                <div class="col col-md-2">
+                    <input class="form-check-input" type="checkbox" id="archive_project" name="archive_project" style="margin-left: 50px;margin-top: 8px" checked>
+                </div>
+                <div class="col col-md-1">
+                    <p style="margin-top: 4px;margin-left: -30px">Active</p>
                 </div>
             </div>
             
@@ -36,7 +48,7 @@
                 <div class="col col-md-2">
                     <span class="line-height">PIC</span>
                 </div>
-                <div class="col col-md-1">
+                <div class="col col-md-7">
                     @if(!is_object($loginInitial))
                     <select id="pic" name="pic" multiple="multiple" class="form-control">                            
                         @foreach ($pic as $pics)                    
@@ -51,24 +63,36 @@
                     </select>
                     @endif                
                 </div>
+                <div class="col col-md-2">
+                    <input class="form-check-input" type="checkbox" id="archive_pic" name="archive_pic" style="margin-left: 50px;margin-top: 8px" checked>
+                </div>
+                <div class="col col-md-1">
+                    <p style="margin-top: 4px;margin-left: -30px">Active</p>
+                </div>
             </div>
             
             <div class="row entry-filter-bottom" style="zoom: 100%">
                 <div class="col col-md-2">
                     <span class="line-height">Staff</span>
                 </div>
-                <div class="col col-md-1">
+                <div class="col col-md-7">
                     <select id="sel_staff" name="sel_staff" multiple="multiple" class="form-control" >                            
                         @foreach ($staff as $staffs)
                         <option value="{{$staffs->id}}">{{$staffs->initial}}</option>
                         @endforeach
                     </select>
                 </div>
+                <div class="col col-md-2">
+                    <input class="form-check-input" type="checkbox" id="archive_staff" name="archive_staff" style="margin-left: 50px;margin-top: 8px" checked>
+                </div>
+                <div class="col col-md-1">
+                    <p style="margin-top: 4px;margin-left: -30px">Active</p>
+                </div>
             </div>              
 
             <div class="row entry-filter-bottom">                           
                 <div class="col col-md-3" >
-                    <input type="button" class="btn btn-default" value="Clear" onclick="clearInputFilter()" style="background-color: white;width: 150px;margin-left: 85px">
+                    <input type="button" class="btn btn-default" value="Clear" onclick="clearInputFilter()" style="background-color: white;width: 150px;margin-left: 107px">
                 </div>
                 <div class="col" >
                     <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="getInputAllData()" style="width: 150px;margin-left: 140px">

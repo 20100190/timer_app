@@ -233,6 +233,22 @@ class BudgetController extends Controller
             }
         }
         
+        if($request->clientAS == "true"){
+            $comments = $comments->where([["client.is_archive","<>",1]]);
+        }
+        
+        if($request->projectAS == "true"){
+            $comments = $comments->where([["project.is_archive","<>",1]]);
+        }
+        
+        if($request->picAS == "true"){
+            $comments = $comments->where([["B.status","=","Active"]]);
+        }
+        
+        if($request->staffAS == "true"){
+            $comments = $comments->where([["staff.status","=","Active"]]);
+        }
+        
         if ($loginUserInitial != "" && $loginUserInitial == $requestPIC && ($request->client == "blank" || in_array("0",explode(",", $request->client)))) {
             //clientがブランクまたはTOPCが指定されていれば
             //$comments = $comments
@@ -248,15 +264,13 @@ class BudgetController extends Controller
                 $query->where(function($query) {
                     $query->Where('project.client_id', "=", 0);
                 });
+                
+                if ($request->staffAS == "true") {
+                    $query->where([["staff.status", "=", "Active"]]);
+                }
             });
         }
-        
-        $comments = $comments
-                    ->where([["client.is_archive","<>",1]]); 
-        
-        $comments = $comments
-                    ->where([["project.is_archive","<>",1]]); 
-   
+           
         $comments = $comments
                 ->orderBy("client", "asc")
                 ->orderBy("project", "asc")

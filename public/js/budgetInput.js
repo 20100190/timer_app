@@ -680,6 +680,10 @@ function testData() {
     var year = "2020";
     var month = "1";
     var day = "6";
+    var clientAS = document.getElementById("archive_client").checked;
+    var projectAS = document.getElementById("archive_project").checked;
+    var picAS = document.getElementById("archive_pic").checked;
+    var staffAS = document.getElementById("archive_staff").checked;
 
     //検索文字列
     client = setDelimiter(clientObj);
@@ -699,7 +703,7 @@ function testData() {
     
   
     $.ajax({
-        url: "/budget/test3/input/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + year + "/" + month + "/" + day,
+        url: "/budget/test3/input/" + client + "/" + project + "/" + fye + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + year + "/" + month + "/" + day + "/" + clientAS + "/" + projectAS + "/" + picAS + "/" + staffAS,
         dataType: "json",
         success: data => {
             $('#budget_info').val(JSON.stringify(data.budget));
