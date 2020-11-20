@@ -378,67 +378,7 @@ class WorkListController extends Controller {
         $projectType = Project::where([["client_id", "=", $request->client], ["project_name", "=", $request->project]])->first()->project_type;
         $projectTypeId = ProjectType::where([["project_type", "=", $projectType]])->first()->id;
         $groupVal = $group;
-        //この画面で追加された行の情報を登録
-        /* for ($i = 1; $i <= 10; $i++) {  //phase
-          if ($_POST["label_phase" . $i] == "") {
-          continue;
-          }
-
-          for ($j = 1; $j <= 50; $j++) { //明細数
-          if (!isset($_POST["phase" . $i . "_id" . $j])) {
-          break;
-          }
-
-          if ($_POST["phase" . $i . "_task" . $j] == "" && $_POST["phase" . $i . "_description" . $j] == "") {
-          continue;
-          }
-
-          //phase group
-          $phaseGroupObj = PhaseGroup::Join("phase", "phase.id", "=", "phase group.phase_id")
-          ->select("phase group.id as id")
-          ->where([["phase group.project_id", "=", $projectTypeId], ["phase.name", "=", $_POST["label_phase" . $i]]]);
-          if ($groupVal != "") {
-          $phaseGroupObj = $phaseGroupObj->where([["group", "=", $groupVal]]);
-          }
-          if ($phaseGroupObj->exists()) {
-          $phaseGroupId = $phaseGroupObj->first()->id;
-          } else {
-          $phaseId = Phase::where([["project_type", "=", $projectTypeId], ["name", "=", $_POST["label_phase" . $i]]])->first()->id;
-
-          $pTable = new PhaseGroup;
-          $pTable->project_id = $request->client;
-          $pTable->phase_id = $phaseId;
-          $pTable->group = $groupVal;
-
-          $pTable->save();
-
-          $phaseGroupId = $pTable->id;
-          }
-
-          //phase item
-          $targetPhaseItem = PhaseItems::where([["id", "=", $_POST["phase" . $i . "_id" . $j]]]);
-          if ($targetPhaseItem->exists()) {
-          //update
-          $updateItem = [
-          "name" => $_POST["phase" . $i . "_task" . $j],
-          "description" => $_POST["phase" . $i . "_description" . $j],
-          ];
-          $targetPhaseItem->update($updateItem);
-          } else {
-          //phase item
-          $table = new PhaseItems;
-          $table->phase_group_id = $phaseGroupId;
-          $table->name = $_POST["phase" . $i . "_task" . $j];
-          $table->is_standard = False;
-          $table->order = $j;
-          $table->description = $_POST["phase" . $i . "_description" . $j];
-
-          $table->save();
-          }
-          }
-          } */
-
-        //-------------------------------------------------------------
+      
         for ($i = 1; $i <= 10; $i++) {  //phase
             if ($_POST["label_phase" . $i] == "") {
                 continue;
@@ -449,15 +389,29 @@ class WorkListController extends Controller {
                     break;
                 }
 
-                $phaseItemId = PhaseGroup::select("phase items.id as id")->leftJoin("phase items", "phase group.id", "=", "phase items.phase_group_id")
+                $phaseItemId = PhaseGroup::select("phase items.id as id","phase group.id as phase_group_id")->leftJoin("phase items", "phase group.id", "=", "phase items.phase_group_id")
                                 ->leftJoin("phase", "phase.id", "=", "phase group.phase_id")
                                 ->where([["phase group.group", "=", $group], ["phase items.order", "=", $j], ["phase.name", "=", $_POST["label_phase" . $i]]]);
 
-                if(!$phaseItemId->exists()){
-                    continue;
+                if(!$phaseItemId->exists()){  
+                    $pgID = PhaseGroup::select("phase group.id as id")->leftJoin("phase", "phase.id", "=", "phase group.phase_id")
+                            ->where([["phase group.group", "=", $group],["project_id","=",$projectTypeId], ["phase.name", "=", $_POST["label_phase" . $i]]])->first()->id;
+                    //continue;
+                    //phase item 作成
+                    //phase item
+                    $table = new PhaseItems;
+                    $table->phase_group_id = $pgID;
+                    $table->name = $_POST["phase" . $i . "_task" . $j];
+                    $table->is_standard = False;
+                    $table->order = $j;
+                    $table->description = $_POST["phase" . $i . "_description" . $j];
+
+                    $table->save();
+                    
+                    $phaseItemId = $table->id;
+                }else {
+                    $phaseItemId = $phaseItemId->first()->id;
                 }
-                
-                $phaseItemId = $phaseItemId->first()->id;
                 
                 $phaseItemObj = ProjectPhaseItem::where([["phase_item_id", "=", $phaseItemId],["project_id","=",$projectId]]);
 
@@ -510,6 +464,23 @@ class WorkListController extends Controller {
                     $table->review_sign_off2 = NULL;//$this->convDateFormat($_POST["phase" . $i . "_review_signoff2" . $j]);
                     $table->memo = $_POST["phase" . $i . "_memo" . $j];
                     $table->col_memo = $_POST["phase" . $i . "_col_memo" . $j];
+                    
+                    //Phase1 Monthly以外はブランクに
+                    $xID = PhaseItems::leftJoin("phase group", "phase items.phase_group_id", "=", "phase group.id")->where([["phase items.id","=",$phaseItemId]])->first()->phase_id;
+                    if($xID != 16){
+                        $table->due_date = NULL;
+                        $table->preparer = 0;
+                        $table->planed_prep = NULL;
+                        $table->prep_sign_off = NULL;
+                        $table->reviewer = 0;
+                        $table->planned_review = NULL;
+                        $table->review_sign_off = NULL;
+                        $table->reviewer2 = 0;
+                        $table->planned_review2 =  NULL;
+                        $table->review_sign_off2 = NULL;
+                        $table->memo = "";
+                        $table->col_memo = "";
+                    }
 
                     $table->save();
                 } else {
