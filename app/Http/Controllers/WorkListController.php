@@ -517,6 +517,24 @@ class WorkListController extends Controller {
                     if($planedReview2Val != NULL){
                         $planedReview2Val = date("Y-m-d",strtotime($this->convDateFormat($_POST["phase" . $i . "_planned_review2" . $j]) . "+" . $offsetMonth . " month"));
                     }
+                    
+                    $memoVal = $_POST["phase" . $i . "_memo" . $j];
+                    $colMemoVal = $_POST["phase" . $i . "_col_memo" . $j];
+                    
+                    //Phase1 Monthly以外はブランクに
+                    $xID = PhaseItems::leftJoin("phase group", "phase items.phase_group_id", "=", "phase group.id")->where([["phase items.id","=",$phaseItemId]])->first()->phase_id;
+                    if($xID != 16){
+                        $dueDateVal = NULL;
+                        $prep = 0;
+                        $planedPrepVal = NULL;                        
+                        $reviewer = 0;
+                        $planedReviewVal = NULL;                        
+                        $reviewer2 = 0;
+                        $planedReview2Val =  NULL;                        
+                        $memoVal = "";
+                        $colMemoVal = "";
+                    }
+
 
                     $updateItem = [
                         "due_date" => $dueDateVal,
@@ -529,8 +547,8 @@ class WorkListController extends Controller {
                         "reviewer2" => $reviewer2, //$_POST["phase" . $i . "_reviewer2" . $j],
                         "planned_review2" => $planedReview2Val,//$this->convDateFormat($_POST["phase" . $i . "_planned_review2" . $j]),
                         "review_sign_off2" => NULL,//$this->convDateFormat($_POST["phase" . $i . "_review_signoff2" . $j]),
-                        "memo" => $_POST["phase" . $i . "_memo" . $j],
-                        "col_memo" => $_POST["phase" . $i . "_col_memo" . $j],
+                        "memo" => $memoVal,//$_POST["phase" . $i . "_memo" . $j],
+                        "col_memo" => $colMemoVal,//$_POST["phase" . $i . "_col_memo" . $j],
                     ];
                     $phaseItemObj->update($updateItem);
                 }
