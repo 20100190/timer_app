@@ -462,15 +462,20 @@ function loadTask(buttonType) {
         history.replaceState('','',"/master/project/" + param3 + "/" + param1 + " - " + param2);
         
         //approved
-        document.getElementById("btn_approve").disabled = false;
+        /*document.getElementById("btn_approve").disabled = false;
         document.getElementById("savingText").innerHTML = "Approve";
         $("#taskEnter").find('input,textarea,select,button').prop('disabled', false);        
         if(data.project != null && data.project.is_approval == 1){
             document.getElementById("btn_approve").disabled = true;
             document.getElementById("savingText").innerHTML = "Unapprove";
-            $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);            
+            $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);     
+            $("#btn_save").prop('disabled', false);
+            $("#is_archive").prop('disabled', false);    
+            
+            $("#project_body").find('input,select,button').prop('disabled', true);    
+              
         }
-        document.getElementById("btn_approve").disabled = false;
+        document.getElementById("btn_approve").disabled = false;*/
 
         //project
         //初期化
@@ -555,6 +560,20 @@ function loadTask(buttonType) {
 
         //計算実行
         calc();
+        
+        //disabled設定
+        document.getElementById("btn_approve").disabled = false;
+        document.getElementById("savingText").innerHTML = "Approve";
+        $("#taskEnter").find('input,textarea,select,button').prop('disabled', false);
+        if (data.project != null && data.project.is_approval == 1) {
+            document.getElementById("btn_approve").disabled = true;
+            document.getElementById("savingText").innerHTML = "Unapprove";
+            $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);
+            $("#btn_save").prop('disabled', false);
+            $("#is_archive").prop('disabled', false);
+
+        }
+        document.getElementById("btn_approve").disabled = false;
         
         //duplicate時初期化
         if(buttonType == "duplicate"){
@@ -681,6 +700,8 @@ function saveForm() {
         return;
     }        
     
+    $("#taskEnter").find('input,textarea,select,button').prop('disabled', false);   
+    
     saveDetail();
     
     /*
@@ -755,7 +776,7 @@ function saveForm() {
 
 function saveDetail(){
     var params = $("form").serialize();
-
+    
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -775,10 +796,10 @@ function saveDetail(){
 
             //処理中
             $("#savingSpinner").css("visibility", "visible");
-            $("#savingText").html("保存中");
+            //$("#savingText").html("保存中");
             $("#taskEnter").find(':input').attr('disabled', true);
             $("#btn_save").attr('disabled', true);
-
+            
         },
         complete: function (xhr, textStatus) {
             //処理中アイコン削除
@@ -786,11 +807,19 @@ function saveDetail(){
             //$('#btnProfileUpdate').attr('disabled', false);
             //処理済
             $("#savingSpinner").css("visibility", "hidden");
-            $("#savingText").html("保存");
+            //$("#savingText").html("保存");
             $("#taskEnter").find(':input').attr('disabled', false);
             $("#taskEnter").find(':input').removeAttr('disabled');
             $("#btn_save").attr('disabled', false);
             $("#btn_save").removeAttr('disabled');
+            
+            //disabled設定
+            if (document.getElementById("savingText").innerHTML == "Unapprove") {
+                $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);
+                $("#btn_save").prop('disabled', false);
+                $("#is_archive").prop('disabled', false);
+                document.getElementById("btn_approve").disabled = false;
+            }
 
             showToast();
         },
@@ -846,6 +875,15 @@ function saveApprove(){
         url: "/master/project-list/save/" + projectId + "/" + appText,
         dataType: "json",
         success: data => {
+            //disabled制御
+            $("#taskEnter").find('input,textarea,select,button').prop('disabled', false);
+            if(message == "Approved"){
+                $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);
+                $("#btn_save").prop('disabled', false);
+                $("#is_archive").prop('disabled', false);
+                document.getElementById("btn_approve").disabled = false;
+            }
+            
             Swal.fire({
                 position: 'top',
                 icon: 'success',
