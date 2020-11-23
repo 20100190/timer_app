@@ -64,6 +64,14 @@ $('.datepicker1').datepicker({
     orientation: 'bottom left'
 });
 
+//Fromに当日日付設定
+     var dateToday = new Date();
+     document.getElementById("filter_date").value = dateToday.toLocaleString("en-US",{
+         "year": "numeric",
+         "month": "numeric",
+         "day": "numeric"
+     });     
+
 var maskStr = "#,##0.0";
 var spreadsheetWidth = "80";
 var size = window.innerHeight - 350;
