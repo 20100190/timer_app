@@ -42,12 +42,14 @@ class ProjectController extends Controller
         
         $reqClient = $request->client_id;
         $reqProject = $request->project;    
-        $reqProjectObj = explode(" - ",$reqProject);
+        $reqProjectType = substr($reqProject,0,-7);
+        $reqProjectYear = substr($reqProject,4);
+        //$reqProjectObj = explode(" - ",$reqProject);
         
-        $projectObj = Project::where([['client_id', '=', $reqClient], ["project_type", "=", $reqProjectObj[0]], ["project_year", "=", $reqProjectObj[1]]]);
+        $projectObj = Project::where([['client_id', '=', $reqClient], ["project_type", "=", $reqProjectType], ["project_year", "=", $reqProjectYear]]);        
         $projectApproved = "0";
         if ($projectObj->exists()) {
-            $projectObj->first()->is_approval;
+            $projectApproved = $projectObj->first()->is_approval;
         }
 
         return $this->commonView()

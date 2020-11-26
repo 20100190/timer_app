@@ -72,11 +72,10 @@ $(document).ready(function () {
      //Fromに当日日付設定
      var dateToday = new Date();
      document.getElementById("filter_date_from").value = dateToday.toLocaleString("en-US",{
-	"year": "numeric",
-	"month": "numeric",
-	"day": "numeric"
-});
-     
+         "year": "numeric",
+         "month": "numeric",
+         "day": "numeric"
+     });     
 
 });
 
