@@ -26,9 +26,10 @@ $(document).ready(function () {
          $("#client").val(reqClient);
      }
      if (reqProject != "") {
-         var projectStr = reqProject.split(" - ");
-         $("#project_type").val(projectStr[0]);
-         $("#project_year").val(projectStr[1]);
+         //var projectStr = reqProject.split(" - ");
+         $("#project_type").val(reqProject.slice(0,-7));
+         $("#project_year").val(reqProject.slice(-4));
+         
          $("#harvest_project_name").val(reqProject);
      }
      if (reqClient != "" && reqProject != "") {        
