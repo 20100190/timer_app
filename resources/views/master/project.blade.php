@@ -137,7 +137,7 @@
         
         <div class="project-layout" style="float: left">   
             <label>&nbsp;</label><br>            
-            <button class="btn btn-primary" type="button" style="width: 100px;background-color: #DCDCDC" onclick="clickDuplicate()">                
+            <button class="btn btn-primary" id="btnDuplicate" name="btnDuplicate" type="button" style="width: 100px;background-color: #DCDCDC" onclick="clickDuplicate()">                
                 <span id="loadingText">Duplicate</span>
             </button>
         </div>

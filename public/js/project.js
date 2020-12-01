@@ -425,7 +425,7 @@ function clickDuplicate(){
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes'
     }).then((result) => {
-        if (result.value) {
+        if (result.value) {            
             loadTask("duplicate");
         }
     });
@@ -572,7 +572,7 @@ function loadTask(buttonType) {
             $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);
             $("#btn_save").prop('disabled', false);
             $("#is_archive").prop('disabled', false);
-
+            $("#btnDuplicate").prop('disabled', false);
         }
         document.getElementById("btn_approve").disabled = false;
         
@@ -587,6 +587,7 @@ function loadTask(buttonType) {
     }).done((data, textStatus, jqXHR) => {
         
         if(buttonType == "duplicate"){
+            $("#taskEnter").find('input,textarea,select,button').prop('disabled', false);
             showDuplicateToast();
         }
         
@@ -819,6 +820,7 @@ function saveDetail(){
                 $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);
                 $("#btn_save").prop('disabled', false);
                 $("#is_archive").prop('disabled', false);
+                $("#btnDuplicate").prop('disabled', false);
                 document.getElementById("btn_approve").disabled = false;
             }
 
@@ -882,6 +884,7 @@ function saveApprove(){
                 $("#taskEnter").find('input,textarea,select,button').prop('disabled', true);
                 $("#btn_save").prop('disabled', false);
                 $("#is_archive").prop('disabled', false);
+                $("#btnDuplicate").prop('disabled', false);
                 document.getElementById("btn_approve").disabled = false;
             }
             
