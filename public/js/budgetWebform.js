@@ -73,8 +73,8 @@ $(document).ready(function () {
      var dateToday = new Date();
      document.getElementById("filter_date_from").value = dateToday.toLocaleString("en-US",{
          "year": "numeric",
-         "month": "numeric",
-         "day": "numeric"
+         "month": "2-digit",
+         "day": "2-digit",	
      });     
 
 });

@@ -68,8 +68,8 @@ $('.datepicker1').datepicker({
      var dateToday = new Date();
      document.getElementById("filter_date").value = dateToday.toLocaleString("en-US",{
          "year": "numeric",
-         "month": "numeric",
-         "day": "numeric"
+         "month": "2-digit",
+         "day": "2-digit",	
      });     
 
 var maskStr = "#,##0.0";
