@@ -178,12 +178,12 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
         }else {        
             c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
         }        
-    }else {
+    }else {      
         if(status != 1){
-            c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 70px" onclick="approveProject(this,' + projectId + ')" disabled>Unapprove</button>';
+            c5.innerHTML = '<span>Approving</span>';
         }else {        
-            c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 70px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
-        }       
+            c5.innerHTML = '<span>Approved</span>';
+        }  
     }
     
 }
