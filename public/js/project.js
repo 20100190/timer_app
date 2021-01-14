@@ -625,11 +625,15 @@ function getErrorText(){
     var objTaskTBL = document.getElementById("tbl");
     var taskCount = objTaskTBL.rows.length;
     
+    var objEngagementFeeTBL = document.getElementById("budget_engagement_body");
+    var engagementCount = objEngagementFeeTBL.rows.length;
+    
     var staffArray = [];
     var errorText = "";
     var isStaffError = false;
     var isHoursError = false;
     var isTaskError = false;
+    var isEngagementFeeError = false;
     for (var cnt = 1; cnt <= count; cnt++) {
         var assign = document.getElementById("assign" + cnt).selectedIndex;
         var hours = document.getElementById("hours" + cnt).value;
@@ -649,6 +653,14 @@ function getErrorText(){
         var taskName = document.getElementById("task_name" + cnt).value;
         if(taskName == ""){
             isTaskError = true;
+        }
+    }
+    
+    //budget engagement
+    for(var cnt = 1; cnt <= engagementCount; cnt++){
+        var engageTypeName = document.getElementById("type" + cnt).value;
+        if(engageTypeName == ""){
+            isEngagementFeeError = true;
         }
     }
     
@@ -687,6 +699,10 @@ function getErrorText(){
     
     if(isTaskError){
         errorText += "Task field is required.<br>";
+    }
+    
+    if(isEngagementFeeError){
+        errorText += "Engagament Fee Type is required.<br>";
     }
     
     return errorText;
