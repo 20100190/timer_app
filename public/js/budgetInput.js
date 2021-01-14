@@ -811,10 +811,15 @@ function testData() {
             //$("#btn_load").removeAttr('disabled');            
             jQuery('#loader-bg').hide();
         },
-        error: () => {
-            alert("ajax Error");
-            jQuery('#loader-bg').hide();    
+        error: function(XMLHttpRequest, textStatus, errorThrown) {            
+            if (XMLHttpRequest.status === 401) {
+                location.href = location.protocol + "//" + location.hostname + "/login";
+            }
         }
+        /*error: () => {
+            alert("ajax Error");    
+            jQuery('#loader-bg').hide();    
+        }*/
     });
 }
 

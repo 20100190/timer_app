@@ -592,10 +592,9 @@ function loadTask(buttonType) {
         }
         
     }).error(function (XMLHttpRequest, textStatus, errorThrown) {
-        //alert('error!!!');
-        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-        console.log("textStatus     : " + textStatus);
-        console.log("errorThrown    : " + errorThrown.message);
+        if (XMLHttpRequest.status === 401) {
+            location.href = location.protocol + "//" + location.hostname + "/login";
+        }
     });
 }
 

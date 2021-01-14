@@ -2,6 +2,24 @@ window.onresize = function(){
     myspreadsheet.options.tableHeight = "1000px";    
 }
 
+function closeOverrall() {    
+    var acWidth = document.getElementById("filter_area").style.height;
+    var btnObj = document.getElementById("btn_open_close");
+    var size = 100;//window.innerHeight - 350;
+    
+    if (acWidth == "0px") {
+        btnObj.src = imagesUrl + "/close.png"
+        document.getElementById("filter_area").style.height = "200px";     
+        document.getElementById("filter_area").style.display = "block";
+        myspreadsheet.options.tableHeight = "100px";
+        
+    } else {
+        btnObj.src = imagesUrl + "/open.png"
+        document.getElementById("filter_area").style.height = "0px";   
+        document.getElementById("filter_area").style.display = "none";
+    }
+}
+
 $(document).ready(function () {
     jQuery('#loader-bg').hide();
 
@@ -756,10 +774,15 @@ function getProjectAllData() {
             //$("#btn_load").removeAttr('disabled');            
             jQuery('#loader-bg').hide();
         },
-        error: () => {
+        error: function(XMLHttpRequest, textStatus, errorThrown) {            
+            if (XMLHttpRequest.status === 401) {
+                location.href = location.protocol + "//" + location.hostname + "/login";
+            }
+        }
+        /*error: () => {
             alert("ajax Error");
             jQuery('#loader-bg').hide();
-        }
+        }*/
     });
 }
 
