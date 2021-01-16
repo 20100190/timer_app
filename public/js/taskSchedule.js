@@ -32,6 +32,13 @@ $(document).ready(function () {
         orientation: 'bottom left'
     });    
     
+    $('#task_schedule').tablesorter({
+        widgets: ['zebra'],
+        widgetOptions: {
+            zebra: ["normal-row", "alt-row"]
+        }
+    });
+    
 });
 
 function clearInputFilter() {
@@ -92,13 +99,13 @@ function loadTaskScheduleData() {
             insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId);
         }
         
-        $('#task_schedule').tablesorter({
+        /*$('#task_schedule').tablesorter({
             widgets: ['zebra'],
             widgetOptions: {
                 zebra: ["normal-row", "alt-row"]
             }
-        });
-
+        });*/
+    $("#task_schedule").trigger("update");
 
     }).error(function (XMLHttpRequest, textStatus, errorThrown) {
         //alert('error!!!');
