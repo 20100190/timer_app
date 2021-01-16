@@ -58,18 +58,29 @@ function setHeight(addHeight){
 }
 
 
-function approveProject(obj,projectId){
-    obj.style.cssText = "background-color: #DCDCDC";
-    obj.disabled = true;
-    
+function approveProject(obj,projectId,rowCnt){
+    var objText = obj.innerText;
+    var table = document.getElementById("project-list-body");
+           
     $.ajax({
-        url: "project-list/save/" + projectId + "/Approve",
+        url: "project-list/save/" + projectId + "/" + objText,
         dataType: "json",
         success: data => {
+            
+            if(objText == "Approve"){
+                obj.innerText = "Unapprove";
+                obj.style.cssText = "width: 80px;background-color: #DCDCDC";    
+                table.rows[rowCnt - 1].cells[4].innerText = "Approved";
+            } else {
+                obj.innerText = "Approve";
+                obj.style.cssText = "width: 80px;background-color: #337ab7";
+                table.rows[rowCnt - 1].cells[4].innerText = "Approving";
+            }
+            
             Swal.fire({
                 position: 'top',
                 icon: 'success',
-                title: 'Approved',
+                title: objText,
                 showConfirmButton: false,
                 timer: 1500
             });
@@ -166,17 +177,19 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
     var c3 = row.insertCell(2);
     var c4 = row.insertCell(3);
     var c5 = row.insertCell(4);
-
+    if(isApprove == 1){
+        var c6 = row.insertCell(5);
+    }
     // 各列に表示内容を設定
     c1.innerHTML = '<a href="project/' + clientId + '/' + projectName + '"' + ' target="_blank"><img src="' + '{{ URL::asset('/image') }}' + '/view.png"></a>';
     c2.innerHTML = '<span>' + projectId + '</span>';
     c3.innerHTML = '<span>' + clientName + '</span>';
     c4.innerHTML = '<span>' + projectName + '</span>';   
-    if(isApprove == 1){
+    /*if(isApprove == 1){
         if(status != 1){
-            c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px" onclick="approveProject(this,' + projectId + ')">Approve</button>';
+            c6.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px" onclick="approveProject(this,' + projectId + ')">Approve</button>';
         }else {        
-            c5.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
+            c6.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 61px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + ')" disabled>Approved</button>';
         }        
     }else {      
         if(status != 1){
@@ -184,7 +197,18 @@ function insertProjectListRow(clientId, projectId, clientName, projectName, stat
         }else {        
             c5.innerHTML = '<span>Approved</span>';
         }  
-    }
+    }*/
+     if(status != 1){
+         c5.innerHTML = '<span>Approving</span>';
+         if(isApprove == 1){
+             c6.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 80px" onclick="approveProject(this,' + projectId + "," + count + ')">Approve</button>';
+         }
+     }else {
+         c5.innerHTML = '<span>Approved</span>';
+         if(isApprove == 1){
+             c6.innerHTML = '<button class="btn btn-xs btn-primary" style="width: 80px;background-color: #DCDCDC" onclick="approveProject(this,' + projectId + "," + count + ')">Unapprove</button>';
+         }
+     }
     
 }
 
@@ -309,8 +333,10 @@ function setProjectData(){
                 <th class="fixed-header" style="width: 100px;">Project ID</th>
                 <th class="fixed-header" style="width: 200px;">Client</th>
                 <th class="fixed-header" style="width: 200px;">Project</th>                
-                
-                <th class="fixed-header" style="width: 50px;text-align: center">Approve</th>                                    
+                <th class="fixed-header" style="width: 50px;text-align: center">Status</th>   
+                @if($isApprove == 1)
+                <th class="fixed-header" style="width: 100px;text-align: center">Approve</th>                                    
+                @endif
                
             </tr>
         </thead>
