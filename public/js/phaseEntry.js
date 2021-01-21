@@ -11,7 +11,8 @@ function closeOverrall() {
         btnObj.src = imagesUrl + "/close.png"
         document.getElementById("filter_area").style.height = "200px";     
         document.getElementById("filter_area").style.display = "block";
-        myspreadsheet.options.tableHeight = "100px";
+        //document.getElementById("spreadsheet2").style.height = "600px";
+        //myspreadsheet.options.maxHeight = "100px";
         
     } else {
         btnObj.src = imagesUrl + "/open.png"
@@ -29,6 +30,9 @@ $(document).ready(function () {
         buttonWidth: buttonWidth,
         maxHeight: 700,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,
     });
@@ -37,28 +41,43 @@ $(document).ready(function () {
         buttonWidth: buttonWidth,
         maxHeight: 700,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,
     });
     $('#vic').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#pic').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         maxHeight: 600,
         includeSelectAllOption: true,
     });
     $('#sel_role').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#sel_staff').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         maxHeight: 400,
         includeSelectAllOption: true,
     });

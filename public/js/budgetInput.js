@@ -17,6 +17,9 @@ $(document).ready(function () {
     $('#client').multiselect({
         buttonWidth: buttonWidth,
         maxHeight: 700,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         enableFiltering: true,
         enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,
@@ -24,6 +27,9 @@ $(document).ready(function () {
     $('#project').multiselect({
         buttonWidth: buttonWidth,
         maxHeight: 700,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         enableFiltering: true,
         enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,
@@ -31,11 +37,17 @@ $(document).ready(function () {
     $('#fye').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#vic').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#pic').multiselect({
@@ -47,11 +59,17 @@ $(document).ready(function () {
     $('#sel_role').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#sel_staff').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         maxHeight: 400,
         includeSelectAllOption: true,
     });

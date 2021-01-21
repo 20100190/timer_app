@@ -17,6 +17,9 @@ $(document).ready(function () {
         buttonWidth: buttonWidth,
         maxHeight: 700,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,
     });
@@ -25,6 +28,9 @@ $(document).ready(function () {
         buttonWidth: buttonWidth,
         maxHeight: 700,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,
     });

@@ -17,6 +17,9 @@ $(document).ready(function () {
         buttonWidth: buttonWidth,
         maxHeight: "500",
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,                
     });
@@ -24,32 +27,50 @@ $(document).ready(function () {
         buttonWidth: buttonWidth, 
         maxHeight: "500",
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,                
     });
     $('#fye').multiselect({
         buttonWidth:"150",
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#vic').multiselect({
         buttonWidth: "150",
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#pic').multiselect({
         buttonWidth: 150,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#sel_staff').multiselect({
         buttonWidth: 150,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#sel_role').multiselect({
         buttonWidth: 150,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         includeSelectAllOption: true,
     });
     $('#pic_or').multiselect({

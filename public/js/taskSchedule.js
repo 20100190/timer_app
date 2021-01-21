@@ -7,6 +7,9 @@ $(document).ready(function () {
         buttonWidth: buttonWidth,
         maxHeight: 700,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         enableCaseInsensitiveFiltering: true,
         includeSelectAllOption: true,
     });
@@ -14,6 +17,9 @@ $(document).ready(function () {
     $('#pic').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         maxHeight: 600,
         includeSelectAllOption: true,
     });
@@ -21,6 +27,9 @@ $(document).ready(function () {
     $('#sel_staff').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
         maxHeight: 400,
         includeSelectAllOption: true,
     });

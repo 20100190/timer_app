@@ -158,6 +158,9 @@
             maxHeight: 700,
             enableFiltering: true,
             enableCaseInsensitiveFiltering: true,
+            onDropdownShown: function(even) {
+                this.$filter.find('.multiselect-search').focus();
+            },
             includeSelectAllOption: true,
         });
         $('#project').multiselect({
@@ -166,6 +169,9 @@
             enableFiltering: true,
             includeSelectAllOption: true,
             enableCaseInsensitiveFiltering: true,
+            onDropdownShown: function(even) {
+                this.$filter.find('.multiselect-search').focus();
+            },
             onChange: function (element, checked) {
                 if (checked == true) {
                     $('#group').multiselect('enable');
