@@ -475,6 +475,10 @@
 
         $.ajax({
             url: "/test3/getWorkList/" + client + "/" + project + "/" + group + "/",
+            beforeSend: function () {
+                //処理中           
+                jQuery('#loader-bg').show();
+            },
         }).success(function (data) {
 
             clearAllList();
@@ -630,11 +634,15 @@
             console.log("XMLHttpRequest : " + XMLHttpRequest.status);
             console.log("textStatus     : " + textStatus);
             console.log("errorThrown    : " + errorThrown.message);
+
+            jQuery('#loader-bg').hide();
         }).done(function(){
             if(submitType != "") {
                 saveForm('monthlyData');
                 document.getElementById("btn_monthly_data").style.backgroundColor = "#DCDCDC";
             }
+
+            jQuery('#loader-bg').hide();
         });
     }
 

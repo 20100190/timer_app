@@ -89,6 +89,10 @@ function loadTaskScheduleData() {
    
     $.ajax({
         url: "/test3/getTaskScheduleData/" + client + "/" + pic + "/" + staff + "/" + dateFrom + "/" + dateTo + "/" + status + "/",
+        beforeSend: function () {
+            //処理中           
+            jQuery('#loader-bg').show();
+        },
     }).success(function (data) {
         clearAllList();
         for (var cnt = 0; cnt < data.taskSchedule.length; cnt++) {
@@ -121,6 +125,8 @@ function loadTaskScheduleData() {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
+    }).done(function () {                  
+        jQuery('#loader-bg').hide();
     });
 }
 
