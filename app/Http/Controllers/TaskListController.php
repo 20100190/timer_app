@@ -42,14 +42,14 @@ class TaskListController extends Controller {
         $staff =  explode(",", $request->staff);
         
         $taskScheduleQuery = ProjectPhaseItem::select("client.id as client_id","project.id as project_id","due_date", "phase items.name as task", "phase items.description as description", "project_name", "client.name as client_name", "phase.name as phase_name","preparer","reviewer","reviewer2","planed_prep","planned_review","planned_review2","prep_sign_off","review_sign_off","review_sign_off2","prep.id as prep_user_id","rev1.id as rev1_user_id","rev2.id as rev2_user_id","prep.initial as prep_user","rev1.initial as review_user","rev2.initial as review2_user")
-                ->leftjoin("phase items", "phase items.id", "=", "project phase item.phase_item_id")
-                ->leftJoin("project", "project.id", "=", "project phase item.project_id")
-                ->leftJoin("client", "project.client_id", "=", "client.id")
-                ->leftJoin("phase group", "phase items.phase_group_id", "=", "phase group.id")
-                ->leftJoin("phase", "phase.id", "=", "phase group.phase_id")
-                ->leftJoin("staff as prep", "prep.id", "=", "project phase item.preparer")
-                ->leftJoin("staff as rev1", "rev1.id", "=", "project phase item.reviewer")
-                ->leftJoin("staff as rev2", "rev2.id", "=", "project phase item.reviewer2");
+                ->join("phase items", "phase items.id", "=", "project phase item.phase_item_id")
+                ->join("project", "project.id", "=", "project phase item.project_id")
+                ->join("client", "project.client_id", "=", "client.id")
+                ->join("phase group", "phase items.phase_group_id", "=", "phase group.id")
+                ->join("phase", "phase.id", "=", "phase group.phase_id")
+                ->join("staff as prep", "prep.id", "=", "project phase item.preparer")
+                ->join("staff as rev1", "rev1.id", "=", "project phase item.reviewer")
+                ->join("staff as rev2", "rev2.id", "=", "project phase item.reviewer2");
         
         if($request->client != "blank"){
             $taskScheduleQuery = $taskScheduleQuery->whereIn("client.id",explode(",", $request->client));
