@@ -41,7 +41,7 @@ class TaskListController extends Controller {
         $dateTo = $request->dateTo;
         $staff =  explode(",", $request->staff);
         
-        $taskScheduleQuery = ProjectPhaseItem::select("client.id as client_id","project.id as project_id","due_date", "phase items.name as task", "phase items.description as description", "project_name", "client.name as client_name", "phase.name as phase_name","preparer","reviewer","reviewer2","planed_prep","planned_review","planned_review2","prep_sign_off","review_sign_off","review_sign_off2","prep.id as prep_user_id","rev1.id as rev1_user_id","rev2.id as rev2_user_id","prep.initial as prep_user","rev1.initial as review_user","rev2.initial as review2_user")
+        $taskScheduleQuery = ProjectPhaseItem::select("client.id as client_id","project.id as project_id","due_date", "phase items.name as task", "phase items.description as description", "project_name", "client.name as client_name", "phase.name as phase_name","preparer","reviewer","reviewer2","planed_prep","planned_review","planned_review2","prep_sign_off","review_sign_off","review_sign_off2","prep.id as prep_user_id","rev1.id as rev1_user_id","rev2.id as rev2_user_id","prep.initial as prep_user","rev1.initial as review_user","rev2.initial as review2_user","col_memo")
                 ->leftjoin("phase items", "phase items.id", "=", "project phase item.phase_item_id")
                 ->leftjoin("project", "project.id", "=", "project phase item.project_id")
                 ->leftjoin("client", "project.client_id", "=", "client.id")
@@ -80,6 +80,7 @@ class TaskListController extends Controller {
                         $taskScheduleDataItem["phase_name"] = $items->phase_name;
                         $taskScheduleDataItem["task"] = $items->task;
                         $taskScheduleDataItem["description"] = $items->description;
+                        $taskScheduleDataItem["memo"] = $items->col_memo;
                         $taskScheduleDataItem["status"] = "Imcomplete";
                     }
                 }
@@ -99,6 +100,7 @@ class TaskListController extends Controller {
                         $taskScheduleDataItem["phase_name"] = $items->phase_name;
                         $taskScheduleDataItem["task"] = $items->task;
                         $taskScheduleDataItem["description"] = $items->description;
+                        $taskScheduleDataItem["memo"] = $items->col_memo;
                         $taskScheduleDataItem["status"] = "Imcomplete";
                     }
                 }
@@ -118,6 +120,7 @@ class TaskListController extends Controller {
                         $taskScheduleDataItem["phase_name"] = $items->phase_name;
                         $taskScheduleDataItem["task"] = $items->task;
                         $taskScheduleDataItem["description"] = $items->description;
+                        $taskScheduleDataItem["memo"] = $items->col_memo;
                         $taskScheduleDataItem["status"] = "Imcomplete";
                     }
                 }
@@ -137,6 +140,7 @@ class TaskListController extends Controller {
                         $taskScheduleDataItem["phase_name"] = $items->phase_name;
                         $taskScheduleDataItem["task"] = $items->task;
                         $taskScheduleDataItem["description"] = $items->description;
+                        $taskScheduleDataItem["memo"] = $items->col_memo;
                         $taskScheduleDataItem["status"] = "Complete";
                     }
                 }

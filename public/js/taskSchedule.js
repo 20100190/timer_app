@@ -109,7 +109,8 @@ function loadTaskScheduleData() {
             var status = data.taskSchedule[cnt].status;
             var clientId = data.taskSchedule[cnt].client_id;
             var projectId = data.taskSchedule[cnt].project_id;
-            insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId);
+            var memo = data.taskSchedule[cnt].memo;
+            insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId,memo);
         }
         
         /*$('#task_schedule').tablesorter({
@@ -130,7 +131,7 @@ function loadTaskScheduleData() {
     });
 }
 
-function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId) {
+function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId,memo) {
     // 最終行に新しい行を追加
     var phase1_tbody = document.getElementById("task_schedule_body");
     var bodyLength = phase1_tbody.rows.length;
@@ -149,6 +150,7 @@ function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,u
     var c8 = row.insertCell(7);
     var c9 = row.insertCell(8);
     var c10 = row.insertCell(9);
+    var c11 = row.insertCell(10);
 
     c1.style.cssText = "vertical-align: middle";
     c2.style.cssText = "vertical-align: middle";
@@ -172,6 +174,7 @@ function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,u
     c8.innerHTML = '<span>' + phase + '</span>';
     c9.innerHTML = '<span>' + name + '</span>';
     c10.innerHTML = '<span>' + description + '</span>';
+    c11.innerHTML = '<span>' + memo + '</span>';
 
 }
 

@@ -136,6 +136,7 @@
                 <th style="width: 50px">Phase</th>
                 <th style="width: 200px">Task</th>
                 <th style="width: 200px">Description</th>
+                <th style="width: 200px">Memo</th>
             </tr>
         </thead>
         <tbody id="task_schedule_body"></tbody>
