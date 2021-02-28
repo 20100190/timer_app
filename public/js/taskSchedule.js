@@ -154,6 +154,7 @@ function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,u
 
     c1.style.cssText = "vertical-align: middle";
     c2.style.cssText = "vertical-align: middle";
+    c3.style.cssText = "vertical-align: middle";
     c4.style.cssText = "vertical-align: middle";
     c5.style.cssText = "vertical-align: middle";
     c6.style.cssText = "vertical-align: middle";
@@ -161,6 +162,7 @@ function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,u
     c8.style.cssText = "vertical-align: middle";
     c9.style.cssText = "vertical-align: middle";
     c10.style.cssText = "vertical-align: middle";
+    c11.style.cssText = "white-space:pre-wrap; word-wrap:break-word;";
    
    
     // 各列に表示内容を設定
