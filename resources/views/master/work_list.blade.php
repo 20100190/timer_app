@@ -196,7 +196,34 @@
             $('#client').multiselect('select', receiveClientId);
             $('#project').multiselect('select', receiveProjectId);
             if(receiveProjectId.match("BM ")){
-                $('#group').multiselect('select', "January");
+                var d = new Date();
+                var month = d.getMonth() + 1;
+                if(month == 1){
+                    $('#group').multiselect('select', "January");
+                }else if(month == 2){
+                    $('#group').multiselect('select', "February");
+                }else if(month == 3){
+                    $('#group').multiselect('select', "March");
+                }else if(month == 4){
+                    $('#group').multiselect('select', "April");
+                }else if(month == 5){
+                    $('#group').multiselect('select', "May");
+                }else if(month == 6){
+                    $('#group').multiselect('select', "June");
+                }else if(month == 7){
+                    $('#group').multiselect('select', "July");
+                }else if(month == 8){
+                    $('#group').multiselect('select', "August");
+                }else if(month == 9){
+                    $('#group').multiselect('select', "September");
+                }else if(month == 10){
+                    $('#group').multiselect('select', "October");
+                }else if(month == 11){
+                    $('#group').multiselect('select', "November");
+                }else if(month == 12){
+                    $('#group').multiselect('select', "December");
+                }
+                
             }
             
             loadPhaseData();
