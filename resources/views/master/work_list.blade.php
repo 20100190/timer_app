@@ -200,6 +200,11 @@
             if(receiveProjectId.match("BM ")){
                 var d = new Date();
                 var month = d.getMonth() + 1;
+                
+                if(receiveGroup != ""){
+                    month = receiveGroup;
+                }
+
                 if(month == 1){
                     $('#group').multiselect('select', "January");
                 }else if(month == 2){
