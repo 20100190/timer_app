@@ -138,6 +138,11 @@ function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,u
     var count = bodyLength + 1;
     var row = phase1_tbody.insertRow(bodyLength);
 
+    //group
+    var m = "";
+    if(dueDate != ""){
+        m = parseInt(dueDate.split("/")[0]);
+    }
 
     // 列の追加
     var c1 = row.insertCell(0);
@@ -167,7 +172,7 @@ function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,u
    
     // 各列に表示内容を設定
     c1.innerHTML = '<span>' + parseInt(cnt + 1) + '</span>';
-    c2.innerHTML = '<a href="master/work-list/' + clientId + "/" + projectName + '" target="_blank"><img src="' + imagesUrl + "/view.png" + '"></a>';
+    c2.innerHTML = '<a href="master/work-list/' + clientId + "/" + projectName + "/" + m + '" target="_blank"><img src="' + imagesUrl + "/view.png" + '"></a>';
     c3.innerHTML = '<span>' + user + '</span>';    
     c4.innerHTML = '<span>' + dueDate + '</span>';
     c5.innerHTML = '<span>' + client + '</span>';

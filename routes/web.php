@@ -103,6 +103,7 @@ Route::post('master/work-list/', 'WorkListController@save');
 Route::get("/task-schedule", "TaskListController@index");
 Route::get("/test3/getTaskScheduleData/{client}/{pic}/{staff}/{dateFrom}/{dateTo}/{status}", "TaskListController@getTaskScheduleData");
 Route::get('master/work-list/{client}/{project}', 'WorkListController@indexLink');
+Route::get('master/work-list/{client}/{project}/{group}', 'WorkListController@indexLink');
 Route::post('master/work-list/{client}/{project}', 'WorkListController@save');
 
 //project list
@@ -113,3 +114,6 @@ Route::get("/master/project-list/{client}/{project}/{status}", "ProjectListContr
 
 //dropdown project data
 Route::get("/project/data/{client}", "ProjectListController@projectDropdownStore");
+
+//Route::get("/project-compare", "ProjectCompareController@index");
+//Route::get("/project-compare/getdata", "ProjectCompareController@getData");
