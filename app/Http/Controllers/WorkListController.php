@@ -45,7 +45,6 @@ class WorkListController extends Controller {
         if(isset($request->group)){
             $reqGroup = $request->group;
         }
-        
 
         //client
         $client = Client::orderBy("name", "asc")->get();
@@ -71,7 +70,8 @@ class WorkListController extends Controller {
 
         $projectId = Project::where([["client_id", "=", $request->client], ["project_name", "=", $request->project]])->first()->id;
 
-        $projectPhaseItemList = ProjectPhaseItem::join("phase group", "phase group.id", "=", "project phase item.phase_group_id")
+        $projectPhaseItemList = ProjectPhaseItem::join("phase items", "project phase item.phase_item_id", "=", "phase items.id")
+                ->join("phase group", "phase group.id", "=", "phase items.phase_group_id")
                 ->join("phase", "phase group.phase_id", "=", "phase.id")
                 //->where([["phase group.project_id","=",$request->client],["project phase item.project_id","=",$projectId]]);
                 ->where([["phase group.project_id", "=", $projectTypeId], ["project phase item.project_id", "=", $projectId]]);
@@ -83,8 +83,9 @@ class WorkListController extends Controller {
         if ($projectPhaseItemList->exists()) {
             $phaseGroupObj = $projectPhaseItemList->select("phase group.id as id")->distinct()->get();
             foreach ($phaseGroupObj as $items) {
-                array_push($phaseItemList, ProjectPhaseItem::select("id", "name", "description", "due_date", "preparer", "planed_prep", "prep_sign_off", "reviewer", "planned_review", "review_sign_off", "reviewer2", "planned_review2", "review_sign_off2", "memo", "col_memo", "phase_group_id")
-                                ->where([['phase_group_id', '=', $items->id], ["project phase item.project_id", "=", $projectId]])->get());
+                array_push($phaseItemList, PhaseItems::select("phase items.id as id", "name", "description", "due_date", "preparer", "planed_prep", "prep_sign_off", "reviewer", "planned_review", "review_sign_off", "reviewer2", "planned_review2", "review_sign_off2", "is_standard", "memo", "col_memo")
+                                ->leftJoin("project phase item", "project phase item.phase_item_id", "=", "phase items.id")
+                                ->where([['phase_group_id', '=', $items->id], ["project phase item.project_id", "=", $projectId]])->orderBy("order")->get());
             }
         } else {
             //$phaseItemList = [];
@@ -96,7 +97,7 @@ class WorkListController extends Controller {
             $phaseGroupList = PhaseGroup::whereIn("phase_id", $phaseIdList)->where("group", $group)->where([["project_id", "=", $projectTypeId]])->get();
             foreach ($phaseGroupList as $items) {
                 //$phaseItemList = PhaseItems::where([['phase_group_id', '=', $items->id]])->get();            
-                array_push($phaseItemList, PhaseItems::where([['phase_group_id', '=', $items->id]])->get());
+                array_push($phaseItemList, PhaseItems::where([['phase_group_id', '=', $items->id], ["is_standard", "=", 1]])->get());
             }
         }
 
@@ -114,7 +115,8 @@ class WorkListController extends Controller {
         
         //Annualizeされているか
         $annualizeCount = ProjectPhaseItem::select("phase group.group")
-                ->leftJoin("phase group","project phase item.phase_group_id","=","phase group.id")
+                ->leftJoin("phase items","project phase item.phase_item_id","=","phase items.id")
+                ->leftJoin("phase group","phase items.phase_group_id","=","phase group.id")
                 ->where("project phase item.project_id","=",$projectId)
                 ->groupBy("phase group.group")                
                 ->get()->count();
@@ -139,8 +141,7 @@ class WorkListController extends Controller {
         if (isset($request->group)) {
             $groupVal = $request->group;
         }
-        
-        /*
+
         //この画面で追加された行の情報を登録
         for ($i = 1; $i <= 10; $i++) {  //phase
             if ($_POST["label_phase" . $i] == "") {
@@ -195,7 +196,7 @@ class WorkListController extends Controller {
                     $table->save();
                 }
             }
-        }*/
+        }
 
         //-------------------------------------------------------------        
         //project phase item        
@@ -209,100 +210,14 @@ class WorkListController extends Controller {
                 if (!isset($_POST["phase" . $i . "_comp" . $j])) {
                     break;
                 }
-
-                $queryObj = ProjectPhaseItem::where([["id", "=", $_POST["phase" . $i . "_id" . $j]]]);
-              
-                if (!$queryObj->exists()) {
-                    //insert
-                    $table = new ProjectPhaseItem;
-                    $table->project_id = $projectId;
-                    //$table->phase_item_id = $targetPhaseItem;
-                    $table->phase_group_id = $_POST["phase" . $i . "_group" . $j];
-                    $table->name = $_POST["phase" . $i . "_task" . $j];
-                    $table->description = $_POST["phase" . $i . "_description" . $j];
-
-                    $table->memo = "";
-                    $table->due_date = $this->convDateFormat($_POST["phase" . $i . "_comp" . $j]);
-
-                    if ($_POST["phase" . $i . "_prep" . $j] == "") {
-                        $table->preparer = 0;
-                    } else {
-                        $table->preparer = $_POST["phase" . $i . "_prep" . $j];
-                    }
-                    $table->planed_prep = $this->convDateFormat($_POST["phase" . $i . "_planned_prep" . $j]);
-                    $table->prep_sign_off = $this->convDateFormat($_POST["phase" . $i . "_prep_signoff" . $j]);
-                    if ($_POST["phase" . $i . "_reviewer1" . $j] == "") {
-                        $table->reviewer = 0;
-                    } else {
-                        $table->reviewer = $_POST["phase" . $i . "_reviewer1" . $j];
-                    }
-                    $table->planned_review = $this->convDateFormat($_POST["phase" . $i . "_planned_review1" . $j]);
-                    $table->review_sign_off = $this->convDateFormat($_POST["phase" . $i . "_review_signoff1" . $j]);
-                    if ($_POST["phase" . $i . "_reviewer2" . $j] == "") {
-                        $table->reviewer2 = 0;
-                    } else {
-                        $table->reviewer2 = $_POST["phase" . $i . "_reviewer2" . $j];
-                    }
-                    $table->planned_review2 = $this->convDateFormat($_POST["phase" . $i . "_planned_review2" . $j]);
-                    $table->review_sign_off2 = $this->convDateFormat($_POST["phase" . $i . "_review_signoff2" . $j]);
-                    $table->memo = $_POST["phase" . $i . "_memo" . $j];
-                    $table->col_memo = $_POST["phase" . $i . "_col_memo" . $j];
-
-                    $table->save();
-                } else {
-                    //update
-                    $prep = 0;
-                    if ($_POST["phase" . $i . "_prep" . $j] != "") {
-                        $prep = $_POST["phase" . $i . "_prep" . $j];
-                    }
-                    $reviewer = 0;
-                    if ($_POST["phase" . $i . "_reviewer1" . $j] != "") {
-                        $reviewer = $_POST["phase" . $i . "_reviewer1" . $j];
-                    }
-                    $reviewer2 = 0;
-                    if ($_POST["phase" . $i . "_reviewer2" . $j] != "") {
-                        $reviewer2 = $_POST["phase" . $i . "_reviewer2" . $j];
-                    }
-
-                    $updateItem = [
-                        "name" => $_POST["phase" . $i . "_task" . $j],
-                        "description" => $_POST["phase" . $i . "_description" . $j],
-                        "due_date" => $this->convDateFormat($_POST["phase" . $i . "_comp" . $j]),
-                        "preparer" => $prep, //$_POST["phase" . $i . "_prep" . $j],
-                        "planed_prep" => $this->convDateFormat($_POST["phase" . $i . "_planned_prep" . $j]),
-                        "prep_sign_off" => $this->convDateFormat($_POST["phase" . $i . "_prep_signoff" . $j]),
-                        "reviewer" => $reviewer, //$_POST["phase" . $i . "_reviewer" . $j],
-                        "planned_review" => $this->convDateFormat($_POST["phase" . $i . "_planned_review1" . $j]),
-                        "review_sign_off" => $this->convDateFormat($_POST["phase" . $i . "_review_signoff1" . $j]),
-                        "reviewer2" => $reviewer2, //$_POST["phase" . $i . "_reviewer2" . $j],
-                        "planned_review2" => $this->convDateFormat($_POST["phase" . $i . "_planned_review2" . $j]),
-                        "review_sign_off2" => $this->convDateFormat($_POST["phase" . $i . "_review_signoff2" . $j]),
-                        "memo" => $_POST["phase" . $i . "_memo" . $j],
-                        "col_memo" => $_POST["phase" . $i . "_col_memo" . $j],
-                    ];
-                    $queryObj->update($updateItem);
+                
+                $reqPhaseItemId = $_POST["phase" . $i . "_id" . $j];
+                if ($reqPhaseItemId == "") {
+                    $phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i],$groupVal);
+                    $reqPhaseItemId = PhaseItems::where([["phase_group_id", "=", $phaseGroupId],["order","=",$j]])->first()->id;
                 }
-                
 
-
-
-
-
-
-
-
-
-                
-                //$reqPhaseItemId = $_POST["phase" . $i . "_id" . $j];
-                //if ($reqPhaseItemId == "") {
-                    //$phaseGroupId = $this->getProjectGroupId($projectTypeId, $_POST["label_phase" . $i],$groupVal);
-                    //$reqPhaseItemId = PhaseItems::where([["phase_group_id", "=", $phaseGroupId],["order","=",$j]])->first()->id;                    
-                //}
-
-                //$queryObj = ProjectPhaseItem::where([["phase_group_id", "=", $reqPhaseItemId], ["project_id", "=", $projectId]]);
-                
-                
-                /*$queryObj = ProjectPhaseItem::where([["id", "=", $_POST["phase" . $i . "_id" . $j]]]);
+                $queryObj = ProjectPhaseItem::where([["phase_item_id", "=", $reqPhaseItemId], ["project_id", "=", $projectId]]);
                 $projectPhaseItemId = "";
                 if ($queryObj->exists()) {
                     $projectPhaseItemId = $queryObj->first()->id;
@@ -324,11 +239,7 @@ class WorkListController extends Controller {
                     //insert
                     $table = new ProjectPhaseItem;
                     $table->project_id = $projectId;                    
-                    //$table->phase_item_id = $targetPhaseItem;
-                    $table->phase_group_id = $_POST["phase" . $i . "_group" . $j];
-                    $table->name = $_POST["phase" . $i . "_task" . $j];
-                    $table->description = $_POST["phase" . $i . "_description" . $j];
-
+                    $table->phase_item_id = $targetPhaseItem;
                     $table->memo = "";
                     $table->due_date = $this->convDateFormat($_POST["phase" . $i . "_comp" . $j]);
 
@@ -387,7 +298,7 @@ class WorkListController extends Controller {
                         "col_memo" => $_POST["phase" . $i . "_col_memo" . $j],
                     ];
                     $queryObj->update($updateItem);
-                }*/
+                }
                 //}                
             }
         }
@@ -482,14 +393,11 @@ class WorkListController extends Controller {
                     break;
                 }
 
-                $phaseItemObj = PhaseGroup::select("phase group.id as id","phase group.id as phase_group_id")
+                $phaseItemId = PhaseGroup::select("phase items.id as id","phase group.id as phase_group_id")->leftJoin("phase items", "phase group.id", "=", "phase items.phase_group_id")
                                 ->leftJoin("phase", "phase.id", "=", "phase group.phase_id")
-                                ->where([["phase group.group", "=", $group], ["phase_id", "=", $_POST["phase" . $i . "_group" . $j]], ["phase.name", "=", $_POST["label_phase" . $i]]]);
-                
-                $phaseItemId = $phaseItemObj->first()->id;
+                                ->where([["phase group.group", "=", $group], ["phase items.order", "=", $j], ["phase.name", "=", $_POST["label_phase" . $i]]]);
 
-
-                /*if(!$phaseItemId->exists()){  
+                if(!$phaseItemId->exists()){  
                     $pgID = PhaseGroup::select("phase group.id as id")->leftJoin("phase", "phase.id", "=", "phase group.phase_id")
                             ->where([["phase group.group", "=", $group],["project_id","=",$projectTypeId], ["phase.name", "=", $_POST["label_phase" . $i]]])->first()->id;
                     //continue;
@@ -507,19 +415,15 @@ class WorkListController extends Controller {
                     $phaseItemId = $table->id;
                 }else {
                     $phaseItemId = $phaseItemId->first()->id;
-                }*/
+                }
                 
-                $phaseItemObj = ProjectPhaseItem::where([["phase_group_id", "=", $phaseItemId],["project_id","=",$projectId]])
-                                        ->offset($j)->limit(1);
-                
+                $phaseItemObj = ProjectPhaseItem::where([["phase_item_id", "=", $phaseItemId],["project_id","=",$projectId]]);
 
                 if (!$phaseItemObj->exists()) {
                     //insert
                     $table = new ProjectPhaseItem;
                     $table->project_id = $projectId;
-                    $table->phase_group_id = $phaseItemId;
-                    $table->name = $_POST["phase" . $i . "_task" . $j];
-                    $table->description = $_POST["phase" . $i . "_description" . $j];
+                    $table->phase_item_id = $phaseItemId;
                     $table->memo = "";
                     
                     $dueDateVal = $this->convDateFormat($_POST["phase" . $i . "_comp" . $j]);
@@ -566,7 +470,7 @@ class WorkListController extends Controller {
                     $table->col_memo = $_POST["phase" . $i . "_col_memo" . $j];
                     
                     //Phase1 Monthly以外はブランクに
-                    $xID = PhaseGroup::where([["id","=",$phaseItemId]])->first()->phase_id;
+                    $xID = PhaseItems::leftJoin("phase group", "phase items.phase_group_id", "=", "phase group.id")->where([["phase items.id","=",$phaseItemId]])->first()->phase_id;
                     if($xID != 16){
                         $table->due_date = NULL;
                         $table->preparer = 0;
