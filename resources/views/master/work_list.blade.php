@@ -2,7 +2,8 @@
 
 @section('content') 
 <input type="hidden" id="receiveClientId" @if(isset($reqClientId)) value="{{$reqClientId}}" @else value="" @endif> 
-       <input type="hidden" id="receiveProjectId" @if(isset($reqProjectId)) value="{{$reqProjectId}}" @else value="" @endif>
+<input type="hidden" id="receiveProjectId" @if(isset($reqProjectId)) value="{{$reqProjectId}}" @else value="" @endif>
+<input type="hidden" id="receiveGroup" @if(isset($reqGroup)) value="{{$reqGroup}}" @else value="" @endif>
 
        <form action="" method="POST" id="s" name="s" style="margin-left: 20px;overflow-x: scroll;"  autocomplete="off">
     {{ csrf_field() }}  
@@ -192,6 +193,7 @@
 
         var receiveClientId = document.getElementById("receiveClientId").value;
         var receiveProjectId = document.getElementById("receiveProjectId").value;
+        var receiveGroup = document.getElementById("receiveGroup").value;
         if (receiveClientId != "" || receiveProjectId != "") {
             $('#client').multiselect('select', receiveClientId);
             $('#project').multiselect('select', receiveProjectId);
