@@ -129,14 +129,14 @@
                 <th style="width: 20px">No.</th>
                 <th style="width: 20px">Link</th>
                 <th style="width: 50px">Staff</th>                
-                <th style="width: 100px">Due Date</th>
+                <th style="width: 60px">Due Date</th>
                 <th style="width: 200px">Client</th>
-                <th style="width: 200px">Project</th>
+                <th style="width: 150px">Project</th>
                 <th style="width: 50px">Status</th>
                 <th style="width: 50px">Phase</th>
                 <th style="width: 200px">Task</th>
                 <th style="width: 200px">Description</th>
-                <th style="width: 200px">Memo</th>
+                <th style="width: 350px">Memo</th>
             </tr>
         </thead>
         <tbody id="task_schedule_body"></tbody>
