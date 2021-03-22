@@ -118,6 +118,7 @@
                         <th style="width: 400px">Memo</th>
                         <th style="width: 40px">&nbsp;</th>
                         <th style="width: 0px;visibility: collapse">Memo</th>
+                        <th style="width: 0px;visibility: collapse">Phase Group ID</th>
                     </tr>
                 </thead>
                 <tbody id="phase{{$i}}_body"></tbody>
@@ -255,10 +256,16 @@
         if (!objTBL)
             return;
 
-        insertPhase1Row("", "", "", buttonIndex, "", "", "", "", "", "", "", "", "", "", "", true, 0, "", "");
+        //group_id
+        var groupId = 1;
+        if (objTBL.rows[1].cells[17].children[0].value != null) {
+            groupId = objTBL.rows[1].cells[17].children[0].value;
+        }
+
+        insertPhase1Row("", "", "", buttonIndex, "0", "", "", "", "", "", "", "", "", "", "", true, 0, "", "", groupId);
     }
 
-    function insertPhase1Row(id, name, description, buttonIndex, groupId, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, isClickBtnAdd, isStandard, memo, colMemo) {
+    function insertPhase1Row(id, name, description, buttonIndex, phaseItemId, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, isClickBtnAdd, isStandard, memo, colMemo, phaseGroupId, projectPhaseItemId) {
         // 最終行に新しい行を追加
         var phase1_tbody = document.getElementById("phase" + buttonIndex + "_body");
         var bodyLength = phase1_tbody.rows.length;
@@ -301,6 +308,9 @@
         var c15 = row.insertCell(14);
         var c16 = row.insertCell(15);
         var c17 = row.insertCell(16);
+        var c18 = row.insertCell(17);  
+        var c19 = row.insertCell(18);  
+        var c20 = row.insertCell(19);  
 
         c1.style.cssText = "vertical-align: middle";
         
@@ -360,7 +370,7 @@
 
         // 各列に表示内容を設定
         c1.innerHTML = '<span class="seqno-phase' + buttonIndex + '">' + count + '</span>';
-        c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'id" type="text" id="phase' + buttonIndex + '_id' + count + '" name="phase' + buttonIndex + '_id' + count + '" value="' + groupId + '" style="width: 100%" readonly>';
+        c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'id" type="text" id="phase' + buttonIndex + '_id' + count + '" name="phase' + buttonIndex + '_id' + count + '" value="' + phaseItemId + '" style="width: 100%" readonly>';
         //c3.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" value="' + name + '" style="width: 100%;font-weight: bold" ' + readonlyStr + '>';
         c3.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '"  style="resize: none;width: 100%;font-weight: bold" ' + readonlyStr + '>' + name + '</textarea>';
         c4.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'description" type="text" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" style="resize: none;width: 100%" ' + readonlyStr + '>' + description + '</textarea>';
@@ -376,11 +386,14 @@
         c14.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'reviewsignoff2 datepicker1" type="text" id="phase' + buttonIndex + '_review_signoff2' + count + '" name="phase' + buttonIndex + '_review_signoff2' + count + '" value="' + reviewSignOff2 + '" style="width: 100%;' + rev2BackgroundColor + '" onchange="setPhaseBackground(this)">';
         c15.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'colmemo" type="text" id="phase' + buttonIndex + '_col_memo' + count + '" name="phase' + buttonIndex + '_col_memo' + count + '" style="resize: none;width: 100%">' + colMemo + '</textarea>';
         if (isClickBtnAdd || isStandard == 0) {
-            c16.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
+            c16.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ',' + projectPhaseItemId + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
         } else {
             c16.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return doNotUseRow(this,' + buttonIndex + ',' + count + ')" style="background-color: transparent"><img src="' + imagesUrl + "/not_use.png" + '"></button>';
         }
         c17.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'memo datepicker1" type="text" id="phase' + buttonIndex + '_memo' + count + '" name="phase' + buttonIndex + '_memo' + count + '" value="' + memo + '" style="width: 100%;visibility:hidden">';
+        c18.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'group datepicker1" type="text" id="phase' + buttonIndex + '_group' + count + '" name="phase' + buttonIndex + '_group' + count + '" value="' + phaseGroupId + '" style="width: 100%;visibility:hidden">';
+        c19.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'standard datepicker1" type="text" id="phase' + buttonIndex + '_standard' + count + '" name="phase' + buttonIndex + '_standard' + count + '" value="' + isStandard + '" style="width: 100%;visibility:hidden">';
+        c20.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'projectphaseid datepicker1" type="text" id="phase' + buttonIndex + '_project_phase_id' + count + '" name="phase' + buttonIndex + '_project_phase_id' + count + '" value="' + projectPhaseItemId + '" style="width: 100%;visibility:hidden">';
 
         $('.datepicker1').datepicker({
             defaultViewDate: Date(),
@@ -395,7 +408,7 @@
         $('#phase' + buttonIndex + '_col_memo' + count).autosize(); 
     }
 
-    function deletePhase1Row(obj, buttonIndex) {
+    function deletePhase1Row(obj, buttonIndex, projectPhaseItemId) {
         delRowCommon(obj, "seqno-phase" + buttonIndex);
 
         // id/name ふり直し
@@ -423,10 +436,15 @@
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "reviewsignoff2", "phase" + buttonIndex + "_review_signoff2");
         reOrderElementTag(textareaTagElements, "inpphase" + buttonIndex + "colmemo", "phase" + buttonIndex + "_col_memo");
         reOrderElementTag(tagElements, "inpphase" + buttonIndex + "memo", "phase" + buttonIndex + "_memo");
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "group", "phase" + buttonIndex + "_group");
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "standard", "phase" + buttonIndex + "_standard");
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "projectphaseid", "phase" + buttonIndex + "_project_phase_id");
 
         reOrderElementTag(tagElements, "delphase" + buttonIndex + "btn", "delPhase" + buttonIndex + "Btn");
+        
+        //削除処理
+        delRowDirect(projectPhaseItemId);
 
-        //reOrderTaskNo();
     }
 
     function delRowCommon(obj, seqNoId) {
@@ -497,6 +515,22 @@
         }
     }
 
+    function delRowDirect(projectPhaseItemId){
+
+        $.ajax({
+            url: "/test3/delRowWorkList/" + projectPhaseItemId + "/",
+            beforeSend: function () {
+                //処理中           
+                jQuery('#loader-bg').show();
+            },
+        }).success(function (data) {
+
+        }).done(function(){           
+            jQuery('#loader-bg').hide();
+        });
+
+    }
+
     function loadPhaseDataDetail(submitType) {
 
         var client = $("#client").val();
@@ -552,6 +586,9 @@
                     var isStandard = "";
                     var memo = "";
                     var colMemo = "";
+                    var phaseGroupId = "";
+                    var phaseItemId = "";
+                    var projectPhaseItemId = "";
 
                     if (data.phase1Detail[cnt][cnt2].due_date != null) {
                         comp = convDateFormat(data.phase1Detail[cnt][cnt2].due_date);
@@ -605,8 +642,20 @@
                         colMemo = data.phase1Detail[cnt][cnt2].col_memo;
                     }
 
+                    if(data.phase1Detail[cnt][cnt2].phase_group_id != null) {
+                        phaseGroupId = data.phase1Detail[cnt][cnt2].phase_group_id
+                    }
+
+                    if(data.phase1Detail[cnt][cnt2].phase_item_id != null) {
+                        phaseItemId = data.phase1Detail[cnt][cnt2].phase_item_id
+                    }
+
+                    if(data.phase1Detail[cnt][cnt2].id != null) {
+                        projectPhaseItemId = data.phase1Detail[cnt][cnt2].id
+                    }
+
                     insertPhase1Row(parseInt(rowId), data.phase1Detail[cnt][cnt2].name, data.phase1Detail[cnt][cnt2].description,
-                            buttonIndex, data.phase1Detail[cnt][cnt2].id, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, false, isStandard, memo, colMemo);
+                            buttonIndex, phaseItemId, comp, prep, planndPrep, prepSignOff, reviewer, plannedReview, reviewSignOff, reviewer2, plannedReview2, reviewSignOff2, false, isStandard, memo, colMemo, phaseGroupId, projectPhaseItemId);
                 }
             }
 
@@ -894,8 +943,9 @@
                 html: "Planned review(2) date(s) must be set after planned prep date<br>Planned review 2 date must be set after planned review date"
             });
         } else {
-            saveDetail();        
-        }        
+            saveDetail();  
+        } 
+      
     }
 
     function saveDetail() {        
@@ -914,23 +964,21 @@
             timeout: 10000,
             beforeSend: function (xhr, settings) {
                 //処理中
-                // $("#savingSpinner").css("visibility", "visible");
-                // $("#savingText").html("保存中");
-                // $("#taskEnter").find(':input').attr('disabled', true);
-                // $("#btn_save").attr('disabled', true);
-
+                jQuery('#loader-bg').show();
             },
             complete: function (xhr, textStatus) {
-                //処理済              
-                showToast();
+                //処理済                          
+                showToast();          
+                jQuery('#loader-bg').hide();      
             },
             success: function (result, textStatus, xhr) {
-
+                loadPhaseDataDetail("");  
             },
             error: function (data) {
                 console.debug(data);
+                jQuery('#loader-bg').hide();    
             }
-        });
+        });        
     }
 
     function showToast() {

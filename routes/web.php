@@ -93,11 +93,13 @@ Route::delete("master/client/{id}", "ClientController@destroy");
 Route::get("master/work/", "WorkController@index");
 Route::get('/test3/getPhaseInfo/{client}/{project}/{group}', 'WorkController@getPhaseInfo');
 Route::post('master/work/', 'WorkController@save');
+Route::get('/test3/deleteWorkRow/{phaseItemId}', 'WorkController@deleteWorkRow');
 
 //work list
 Route::get("master/work-list/", "WorkListController@index");
 Route::get('/test3/getWorkList/{client}/{project}/{group}', 'WorkListController@getWorkList');
 Route::post('master/work-list/', 'WorkListController@save');
+Route::get('/test3/delRowWorkList/{projectPhaseItemId}', 'WorkListController@delRowWorkList');
 
 //task list
 Route::get("/task-schedule", "TaskListController@index");

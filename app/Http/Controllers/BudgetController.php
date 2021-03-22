@@ -777,7 +777,7 @@ class BudgetController extends Controller
             $phaseListObj = ProjectPhase::join("phase","phase.id","=","project phase.phase_id")
                     ->where([["project_id","=",$idList["project_id"]],["ymd",">=",$startDate],["ymd","<=",$endDate]]);
             if(!$phaseListObj->exists()){
-                continue;
+                //continue;
             }
             
             //$warningProjectList = $this->warningProject($idList["project_id"]);
@@ -915,9 +915,8 @@ class BudgetController extends Controller
 
     function warningProject($projectId,$weekArray) {
         //ワーニング背景色
-        $warningPhase = ProjectPhaseItem::select("project phase item.project_id","due_date", "phase.color","planed_prep","prep_sign_off","planned_review","review_sign_off","planned_review2","review_sign_off2")
-                ->leftJoin("phase items", "phase items.id", "=", "project phase item.phase_item_id")
-                ->leftJoin("phase group", "phase items.phase_group_id", "=", "phase group.id")
+        $warningPhase = ProjectPhaseItem::select("project phase item.project_id","due_date", "phase.color","planed_prep","prep_sign_off","planned_review","review_sign_off","planned_review2","review_sign_off2")                
+                ->leftJoin("phase group", "project phase item.phase_group_id", "=", "phase group.id")
                 ->leftJoin("phase", "phase group.phase_id", "=", "phase.id")
                 ->where([["project phase item.project_id", "=", $projectId]])                
                 ->where(function($query) {

@@ -33,29 +33,7 @@
                     </select>
                 </div>                
             </div>
-            <!--<div class="row entry-filter-bottom" style="zoom: 100%">
-                <div class="col col-md-2">
-                    <span class="line-height">Group</span>
-                </div>
-                <div class="col col-md-1">
-                    <select id="group" name="group" style="width: 200px">     
-                        <option value="">&nbsp</option>
-                        <option value="January">January</option>
-                        <option value="February">February</option>
-                        <option value="March">March</option>
-                        <option value="April">April</option>
-                        <option value="May">May</option>
-                        <option value="June">June</option>
-                        <option value="July">July</option>
-                        <option value="August">August</option>
-                        <option value="September">September</option>
-                        <option value="October">October</option>
-                        <option value="November">November</option>
-                        <option value="December">December</option>                        
-                    </select>
-                </div>                
-            </div>-->
-
+            
             <div class="row entry-filter-bottom">    
                 <div class="col col-md-1" style="margin-left: 6px" >
                 </div>
@@ -136,10 +114,10 @@
         if (!objTBL)
             return;
 
-        insertPhase1Row("", "", "", buttonIndex);
+        insertPhase1Row("", "", "", buttonIndex,"");
     }
 
-    function insertPhase1Row(id, name, description, buttonIndex) {
+    function insertPhase1Row(id, name, description, buttonIndex,phaseItemId) {
         // 最終行に新しい行を追加
         var phase1_tbody = document.getElementById("phase" + buttonIndex + "_body");
         var bodyLength = phase1_tbody.rows.length;
@@ -157,6 +135,7 @@
         var c2 = row.insertCell(1);
         var c3 = row.insertCell(2);
         var c4 = row.insertCell(3);
+        var c5 = row.insertCell(4);
                 
         c1.style.cssText = "vertical-align: middle";
 
@@ -165,14 +144,17 @@
         //c2.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" value="' + name + '" style="width: 100%">';        
         c2.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'task" type="text" id="phase' + buttonIndex + '_task' + count + '" name="phase' + buttonIndex + '_task' + count + '" style="width: 100%;resize: none">' + name + '</textarea>';
         c3.innerHTML = '<textarea class="form-control inpphase' + buttonIndex + 'description" id="phase' + buttonIndex + '_description' + count + '" name="phase' + buttonIndex + '_description' + count + '" style="width: 100%;resize: none">' + description + '</textarea>';
-        c4.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';       
-        
+        c4.innerHTML = '<button class="delphase' + buttonIndex + 'btn btn btn-sm" type="button" id="delPhase' + buttonIndex + 'Btn' + count + '" value="Delete" onclick="return deletePhase1Row(this,' + buttonIndex + "," + count + ')" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';       
+        c5.innerHTML = '<input class="form-control inpphase' + buttonIndex + 'phaseitemid" type="hidden" id="phase' + buttonIndex + '_phase_item_id' + count + '" name="phase' + buttonIndex + '_phase_item_id' + count + '" value="' + phaseItemId + '" style="width: 0%">';        
+
         $('#phase' + buttonIndex + '_task' + count).autosize(); 
         $('#phase' + buttonIndex + '_description' + count).autosize(); 
         
     }
 
-    function deletePhase1Row(obj, buttonIndex) {
+    function deletePhase1Row(obj, buttonIndex, rowCnt) {
+        var targetId = document.getElementById('phase' + buttonIndex + '_phase_item_id' + rowCnt).value;
+
         delRowCommon(obj, "seqno-phase" + buttonIndex);
 
         // id/name ふり直し
@@ -181,13 +163,18 @@
             return false;
         
         var textareaTagElements = document.getElementsByTagName("textarea");
+        var buttonTagElements = document.getElementsByTagName("button");
 
         var seq = 1;
         reOrderElementTag(textareaTagElements, "inpphase" + buttonIndex + "task", "phase" + buttonIndex + "_task");
         reOrderElementTag(textareaTagElements, "inpphase" + buttonIndex + "description", "phase" + buttonIndex + "_description");
-
-        reOrderElementTag(tagElements, "delphase" + buttonIndex + "btn", "delPhase" + buttonIndex + "Btn");
-
+        reOrderElementTag(buttonTagElements, "delphase" + buttonIndex + "btn", "delPhase" + buttonIndex + "Btn");
+        reOrderElementTag(tagElements, "inpphase" + buttonIndex + "phaseitemid", "phase" + buttonIndex + "_phase_item_id");
+        
+        if(targetId != ""){
+            deleteRowPhase(targetId);
+        }
+        
         //reOrderTaskNo();
     }
 
@@ -279,7 +266,7 @@
                 for (var cnt2 = 0; cnt2 < data.phase1Detail[cnt].length; cnt2++) {
                     var buttonIndex = cnt + 1;
                     var rowId = cnt2 + 1;
-                    insertPhase1Row(parseInt(rowId), data.phase1Detail[cnt][cnt2].name, data.phase1Detail[cnt][cnt2].description, buttonIndex);
+                    insertPhase1Row(parseInt(rowId), data.phase1Detail[cnt][cnt2].name, data.phase1Detail[cnt][cnt2].description, buttonIndex,data.phase1Detail[cnt][cnt2].id);
                 }
             }
             
@@ -385,6 +372,13 @@
             showConfirmButton: false,
             timer: 1500
         });
+    }
+
+    function deleteRowPhase(targetId) {
+        $.ajax({
+            url: "/test3/deleteWorkRow/" + targetId + "/",
+        }).success(function (data) {
+        });    
     }
     
    

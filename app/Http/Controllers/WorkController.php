@@ -72,7 +72,7 @@ class WorkController extends Controller {
         $phaseGroupList = PhaseGroup::whereIn("phase_id",$phaseIdList)->whereIn("group",["","January"])->get();
         foreach ($phaseGroupList as $items) {
             //$phaseItemList = PhaseItems::where([['phase_group_id', '=', $items->id]])->get();            
-            array_push($phaseItemList, PhaseItems::where([['phase_group_id', '=', $items->id],["is_standard","=",1]])->get());
+            array_push($phaseItemList, PhaseItems::where([['phase_group_id', '=', $items->id],["is_deleted","=","0"]])->get());
         }
 
         $json = [
@@ -98,20 +98,6 @@ class WorkController extends Controller {
             }
         }
 
-
-        //phase group登録　存在していない場合登録するのみ   
-        /*for ($i = 1; $i <= 10; $i++) {
-            $label_phase = $_POST["label_phase" . $i];
-            //$phaseId = Phase::where([["project_type", "=", $request->project], ["name", "=", $label_phase]])->first()->id;
-            $phaseGroupId = "";
-            if ($label_phase != "") {                
-                $phaseGroupId = $this->savePhaseGroup($request, $label_phase, $group);               
-                
-                $this->savePhaseItems($phaseGroupId,$i);               
-            }
-        }*/
-
-
         return $this->showWork();
     }
     
@@ -125,8 +111,8 @@ class WorkController extends Controller {
                 $phaseGroupId = $this->savePhaseGroup($request, $label_phase, $group);
                 
                 //phase items削除
-                $delObj = PhaseItems::where([['phase_group_id', '=', $phaseGroupId]]);
-                $delObj->delete();
+                //$delObj = PhaseItems::where([['phase_group_id', '=', $phaseGroupId]]);
+                //$delObj->delete();
 
                 $this->savePhaseItems($phaseGroupId, $i);
             }
@@ -138,7 +124,18 @@ class WorkController extends Controller {
                 ->leftJoin("project_type", "project_type.id", "=", "phase.project_type")
                 ->select("phase group.id as id")
                 ->where([["phase.project_type", "=", $request->project], ["phase.name", "=", $label_phase]]);
-        if($group != ""){
+        if ($group != "") {
+            $phaseGroupObj = $phaseGroupObj->where([["group", "=", $group]]);
+        }
+
+        if ($phaseGroupObj->exists()) {
+            foreach ($phaseGroupObj->get() as $items) {
+                $phaseGroupId = $items->id;
+            }
+        }
+
+
+        /*if($group != ""){
             $phaseGroupObj = $phaseGroupObj->where([["group","=",$group]]);
         }
         if ($phaseGroupObj->exists()) {
@@ -156,7 +153,7 @@ class WorkController extends Controller {
             $pTable->save();
 
             $phaseGroupId = $pTable->id;
-        }
+        }*/
         
         return $phaseGroupId;
     }
@@ -171,7 +168,8 @@ class WorkController extends Controller {
                 continue;
             }
 
-            $targetPhaseItem = PhaseItems::where([["phase_group_id", "=", $phaseGroupId], ["order", "=", $taskCnt]]);
+            //$targetPhaseItem = PhaseItems::where([["phase_group_id", "=", $phaseGroupId], ["order", "=", $taskCnt]]);
+            $targetPhaseItem = PhaseItems::where([["id", "=", $_POST["phase" . $index . "_phase_item_id" . $taskCnt]]]);
             if ($targetPhaseItem->exists()) {
                 //update
                 $updateItem = [
@@ -186,10 +184,23 @@ class WorkController extends Controller {
                 $table->name = $_POST["phase" . $index . "_task" . $taskCnt];
                 $table->is_standard = True;
                 $table->order = $taskCnt;
+                $table->is_deleted = "0";
                 $table->description = $_POST["phase" . $index . "_description" . $taskCnt];
 
                 $table->save();
             }
+        }
+    }
+
+    public function deleteWorkRow(Request $request) {
+        $phaseItemId = $request->phaseItemId;
+        $targetPhaseItem = PhaseItems::where([["id", "=", $phaseItemId]]);
+        if ($targetPhaseItem->exists()) {
+            //update
+            $updateItem = [
+                "is_deleted" => "1",                
+            ];
+            $targetPhaseItem->update($updateItem);
         }
     }
     
