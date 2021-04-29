@@ -231,6 +231,10 @@ class WorkListController extends Controller {
        
         //Monthly Data Expand
         if ($_POST["clicked_button"] == "monthlyData") {
+            //january以外削除
+            $delObj = ProjectPhaseItem::where([["project_id", "=", $projectId],["phase_group_id",">=",21]]);
+            $delObj->delete();
+
             $this->expandMonthlyData($request, "February",1);
             $this->expandMonthlyData($request, "March",2);
             $this->expandMonthlyData($request, "April",3);

@@ -723,9 +723,10 @@
             if(submitType != "") {
                 saveForm('monthlyData');
                 document.getElementById("btn_monthly_data").style.backgroundColor = "#DCDCDC";
+            }else {
+                jQuery('#loader-bg').hide();
             }
-
-            jQuery('#loader-bg').hide();
+            
         });
     }
 
