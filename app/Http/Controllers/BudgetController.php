@@ -675,13 +675,13 @@ class BudgetController extends Controller
         $colDiff = 9;
         $colWeek = 10;
         
-        if($request->from != "blank"){
+        /*if($request->from != "blank"){
             $dateFrom = $requestDateFrom;
         }
         
         if($request->to != "blank"){
             $dateTo = $requestDateTo;
-        }
+        }*/
         
         $weekArray = $this->getWeek($dateFrom[2], intval($dateFrom[0]), intval($dateFrom[1]));        
         $startDateAll = $weekArray[0]["year"] . sprintf('%02d', $weekArray[0]["month"]) . sprintf('%02d', $weekArray[0]["day"]);
