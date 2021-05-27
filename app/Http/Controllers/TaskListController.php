@@ -65,28 +65,88 @@ class TaskListController extends Controller {
         foreach ($taskScheduleObj as $items) {    
            
             $taskScheduleDataItem = [];
-            //review2
-            if ($items->planned_review2 != null && $items->review_sign_off2 == null && $status != "Completed") {
-                $dateymd = intval(str_replace("-", "", $items->planned_review2));
-                if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
-                    if($request->staff == "blank" || in_array($items->rev2_user_id,$staff)) {
-                        $taskScheduleDataItem["user"] = $items->review2_user;
-                        $taskScheduleDataItem["due_date"] = $items->planned_review2;
-                        $taskScheduleDataItem["client_id"] = $items->client_id;
-                        $taskScheduleDataItem["client_name"] = $items->client_name;
-                        $taskScheduleDataItem["project_id"] = $items->project_id;
-                        $taskScheduleDataItem["project_name"] = $items->project_name;
-                        $taskScheduleDataItem["phase_name"] = $items->phase_name;
-                        $taskScheduleDataItem["task"] = $items->task;
-                        $taskScheduleDataItem["description"] = $items->description;
-                        $taskScheduleDataItem["memo"] = $items->col_memo;
-                        $taskScheduleDataItem["status"] = "Imcomplete";
-                    }
-                }
-            }
+            
+            //if ($items->planned_review2 != null && $items->review_sign_off2 == null && $status != "Completed") {
+            if ($status != "Completed") {
+                //review2
+                if ($items->planned_review2 != null && $items->review_sign_off2 == null) {
+                    $dateymd = intval(str_replace("-", "", $items->planned_review2));
+                    if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
+                        if ($request->staff == "blank" || in_array($items->rev2_user_id, $staff)) {
+                            $taskScheduleDataItem["user"] = $items->review2_user;
+                            $taskScheduleDataItem["due_date"] = $items->planned_review2;
+                            $taskScheduleDataItem["client_id"] = $items->client_id;
+                            $taskScheduleDataItem["client_name"] = $items->client_name;
+                            $taskScheduleDataItem["project_id"] = $items->project_id;
+                            $taskScheduleDataItem["project_name"] = $items->project_name;
+                            $taskScheduleDataItem["phase_name"] = $items->phase_name;
+                            $taskScheduleDataItem["task"] = $items->task;
+                            $taskScheduleDataItem["description"] = $items->description;
+                            $taskScheduleDataItem["memo"] = $items->col_memo;
+                            $taskScheduleDataItem["status"] = "Imcomplete";
 
+                            if(isset($taskScheduleDataItem["user"])){
+                                array_push($taskScheduleData,$taskScheduleDataItem);
+                            }
+                        }
+                    }
+
+                }
+
+                //review1
+                if ($items->planned_review != null && $items->review_sign_off == null) {
+                    $dateymd = intval(str_replace("-", "", $items->planned_review));
+                    if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
+                        if ($request->staff == "blank" || in_array($items->rev1_user_id, $staff)) {
+                            $taskScheduleDataItem["user"] = $items->review_user;
+                            $taskScheduleDataItem["due_date"] = $items->planned_review;
+                            $taskScheduleDataItem["client_id"] = $items->client_id;
+                            $taskScheduleDataItem["client_name"] = $items->client_name;
+                            $taskScheduleDataItem["project_id"] = $items->project_id;
+                            $taskScheduleDataItem["project_name"] = $items->project_name;
+                            $taskScheduleDataItem["phase_name"] = $items->phase_name;
+                            $taskScheduleDataItem["task"] = $items->task;
+                            $taskScheduleDataItem["description"] = $items->description;
+                            $taskScheduleDataItem["memo"] = $items->col_memo;
+                            $taskScheduleDataItem["status"] = "Imcomplete";
+
+                            if(isset($taskScheduleDataItem["user"])){
+                                array_push($taskScheduleData,$taskScheduleDataItem);
+                            }
+                        }
+                    }                    
+                }
+                
+                //preparer
+                if ($items->planed_prep != null && $items->prep_sign_off == null) {
+                    $dateymd = intval(str_replace("-", "", $items->planed_prep));
+                    if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
+                        if ($request->staff == "blank" || in_array($items->prep_user_id, $staff)) {
+                            $taskScheduleDataItem["user"] = $items->prep_user;
+                            $taskScheduleDataItem["due_date"] = $items->planed_prep;
+                            $taskScheduleDataItem["client_id"] = $items->client_id;
+                            $taskScheduleDataItem["client_name"] = $items->client_name;
+                            $taskScheduleDataItem["project_id"] = $items->project_id;
+                            $taskScheduleDataItem["project_name"] = $items->project_name;
+                            $taskScheduleDataItem["phase_name"] = $items->phase_name;
+                            $taskScheduleDataItem["task"] = $items->task;
+                            $taskScheduleDataItem["description"] = $items->description;
+                            $taskScheduleDataItem["memo"] = $items->col_memo;
+                            $taskScheduleDataItem["status"] = "Imcomplete";
+
+                            if(isset($taskScheduleDataItem["user"])){
+                                array_push($taskScheduleData,$taskScheduleDataItem);
+                            }
+                        }
+                    }                   
+
+                }
+
+            }
+/*
             //review1
-            if ($items->planned_review != null && $items->review_sign_off == null && $status != "Completed") {
+            //if ($items->planned_review != null && $items->review_sign_off == null && $status != "Completed") {
+            if ($status != "Completed") {
                 $dateymd = intval(str_replace("-", "", $items->planned_review));
                 if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
                     if ($request->staff == "blank" || in_array($items->rev1_user_id, $staff)) {
@@ -106,7 +166,8 @@ class TaskListController extends Controller {
             }
 
             //preparer
-            if ($items->planed_prep != null && $items->prep_sign_off == null && $status != "Completed") {
+            //if ($items->planed_prep != null && $items->prep_sign_off == null && $status != "Completed") {
+            if ($status != "Completed") {
                 $dateymd = intval(str_replace("-", "", $items->planed_prep));
                 if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
                     if ($request->staff == "blank" || in_array($items->prep_user_id, $staff)) {
@@ -124,32 +185,74 @@ class TaskListController extends Controller {
                     }
                 }
             }
-
-            //complete
-            if ($items->prep_sign_off != null && $items->review_sign_off != null && $items->review_sign_off2 != null && $status != "Imcomplete") {
-                $dateymd = intval(str_replace("-", "", $items->planned_review2));
-                if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
-                    if ($request->staff == "blank" || in_array($items->rev2_user_id, $staff)) {
-                        $taskScheduleDataItem["user"] = $items->review2_user;
-                        $taskScheduleDataItem["due_date"] = $items->planned_review2;
-                        $taskScheduleDataItem["client_id"] = $items->client_id;
-                        $taskScheduleDataItem["client_name"] = $items->client_name;
-                        $taskScheduleDataItem["project_id"] = $items->project_id;
-                        $taskScheduleDataItem["project_name"] = $items->project_name;
-                        $taskScheduleDataItem["phase_name"] = $items->phase_name;
-                        $taskScheduleDataItem["task"] = $items->task;
-                        $taskScheduleDataItem["description"] = $items->description;
-                        $taskScheduleDataItem["memo"] = $items->col_memo;
-                        $taskScheduleDataItem["status"] = "Complete";
+*/
+            //complete           
+            if ($status != "Imcomplete") {
+                //prep
+                if ($items->prep_sign_off != null && $items->review1_user == "") {
+                    $dateymd = intval(str_replace("-", "", $items->planed_prep));
+                    if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
+                        if ($request->staff == "blank" || in_array($items->prep_user_id, $staff)) {
+                            $taskScheduleDataItem["user"] = $items->prep_user;
+                            $taskScheduleDataItem["due_date"] = $items->planed_prep;
+                            $taskScheduleDataItem["client_id"] = $items->client_id;
+                            $taskScheduleDataItem["client_name"] = $items->client_name;
+                            $taskScheduleDataItem["project_id"] = $items->project_id;
+                            $taskScheduleDataItem["project_name"] = $items->project_name;
+                            $taskScheduleDataItem["phase_name"] = $items->phase_name;
+                            $taskScheduleDataItem["task"] = $items->task;
+                            $taskScheduleDataItem["description"] = $items->description;
+                            $taskScheduleDataItem["memo"] = $items->col_memo;
+                            $taskScheduleDataItem["status"] = "Complete";
+                        }
                     }
                 }
-            }
 
+                //review2
+                if ($items->prep_sign_off != null && $items->review_sign_off != null && $items->review_sign_off2 != null) {
+                    $dateymd = intval(str_replace("-", "", $items->planned_review2));
+                    if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
+                        if ($request->staff == "blank" || in_array($items->rev2_user_id, $staff)) {
+                            $taskScheduleDataItem["user"] = $items->review2_user;
+                            $taskScheduleDataItem["due_date"] = $items->planned_review2;
+                            $taskScheduleDataItem["client_id"] = $items->client_id;
+                            $taskScheduleDataItem["client_name"] = $items->client_name;
+                            $taskScheduleDataItem["project_id"] = $items->project_id;
+                            $taskScheduleDataItem["project_name"] = $items->project_name;
+                            $taskScheduleDataItem["phase_name"] = $items->phase_name;
+                            $taskScheduleDataItem["task"] = $items->task;
+                            $taskScheduleDataItem["description"] = $items->description;
+                            $taskScheduleDataItem["memo"] = $items->col_memo;
+                            $taskScheduleDataItem["status"] = "Complete";
+                        }
+                    }
+                }
 
-            if(isset($taskScheduleDataItem["user"])){
-                array_push($taskScheduleData,$taskScheduleDataItem);
-            }
-            
+                //review1
+                if ($items->prep_sign_off != null && $items->review_sign_off != null && $items->review2_user == "") {
+                    $dateymd = intval(str_replace("-", "", $items->planned_review));
+                    if ($this->isDateRange($dateFrom, $dateTo, $dateymd)) {
+                        if ($request->staff == "blank" || in_array($items->rev1_user_id, $staff)) {
+                            $taskScheduleDataItem["user"] = $items->review_user;
+                            $taskScheduleDataItem["due_date"] = $items->planned_review;
+                            $taskScheduleDataItem["client_id"] = $items->client_id;
+                            $taskScheduleDataItem["client_name"] = $items->client_name;
+                            $taskScheduleDataItem["project_id"] = $items->project_id;
+                            $taskScheduleDataItem["project_name"] = $items->project_name;
+                            $taskScheduleDataItem["phase_name"] = $items->phase_name;
+                            $taskScheduleDataItem["task"] = $items->task;
+                            $taskScheduleDataItem["description"] = $items->description;
+                            $taskScheduleDataItem["memo"] = $items->col_memo;
+                            $taskScheduleDataItem["status"] = "Complete";
+                        }
+                    }
+                }
+                
+                if(isset($taskScheduleDataItem["user"])){
+                    array_push($taskScheduleData,$taskScheduleDataItem);
+                }
+
+            }               
         }
         
         $json = [
