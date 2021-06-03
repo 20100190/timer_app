@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use Validate;
-use DB;
+//use DB;
 use App\Client;
 use App\ContactPerson;
 use App\Shareholders;
 use App\Officers;
 use App\Staff;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 //=======================================================================
 class ClientController extends Controller {
@@ -44,8 +46,26 @@ class ClientController extends Controller {
     public function create() {        
         //pic
         $picData = Staff::ActiveStaffOrderByInitial();
+
+        $columns = DB::select('describe client');   
+        $typeArray = [];
+        foreach($columns as $index => $data){
+            //$row = [];            
+            $field = $columns[$index]->Field;
+            $type = $columns[$index]->Type;
+                        
+            //$row["field"] = $field;
+            //$row["length"] = str_replace(["varchar(",")","int("],"",$type);
+            $row = array($field => str_replace(["varchar(",")","int("],"",$type));
+
+            //array_push($typeArray, $row);
+            $typeArray = array_merge($typeArray, $row);
+        }     
         
-        return view("master.client.create",compact("picData"));
+        //$typeArray = json_encode($typeArray);        
+        $retTypeArray = json_encode(["client" => $typeArray]);
+        
+        return view("master.client.create",compact("picData","retTypeArray"));
     }
 
     /**

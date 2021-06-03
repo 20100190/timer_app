@@ -250,8 +250,11 @@
     }
     
     function isCheckClientError() {
-         //妥当性　エラーチェック
+         //妥当性　エラーチェック        
         var isError = false;
+        var errorMessage = "";
+        var strRequired = "required<br>";
+        var strLength = "characters<br>";
         var name = $("#name").val();
         var fye = $("#fye").val();      
         var vic = $("#vic_status").val();
@@ -260,7 +263,7 @@
         var tel = $("#tel1").val();
         var defaultColor = "transparent";
         var errorColor = "red";
-        
+        /*
         $("#name").css("background-color",defaultColor);
         if(name == ""){
             isError = true;
@@ -295,7 +298,180 @@
         if(tel == ""){
             isError = true;
             $("#tel1").css("background-color",errorColor);
+        }*/
+        //桁数取得        
+        var clientTypeList = JSON.parse(document.getElementById("client_type_list").value);
+        //name
+        $("#name").css("background-color",defaultColor);        
+        if(name == ""){            
+            isError = true;
+            $("#name").css("background-color",errorColor);
+            errorMessage += "name : " + strRequired;
         }
+        if(name.length > parseInt(clientTypeList.client["name"])){
+            isError = true;
+            $("#name").css("background-color",errorColor); 
+            errorMessage += "name : " + parseInt(clientTypeList.client["name"]) + strLength;           
+        }
+
+        //fye
+        $("#fye").css("background-color",defaultColor);
+        if(fye == ""){
+            isError = true;
+            $("#fye").css("background-color",errorColor);
+            errorMessage += "FYE : " + strRequired;
+        }
+        
+        //vic
+        $("#vic_status").css("background-color",defaultColor);
+        if(vic == ""){
+            isError = true;
+            $("#vic_status").css("background-color",errorColor);
+            errorMessage += "vic : " + strRequired;
+        }
+
+        //group companies
+        $("#group_companies").css("background-color",defaultColor);
+        var groupCompanies = $("#group_companies").val();
+        if(groupCompanies.length > parseInt(clientTypeList.client["group_companies"])){
+            isError = true;
+            $("#group_companies").css("background-color",errorColor);
+            errorMessage += "Group Companies : " + parseInt(clientTypeList.client["group_companies"]) + strLength;
+        }               
+
+        //website
+        $("#website").css("background-color",defaultColor);
+        var website = $("#website").val();
+        if(website.length > parseInt(clientTypeList.client["website"])){
+            isError = true;
+            $("#website").css("background-color",errorColor);
+            errorMessage += "website : " + strRequired;
+        }   
+        
+        //address us
+        $("#address_us").css("background-color",defaultColor);
+        if(address == ""){
+            isError = true;
+            $("#address_us").css("background-color",errorColor);
+            errorMessage += "address us : " + strRequired;
+        }
+              
+        if(address.length > parseInt(clientTypeList.client["address_us"])){
+            isError = true;
+            $("#address_us").css("background-color",errorColor);
+            errorMessage += "address us : " + parseInt(clientTypeList.client["address_us"]) + strLength;           
+        }   
+
+        //address jp
+        $("#address_jp").css("background-color",defaultColor);
+        var addressJp = $("#address_jp").val();
+        if(addressJp.length > parseInt(clientTypeList.client["address_jp"])){
+            isError = true;
+            $("#address_jp").css("background-color",errorColor);
+            errorMessage += "address jp : " + strRequired;
+        }  
+        
+        //mailing address
+        $("#mailing_address").css("background-color",defaultColor);
+        if(mAddress == ""){
+            isError = true;
+            $("#mailing_address").css("background-color",errorColor);
+            errorMessage += "mailing address : " + strRequired;
+        }
+
+        if(mAddress.length > parseInt(clientTypeList.client["mailing_address"])){
+            isError = true;
+            $("#mailing_address").css("background-color",errorColor);
+            errorMessage += "mailing address : " + parseInt(clientTypeList.client["mailing_address"]) + strLength;           
+        }   
+
+        //tel1
+        $("#tel1").css("background-color",defaultColor);
+        if(tel == ""){
+            isError = true;
+            $("#tel1").css("background-color",errorColor);
+            errorMessage += "tel1 : " + strRequired;
+        }
+
+        //tel2
+        $("#tel2").css("background-color",defaultColor);
+        var tel2 = $("#tel2").val();
+        if(tel2.length > parseInt(clientTypeList.client["tel2"])){
+            isError = true;
+            $("#tel2").css("background-color",errorColor);
+            errorMessage += "tel2 : " + parseInt(clientTypeList.client["tel2"]) + strLength;           
+        }  
+
+        //tel3
+        $("#tel3").css("background-color",defaultColor);
+        var tel3 = $("#tel3").val();
+        if(tel3.length > parseInt(clientTypeList.client["tel3"])){
+            isError = true;
+            $("#tel3").css("background-color",errorColor);
+            errorMessage += "tel3 : " + parseInt(clientTypeList.client["tel3"]) + strLength;           
+        }  
+
+        //fax
+        $("#fax").css("background-color",defaultColor);
+        var fax = $("#fax").val();
+        if(fax.length > parseInt(clientTypeList.client["fax"])){
+            isError = true;
+            $("#fax").css("background-color",errorColor);
+        }  
+
+        //federal id
+        $("#federal_id").css("background-color",defaultColor);
+        var federalId = $("#federal_id").val();
+        if(federalId.length > parseInt(clientTypeList.client["federal_id"])){
+            isError = true;
+            $("#federal_id").css("background-color",errorColor);
+            errorMessage += "federal id : " + parseInt(clientTypeList.client["federal_id"]) + strLength;           
+        } 
+
+        //state id
+        $("#state_id").css("background-color",defaultColor);
+        var stateId = $("#state_id").val();
+        if(stateId.length > parseInt(clientTypeList.client["state_id"])){
+            isError = true;
+            $("#state_id").css("background-color",errorColor);
+            errorMessage += "state id : " + parseInt(clientTypeList.client["state_id"]) + strLength;           
+        } 
+
+        //edd id
+        $("#edd_id").css("background-color",defaultColor);
+        var eddId = $("#edd_id").val();
+        if(eddId.length > parseInt(clientTypeList.client["edd_id"])){
+            isError = true;
+            $("#edd_id").css("background-color",errorColor);
+            errorMessage += "edd id : " + parseInt(clientTypeList.client["edd_id"]) + strLength;           
+        } 
+
+        //note
+        $("#note").css("background-color",defaultColor);
+        var noteText = $("#note").val();
+        if(noteText.length > parseInt(clientTypeList.client["note"])){
+            isError = true;
+            $("#note").css("background-color",errorColor);
+            errorMessage += "note : " + parseInt(clientTypeList.client["note"]) + strLength;           
+        } 
+
+        //nature of business
+        $("#nature_of_business").css("background-color",defaultColor);
+        var nob = $("#nature_of_business").val();
+        if(nob.length > parseInt(clientTypeList.client["nature_of_business"])){
+            isError = true;
+            $("#nature_of_business").css("background-color",errorColor);
+            errorMessage += "nature of business : " + parseInt(clientTypeList.client["nature_of_business"]) + strLength;           
+        } 
+
+        //incorporation state
+        $("#incorporation_state").css("background-color",defaultColor);
+        var incState = $("#incorporation_state").val();
+        if(incState.length > parseInt(clientTypeList.client["incorporation_state"])){
+            isError = true;
+            $("#incorporation_state").css("background-color",errorColor);
+            errorMessage += "incorporation state : " + parseInt(clientTypeList.client["incorporation_state"]) + strLength;           
+        } 
         
         //contact
         var objContactTBL = document.getElementById("contact_person_body");
@@ -313,18 +489,18 @@
                 isError = true;
             }
         }
-        return isError;
+        return [isError,errorMessage];
     }
     
     function saveClient() {
-        var isError = isCheckClientError();
+        var [isError,errorMessage] = isCheckClientError();   
         if (isError) {
             Swal.fire({
                 position: 'top',
                 icon: 'error',
                 title: 'Error',
                 width: '400px',
-                html: "Error"
+                html: errorMessage
             });
             return;
         }
@@ -350,6 +526,7 @@
     </ul>
     @endif
 
+    <input type="hidden" id="client_type_list" value="{{$retTypeArray}}">
     <form method="POST" name="clientForm" action="/master/client/{{ $client->id }}" class="form-horizontal" autocomplete="off">
         {{ csrf_field() }}
         {{ method_field("PUT") }}
