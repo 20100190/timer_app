@@ -38,7 +38,7 @@ Route::get('/test3/getProjectInfo/{client}/{type}/{year}', 'ProjectController@ge
 
 //phase entry
 Route::get('/phase/enter', 'PhaseEntryController@index');
-Route::get('/phase/entry/{client}/{project}/{vic}/{pic}/{staff}/{role}/{year}/{month}/{day}', 'PhaseEntryController@storeInput');
+Route::get('/phase/entry/{client}/{project}/{vic}/{pic}/{staff}/{role}/{year}/{month}/{day}/{archive}', 'PhaseEntryController@storeInput');
 Route::get('/phase/entry/save/{projectId}/{year}/{month}/{day}/{value}/{projectTypeId}', 'PhaseEntryController@save');
 
 //Staff
@@ -116,6 +116,18 @@ Route::get("/master/project-list/{client}/{project}/{status}", "ProjectListContr
 
 //dropdown project data
 Route::get("/project/data/{client}", "ProjectListController@projectDropdownStore");
+
+//sync tools
+Route::get("/sync_tools", "SyncToolController@index");
+Route::get("/sync_tools/project", "SyncToolController@syncProject");
+Route::get("/sync_tools/user", "SyncToolController@syncUser");
+Route::get("/sync_tools/client", "SyncToolController@syncClient");
+Route::get("/sync_tools/time_entry/{from}/{to}", "SyncToolController@syncTimeEntry");
+Route::get("/sync_tools/create_project", "SyncToolController@createProjectToHarvest");
+Route::get("/sync_tools/invoice", "SyncToolController@syncInvoice");
+Route::get("/sync_tools/expense", "SyncToolController@syncExpense");
+Route::get("/sync_tools/engagement_fee", "SyncToolController@createEngagementFee");
+
 
 //Route::get("/project-compare", "ProjectCompareController@index");
 //Route::get("/project-compare/getdata", "ProjectCompareController@getData");

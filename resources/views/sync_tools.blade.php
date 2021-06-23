@@ -1,0 +1,62 @@
+@extends('layouts.main')
+@section('content') 
+
+<div style="margin-left: 20px">
+ 
+    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="syncProjectData()" style="width: 150px;margin-left: 0px">        
+        <span id="loadingText">Sync Project</span>
+    </button>
+
+    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="syncUserData()" style="width: 150px;margin-left: 0px">        
+        <span id="loadingText">Sync User</span>
+    </button>
+
+    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="syncClientData()" style="width: 150px;margin-left: 0px">        
+        <span id="loadingText">Sync Client</span>
+    </button>    
+
+    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="syncInvoiceData()" style="width: 150px;margin-left: 0px">        
+        <span id="loadingText">Sync Invoice</span>
+    </button>
+
+    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="syncExpenseData()" style="width: 150px;margin-left: 0px">        
+        <span id="loadingText">Sync Expense</span>
+    </button>
+
+    <br><br>
+
+
+    <input type="text" class="form-control datepicker1" id="time-entry-from" name="time-entry-from" style="float: left;width: 150px">
+    <input type="text" class="form-control datepicker1" id="time-entry-to" name="time-entry-to" style="float: left;width: 150px">
+
+    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="syncTimeEntry()" style="width: 150px;margin-left: 0px">        
+        <span id="loadingText">Sync Time Entry</span>
+    </button>
+
+    <br><br>
+
+    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="syncEngagementFee()" style="width: 150px;margin-left: 0px">        
+        <span id="loadingText">Sync Engagement Fee</span>
+    </button>
+
+    <br><br>
+
+    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="createProjectData()" style="width: 150px;margin-left: 0px">        
+        <span id="loadingText">Create Project</span>
+    </button>
+
+   
+  
+</div>
+<script>
+    // "global" vars, built using blade
+    var imagesUrl = '{{ URL::asset('/image') }}';
+    $('.datepicker1').datepicker({
+        format: "mm/dd/yyyy",
+        language: "en",
+        autoclose: true,
+        orientation: 'bottom left'
+    });
+</script>
+<script src="{{ asset('js/syncTool.js') }}"></script>
+@endsection
