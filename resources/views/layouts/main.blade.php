@@ -240,17 +240,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="nav navbar-nav">
                         <li>
                             <a style="font-size: 20px;" href="">Budget Webform 
-                                @if(Request::decodedPath() == "budget/enter") - Budget Entry @endif
-                                @if(Request::decodedPath() == "budget/show") - Budget Report @endif
-                                @if(Request::decodedPath() == "phase/enter") - Phase Entry @endif
-                                @if(strpos(Request::decodedPath(),"master/project") !== false) - Project @endif
-                                @if(Request::decodedPath() == "master/staff") - Staff @endif
-                                @if(Request::decodedPath() == "master/task") - Harvest Task @endif
-                                @if(Request::decodedPath() == "master/client") - Client @endif
-                                @if(Request::decodedPath() == "master/work") - Phase Standard @endif                                
-                                @if(strpos(Request::decodedPath(),"master/work-list") !== false) - Phase Tasks @endif
-                                @if(Request::decodedPath() == "task-schedule") - Task Schedule @endif
-                                @if(Request::decodedPath() == "master/project-list") - Project List @endif
+                                @if(Request::decodedPath() == "budget/enter")
+                                 - Budget Entry
+                                @elseif(Request::decodedPath() == "budget/show")
+                                 - Budget Report 
+                                @elseif(Request::decodedPath() == "phase/enter")
+                                 - Phase Entry 
+                                @elseif(Request::decodedPath() == "master/project-list")
+                                 - Project List
+                                @elseif(strpos(Request::decodedPath(),"master/project") !== false)
+                                 - Project
+                                @elseif(Request::decodedPath() == "master/staff")
+                                 - Staff
+                                @elseif(Request::decodedPath() == "master/task")
+                                 - Harvest Task
+                                @elseif(Request::decodedPath() == "master/client")
+                                 - Client
+                                @elseif(Request::decodedPath() == "master/work")
+                                 - Phase Standard
+                                @elseif(strpos(Request::decodedPath(),"master/work-list") !== false)
+                                 - Phase Tasks
+                                @elseif(Request::decodedPath() == "task-schedule")
+                                 - Task Schedule
+                                 @elseif(Request::decodedPath() == "sync_tools")
+                                 - Sync Tools
+                                @endif
                             </a>
                         </li>
                         <li @if(Request::decodedPath() == "budget/enter") class="active" @endif><a href="{{asset("budget/enter")}}">Entry</a></li>
