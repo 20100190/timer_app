@@ -93,7 +93,7 @@ class ProjectController extends Controller
         //project taskにデータがあればそれを表示
         //無ければtaskマスタから表示
         //$projectObj = Project::where([['client_id', '=', $request->client], ["project_type", "=", $request->type], ["project_year", "=", $request->year]]);
-        $projectObj = Project::select(DB::raw("project.*,client.name,project_harvest.id as project_harvest_id",))
+        $projectObj = Project::select(DB::raw("project.*,client.name,project_harvest.id as project_harvest_id"))
             ->leftJoin("client", "client.id","=","project.client_id")
             ->leftJoin("project_harvest", function ($join){
                 $join->on("client.name","=","project_harvest.client_name")
