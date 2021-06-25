@@ -623,4 +623,31 @@ class SyncToolController extends Controller
 
         return $ary;
     }
+
+    public function execPatchCurl($url,$targetJson){
+        $headers = array(
+            "Authorization: Bearer 1811250.pt.FwB6sKeYVYTGxSiARVlWk9eZATp7Jdu4u5eRjyFLv0XDGDs1A2gvTtilegTjoIJ4sCr0uqDOA-rWUGy1SNx4TA",
+            "Harvest-Account-Id: 231068",
+            "User-Agent: MyApp (takahiroy@topc.us)",           
+            "Content-Type: application/json",
+        );
+        $conn = curl_init(); #cURLセッションの初期化
+        curl_setopt($conn,CURLOPT_POST, true);
+        curl_setopt($conn, CURLOPT_URL, $url); #取得するURLを指定        
+        curl_setopt($conn, CURLOPT_RETURNTRANSFER, true); #実行結果を文字列で返す。
+        curl_setopt($conn, CURLOPT_CUSTOMREQUEST, 'PATCH');
+        curl_setopt($conn, CURLOPT_HTTPHEADER, $headers);
+        //curl_setopt($conn, CURLOPT_POSTFIELDS, '{"client_id":867689,"name":"Test Project","is_billable":true,"bill_by":"Project","hourly_rate":100.0,"budget_by":"project","budget":10000}');
+        curl_setopt($conn, CURLOPT_POSTFIELDS, $targetJson);
+
+
+        $res = curl_exec($conn);
+        curl_close($conn); #セッションの終了
+        
+        $ary = json_decode($res, true);
+    
+        //$data = $ary[$arrayItemName];        
+
+        return $ary;
+    }
 }

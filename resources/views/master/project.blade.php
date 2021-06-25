@@ -205,9 +205,14 @@
 
         <div style="clear: left"></div>
 
-        <div style="float: left;width: 864px">        
+        <div style="float: left;width: 864px;">        
             <label>Notes</label><br>
             <input type="text" id="note" name="note" class="form-control" style="width: 100%">
+        </div>
+
+        <div style="float: left;width: 180px;margin-left: 20px">        
+            <label>Harvest Project ID</label><br>
+            <input type="text" id="harvest_project_id" name="harvest_project_id" class="form-control" style="width: 100%" readonly>
         </div>
 
     </div>

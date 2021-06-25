@@ -26,8 +26,10 @@
     <br><br>
 
 
-    <input type="text" class="form-control datepicker1" id="time-entry-from" name="time-entry-from" style="float: left;width: 150px">
-    <input type="text" class="form-control datepicker1" id="time-entry-to" name="time-entry-to" style="float: left;width: 150px">
+    <div style="float: left;padding-top: 5px"><label>From</label></div>
+    <input type="text" class="form-control datepicker1" id="time-entry-from" name="time-entry-from" style="float: left;width: 150px;margin-right: 10px">
+    <div style="float: left;padding-top: 5px"><label>To</label></div>
+    <input type="text" class="form-control datepicker1" id="time-entry-to" name="time-entry-to" style="float: left;width: 150px;margin-right: 10px">
 
     <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="syncTimeEntry()" style="width: 150px;margin-left: 0px">        
         <span id="loadingText">Sync Time Entry</span>

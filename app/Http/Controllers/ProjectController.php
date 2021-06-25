@@ -12,6 +12,7 @@ use App\Assign;
 use App\ProjectTask;
 use App\ProjectType;
 use App\Engagement;
+use App\ProjectHarvest;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
@@ -91,8 +92,16 @@ class ProjectController extends Controller
     public function getTaskProjectInfo(Request $request) {
         //project taskにデータがあればそれを表示
         //無ければtaskマスタから表示
-        $projectObj = Project::where([['client_id', '=', $request->client], ["project_type", "=", $request->type], ["project_year", "=", $request->year]]);
-        
+        //$projectObj = Project::where([['client_id', '=', $request->client], ["project_type", "=", $request->type], ["project_year", "=", $request->year]]);
+        $projectObj = Project::select(DB::raw("project.*,client.name,project_harvest.id as project_harvest_id",))
+            ->leftJoin("client", "client.id","=","project.client_id")
+            ->leftJoin("project_harvest", function ($join){
+                $join->on("client.name","=","project_harvest.client_name")
+                ->on("project.project_name","=","project_harvest.project_name");
+            })
+            ->where([['project.client_id', '=', $request->client], ["project.project_type", "=", $request->type], ["project.project_year", "=", $request->year]]); 
+
+
         $projectId = "";
         if ($projectObj->exists()) {
             $projectId = $projectObj->first()["id"];

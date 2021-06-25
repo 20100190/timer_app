@@ -511,6 +511,8 @@ function loadTask(buttonType) {
             if(data.project.is_archive == 1){
                 $("#is_archive").val(data.project.is_archive);  
             }            
+
+            document.getElementById("harvest_project_id").value = data.project.project_harvest_id;
         }
         
         if (document.getElementById("starts_on").value == "") {
@@ -874,6 +876,10 @@ function saveApprove(){
     var projectId = document.getElementById("rec_project_id").value;
     var obj = document.getElementById("btn_approve");    
     var appText = document.getElementById("savingText").innerHTML;
+    var harvestProjectId = document.getElementById("harvest_project_id").value;
+    if(harvestProjectId == ""){
+        harvestProjectId = "blank"
+    }
     
     if(appText == "Approve"){
         obj.style.backgroundColor = "#DCDCDC";
@@ -890,7 +896,7 @@ function saveApprove(){
     }
     
     $.ajax({
-        url: "/master/project-list/save/" + projectId + "/" + appText,
+        url: "/master/project-list/save/" + projectId + "/" + appText + "/" + harvestProjectId,
         dataType: "json",
         success: data => {
             //disabled制御
@@ -901,6 +907,11 @@ function saveApprove(){
                 $("#is_archive").prop('disabled', false);
                 $("#btnDuplicate").prop('disabled', false);
                 document.getElementById("btn_approve").disabled = false;
+            }
+
+            //harvest id セット
+            if(data.harvest_project.id != null){
+                document.getElementById("harvest_project_id").value = data.harvest_project.id;
             }
             
             Swal.fire({

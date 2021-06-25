@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use Validate;
-use DB;
+//use DB;
 use App\Project;
 use App\Client;
 use App\ContactPerson;
 use App\Shareholders;
 use App\Officers;
+use App\ClientHarvest;
+use App\ProjectHarvest;
+use App\Assign;
 use App\Staff;
+use Illuminate\Support\Facades\DB;
 
 //=======================================================================
 class ProjectListController extends Controller {
@@ -112,6 +116,7 @@ class ProjectListController extends Controller {
     public function save(Request $request) {
         $projectId = $request->project;
         $status = $request->status;
+        $harvestProjectId = $request->harvestProject;
         $approved = 1;
         if($status == "Unapprove"){
             $approved = 0;
@@ -121,13 +126,93 @@ class ProjectListController extends Controller {
         $updateItem = [
             "is_approval" => $approved,
         ];
-        $queryObj->update($updateItem);
+        //$queryObj->update($updateItem);
 
-        $json = ["status" => "success"];
+        //harvest連携
+        $ary = [];
+        if($harvestProjectId == "blank"){           
+            $projectDetail = $this->updateHarvest($projectId);
+            $ary = $this->execHarvest(json_encode($projectDetail),"","post");            
+            //harvest_projectへinsert
+            $projectHarvestObj = new ProjectHarvest;
+            $projectHarvestObj->id = $ary["id"];
+            $projectHarvestObj->client_id = $projectDetail["client_id"];
+            $projectHarvestObj->client_name = $ary["client"]["name"];
+            $projectHarvestObj->project_name = $ary["name"];
+            $projectHarvestObj->is_active = 0;
+            $projectHarvestObj->budget = $ary["budget"];
+
+            $projectHarvestObj->save();
+        }else{
+            $projectDetail = $this->updateHarvest($projectId);
+            $ary = $this->execHarvest(json_encode($projectDetail),$harvestProjectId,"patch");    
+        }
+
+        $json = ["status" => "success","harvest_project" => $ary];
 
         return response()->json($json);
 
         //return redirect("master/project-list")->with("flash_message", "client updated!");
+    }
+
+    function updateHarvest($projectId)
+    {
+        //project data
+        $projectData = Project::select("client.name", "start", "end", "project.note", "project.project_name")->leftJoin("client", "client.id", "=", "project.client_id")
+        ->where("project.id", "=", $projectId)->first();
+
+        //client id取得
+        $clientTable = new ClientHarvest;
+        $clientData = $clientTable->where("name", "=", $projectData["name"])->first();
+
+        //total hour取得
+        $assignTable = new Assign;
+        $budgetHours = $assignTable->select(DB::raw("sum(budget_hour) as total_hours"))->where("project_id", "=", $projectId)->get();
+
+        //harvestに登録
+        //harvest client codeを取得
+        $clientId = $clientData["id"];
+        $projectName = $projectData["project_name"];
+        //$hourlyRate = 321.0;
+        $budget = $budgetHours[0]["total_hours"];
+        $startsOn = $projectData["start"];
+        $endsOn = $projectData["end"];
+        $notes = $projectData["note"];
+
+        //harvestにcreate用配列作成
+        $projectDetail = [
+            "client_id" => $clientId,
+            "name" => $projectName,
+            "is_billable" => true,
+            "bill_by" => "People",
+            "hourly_rate" => 0,
+            "budget_by" => "project",
+            "budget" => $budget,
+            "notify_when_over_budget" => true,
+            "show_budget_to_all" => true,
+            "starts_on" => $startsOn,
+            "ends_on" => $endsOn,
+            "notes" => $notes,
+        ];
+
+        return $projectDetail;
+    }
+
+    function execHarvest($projectDetail,$harvestProjectId,$execType){
+        $url = "https://api.harvestapp.com/v2/projects";
+        if($harvestProjectId != ""){
+            $url .= "/" . $harvestProjectId;
+        }
+
+        $syncToolObj = new SyncToolController();
+        if($execType == "patch"){
+            $projectArray = $syncToolObj->execPatchCurl($url,$projectDetail);
+        }else{
+            $projectArray = $syncToolObj->execPostCurl($url,$projectDetail);
+        }
+        
+
+        return $projectArray;
     }
     
     function projectDropdownStore(Request $request){
