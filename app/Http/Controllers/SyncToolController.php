@@ -10,6 +10,7 @@ use App\InvoiceHarvest;
 use App\ExpenseHarvest;
 use App\Engagement;
 use App\EngagementHarvest;
+use App\TaskHarvest;
 use Illuminate\Http\Request;
 
 class SyncToolController extends Controller
@@ -73,6 +74,11 @@ class SyncToolController extends Controller
     public function syncExpense(){
         $data = $this->getExpenseFromHarvest();
         $this->insertHarvestExpense($data);
+    }
+
+    public function syncTask(){
+        $data = $this->getTaskFromHarvest();
+        $this->insertHarvestTask($data);
     }
 
 
@@ -216,6 +222,40 @@ class SyncToolController extends Controller
         return $dataArray;
     }
 
+    public function getTaskFromHarvest(){
+        $url = "https://api.harvestapp.com/v2/tasks";
+
+        $projectArray = $this->execCurl($url);
+
+        //100件ごとに帰ってくる、最大ページ数
+        $totalPage = $projectArray["total_pages"];
+
+        $dataArray = [];
+
+        //for ($i = 1; $i <= $totalPage; $i++) {
+        for ($i = 1; $i <= $totalPage; $i++) {
+            $urlIndex = $url . "?page=" . $i;
+
+            $projectArrayIndex = $this->execCurl($urlIndex)["tasks"];       
+            
+            foreach ($projectArrayIndex as $projectItem) {
+                $dataArrayItem = [];
+               
+                $dataArrayItem["id"] = $projectItem["id"];
+                $dataArrayItem["name"] = $projectItem["name"];
+                $dataArrayItem["billable_by_default"] = $projectItem["billable_by_default"];
+                $dataArrayItem["default_hourly_rate"] = $projectItem["default_hourly_rate"];
+                $dataArrayItem["is_default"] = $projectItem["is_default"];    
+                $dataArrayItem["is_active"] = $projectItem["is_active"];    
+               
+                array_push($dataArray,$dataArrayItem);
+            }
+
+        }
+
+        return $dataArray;
+    }
+
  
     public function getProjectFromHarvest(){
         $url = "https://api.harvestapp.com/v2/projects";
@@ -346,6 +386,7 @@ class SyncToolController extends Controller
     }
 
     public function createProjectToHarvest(){
+        //Project
         $url = "https://api.harvestapp.com/v2/projects";
 
         $projectDetail = [
@@ -365,7 +406,40 @@ class SyncToolController extends Controller
 
         $projectArray = $this->execPostCurl($url,json_encode($projectDetail));
 
-        var_dump($projectArray);
+        //Task
+        $projectId = $projectArray["id"];
+        $url = "https://api.harvestapp.com/v2/projects/" . $projectId . "/task_assignments";
+
+        $taskId = "";//"1193015";
+        //get Task Id
+        $table = new TaskHarvest;
+        $taskData = $table->where([['name',"=","Consulting"]])->get();
+        foreach($taskData as $tData){
+            $taskId = $tData["id"];
+        }
+
+        if($taskId != ""){
+            $taskDetail = [
+                "task_id" => $taskId,
+            ];
+    
+            $taskArray = $this->execPostCurl($url,json_encode($taskDetail));    
+        }
+
+        $taskData = $table->where([['name',"=","1.1 Transaction - Bill"]])->get();
+        foreach($taskData as $tData){
+            $taskId = $tData["id"];
+        }
+
+        if($taskId != ""){
+            $taskDetail = [
+                "task_id" => $taskId,
+            ];
+    
+            $taskArray = $this->execPostCurl($url,json_encode($taskDetail));    
+        }
+        
+        var_dump($taskData);
     }
 
     public function insertHarvestProject($projectData){
@@ -462,6 +536,26 @@ class SyncToolController extends Controller
             $table->invoice_id = $data["invoice_id"];           
                                     
             $table->invoice_name = "";
+
+            $table->save();            
+        }
+        
+    }
+
+    public function insertHarvestTask($projectData){
+
+        $table = new TaskHarvest;
+        $table->query()->delete();
+
+        foreach($projectData as $data){
+            $table = new TaskHarvest;
+           
+            $table->id = $data["id"];
+            $table->name = $data["name"];
+            $table->billable_by_default = $data["billable_by_default"];
+            $table->default_hourly_rate = $data["default_hourly_rate"];
+            $table->is_default = $data["is_default"];    
+            $table->is_active = $data["is_active"];              
 
             $table->save();            
         }

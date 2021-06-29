@@ -14,7 +14,9 @@ use App\Officers;
 use App\ClientHarvest;
 use App\ProjectHarvest;
 use App\Assign;
+use App\ProjectTask;
 use App\Staff;
+use App\TaskHarvest;
 use Illuminate\Support\Facades\DB;
 
 //=======================================================================
@@ -126,13 +128,15 @@ class ProjectListController extends Controller {
         $updateItem = [
             "is_approval" => $approved,
         ];
-        //$queryObj->update($updateItem);
+        $queryObj->update($updateItem);
 
         //harvest連携
         $ary = [];
         if($harvestProjectId == "blank"){           
             $projectDetail = $this->updateHarvest($projectId);
-            $ary = $this->execHarvest(json_encode($projectDetail),"","post");            
+            $taskDetail = $this->getTaskData($projectId);
+            $ary = $this->execHarvest(json_encode($projectDetail),"","post");   
+            $ary2 = $this->execHarvestTask($taskDetail, $ary["id"], "post");
             //harvest_projectへinsert
             $projectHarvestObj = new ProjectHarvest;
             $projectHarvestObj->id = $ary["id"];
@@ -146,6 +150,9 @@ class ProjectListController extends Controller {
         }else{
             $projectDetail = $this->updateHarvest($projectId);
             $ary = $this->execHarvest(json_encode($projectDetail),$harvestProjectId,"patch");    
+
+            $taskDetail = $this->getTaskData($projectId);
+            $ary2 = $this->execHarvestTask($taskDetail, $ary["id"], "post");
         }
 
         $json = ["status" => "success","harvest_project" => $ary];
@@ -158,8 +165,10 @@ class ProjectListController extends Controller {
     function updateHarvest($projectId)
     {
         //project data
-        $projectData = Project::select("client.name", "start", "end", "project.note", "project.project_name")->leftJoin("client", "client.id", "=", "project.client_id")
-        ->where("project.id", "=", $projectId)->first();
+        $projectData = Project::select("client.name", "start", "end", "project.note", "project.project_name","staff.initial")
+            ->leftJoin("client", "client.id", "=", "project.client_id")
+            ->leftJoin("staff", "project.pic", "=", "staff.id")
+            ->where("project.id", "=", $projectId)->first();
 
         //client id取得
         $clientTable = new ClientHarvest;
@@ -178,6 +187,7 @@ class ProjectListController extends Controller {
         $startsOn = $projectData["start"];
         $endsOn = $projectData["end"];
         $notes = $projectData["note"];
+        $projectCode = $projectData["initial"];
 
         //harvestにcreate用配列作成
         $projectDetail = [
@@ -193,9 +203,34 @@ class ProjectListController extends Controller {
             "starts_on" => $startsOn,
             "ends_on" => $endsOn,
             "notes" => $notes,
+            "code" => $projectCode,
         ];
 
         return $projectDetail;
+    }
+
+    function getTaskData($projectId){
+        $table = new ProjectTask;
+        $taskData = $table->select("task_harvest.id")
+            ->leftJoin("task","task.id","=","project task.task_id")            
+            ->leftJoin("task_harvest","task_harvest.name","=","task.name")            
+            ->where([['project_id',"=",$projectId]])->get();    
+            
+        return $taskData;
+    }
+
+    function execHarvestTask($taskDetail, $harvestProjectId, $execType){
+        $url = "https://api.harvestapp.com/v2/projects/" . $harvestProjectId . "/task_assignments";
+        $syncToolObj = new SyncToolController();
+        foreach ($taskDetail as $data) {
+            if ($data["id"] != "") {
+                $taskDetailStr = [
+                    "task_id" => $data["id"],
+                ];
+
+                $taskArray = $syncToolObj->execPostCurl($url, json_encode($taskDetailStr));
+            }
+        }
     }
 
     function execHarvest($projectDetail,$harvestProjectId,$execType){

@@ -127,6 +127,7 @@ Route::get("/sync_tools/create_project", "SyncToolController@createProjectToHarv
 Route::get("/sync_tools/invoice", "SyncToolController@syncInvoice");
 Route::get("/sync_tools/expense", "SyncToolController@syncExpense");
 Route::get("/sync_tools/engagement_fee", "SyncToolController@createEngagementFee");
+Route::get("/sync_tools/task", "SyncToolController@syncTask");
 
 
 //Route::get("/project-compare", "ProjectCompareController@index");

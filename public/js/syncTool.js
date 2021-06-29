@@ -1,6 +1,12 @@
 $(document).ready(function () {
     jQuery('#loader-bg').hide();   
-    
+
+    var m = moment();    
+    var text = m.format('MM/DD/YYYY') + "\n";
+    document.getElementById("time-entry-to").value = text;
+    m.add(-14, "day");
+    text = m.format('MM/DD/YYYY') + "\n";
+    document.getElementById("time-entry-from").value = text;
 });
 
 
@@ -144,6 +150,32 @@ function syncInvoiceData() {
    
     $.ajax({
         url: "/sync_tools/invoice",
+        beforeSend: function () {
+            //処理中           
+            jQuery('#loader-bg').show();
+        },
+    }).success(function (data) {
+        Swal.fire({
+            position: 'top',
+            icon: 'success',
+            title: "updated",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }).error(function (XMLHttpRequest, textStatus, errorThrown) {
+        //alert('error!!!');
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+    }).done(function () {                  
+        jQuery('#loader-bg').hide();
+    });
+}
+
+function syncTaskData() {
+   
+    $.ajax({
+        url: "/sync_tools/task",
         beforeSend: function () {
             //処理中           
             jQuery('#loader-bg').show();
