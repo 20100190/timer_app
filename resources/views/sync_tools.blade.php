@@ -57,9 +57,9 @@
 
     <br><br>
 
-    <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="createProjectData()" style="width: 150px;margin-left: 0px">        
+    <!--<button id="btn_load" name="btn_load" class="btn btn-primary" type="button" onclick="createProjectData()" style="width: 150px;margin-left: 0px">        
         <span id="loadingText">Create Project</span>
-    </button>
+    </button>-->
 
    
   
