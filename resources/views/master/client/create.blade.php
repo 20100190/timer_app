@@ -3,7 +3,24 @@
 <script type="text/javascript">
     $(document).ready(function () {
         jQuery('#loader-bg').hide();
+
+        $('#group_companies').multiselect({
+            buttonWidth: "200px",
+            maxHeight: 700,
+            onDropdownShown: function(even) {
+                this.$filter.find('.multiselect-search').focus();
+            },
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            includeSelectAllOption: true,
+        });
     });
+
+    function AddNewGroupCompany() {        
+        $('#group_companies').multiselect('select','');        
+        document.getElementById("group_add_text").readOnly = false;
+        document.getElementById("group_add_text").focus();
+    }
       
     function appendContactRow() {
         var objTBL = document.getElementById("contact_list");
@@ -436,10 +453,14 @@
             $("#incorporation_state").css("background-color",errorColor);
             errorMessage += "incorporation state : " + parseInt(clientTypeList.client["incorporation_state"]) + strLength;           
         } 
-        
+       
         //contact
         var objContactTBL = document.getElementById("contact_person_body");
         var cnt = objContactTBL.rows.length;
+        if(cnt == 0){
+            errorMessage += "contact person : " + strRequired;           
+            isError = true;
+        }
         for (var count = 1; count <= cnt; count++) {
             document.getElementById("contact_person" + count).style.backgroundColor = defaultColor;
             if(document.getElementById("contact_person" + count).value == ""){
@@ -453,6 +474,15 @@
                 isError = true;
             }
         }
+
+        //group company
+        var groupCompanyName = $("#group_companies").val();
+        var groupCompanyNameText = $("#group_add_text").val();
+        if(groupCompanyName == "" && groupCompanyNameText == ""){
+            errorMessage += "group company : " + strRequired;           
+            isError = true;
+        }
+
         return [isError,errorMessage];
     }
     
@@ -495,7 +525,7 @@
     <form method="POST" name="clientForm" action="/master/client/store" class="form-horizontal" autocomplete="off">
         {{ csrf_field() }}
 
-        <div style="float: left;margin-right: 50px">
+        <div style="float: left;margin-right: 30px">
             <table class="table table-borderless">                                
                 <tbody>                    
                     <tr>
@@ -534,7 +564,16 @@
                     </tr>
                     <tr>
                         <th style="vertical-align: middle;">Group Companies</th>
-                        <td style="vertical-align: middle;"><input class="form-control" name="group_companies" type="text" id="group_companies" value=""></td>
+                        <td style="vertical-align: middle;">
+                            <!--<input class="form-control" name="group_companies" type="text" id="group_companies" value="">-->
+                            <select class="form-control" name="group_companies" id="group_companies">
+                            <option value=""></option>
+                                @foreach($clientGroup as $data)
+                                <option value="{{$data->group_companies}}">{{$data->group_companies}}</option>
+                                @endforeach
+                            </select><input type="button" id="group_add_new" name="group_add_new" value="Add New" style="height: 30px;font-size: 10px;background-color: #3C8DBC;color: white;" onclick="AddNewGroupCompany()"><br>
+                            <input class="form-control" id="group_add_text" name="group_add_text" type="text" value="" readonly>
+                        </td>
                     </tr>
                     <tr>
                         <th style="vertical-align: middle;">Website</th>

@@ -1,0 +1,256 @@
+@extends('layouts.main')
+@section("content")
+<script type="text/javascript">
+$(document).ready(function () {
+    jQuery('#loader-bg').hide();
+
+    var buttonWidth = "600";
+    var buttonWidth2 = "150";
+
+    $('#client').multiselect({
+        buttonWidth: buttonWidth,
+        maxHeight: 700,
+        enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
+        enableCaseInsensitiveFiltering: true,
+        includeSelectAllOption: true,
+    });
+
+    $('#project').multiselect({
+        buttonWidth: buttonWidth,
+        maxHeight: 700,
+        enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
+        enableCaseInsensitiveFiltering: true,
+        includeSelectAllOption: true,
+    });
+
+    /*$('#task').multiselect({
+        buttonWidth: buttonWidth,
+        maxHeight: 700,
+        enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
+        enableCaseInsensitiveFiltering: true,
+        includeSelectAllOption: true,
+    });*/
+
+    $('#requestor').multiselect({
+        buttonWidth: buttonWidth,
+        maxHeight: 700,
+        enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
+        enableCaseInsensitiveFiltering: true,
+        includeSelectAllOption: true,
+    });
+
+    $('#preparer').multiselect({
+        buttonWidth: buttonWidth,
+        maxHeight: 700,
+        enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
+        enableCaseInsensitiveFiltering: true,
+        includeSelectAllOption: true,
+    });
+
+    $('#optional').multiselect({
+        buttonWidth: buttonWidth,
+        maxHeight: 700,
+        enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
+        enableCaseInsensitiveFiltering: true,
+        includeSelectAllOption: true,
+    });
+
+    $('.datepicker1').datepicker({
+        format: "mm/dd/yyyy",
+        language: "en",
+        autoclose: true,
+        orientation: 'bottom left'
+    });
+
+});
+</script>
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<form method="POST" enctype="multipart/form-data" id="taskEnter" name="taskEnter" autocomplete="off">
+    <div style="margin-left: 20px">
+        <div id="filter_area" style="margin-top: 30px;">
+            <div id="filter_left" style="float: left;height: 180px;margin-bottom: 30px">
+                <div class="row entry-filter-bottom" style="zoom: 100%">
+                    <div class="col col-md-3" >
+                        <span class="line-height">Client Name</span>
+                    </div>          
+                    <div class="col col-md-5">
+                        <select id="client" name="client" class="form-control select2" data-display="static" onchange="setProjectIDData(false)">
+                            <option value="">&nbsp;</option>                           
+                            @foreach ($clientList as $clients)
+                            <option value="{{$clients->id}}">{{$clients->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>  
+                </div>
+
+                <div class="row entry-filter-bottom" style="zoom: 100%">
+                    <div class="col col-md-3">
+                        <span class="line-height">Project Name</span>
+                    </div>
+                    <div class="col col-md-1">
+                        <!--<select id="project" name="project" class="form-control" onchange="setTaskIDData(false)">     -->
+                        <select id="project" name="project" class="form-control">     
+                            <option value="">&nbsp;</option>
+                            @foreach ($projectList as $projects)
+                            <option value="{{$projects->id}}">{{$projects->project_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>  
+                </div>
+                
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">Task</span>
+                    </div>
+                    <div class="col col-md-1">
+                        <input style="width: 600px" class="form-control" type="text" id="task" name="task" value="">
+                        <!--<select id="task" name="task" class="form_control">
+                            <option value="">&nbsp;</option>
+                            @foreach ($taskList as $tasks)
+                            <option value="{{$tasks->id}}">{{$tasks->name}}</option>
+                            @endforeach
+                        </select>-->
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">Requestor</span>
+                    </div>
+                    <div class="col col-md-1">
+                        <select id="requestor" name="requestor" class="form_control">
+                            @foreach ($requestorList as $requestors)
+                            <option value="{{$requestors->id}}">{{$requestors->initial}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">Preparer</span>
+                    </div>
+                    <div class="col col-md-1">
+                        <select id="preparer" name="preparer" multiple="multiple" class="form-control">
+                            @foreach ($preparerList as $preparers)
+                            <option value="{{$preparers->id}}">{{$preparers->initial}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">Optional Personnel</span>
+                    </div>
+                    <div class="col col-md-1">
+                        <select id="optional" name="optional" multiple="multiple" class="form-control">
+                            @foreach ($optionalList as $optionals)
+                            <option value="{{$optionals->id}}">{{$optionals->initial}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">Start Time</sapn>
+                    </div>
+                    <div class="col col-md-3">
+                        <input type="text" style="width: 150px;" class="form-control datepicker1" id="start_date" name="start_date" placeholder="mm/dd/yyyy" value="" autocomplete="off" onchange="setEndTime()">
+                    </div>
+                    <div class="col col-md-3">
+                        <input type="time" style="width: 150px;" class="form-control" id="start_time" value="07:00" name="start_time" autocomplete="off" onchange="setEndTime()">
+                    </div>
+                    <div class="col col-md-3">
+                        <input type="text" style="width: 200px;border: none; background: white" readonly class="form-control" id="pacific_time" name="pacific_time" placeholder="" value="Pacific Time (US & Canada)" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">Duration</span>
+                    </div>
+                    <div class="col col-md-1">
+                        <input type="number" step="0.25" min= "0" style="width: 100px;" class="form-control" id="duration" name="duration" value="0.25" autocomplete="off" onchange="setEndTime()">
+                    </div>
+                    <div class="col col-md-1" style="margin-left: 40px">
+                        <span class="line-height"><font size="4">hr</font></sapn>
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">End Time</sapn>
+                    </div>
+                    <div class="col col-md-3">
+                        <input type="datetime-local" style="width: 600px;" class="form-control" id="end_time" name="end_time" value="" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">Progress</span>
+                    </div>
+                    <div class="col col-md-1">
+                        <input type="text" style="width: 100px;" class="form-control" id="progress" name="progress" value="" autocomplete="off">
+                    </div>
+                    <div class="col col-md-1" style="margin-left: 40px">
+                        <span class="line-height"><font size="4">%</font></sapn>
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">Location</span>
+                    </div>
+                    <div class="col col-md-1">
+                        <input type="text" style="width: 600px;" class="form-control" id="location" value="" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom">
+                    <div class="col col-md-3">
+                        <span class="line-height">Memo</span>
+                    </div>
+                    <div class="col col-md-1">
+                        <textarea style="width: 600px; height: 105px;" class="form-control" name="memo" id="memo" placeholder="Memo" value="" autocomplete="off"></textarea>
+                    </div>
+                </div>
+
+                <div class="row entry-filter-bottom" style="margin-left: 550px">
+                    <button id="btn_save" name="btn_save" class="btn btn-primary project-button" type="button" onclick="saveForm()">
+                        <span id="savingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="savingText">Save</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    // "global" vars, built using blade
+    var imagesUrl = '{{ URL::asset('/image') }}';
+</script>
+<script src="{{ asset('js/to_do_list_entry.js') }}"></script>
+
+@endsection

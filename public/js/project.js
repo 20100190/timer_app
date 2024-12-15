@@ -104,7 +104,7 @@ function insertTaskRow(name, status, taskId, isNew) {
     var c6 = row.insertCell(5);
     
     //var status = "readonly";
-    var taskNameObj = '<input class="inpname form-control form-control-sm" type="text" id="task_name' + count + '" name="task_name' + count + '" value="' + name + '" style="width: 100%" readonly>';
+    /*var taskNameObj = '<input class="inpname form-control form-control-sm" type="text" id="task_name' + count + '" name="task_name' + count + '" value="' + name + '" style="width: 100%" readonly>';
     var taskInfo = JSON.parse(document.getElementById("task_info").value);
     if (isNew) {
         taskNameObj = '<input type="text" name="task_name' + count + '" id="task_name' + count + '" class="inpname form-control form-control-sm" list="samplelist">';
@@ -113,7 +113,55 @@ function insertTaskRow(name, status, taskId, isNew) {
             taskNameObj += '<option value="' + taskInfo[tCnt].name + '"></option>';
         }
         taskNameObj += '</datalist>';
-    }
+    }*/
+    taskNameObj = '<select class="inpname form-control form-control-sm" id="task_name' + count + '" name="task_name' + count + '" style="width: 100%">';
+    var taskInfo = JSON.parse(document.getElementById("task_info").value);     
+    for (tCnt = 0; tCnt < taskInfo.length; tCnt++) {
+        if(isNew){
+            var isExistTask = false;
+            for(hCnt = 1; hCnt < count; hCnt++){
+                if(document.getElementById("task_name" + hCnt).value == taskInfo[tCnt].name){
+                    isExistTask = true;
+                }                    
+            }
+            //add new
+            if(tCnt == 0){
+                if(isExistTask){
+                    taskNameObj += '<option style="background-color: lightgray" value="' + taskInfo[tCnt].name + '" selected disabled>' + taskInfo[tCnt].name + '</option>';
+                }else{
+                    taskNameObj += '<option value="' + taskInfo[tCnt].name + '" selected>' + taskInfo[tCnt].name + '</option>';
+                } 
+            }else{
+                if(isExistTask){
+                    taskNameObj += '<option style="background-color: lightgray" value="' + taskInfo[tCnt].name + '" disabled>' + taskInfo[tCnt].name + '</option>';
+                }else{
+                    taskNameObj += '<option value="' + taskInfo[tCnt].name + '">' + taskInfo[tCnt].name + '</option>';
+                }
+                
+            }            
+        }else{
+            //load
+            if(taskInfo[tCnt].name == name){
+                taskNameObj += '<option value="' + taskInfo[tCnt].name + '" selected >' + taskInfo[tCnt].name + '</option>';
+            }else{
+                taskNameObj += '<option value="' + taskInfo[tCnt].name + '" disabled>' + taskInfo[tCnt].name + '</option>';
+            }
+        }
+        /*if(tCnt == count - 1){
+            if(isNew){
+                taskNameObj += '<option value="' + taskInfo[tCnt].name + '" selected>' + taskInfo[tCnt].name + '</option>';
+            }else{
+                taskNameObj += '<option value="' + taskInfo[tCnt].name + '" selected disabled>' + taskInfo[tCnt].name + '</option>';
+            }                
+        }else{
+            if(isNew){
+                taskNameObj += '<option value="' + taskInfo[tCnt].name + '">' + taskInfo[tCnt].name + '</option>';
+            }else{
+                taskNameObj += '<option value="' + taskInfo[tCnt].name + '" disabled>' + taskInfo[tCnt].name + '</option>';
+            }
+        } */           
+    }    
+    taskNameObj += '</select>';
 
     // 各列にスタイルを設定
     c1.style.cssText = "text-align:center;vertical-align: middle ";
@@ -386,10 +434,10 @@ function calc() {
 
     var total = 0;
     var totalHour = 0;
-    for (var cnt = 1; cnt <= count; cnt++) {
-        var budgetAmount = parseInt(removeComma(document.getElementById("hours" + cnt).value)) * parseInt(removeComma(document.getElementById("rate" + cnt).value));        
+    for (var cnt = 1; cnt <= count; cnt++) {        
+        var budgetAmount = parseFloat(removeComma(document.getElementById("hours" + cnt).value)) * parseFloat(removeComma(document.getElementById("rate" + cnt).value));        
         document.getElementById("budget" + cnt).value = budgetAmount.toLocaleString();
-        total += parseInt(removeComma(document.getElementById("budget" + cnt).value));        
+        total += parseFloat(removeComma(document.getElementById("budget" + cnt).value));        
         totalHour += parseFloat(removeComma(document.getElementById("hours" + cnt).value));
     }
 
@@ -490,6 +538,7 @@ function loadTask(buttonType) {
         document.getElementById("pic").selectedIndex = 0;
         document.getElementById("fye").selectedIndex = 0;
         document.getElementById("is_archive").selectedIndex = 0;
+        document.getElementById("archive_date").value = "";
 
         if (data.project !== null) {
             if (data.project.start != "") {
@@ -510,6 +559,11 @@ function loadTask(buttonType) {
             $("#pic").val(data.project.pic);  
             if(data.project.is_archive == 1){
                 $("#is_archive").val(data.project.is_archive);  
+                //$("#archive_date").val(data.project.archive_date);  
+                if (data.project.archive_date != "") {
+                    var archiveArray = data.project.archive_date.split("-");
+                    document.getElementById("archive_date").value = archiveArray[1] + "/" + archiveArray[2] + "/" + archiveArray[0];
+                }
             }            
 
             document.getElementById("harvest_project_id").value = data.project.project_harvest_id;
@@ -547,8 +601,9 @@ function loadTask(buttonType) {
         var startMonth = "1";
         var startYear = "2020";
         //totalEngagementColumn();
-        for (var cnt = 0; cnt < data.engagement.length; cnt++) {
-            appendEngagementRow(data.engagement[cnt]["type"],Number(data.engagement[cnt]["col1"]).toLocaleString(),data.engagement[cnt]["col2"],data.engagement[cnt]["col3"],data.engagement[cnt]["col4"],data.engagement[cnt]["col5"],data.engagement[cnt]["col6"],data.engagement[cnt]["col7"],data.engagement[cnt]["col8"],data.engagement[cnt]["col9"],data.engagement[cnt]["col10"],data.engagement[cnt]["col11"],data.engagement[cnt]["col12"]);
+        for (var cnt = 0; cnt < data.engagement.length; cnt++) {                  
+            
+            appendEngagementRow(data.engagement[cnt]["type"],Number(data.engagement[cnt]["col1"]).toLocaleString(),data.engagement[cnt]["col2"],data.engagement[cnt]["col3"],data.engagement[cnt]["col4"],data.engagement[cnt]["col5"],data.engagement[cnt]["col6"],data.engagement[cnt]["col7"],data.engagement[cnt]["col8"],data.engagement[cnt]["col9"],data.engagement[cnt]["col10"],data.engagement[cnt]["col11"],data.engagement[cnt]["col12"],data.engagement[cnt]["doc_type"],data.engagement[cnt]["location"]);
             calcEngagementFeeDetail(parseInt(cnt)+1);
             
             startMonth = data.engagement[cnt].start_month;
@@ -567,6 +622,7 @@ function loadTask(buttonType) {
         //disabled設定
         document.getElementById("btn_approve").disabled = false;
         document.getElementById("savingText").innerHTML = "Approve";
+        
         $("#taskEnter").find('input,textarea,select,button').prop('disabled', false);
         if (data.project != null && data.project.is_approval == 1) {
             document.getElementById("btn_approve").disabled = true;
@@ -577,6 +633,13 @@ function loadTask(buttonType) {
             $("#btnDuplicate").prop('disabled', false);
         }
         document.getElementById("btn_approve").disabled = false;
+
+        $("#archive_date").prop('disabled', true);
+        $("#sync_archive_status").prop('disabled', true);
+        if(document.getElementById("is_archive").value == "1"){
+            $("#archive_date").prop('disabled', false);
+            $("#sync_archive_status").prop('disabled', false);
+        }
         
         //duplicate時初期化
         if(buttonType == "duplicate"){
@@ -636,6 +699,7 @@ function getErrorText(){
     var isHoursError = false;
     var isTaskError = false;
     var isEngagementFeeError = false;
+    var isEngegementDocTypeError = false;
     for (var cnt = 1; cnt <= count; cnt++) {
         var assign = document.getElementById("assign" + cnt).selectedIndex;
         var hours = document.getElementById("hours" + cnt).value;
@@ -664,6 +728,38 @@ function getErrorText(){
         if(engageTypeName == ""){
             isEngagementFeeError = true;
         }
+
+        var engageDocType = document.getElementById("dec_type" + cnt).value;
+        if(engageDocType == ""){
+            isEngegementDocTypeError = true;
+        }
+    }
+
+    //taskの重複チェック
+    var tblCnt = document.getElementById("tbl").rows.length;
+    var isTaskExistCntError = false;
+    for(cnt = 1; cnt < tblCnt; cnt++){
+        var targetTaskName = document.getElementById("task_name" + cnt).value;
+        var existCnt = 0;
+        for(bCnt = 1; bCnt < tblCnt; bCnt++){
+            var compTaskName = document.getElementById("task_name" + bCnt).value;
+            if(targetTaskName == compTaskName){
+                existCnt += 1;
+                if(existCnt == 2){
+                    isTaskExistCntError = true;
+                    break;
+                }                
+            }
+        }
+        if(existCnt == 2){
+            isTaskExistCntError = true;
+            break;
+        }
+    }
+
+    //task重複チェック
+    if(isTaskExistCntError){
+        errorText += "Duplicate Task exists.<br>";
     }
     
     //未選択チェック
@@ -692,6 +788,17 @@ function getErrorText(){
     if(endsOnVal == ""){
         errorText += "Ends on is required.<br>";
     }
+
+    //starts on ends on 妥当性チェック
+    if(startsOnVal != "" && endsOnVal != ""){
+        var startsOnArray = startsOnVal.split("/");
+        var endsOnArray = endsOnVal.split("/");
+        var startsOnString = startsOnArray[2].concat(("00" + startsOnArray[0]).slice(-2),("00" + startsOnArray[1]).slice(-2));
+        var endsOnString = endsOnArray[2].concat(("00" + endsOnArray[0]).slice(-2),("00" + endsOnArray[1]).slice(-2));
+        if(Number(startsOnString) >= Number(endsOnString)){
+            errorText += "Ends on must be after Starts on.<br>";
+        }
+    }
     
     //project year 未入力
     var projectYearVal = document.getElementById("project_year").value;
@@ -705,6 +812,17 @@ function getErrorText(){
     
     if(isEngagementFeeError){
         errorText += "Engagament Fee Type is required.<br>";
+    }
+
+    if(isEngegementDocTypeError){
+        errorText += "Engagament Fee Doc Type is required.<br>";
+    }
+
+    //archive date 必須
+    var isArchiveVal = document.getElementById("is_archive").value;
+    var archiveDateVal = document.getElementById("archive_date").value;
+    if(isArchiveVal == 1 && archiveDateVal == ""){
+        errorText += "Archive Date is required.<br>";
     }
     
     return errorText;
@@ -812,13 +930,13 @@ function saveDetail(){
             //$('#btnProfileUpdate').attr('disabled', true);
             //処理中のを通知するアイコンを表示する
             //$('#boxEmailSettings').append('<div class="overlay" id ="spin" name = "spin"><i class="fa fa-refresh fa-spin"></i></div>');
-
+            jQuery('#loader-bg').show();
             //処理中
             $("#savingSpinner").css("visibility", "visible");
             //$("#savingText").html("保存中");
             $("#taskEnter").find(':input').attr('disabled', true);
             $("#btn_save").attr('disabled', true);
-            
+
         },
         complete: function (xhr, textStatus) {
             //処理中アイコン削除
@@ -841,7 +959,18 @@ function saveDetail(){
                 document.getElementById("btn_approve").disabled = false;
             }
 
+            $("#archive_date").prop('disabled', true);
+            $("#sync_archive_status").prop('disabled', true);
+            if(document.getElementById("is_archive").value == "1"){
+                $("#archive_date").prop('disabled', false);
+                $("#sync_archive_status").prop('disabled', false);
+            }
+
             showToast();
+
+            jQuery('#loader-bg').hide();
+
+            loadTask('search');
         },
         success: function (result, textStatus, xhr) {
             //ret = jQuery.parseJSON(result);
@@ -895,6 +1024,8 @@ function saveApprove(){
         message = "Unapproved";
     }
     
+    jQuery('#loader-bg').show();
+
     $.ajax({
         url: "/master/project-list/save/" + projectId + "/" + appText + "/" + harvestProjectId,
         dataType: "json",
@@ -921,6 +1052,8 @@ function saveApprove(){
                 showConfirmButton: false,
                 timer: 1500
             });
+
+            jQuery('#loader-bg').hide();
         },        
     });    
 }
@@ -969,9 +1102,9 @@ function inputHarfChar($this)
 function inputHarfCharPeriod($this)
 {
     var str=$this.value;
-    while(str.match(/[^0-9.]/))
+    while(str.match(/[^0-9.-]/))
     {
-        str=str.replace(/[^0-9.]/,"");
+        str=str.replace(/[^0-9.-]/,"");
     }
     $this.value=str;
 }
@@ -987,7 +1120,7 @@ function inputHarfAlpha($this)
     $this.value=str;
 }
 
-function appendEngagementRow(type,jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec){
+function appendEngagementRow(type,jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec,docType,location){
     var objTBL = document.getElementById("budget_engagement");
     if (!objTBL)
         return;
@@ -1016,33 +1149,68 @@ function appendEngagementRow(type,jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,de
     var c15 = row.insertCell(14);
     var c16 = row.insertCell(15);
     var c17 = row.insertCell(16);
+    var c18 = row.insertCell(17);
+    var c19 = row.insertCell(18);
+
+    var decTypeSelect = '<select class="inpengagementdec form-control" id="dec_type' + count + '" name="dec_type' + count + '">';    
+
+    decTypeSelect += '<option value=""></option>';
+    if(docType == 1){
+        decTypeSelect += '<option value="1" selected>Engagement Letter</option>';
+    }else{
+        decTypeSelect += '<option value="1">Engagement Letter</option>';
+    }
+    
+    if(docType == 2){
+        decTypeSelect += '<option value="2" selected>Email</option>';    
+    }else {
+        decTypeSelect += '<option value="2">Email</option>';    
+    }
+    if(docType == 3){
+        decTypeSelect += '<option value="3" selected>Other Agreement</option>';
+    }else {
+        decTypeSelect += '<option value="3">Other Agreement</option>';
+    }
+    if(docType == 4){
+        decTypeSelect += '<option value="4" selected>Est’d - PY</option>';
+    }else {
+        decTypeSelect += '<option value="4">Est’d - PY</option>';
+    }    
+    if(docType == 5){
+        decTypeSelect += '<option value="5" selected>Esti’d - Rough</option>';
+    }else {
+        decTypeSelect += '<option value="5">Esti’d - Rough</option>';
+    }   
+    decTypeSelect += '</select>';
     
     // 各列にスタイルを設定
     //c2.style.cssText = "width: 150px";
     c1.style.cssText = "vertical-align: middle;text-align: center";
-    c16.style.cssText = "vertical-align: middle";
-    c17.style.cssText = "vertical-align: middle";
+    c18.style.cssText = "vertical-align: middle";
+    c19.style.cssText = "vertical-align: middle";
    
     // 各列に表示内容を設定
-    c1.innerHTML = '<span class="seqnoengagement">' + count + '</span>';
+    c1.innerHTML = '<span class="seqnoengagement">' + count + '</span>';    
     c2.innerHTML = '<input class="inpengagementtype form-control form-control-sm" id="type' + count + '" name="type' + count + '" style="width: 100%" value="' + type + '">';
-    c3.innerHTML = '<input class="inpengagementjan form-control form-control-sm" id="jan' + count + '" name="jan' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + jan + '">';
-    c4.innerHTML = '<input class="inpengagementfeb form-control form-control-sm" id="feb' + count + '" name="feb' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + feb + '">';
-    c5.innerHTML = '<input class="inpengagementmar form-control form-control-sm" id="mar' + count + '" name="mar' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + mar + '">';
-    c6.innerHTML = '<input class="inpengagementapr form-control form-control-sm" id="apr' + count + '" name="apr' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + apr + '">';
-    c7.innerHTML = '<input class="inpengagementmay form-control form-control-sm" id="may' + count + '" name="may' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + may + '">';
-    c8.innerHTML = '<input class="inpengagementjun form-control form-control-sm" id="jun' + count + '" name="jun' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + jun + '">';
-    c9.innerHTML = '<input class="inpengagementjul form-control form-control-sm" id="jul' + count + '" name="jul' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + jul + '">';
-    c10.innerHTML = '<input class="inpengagementaug form-control form-control-sm" id="aug' + count + '" name="aug' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + aug + '">';
-    c11.innerHTML = '<input class="inpengagementsep form-control form-control-sm" id="sep' + count + '" name="sep' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + sep + '">';
-    c12.innerHTML = '<input class="inpengagementoct form-control form-control-sm" id="oct' + count + '" name="oct' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + oct + '">';
-    c13.innerHTML = '<input class="inpengagementnov form-control form-control-sm" id="nov' + count + '" name="nov' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + nov + '">';
-    c14.innerHTML = '<input class="inpengagementdec form-control form-control-sm" id="dec' + count + '" name="dec' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + dec + '">';
-    c15.innerHTML = '<input class="inpengagementtotal form-control form-control-sm" id="total' + count + '" name="total' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" value="' + 0 + '" readonly>';        
+    c3.innerHTML = decTypeSelect;
+    c4.innerHTML = '<input class="inpengagementlocation form-control form-control-sm" id="location' + count + '" name="location' + count + '" style="width: 100%;" value="' + location + '">';
+    c5.innerHTML = '<input class="inpengagementjan form-control form-control-sm" id="jan' + count + '" name="jan' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + jan + '">';
+    c6.innerHTML = '<input class="inpengagementfeb form-control form-control-sm" id="feb' + count + '" name="feb' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + feb + '">';
+    c7.innerHTML = '<input class="inpengagementmar form-control form-control-sm" id="mar' + count + '" name="mar' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + mar + '">';
+    c8.innerHTML = '<input class="inpengagementapr form-control form-control-sm" id="apr' + count + '" name="apr' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + apr + '">';
+    c9.innerHTML = '<input class="inpengagementmay form-control form-control-sm" id="may' + count + '" name="may' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + may + '">';
+    c10.innerHTML = '<input class="inpengagementjun form-control form-control-sm" id="jun' + count + '" name="jun' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + jun + '">';
+    c11.innerHTML = '<input class="inpengagementjul form-control form-control-sm" id="jul' + count + '" name="jul' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + jul + '">';
+    c12.innerHTML = '<input class="inpengagementaug form-control form-control-sm" id="aug' + count + '" name="aug' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + aug + '">';
+    c13.innerHTML = '<input class="inpengagementsep form-control form-control-sm" id="sep' + count + '" name="sep' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + sep + '">';
+    c14.innerHTML = '<input class="inpengagementoct form-control form-control-sm" id="oct' + count + '" name="oct' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + oct + '">';
+    c15.innerHTML = '<input class="inpengagementnov form-control form-control-sm" id="nov' + count + '" name="nov' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + nov + '">';
+    c16.innerHTML = '<input class="inpengagementdec form-control form-control-sm" id="dec' + count + '" name="dec' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" onchange="calcEngagementFee(this,' + count + ')" value="' + dec + '">';
+    c17.innerHTML = '<input class="inpengagementtotal form-control form-control-sm" id="total' + count + '" name="total' + count + '" style="width: 100%;text-align: right" oninput="inputHarfCharPeriod(this)" value="' + 0 + '" readonly>';        
     //c16.innerHTML = '<a><img src="'+ imagesUrl + "/duplicate.png" +'" id="copyBtnEngagement' + count + '" value="Copy" onclick="copyRowEngagementList(' + count + ');return;"></a>';    
-    c16.innerHTML = '<input class="copyEngagementBtn btn btn-sm" type="image" src="'+ imagesUrl + "/duplicate.png" +'" id="copyBtnEngagement' + count + '" value="Copy" onclick="copyRowEngagementList(this);return false;">';
+    c18.innerHTML = '<input class="copyEngagementBtn btn btn-sm" type="image" src="'+ imagesUrl + "/duplicate.png" +'" id="copyBtnEngagement' + count + '" value="Copy" onclick="copyRowEngagementList(this);return false;">';
     //c17.innerHTML = '<a><img src="'+ imagesUrl + "/delete.png" +'" id="deleteBtnEngagement' + count + '" value="Copy" onclick="delRowEngagementList(this);return;"></a>';
-    c17.innerHTML = '<input class="delEngagementBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnEngagement' + count + '" value="Delete" onclick="delRowEngagementList(this);return false;">';
+    c19.innerHTML = '<input class="delEngagementBtn btn btn-sm" type="image" src="'+ imagesUrl + "/delete.png" +'" id="delBtnEngagement' + count + '" value="Delete" onclick="delRowEngagementList(this);return false;">';
 }
 
 function delRowEngagementList(obj) {
@@ -1050,10 +1218,14 @@ function delRowEngagementList(obj) {
 
     // id/name ふり直し
     var tagElements = document.getElementsByTagName("input");
+    var tagSelectElements = document.getElementsByTagName("select");
     if (!tagElements)
         return false;
 
+
     reOrderElementTag(tagElements, "inpengagementtype", "type");    
+    reOrderElementTag(tagSelectElements, "inpengagementdec", "dec_type");    
+    reOrderElementTag(tagElements, "inpengagementlocation", "location");    
     reOrderElementTag(tagElements, "inpengagementjan", "jan");
     reOrderElementTag(tagElements, "inpengagementfeb", "feb");
     reOrderElementTag(tagElements, "inpengagementmar", "mar");
@@ -1318,6 +1490,42 @@ function setEngagementHeader() {
     }            
 }
 
+function selectIsArchive(){
+    var isArchive = $("#is_archive").val();
+    $("#archive_date").prop('disabled', true);
+    $("#sync_archive_status").prop('disabled', true);
+    if(isArchive == "1"){
+        $("#archive_date").prop('disabled', false);
+        $("#sync_archive_status").prop('disabled', false);
+    }
+}
+
+function syncArchiveStatus(){
+    var projectId = document.getElementById("rec_project_id").value;    
+    var harvestProjectId = document.getElementById("harvest_project_id").value;
+    if(harvestProjectId == ""){
+        harvestProjectId = "blank"
+    }
+
+    //error check
+    var archiveDate = $("#archive_date").val();
+    if(archiveDate == ""){
+        showErrorToast("archive date is required");
+        return;
+    }
+
+    var isArchive = $("#is_archive").val();
+    if(isArchive == "1"){
+        //harvestのprojectをArchivedにする
+        $.ajax({
+            url: "/master/project-list/sync-archive/" + projectId + "/" + harvestProjectId,
+            dataType: "json",
+            success: data => {                
+                saveForm();
+            },        
+        });    
+    }
+}
 
 
 function removeFormat(obj) {

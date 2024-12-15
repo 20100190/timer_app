@@ -24,6 +24,16 @@ $(document).ready(function () {
         includeSelectAllOption: true,
     });
 
+    $('#fye').multiselect({
+        buttonWidth: buttonWidth2,
+        enableFiltering: true,
+        onDropdownShown: function(even) {
+            this.$filter.find('.multiselect-search').focus();
+        },
+        maxHeight: 600,
+        includeSelectAllOption: true,
+    });
+
     $('#sel_staff').multiselect({
         buttonWidth: buttonWidth2,
         enableFiltering: true,
@@ -74,6 +84,7 @@ function loadTaskScheduleData() {
     var dateFrom = "blank";
     var dateTo = "blank";
     var status = "blank";
+    var fye = setDelimiter($("#fye").val());
     if(document.getElementById("status").value != ""){
         status = document.getElementById("status").value;
     }
@@ -86,9 +97,18 @@ function loadTaskScheduleData() {
         dateTo = t[2] + t[0] + t[1];
     }
     
+    var phase = "blank";
+    if(document.getElementById("phase_status").value != ""){
+        phase = document.getElementById("phase_status").value;
+    }
+
+    var group = "blank";
+    if(document.getElementById("group").value != ""){
+        group = document.getElementById("group").value;
+    }
    
     $.ajax({
-        url: "/test3/getTaskScheduleData/" + client + "/" + pic + "/" + staff + "/" + dateFrom + "/" + dateTo + "/" + status + "/",
+        url: "/test3/getTaskScheduleData/" + client + "/" + pic + "/" + staff + "/" + dateFrom + "/" + dateTo + "/" + status + "/" + phase + "/" + fye + "/" + group,
         beforeSend: function () {
             //処理中           
             jQuery('#loader-bg').show();
@@ -110,7 +130,8 @@ function loadTaskScheduleData() {
             var clientId = data.taskSchedule[cnt].client_id;
             var projectId = data.taskSchedule[cnt].project_id;
             var memo = data.taskSchedule[cnt].memo;
-            insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId,memo);
+            var fye = data.taskSchedule[cnt].fye;
+            insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId,memo,fye);
         }
         
         /*$('#task_schedule').tablesorter({
@@ -131,7 +152,7 @@ function loadTaskScheduleData() {
     });
 }
 
-function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId,memo) {
+function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,user,status,clientId,projectId,memo,fye) {
     // 最終行に新しい行を追加
     var phase1_tbody = document.getElementById("task_schedule_body");
     var bodyLength = phase1_tbody.rows.length;
@@ -156,6 +177,7 @@ function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,u
     var c9 = row.insertCell(8);
     var c10 = row.insertCell(9);
     var c11 = row.insertCell(10);
+    var c12 = row.insertCell(11);
 
     c1.style.cssText = "vertical-align: middle";
     c2.style.cssText = "vertical-align: middle";
@@ -167,21 +189,28 @@ function insertPhase1Row(cnt,dueDate,name,description,projectName,client,phase,u
     c8.style.cssText = "vertical-align: middle";
     c9.style.cssText = "vertical-align: middle";
     c10.style.cssText = "vertical-align: middle";
-    c11.style.cssText = "white-space:pre-wrap; word-wrap:break-word;";
+    c11.style.cssText = "vertical-align: middle";
+    c12.style.cssText = "white-space:pre-wrap; word-wrap:break-word;";
+
+    var linkStr = '<a href="master/work-list/' + clientId + "/" + projectName + "/" + m + '" target="_blank"><img src="' + imagesUrl + "/view.png" + '"></a>';
+    if(phase == "To Do List"){
+        linkStr = memo + '<img src="' + imagesUrl + "/view.png" + '"></a>';
+    }
    
    
     // 各列に表示内容を設定
     c1.innerHTML = '<span>' + parseInt(cnt + 1) + '</span>';
-    c2.innerHTML = '<a href="master/work-list/' + clientId + "/" + projectName + "/" + m + '" target="_blank"><img src="' + imagesUrl + "/view.png" + '"></a>';
+    c2.innerHTML = linkStr;//'<a href="master/work-list/' + clientId + "/" + projectName + "/" + m + '" target="_blank"><img src="' + imagesUrl + "/view.png" + '"></a>';
     c3.innerHTML = '<span>' + user + '</span>';    
     c4.innerHTML = '<span>' + dueDate + '</span>';
-    c5.innerHTML = '<span>' + client + '</span>';
-    c6.innerHTML = '<span>' + projectName + '</span>';
-    c7.innerHTML = '<span>' + status + '</span>';
-    c8.innerHTML = '<span>' + phase + '</span>';
-    c9.innerHTML = '<span>' + name + '</span>';
-    c10.innerHTML = '<span>' + description + '</span>';
-    c11.innerHTML = '<span>' + memo + '</span>';
+    c5.innerHTML = '<span>' + fye + '</span>';
+    c6.innerHTML = '<span>' + client + '</span>';
+    c7.innerHTML = '<span>' + projectName + '</span>';
+    c8.innerHTML = '<span>' + status + '</span>';
+    c9.innerHTML = '<span>' + phase + '</span>';
+    c10.innerHTML = '<span>' + name + '</span>';
+    c11.innerHTML = '<span>' + description + '</span>';
+    c12.innerHTML = '<span>' + memo + '</span>';
 
 }
 

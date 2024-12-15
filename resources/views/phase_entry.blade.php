@@ -1,5 +1,7 @@
 @extends('layouts.main')
 @section('content') 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 
 <div style="margin-left: 20px">
     <div id="filter_area" style="margin-top: 30px;">
@@ -66,6 +68,12 @@
                         <span id="loadingText">Search</span>
                     </button>
                 </div>
+                <div class="col" >
+                    <button id="btn_export" name="btn_export" class="btn btn-primary" type="button" onclick="exportPhaseData()" style="width: 150px;margin-left: 140px">
+                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="loadingText">Export</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -103,6 +111,15 @@
                 </div>
                 <div class="col col-md-1">
                     <input type="text" style="width:150px;hight:10px;margin-right: 20px;" class="form-control datepicker1" id="filter_date" name="filter_date" placeholder="mm/dd/yyyy" value="" autocomplete="off">                            
+                </div>                 
+            </div>
+
+            <div class="row entry-filter-bottom">
+                <div class="col col-md-4">
+                    <span class="line-height">Active</span>
+                </div>
+                <div class="col col-md-1">
+                    <input class="form-check-input" type="checkbox" style="width: 20px;vertical-align: middle" id="is_archive" name="is_archive" checked>                            
                 </div>                 
             </div>
 

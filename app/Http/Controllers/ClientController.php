@@ -11,6 +11,8 @@ use App\ContactPerson;
 use App\Shareholders;
 use App\Officers;
 use App\Staff;
+use App\Domain;
+use App\ClientHarvest;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
@@ -27,15 +29,18 @@ class ClientController extends Controller {
         //$perPage = 25;
 
         if (!empty($keyword)) {
-            $client = Client::select("client.id as id","name","fye","vic_status","group_companies","initial")->leftJoin("staff","staff.id","=","client.pic")->where("name", "LIKE", "%$keyword%")->orWhere("Initial", "LIKE", "%$keyword%")->Where("client.id","<>","0")->get();//paginate($perPage);
+            $client = Client::select("client.id as id","name","fye","vic_status","group_companies","initial","is_approve")->leftJoin("staff","staff.id","=","client.pic")->where("name", "LIKE", "%$keyword%")->orWhere("Initial", "LIKE", "%$keyword%")->Where("client.id","<>","0")->get();//paginate($perPage);
         } else {
-            $client = Client::select("client.id as id","name","fye","vic_status","group_companies","initial")->leftJoin("staff","staff.id","=","client.pic")->Where("client.id","<>","0")->get();//paginate($perPage);
+            $client = Client::select("client.id as id","name","fye","vic_status","group_companies","initial","is_approve")->leftJoin("staff","staff.id","=","client.pic")->Where("client.id","<>","0")->get();//paginate($perPage);
         }
         
         //編集権限
         $isEdit = Staff::HaveEditAuthority(Auth::User()->email);
+
+        //承認権限
+        $isApprove = Staff::HaveApprovalAuthority(Auth::User()->email);
         
-        return view("master.client.index",compact("client","isEdit"));
+        return view("master.client.index",compact("client","isEdit","isApprove"));
     }
 
     /**
@@ -46,6 +51,8 @@ class ClientController extends Controller {
     public function create() {        
         //pic
         $picData = Staff::ActiveStaffOrderByInitial();
+
+        $clientGroup = Client::GetClientGroup();
 
         $columns = DB::select('describe client');   
         $typeArray = [];
@@ -65,7 +72,7 @@ class ClientController extends Controller {
         //$typeArray = json_encode($typeArray);        
         $retTypeArray = json_encode(["client" => $typeArray]);
         
-        return view("master.client.create",compact("picData","retTypeArray"));
+        return view("master.client.create",compact("picData","retTypeArray","clientGroup"));
     }
 
     /**
@@ -81,7 +88,7 @@ class ClientController extends Controller {
 
         $maxClientId = Client::max('id');
         //$requestData["id"] = $maxClientId + 1; 
-        
+       
         $incorporationDate = NULL;
         if($request->input("incorporation_date") != ""){
             $bArray = explode("/",$request->input("incorporation_date"));
@@ -93,14 +100,18 @@ class ClientController extends Controller {
             $bArray = explode("/",$request->input("business_started"));
             $businessStartedDate = $bArray[2] . "-" . $bArray[0] . "-" . $bArray[1];
         }
-       
+        
+        $groupCompanyStr = $request->input("group_companies");    
+        if($groupCompanyStr == ""){
+            $groupCompanyStr = $request->input("group_add_text");
+        }
         
         $table = new Client;
         //$table->id = $maxClientId + 1; 
         $table->name = $request->input("name");
         $table->fye = $request->input("fye");
         $table->vic_status = $request->input("vic_status");
-        $table->group_companies = $request->input("group_companies");
+        $table->group_companies = $groupCompanyStr;//$request->input("group_companies");
         $table->website = $request->input("website");
         $table->address_us = $request->input("address_us");
         $table->address_jp = $request->input("address_jp");
@@ -119,6 +130,7 @@ class ClientController extends Controller {
         $table->incorporation_state = $request->input("incorporation_state");
         $table->business_started = $businessStartedDate;
         $table->is_archive = $request->input("archive");
+        $table->is_approve = "0";
         
         $table->save();
         
@@ -180,11 +192,7 @@ class ClientController extends Controller {
 
             $pTable->save();
         }
-        
-        //officer        
-        //$queryObj = Officers::where([['client_id', '=', $id]]);
-        //$queryObj->delete();
-        
+     
         for ($officerCnt = 1; $officerCnt < 20; $officerCnt++) {
             if (!isset($_POST["officer_name" . $officerCnt])) {
                 break;
@@ -197,9 +205,41 @@ class ClientController extends Controller {
 
             $pTable->save();
         }
-        
+       
+        //Harvestへclient作成
+        /*$clientDetail = [            
+            "name" => $request->input("name"),
+            "address" => $request->input("address_us"),
+        ];
+        $ary = $this->execHarvest(json_encode($clientDetail),"","post");  
+
+        $this->insertHarvestClient($ary["id"],$request->input("name"));*/
         
         return redirect("master/client")->with("flash_message", "client added!");
+    }
+
+    public function insertHarvestClient($harvestClientId,$harvestClientName){
+        //Budget webform
+        /*$targetTable = "client_harvest";
+        $insertParam = [];
+        $table = DB::table($targetTable); 
+        $insertParam[] = [
+            "id" => $harvestClientId,
+            "name" => $harvestClientName,
+        ];
+        $table->insert($insertParam); */
+
+        //ITR
+        $targetTable = "harvest_client";        
+        $insertParam = [];
+        $table = DB::connection('mysql_itr')->table($targetTable); 
+        $insertParam[] = [
+            "id" => $harvestClientId,
+            "name" => $harvestClientName,
+            "is_active" => "1",
+        ];
+        
+        $table->insert($insertParam);     
     }
 
     /**
@@ -226,7 +266,14 @@ class ClientController extends Controller {
         $usShareholders = Shareholders::where([["client_id","=",$id],["type","=","1"]])->get();
         $foreignShareholders = Shareholders::where([["client_id","=",$id],["type","=","2"]])->get();
         $officers = Officers::where("client_id","=",$id)->get();
-        return view("master.client.show", compact("clien","contactPerson","usShareholders","foreignShareholders","officers"));
+        //$clientHarvest = ClientHarvest::where("name","=",$clien->name)->get();
+        $targetTable = "harvest_client";                
+        $clientHarvest = DB::connection('mysql_itr')->table($targetTable)->where([["name","=",$clien->name]])->first();
+
+        //承認権限
+        $isApprove = Staff::HaveApprovalAuthority(Auth::User()->email);
+
+        return view("master.client.show", compact("clien","contactPerson","usShareholders","foreignShareholders","officers","clientHarvest","isApprove"));
     }
 
     /**
@@ -263,7 +310,33 @@ class ClientController extends Controller {
         //pic
         $picData = Staff::ActiveStaffOrderByInitial();
 
-        return view("master.client.edit", compact("client","officer","usList","foreignList","contactPersonList","picData"));
+        //harvest client id
+        $targetTable = "harvest_client";                
+        $clientHarvest = DB::connection('mysql_itr')->table($targetTable)->where([["name","=",$client->name]])->first();
+
+        $clientGroup = Client::GetClientGroup();
+
+        $columns = DB::select('describe client');   
+        $typeArray = [];
+        foreach($columns as $index => $data){
+            
+            $field = $columns[$index]->Field;
+            $type = $columns[$index]->Type;
+            
+            $row = array($field => str_replace(["varchar(",")","int("],"",$type));
+
+            $typeArray = array_merge($typeArray, $row);
+        }     
+
+        $retTypeArray = json_encode(["client" => $typeArray]);
+
+        //承認権限
+        $isApprove = Staff::HaveApprovalAuthority(Auth::User()->email);
+
+        //domain
+        $domainData = Domain::where([["client_id","=","1"]])->get();
+
+        return view("master.client.edit", compact("client","officer","usList","foreignList","contactPersonList","picData","retTypeArray","clientGroup","clientHarvest","isApprove","domainData"));
     }
 
     /**
@@ -290,12 +363,22 @@ class ClientController extends Controller {
             $bArray = explode("/",$request->input("business_started"));
             $businessStartedDate = $bArray[2] . "-" . $bArray[0] . "-" . $bArray[1];
         }
+
+        $groupCompanyStr = $request->input("group_companies");    
+        if($groupCompanyStr == ""){
+            $groupCompanyStr = $request->input("group_add_text");
+        }
+
+        $isApprove = "0";
+        if(isset($_POST["btn_unapprove"])){
+            $isApprove = "1";
+        }
         
         $updateItem = [
             "name" => $request->input("name"),
             "fye" => $request->input("fye"),
             "vic_status" => $request->input("vic_status"),
-            "group_companies" => $request->input("group_companies"),
+            "group_companies" => $groupCompanyStr,//$request->input("group_companies"),
             "website" => $request->input("website"),
             "address_us" => $request->input("address_us"),
             "address_jp" => $request->input("address_jp"),
@@ -313,7 +396,8 @@ class ClientController extends Controller {
             "incorporation_date" => $incorporationDate,
             "incorporation_state" => $request->input("incorporation_state"),
             "business_started" => $businessStartedDate,
-            "is_archive" => $request->input("archive"),
+            "is_archive" => $request->input("archive"),    
+            "is_approve" => $isApprove,
         ];
 
         $client->update($updateItem);
@@ -409,6 +493,32 @@ class ClientController extends Controller {
             $pTable->save();
         }
 
+        //Harvestへclient作成
+        /*$harvestClientId = "";
+        $clientDetail = [            
+            "name" => $request->input("name"),
+            "address" => $request->input("address_us"),
+        ];
+        $ary = $this->execHarvest(json_encode($clientDetail),$request->input("harvest_client_id"),"patch");  */
+        if(isset($_POST["btn_unapprove"])){
+            $clientDetail = [            
+                "name" => $request->input("name"),
+                "address" => $request->input("address_us"),
+            ];
+            $ary = $this->execHarvest(json_encode($clientDetail),"","post");  
+            $this->insertHarvestClient($ary["id"],$request->input("name"));
+        }
+        
+
+        //ITR
+        $targetTable = "harvest_client";        
+        $insertParam = [];
+        $updateTable = DB::connection('mysql_itr')->table($targetTable)->where([["id","=",$request->input("harvest_client_id")]]);
+        $updateParam = [            
+            "name" => $request->input("name"),            
+        ];        
+        $updateTable->update($updateParam);     
+
         return redirect("master/client")->with("flash_message", "client updated!");
     }
 
@@ -426,6 +536,48 @@ class ClientController extends Controller {
         $delOffer = Officers::where("client_id","=",$id)->delete();
 
         return redirect("master/client")->with("flash_message", "client deleted!");
+    }
+
+    function execHarvest($clientDetail,$harvestClientId,$execType){
+        $url = "https://api.harvestapp.com/v2/clients";
+        if($harvestClientId != ""){
+            $url .= "/" . $harvestClientId;
+        }
+
+        $syncToolObj = new SyncToolController();
+        if($execType == "patch"){
+           $clientArray = $syncToolObj->execPatchCurl($url,$clientDetail);           
+        }else{
+            $clientArray = $syncToolObj->execPostCurl($url,$clientDetail);
+        }
+        
+
+        return $clientArray;
+    }
+
+    function approve(Request $request){
+        $type = $request->type;
+        $id = $request->id;
+        $client = Client::where("id","=",$id);
+        //$isApprove = "";
+        if($type == "btn_approve"){
+            $updateItem = [                
+                "is_approve" => "0",            
+            ];    
+            $client->update($updateItem);
+            //$isApprove = "0";
+        }
+        if($type == "btn_unapprove"){
+            $updateItem = [                
+                "is_approve" => "1",            
+            ];    
+            $client->update($updateItem);
+            //$isApprove = "1";
+        }
+
+        //$json = ["is_approve" => $isApprove];
+        //return response()->json($json);
+        return response()->json("");
     }
 
 }

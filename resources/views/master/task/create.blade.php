@@ -3,6 +3,24 @@
 <script type="text/javascript">
     $(document).ready(function () {
         jQuery('#loader-bg').hide();
+
+        $('#name').multiselect({
+            buttonWidth: "500",
+            enableFiltering: true,
+            onDropdownShown: function (even) {
+                this.$filter.find('.multiselect-search').focus();
+            },
+            includeSelectAllOption: true,
+        });
+
+        $('#project_type').multiselect({
+            buttonWidth: "500",
+            enableFiltering: true,
+            onDropdownShown: function (even) {
+                this.$filter.find('.multiselect-search').focus();
+            },
+            includeSelectAllOption: true,
+        });
     });
 </script>
 <div style="margin-left: 20px;margin-top: 20px">
@@ -30,13 +48,23 @@
         <div class="form-group">
             <label for="name" class="col-md-1 control-label">Tasks: </label>
             <div class="col-md-3">
-                <input class="form-control" name="name" type="text" id="name" value="{{old('name')}}">
+                <!--<input class="form-control" name="name" type="text" id="name" value="{{old('name')}}">-->
+                <select class="form-control" id="name" name="name">
+                    @foreach ($harvestTaskList as $task)
+                    <option value="{{$task->name}}">{{$task->name}}</option>
+                    @endforeach
+                </select>
             </div>            
         </div>
         <div class="form-group">
             <label for="project_type" class="col-md-1 control-label">Project Type: </label>
             <div class="col-md-3">
-                <input class="form-control" name="project_type" type="text" id="project_type" value="{{old('project_type')}}">
+                <!--<input class="form-control" name="project_type" type="text" id="project_type" value="{{old('project_type')}}">-->
+                <select class="form-control" id="project_type" name="project_type">
+                    @foreach ($projectTypeList as $type)
+                    <option value="{{$type->project_type}}">{{$type->project_type}}</option>
+                    @endforeach
+                </select>
             </div>            
         </div>
         <div class="form-group">

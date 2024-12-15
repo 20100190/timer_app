@@ -8,6 +8,8 @@ use Validate;
 use DB;
 use App\Task;
 use App\Staff;
+use App\TaskHarvest;
+use App\ProjectType;
 
 //=======================================================================
 class TaskController extends Controller {
@@ -39,7 +41,9 @@ class TaskController extends Controller {
      * @return \Illuminate\View\View
      */
     public function create() {
-        return view("master.task.create");
+        $harvestTaskList = TaskHarvest::orderBy("name")->get();
+        $projectTypeList = ProjectType::orderBy("project_type")->get();
+        return view("master.task.create",compact("harvestTaskList","projectTypeList"));
     }
 
     /**
@@ -111,8 +115,10 @@ class TaskController extends Controller {
      */
     public function edit($id) {
         $task = Task::findOrFail($id);
+        $harvestTaskList = TaskHarvest::orderBy("name")->get();
+        $projectTypeList = ProjectType::orderBy("project_type")->get();
 
-        return view("master.task.edit", compact("task"));
+        return view("master.task.edit", compact("task","harvestTaskList","projectTypeList"));
     }
 
     /**

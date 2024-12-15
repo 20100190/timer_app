@@ -4,8 +4,31 @@
 <script type="text/javascript">
     $(document).ready(function () {
         jQuery('#loader-bg').hide();
+
+        $('#group_companies').multiselect({
+            buttonWidth: "200px",
+            maxHeight: 700,
+            onDropdownShown: function(even) {
+                this.$filter.find('.multiselect-search').focus();
+            },
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            includeSelectAllOption: true,
+        });
+
+        //approvedの場合は編集不可
+        if(document.getElementById("approve_status").value == "1"){
+            $("#clientForm").find('input,textarea,select,button').prop('disabled', true);
+            document.getElementById("btn_approve").disabled = false;
+        }
     });
    
+    function AddNewGroupCompany() {        
+        $('#group_companies').multiselect('select','');        
+        document.getElementById("group_add_text").readOnly = false;
+        document.getElementById("group_add_text").focus();
+    }
+
     function appendContactRow() {
         var objTBL = document.getElementById("contact_list");
         if (!objTBL)
@@ -36,6 +59,56 @@
             return;
 
         insertOfficerRow("", "", "", true);
+    }
+
+    function appendDomainRow(){
+        var objTBL = document.getElementById("domain_list");
+        if (!objTBL)
+            return;
+
+        insertDomainRow("", "", "", true);
+    }
+
+    function insertDomainRow(name, status, taskId, isNew) {
+        // 最終行に新しい行を追加
+        var domain_tbody = document.getElementById("domain_body");
+        var bodyLength = domain_tbody.rows.length;
+        var count = bodyLength + 1;
+        var row = domain_tbody.insertRow(bodyLength);
+
+        var imagesUrl = '{{URL::asset('/image')}}';
+
+        // 列の追加
+        var c1 = row.insertCell(0);
+        var c2 = row.insertCell(1);
+        var c3 = row.insertCell(2);
+        var c4 = row.insertCell(3);
+        var c5 = row.insertCell(4);
+
+        var seqnoSpan = document.createElement("span");
+        seqnoSpan.classList.add("seqno-contact");
+        seqnoSpan.textContent = count;
+        c1.style.verticalAlign = "middle";
+        c1.style.textAlign = "center";
+        c1.appendChild(seqnoSpan);
+
+        c2.style.verticalAlign = "middle";
+        c2.style.textAlign = "center";
+        c2.textContent = '@';
+
+        var button = document.createElement("input");
+        button.type = "button";
+        button.id = "is_registered" + count;
+        button.name = "is_registered" + count;
+        button.value = "Registered";
+        button.style.width = "100%";
+        button.classList.add("form-control", "inpcontactjp","btn","btn-primary");
+        c4.appendChild(button);
+
+        // 各列に表示内容を設定
+        //c1.innerHTML = '<span class="seqno-contact">' + count + '</span>';        
+        c3.innerHTML = '<input class="form-control inptitle" type="text" id="domain' + count + '" name="domain' + count + '" value="" style="width: 100%">';        
+        c5.innerHTML = '<button class="delbtn btn btn-sm" type="button" id="delBtnContact' + count + '" value="Delete" onclick="return deleteContactRow(this)" style="background-color: transparent"><img src="' + imagesUrl + "/delete.png" + '"></button>';
     }
 
     function insertContactRow(name, status, taskId, isNew) {
@@ -476,6 +549,10 @@
         //contact
         var objContactTBL = document.getElementById("contact_person_body");
         var cnt = objContactTBL.rows.length;
+        if(cnt == 0){
+            errorMessage += "contact person : " + strRequired;           
+            isError = true;
+        }
         for (var count = 1; count <= cnt; count++) {
             document.getElementById("contact_person" + count).style.backgroundColor = defaultColor;
             if(document.getElementById("contact_person" + count).value == ""){
@@ -489,10 +566,20 @@
                 isError = true;
             }
         }
+
+        //group company
+        var groupCompanyName = $("#group_companies").val();
+        var groupCompanyNameText = $("#group_add_text").val();
+        if(groupCompanyName == "" && groupCompanyNameText == ""){
+            errorMessage += "group company : " + strRequired;           
+            isError = true;
+        }
+
         return [isError,errorMessage];
     }
     
-    function saveClient() {
+    function saveClient() {        
+        jQuery('#loader-bg').show();
         var [isError,errorMessage] = isCheckClientError();   
         if (isError) {
             Swal.fire({
@@ -504,6 +591,7 @@
             });
             return;
         }
+        $("#clientForm").find('input,textarea,select,button').prop('disabled', false);
         document.clientForm.submit();
     }
 
@@ -525,18 +613,19 @@
         @endforeach
     </ul>
     @endif
-
+    
     <input type="hidden" id="client_type_list" value="{{$retTypeArray}}">
-    <form method="POST" name="clientForm" action="/master/client/{{ $client->id }}" class="form-horizontal" autocomplete="off">
+    <form method="POST" id="clientForm" name="clientForm" action="/master/client/{{ $client->id }}" class="form-horizontal" autocomplete="off">
         {{ csrf_field() }}
         {{ method_field("PUT") }}
-
-        <div style="float: left;margin-right: 50px">
+        <input type="hidden" id="harvest_client_id" name="harvest_client_id" value="{{isset($clientHarvest->id) ? $clientHarvest->id : ''}}">
+        <input type="hidden" id="approve_status" name="approve_status" value="{{isset($client->is_approve) ? $client->is_approve : ''}}">
+        <div style="float: left;margin-right: 10px">
             <table class="table table-borderless">                                
                 <tbody>
                     <tr style="height: 50px">
-                        <th width="200px" style="vertical-align: middle;">ID</th>
-                        <td style="vertical-align: middle;">{{$client->id}} </td>
+                        <th width="150px" style="vertical-align: middle;">ID</th>
+                        <td style="vertical-align: middle;"><span id="clientId">{{$client->id}}</span> </td>
                     </tr>
                     <tr>
                         <th style="vertical-align: middle;">Name</th>
@@ -575,7 +664,17 @@
                     </tr>
                     <tr>
                         <th style="vertical-align: middle;">Group Companies</th>
-                        <td style="vertical-align: middle;"><input class="form-control" name="group_companies" type="text" id="group_companies" value="{{$client->group_companies}}"></td>
+                        <td style="vertical-align: middle;">
+                            <!--<input class="form-control" name="group_companies" type="text" id="group_companies" value="{{$client->group_companies}}">-->
+                            <select class="form-control" name="group_companies" id="group_companies">
+                                <option value=""></option>
+                                @foreach($clientGroup as $data)
+                                <option value="{{$data->group_companies}}" @if($data->group_companies == $client->group_companies) selected @endif>{{$data->group_companies}}</option>
+                                @endforeach
+                            </select>
+                            </select><input type="button" id="group_add_new" name="group_add_new" value="Add New" style="height: 30px;font-size: 10px;background-color: #3C8DBC;color: white;" onclick="AddNewGroupCompany()"><br>
+                            <input class="form-control" id="group_add_text" name="group_add_text" type="text" value="" readonly>
+                        </td>
                     </tr>
                     <tr>
                         <th style="vertical-align: middle;">Website</th>
@@ -613,7 +712,7 @@
             </table>
         </div>    
 
-        <div style="float: left;margin-right: 50px">
+        <div style="float: left;margin-right: 10px">
             <table class="table table-borderless">                  
                 <tbody>                
                     <tr>
@@ -669,6 +768,12 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <th style="vertical-align: middle;">Harvest Client ID</th>
+                        <td style="vertical-align: middle;">
+                            {{isset($clientHarvest->id) ? $clientHarvest->id : ""}}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -699,6 +804,30 @@
                         <td><input class="form-control inpcellphone" type="text" id="cellphone{{$loop->index + 1}}" name="cellphone{{$loop->index + 1}}" value="{{$items->mobile_phone}}" style="width: 100%"></td>
                         <td><input class="form-control inpfax" type="text" id="fax{{$loop->index + 1}}" name="fax{{$loop->index + 1}}" value="{{$items->fax}}" style="width: 100%"></td>
                         <td><input class="form-control inpemail" type="text" id="email{{$loop->index + 1}}" name="email{{$loop->index + 1}}" value="{{$items->email}}" style="width: 100%"></td>
+                        <td><button class="delbtn btn btn-sm" type="button" id="delBtnContact{{$loop->index + 1}}" value="Delete" onclick="return deleteContactRow(this)" style="background-color: transparent"><img src="{{URL::asset('/image')}}/delete.png"></button></td>                      
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <div><label style="font-size: 20px;width: 180px">Domain</label><input type="button" id="domain_list" name="domain_list" class="btn btn-primary btn-sm project-button" value="Add" onclick="appendDomainRow()"></div>
+            <table border="0" id="domain_table" class="table table-sm" style="font-size: 12px;table-layout: fixed;width: 550px">                
+                <thead>
+                    <tr>
+                        <th class="project-font-size" style="text-align:center; width:20px;">No</th>
+                        <th class="project-font-size" style="text-align:center; width:20px;">@</th>
+                        <th class="project-font-size" style="width: 80px">Domain</th>
+                        <th class="project-font-size" style="width: 50px">Registerd?</th>                        
+                        <th style="width:40px;"> </th>
+                    </tr> 
+                </thead>
+                <tbody id="domain_body">
+                    @foreach($domainData as $items)
+                    <tr>
+                        <td style="vertical-align: middle;text-align: center"><span class="seqno-contact">{{$loop->index + 1}}</span></td>
+                        <td style="vertical-align: middle;text-align: center">@</td>
+                        <td><input class="form-control inptitle" type="text" id="domain{{$loop->index + 1}}" name="domain{{$loop->index + 1}}" value="{{$items->domain}}" style="width: 100%"></td>
+                        <td><input class="btn btn-primary inpcontactjp" type="button" id="is_registered{{$loop->index + 1}}" name="is_registered{{$loop->index + 1}}" value="{{$items->is_resistered == '0' ? 'Registered' : 'Unregistered'}}" style="width: 100%"></td>                        
                         <td><button class="delbtn btn btn-sm" type="button" id="delBtnContact{{$loop->index + 1}}" value="Delete" onclick="return deleteContactRow(this)" style="background-color: transparent"><img src="{{URL::asset('/image')}}/delete.png"></button></td>                      
                     </tr>
                     @endforeach
@@ -778,11 +907,20 @@
      
         <div style="clear: both"></div>
 
-        <div class="form-group">            
+        <div class="form-group" style="float: left;width: 400px">            
             <div class="col-md-4">
-                <input class="btn btn-primary" type="button" onclick="saveClient()" value="Update">
-            </div>
-        </div>   
+                <input class="btn btn-primary" type="button" onclick="saveClient()" value="Update">                
+            </div>   
+            @if($isApprove == 1)                
+            <div class="col-md-4" style="margin-left: 100px">                            
+                @if($client->is_approve == 1)                    
+                <button style="height: 34px;width: 100px;background-color: #C0C0C0" class="btn btn-primary btn-sm" id="btn_approve" name="btn_approve" onclick="saveClient()" >Unapprove</button>
+                @else    
+                <button style="height: 34px;width: 100px;" class="btn btn-primary btn-sm" onclick="saveClient()" id="btn_unapprove" name="btn_unapprove" >Approve</button>
+                @endif  
+            </div>               
+        @endif
+        </div>           
     </form>
 
 </div>

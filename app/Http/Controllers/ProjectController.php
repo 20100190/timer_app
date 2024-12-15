@@ -110,7 +110,7 @@ class ProjectController extends Controller
 
         if (!$isExistTask) {
             $data = Task::select("id as task_id", "name", DB::raw("0 as task_status"))                    
-                    ->where([['project_type', '=', $request->type], ['is_standard', '=', 'True']])
+                    ->where([['project_type', '=', $request->type], ['is_standard', '=', 'True']])                    
                     ->get();
         } else {
             $data = ProjectTask::select("task_id", "name")
@@ -129,9 +129,11 @@ class ProjectController extends Controller
         
         $budgetData = Assign::where([['project_id', '=', $projectId]])->get();
         
-        //All Task
-        $allTask = Task::select(DB::raw("0 as id"),"name")->where([['is_standard', '=', 'True']])->groupBy("name")->get();//TaskName::get();
-        
+        //All Task        
+        //$allTask = Task::select(DB::raw("0 as id"),"name")->where([['project_type', '=', $request->type]])->groupBy("name")->get();
+        //$allTask = Task::select(DB::raw("0 as id"),"name")->where([['project_type', '=', $request->type],["is_standard","=","true"]])->orderBy("id")->get();
+        $allTask = Task::select(DB::raw("0 as id"),"name")->where([['project_type', '=', $request->type]])->orderBy("id")->get();
+
         //fye
         $fye = Client::select("fye")->where([['id', '=', $request->client]])->first();
         
@@ -152,7 +154,6 @@ class ProjectController extends Controller
     }
     
     public function saveProjectTaskBudget(Request $request) {
-
         //var_dump($_POST["xw;elkfjr"]);    
         //project
         $projectId = $this->saveProjectTable($request);
@@ -189,32 +190,13 @@ class ProjectController extends Controller
             $engTable->col12 = str_replace(",","",$_POST["dec" . $engCnt]);
             $engTable->start_month = $_POST["start_month"];
             $engTable->start_year = $_POST["engagement_year"];
+            $engTable->doc_type = $_POST["dec_type" . $engCnt];
+            $engTable->location = $_POST["location" . $engCnt];
             
             $engTable->save();
         }
         
-        //assign
-        /*$table = new Assign;
-        $queryObj = Assign::where([['project_id', '=', $projectId]]);
-        $queryObj->delete();
-        
-        for ($assignCnt = 1; $assignCnt < 20; $assignCnt++) {
-            if (!isset($_POST["assign" . $assignCnt])) {
-                break;
-            }
-
-            $assignId = $_POST["assign" . $assignCnt];
-            
-            if ($assignId != "") {
-                $table = new Assign;
-                $table->project_id = $projectId;
-                $table->staff_id = $_POST["assign" . $assignCnt];
-                $table->role = $_POST["role" . $assignCnt];
-                $table->budget_hour = $_POST["hours" . $assignCnt];
-                
-                $table->save();             
-            }           
-        }*/
+       
         $table = new Assign;
         $queryObj = Assign::where([['project_id', '=', $projectId]]);
         
@@ -314,6 +296,7 @@ class ProjectController extends Controller
             $projectTable->adjustments = 0;//$request->input("adjustments");
             $projectTable->is_approval = 0;//$request->input("adjustments");
             $projectTable->is_archive = $request->input("is_archive");
+            $projectTable->archive_date = $this->formatDate($request->input("archive_date"));            
 
             $projectTable->save();
         } else {
@@ -325,7 +308,7 @@ class ProjectController extends Controller
                 "pic" => $request->input("pic"),
                 "billable" => $request->input("billable"),
                 "note" => $request->input("note"),
-                "is_archive" => $request->input("is_archive"),
+                "is_archive" => $request->input("is_archive"),                     
                 //"engagement_fee_unit" => str_replace(",","",$request->input("engagement_fee")),
                 //"invoice_per_year" => $request->input("engagement_monthly"),
                 //"adjustments" => $request->input("adjustments"),
@@ -341,7 +324,23 @@ class ProjectController extends Controller
                 $updateItem = $updateItem + $end;
             //}
 
+            $archiveDate = ["archive_date" => $this->formatDate($request->input("archive_date"))];
+            $updateItem = $updateItem + $archiveDate;
+
             $projectObj->update($updateItem);
+        }
+
+        //project group
+        $projectGroupTable = DB::connection('mysql_itr')->table("harvest_project_group");
+        $isProjectGroupData = $projectGroupTable->where([["projectName","=",$request->input("harvest_project_name")]])->exists();
+        if(!$isProjectGroupData){
+            $projectGroupCount = DB::connection('mysql_itr')->table("harvest_project_group")->get()->count();
+            $insertProjectGroupParam[] = [
+                "id" => $projectGroupCount + 1,
+                "projectName" => $request->input("harvest_project_name"),
+                "ProjectGroup" => $request->input("project_type"),
+            ];
+            $projectGroupTable->insert($insertProjectGroupParam); 
         }
         
         $clientObj = Client::where([['id', '=', $request->input("client")]]);
@@ -378,14 +377,18 @@ class ProjectController extends Controller
 
             //task マスタ
             if ($taskId == "") {
-                $pTable = new Task;
+            /*    $pTable = new Task;
                 $pTable->project_type = $request->input("project_type");
                 $pTable->name = $_POST["task_name" . $taskCnt];
                 $pTable->is_standard = "False";
 
                 $pTable->save();
 
-                $taskId = $pTable->id;
+                $taskId = $pTable->id;*/
+                $pTable = new Task;
+                $pQueryObj = Task::where([["project_type","=",$request->input("project_type")],["name","=",$_POST["task_name" . $taskCnt]]]);
+                $pData = $pQueryObj->first();
+                $taskId = $pData->id;
             }
 
             //project task

@@ -4,182 +4,194 @@ This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Budget Webform</title>
-        <!-- Tell the browser to be responsive to screen width -->
-        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-        
-        <!--<link rel="stylesheet" href="{{asset("node_modules/bootstrap/dist/css/bootstrap.min.css")}}">-->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" type="text/css" />
-        
-        <!-- Font Awesome -->
-        <!--<link rel="stylesheet" href="{{asset("node_modules/font-awesome/css/font-awesome.min.css")}}">-->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <!-- Ionicons -->
-        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-        <!-- iCheck for checkboxes and radio inputs -->
-        <!--<link rel="stylesheet" href="{{asset("node_modules/admin-lte/plugins/iCheck/all.css")}}">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Budget Webform</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
+  <!--<link rel="stylesheet" href="{{asset("node_modules/bootstrap/dist/css/bootstrap.min.css")}}">-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    type="text/css" />
+
+  <!-- Font Awesome -->
+  <!--<link rel="stylesheet" href="{{asset("node_modules/font-awesome/css/font-awesome.min.css")}}">-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <!--<link rel="stylesheet" href="{{asset("node_modules/admin-lte/plugins/iCheck/all.css")}}">
         <script src="{{asset("node_modules/admin-lte/plugins/iCheck/icheck.min.js")}}"></script>-->
-                        
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" type="text/css" />
-        <style type="text/css">
-            .multiselect.dropdown-toggle {
-                text-align: left;
-                height: 30px;
-            }
-        </style>
-        
-        <!-- Theme style -->
-        <link rel="stylesheet" href="{{asset("admin-lte/dist/css/AdminLTE.min.css")}}">
-        
-        <style type="text/css">
-            .sidebar-mini.sidebar-collapse .main-header .navbar {
-                margin-left: 0px;
-            }            
-            .sidebar-mini.sidebar-collapse .main-sidebar {       
-                width: 0px !important;
-            }
-            .sidebar-mini.sidebar-collapse .main-footer {
-                margin-left: 0px !important;              
-            }
-        </style>
-        
-        <style type="text/css">
-            .project-layout {
-                margin-right: 20px
-            }
-            
-            .entry-filter-bottom {
-                margin-bottom: 10px;
-            }
-            
-            .project-button {
-                width: 160px
-            }
-            
-            .block-background-color {
-                padding: 20px 0px 0px 0px;
-                /*border: 1px solid #333333;*/
-                width: 1020px;
-                height: 300px;
-                background-color: #f6fafd;
-            }
-            
-            .font-bold {
-                font-weight: bold;
-            }
-            
-            .border-top-style-list {
-                border-top: solid 1px lightgray;
-            }
-            
-            .border-bottom-style-list {
-                border-bottom: solid 1px lightgray;
-            }
-            
-            .border-left-style-list {
-                border-left: solid 1px lightgray;
-            }
-            
-            .project-font-size {
-                font-size: 14px;
-            }
-            
-            .line-height {
-                line-height: 30px;
-            }
-            
-            #loader-bg {
-                background: #fff;
-                opacity: 0.8;
-                height: 100%;
-                width: 100%;
-                position: fixed;
-                top: 0px;
-                left: 0px;
-                z-index: 20;
-            }
-            #loader-bg img {	
-                background: #fff;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                -webkit-transform: translate(-50%, -50%);
-                -ms-transform: translate(-50%, -50%);
-                transform: translate(-50%, -50%);
-                z-index: 20;
-            }   
-            .table-sticky-locklist {
-                position: sticky;
-                top: 0;
-                z-index:1;
-                background-color: white
-            }            
-        </style>
-            
-        
-        <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css"
+    type="text/css" />
+  <style type="text/css">
+    .multiselect.dropdown-toggle {
+      text-align: left;
+      height: 30px;
+    }
+  </style>
+
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{asset("admin-lte/dist/css/AdminLTE.min.css")}}">
+
+  <style type="text/css">
+    .sidebar-mini.sidebar-collapse .main-header .navbar {
+      margin-left: 0px;
+    }
+
+    .sidebar-mini.sidebar-collapse .main-sidebar {
+      width: 0px !important;
+    }
+
+    .sidebar-mini.sidebar-collapse .main-footer {
+      margin-left: 0px !important;
+    }
+  </style>
+
+  <style type="text/css">
+    .project-layout {
+      margin-right: 20px
+    }
+
+    .entry-filter-bottom {
+      margin-bottom: 10px;
+    }
+
+    .project-button {
+      width: 160px
+    }
+
+    .block-background-color {
+      padding: 20px 0px 0px 0px;
+      /*border: 1px solid #333333;*/
+      width: 1020px;
+      height: 300px;
+      background-color: #f6fafd;
+    }
+
+    .font-bold {
+      font-weight: bold;
+    }
+
+    .border-top-style-list {
+      border-top: solid 1px lightgray;
+    }
+
+    .border-bottom-style-list {
+      border-bottom: solid 1px lightgray;
+    }
+
+    .border-left-style-list {
+      border-left: solid 1px lightgray;
+    }
+
+    .project-font-size {
+      font-size: 14px;
+    }
+
+    .line-height {
+      line-height: 30px;
+    }
+
+    #loader-bg {
+      background: #fff;
+      opacity: 0.8;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      z-index: 20;
+    }
+
+    #loader-bg img {
+      background: #fff;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      z-index: 20;
+    }
+
+    .table-sticky-locklist {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background-color: white
+    }
+  </style>
+
+
+  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
               page. However, you can choose any other skin. Make sure you
               apply the skin class to the body tag so the changes take effect. -->
-        <link rel="stylesheet" href="{{asset("admin-lte/dist/css/skins/skin-blue.min.css")}}">
-        <link rel="stylesheet" href="{{asset("admin-lte/dist/css/skins/skin-green.min.css")}}">
+  <link rel="stylesheet" href="{{asset("admin-lte/dist/css/skins/skin-blue.min.css")}}">
+  <link rel="stylesheet" href="{{asset("admin-lte/dist/css/skins/skin-green.min.css")}}">
 
-        <!--<script src="https://bossanova.uk/jexcel/v4/jexcel.js"></script>
+  <!--<script src="https://bossanova.uk/jexcel/v4/jexcel.js"></script>
         <script src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
         <link rel="stylesheet" href="https://bossanova.uk/jsuites/v2/jsuites.css" type="text/css" />
         <link rel="stylesheet" href="https://bossanova.uk/jexcel/v4/jexcel.css" type="text/css" />-->
-        
-        <script src="https://jexcel.net/v5/jexcel.js"></script>
-        <script src="https://jexcel.net/v5/jsuites.js"></script>
-        <link rel="stylesheet" href="https://jexcel.net/v5/jsuites.css" type="text/css" />
-        <link rel="stylesheet" href="https://jexcel.net/v5/jexcel.css" type="text/css" />
 
-        <style type="text/css">
-            .jexcel_content::-webkit-scrollbar {
-                width: 20px;
-                height: 12px;
-            }
-        </style>
+  <script src="https://jexcel.net/v5/jexcel.js"></script>
+  <script src="https://jexcel.net/v5/jsuites.js"></script>
+  <link rel="stylesheet" href="https://jexcel.net/v5/jsuites.css" type="text/css" />
+  <link rel="stylesheet" href="https://jexcel.net/v5/jexcel.css" type="text/css" />
 
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
+  <style type="text/css">
+    .jexcel_content::-webkit-scrollbar {
+      width: 20px;
+      height: 12px;
+    }
+  </style>
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <!-- Google Font -->
-        <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <!-- Google Font -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
-        <script type="text/javascript">
-            var backgroundColorError = "#ff7f7f";
-            
-            function showImage(){
-                var cssText = document.getElementById("header_logo").style.cssText;
-                
-                document.getElementById("header_logo").style.cssText = "";
-                if(cssText == ""){
-                    document.getElementById("header_logo").style.cssText = "display: none";    
-                }                
-            }
-        </script>
+  <script type="text/javascript">
+    var backgroundColorError = "#ff7f7f";
+
+    function showImage() {
+      var cssText = document.getElementById("header_logo").style.cssText;
+
+      document.getElementById("header_logo").style.cssText = "";
+      if (cssText == "") {
+        document.getElementById("header_logo").style.cssText = "display: none";
+      }
+    }
+  </script>
 
 
-        <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-        
-        <!-- jQuery UI -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-        
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-        
-        <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>        -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/css/theme.default.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/widgets/widget-scroller.min.js">
+  <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+
+  <!-- jQuery UI -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+  <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>        -->
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/css/theme.default.min.css">
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/widgets/widget-scroller.min.js">
         <style type="text/css">
            table.tablesorter tbody tr.normal-row td {
                background: #efefef;
@@ -193,15 +205,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!--moment.js-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" type="text/javascript"></script>
-        <!-- Bootstrap-datepicker -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.ja.min.js"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
-        
-        <script src="https://cdn.jsdelivr.net/npm/jquery-autosize@1.18.18/jquery.autosize.min.js"></script>
-        
-    </head>
-    <!--
+  <!-- Bootstrap-datepicker -->
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.ja.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"
+    rel="stylesheet" type="text/css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery-autosize@1.18.18/jquery.autosize.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+
+</head>
+<!--
     BODY TAG OPTIONS:
     =================
     Apply one or more of the following classes to get the
@@ -221,115 +237,180 @@ scratch. This page gets rid of all links and provides the needed markup only.
     |               | sidebar-mini                            |
     |---------------------------------------------------------|
     -->
-    <body class="hold-transition skin-green sidebar-mini sidebar-collapse"> <!--style変更　 style="font-family: Segoe UI"-->
-        <div id="loader-bg">
-            <img src="{{asset("image/loading.gif")}}">
-        </div>
-        <div class="wrapper">
-            <header class="main-header">
-                <!-- ロゴ -->
-                <!--<a href="{{ action('HomeController@index') }}">-->
-                    <img src="{{asset("image/TOPC_logo.png")}}" id="header_logo" class="logo" style="display: none">
-                <!--</a>-->
 
-                <!-- トップメニュー -->
-                <nav class="navbar navbar-static-top" role="navigation">
-                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" id="btn_menu" onclick="showImage()" style="margin-left: 10px">
-                        <span class="sr-only">Toggle navigation</span>
-                    </a>
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <a style="font-size: 20px;" href="">Budget Webform 
-                                @if(Request::decodedPath() == "budget/enter")
-                                 - Budget Entry
-                                @elseif(Request::decodedPath() == "budget/show")
-                                 - Budget Report 
-                                @elseif(Request::decodedPath() == "phase/enter")
-                                 - Phase Entry 
-                                @elseif(Request::decodedPath() == "master/project-list")
-                                 - Project List
-                                @elseif(strpos(Request::decodedPath(),"master/project") !== false)
-                                 - Project
-                                @elseif(Request::decodedPath() == "master/staff")
-                                 - Staff
-                                @elseif(Request::decodedPath() == "master/task")
-                                 - Harvest Task
-                                @elseif(Request::decodedPath() == "master/client")
-                                 - Client
-                                @elseif(Request::decodedPath() == "master/work")
-                                 - Phase Standard
-                                @elseif(strpos(Request::decodedPath(),"master/work-list") !== false)
-                                 - Phase Tasks
-                                @elseif(Request::decodedPath() == "task-schedule")
-                                 - Task Schedule
-                                 @elseif(Request::decodedPath() == "sync_tools")
-                                 - Sync Tools
-                                @endif
-                            </a>
-                        </li>
-                        <li @if(Request::decodedPath() == "budget/enter") class="active" @endif><a href="{{asset("budget/enter")}}">Entry</a></li>
-                        <li @if(Request::decodedPath() == "budget/show") class="active" @endif><a href="{{asset("budget/show")}}">Report</a></li>                        
-                        <!--<li @if(substr(Request::decodedPath(),0,6) == "master") class="dropdown active" @else class="dropdown" @endif>
+<body class="hold-transition skin-green sidebar-mini sidebar-collapse"> <!--style変更　 style="font-family: Segoe UI"-->
+  <div id="loader-bg">
+    <img src="{{asset("image/loading.gif")}}">
+  </div>
+  <div class="wrapper">
+    <header class="main-header">
+      <!-- ロゴ -->
+      <!--<a href="{{ action('HomeController@index') }}">-->
+      <img src="{{asset("image/TOPC_logo.png")}}" id="header_logo" class="logo" style="display: none">
+      <!--</a>-->
+
+      <!-- トップメニュー -->
+      <nav class="navbar navbar-static-top" role="navigation">
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" id="btn_menu" onclick="showImage()"
+          style="margin-left: 10px">
+          <span class="sr-only">Toggle navigation</span>
+        </a>
+        <ul class="nav navbar-nav">
+          <li>
+            <a style="font-size: 20px;" href="">Budget Webform
+              @if(Request::decodedPath() == "budget/enter")
+          - Budget Entry
+        @elseif(Request::decodedPath() == "budget/show")
+        - Budget Report
+      @elseif(Request::decodedPath() == "timer")
+      - Timer Entry
+    @elseif(Request::decodedPath() == "phase/enter")
+      - Phase Entry
+    @elseif(Request::decodedPath() == "master/project-list")
+      - Project List
+    @elseif(strpos(Request::decodedPath(), "master/project") !== false)
+      - Project
+    @elseif(Request::decodedPath() == "master/staff")
+      - Staff
+    @elseif(Request::decodedPath() == "master/task")
+      - Harvest Task
+    @elseif(Request::decodedPath() == "master/client")
+      - Client
+    @elseif(Request::decodedPath() == "master/work")
+      - Phase Standard
+    @elseif(strpos(Request::decodedPath(), "master/work-list") !== false)
+      - Phase Tasks
+    @elseif(Request::decodedPath() == "task-schedule")
+      - Task Schedule
+    @elseif(Request::decodedPath() == "sync_tools")
+      - Sync Tools
+    @elseif(Request::decodedPath() == "task-schedule-weekly")
+      - Weekly Task Schedule
+    @elseif(Request::decodedPath() == "master/to-do-list")
+      - ToDo List
+    @elseif(Request::decodedPath() == "master/to-do-list-entry")
+      - ToDo List Entry
+    @endif
+            </a>
+          </li>
+          <li @if(Request::decodedPath() == "budget/enter") class="active" @endif><a
+              href="{{asset("budget/enter")}}">Entry</a></li>
+          <li @if(Request::decodedPath() == "budget/show") class="active" @endif><a
+              href="{{asset("budget/show")}}">Report</a></li>
+          <!--<li @if(substr(Request::decodedPath(),0,6) == "master") class="dropdown active" @else class="dropdown" @endif>
                             <a href="" data-toggle="dropdown" class="dropdown-toggle">Master<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li @if(Request::decodedPath() == "master/project") class="active" @endif><a href="{{asset("master/project")}}">Project</a></li>                                
                                 <li><a href="xxx">Client</a></li>                                
                             </ul>
                         </li>-->
-                    </ul>
+        </ul>
 
-                    <div class="navbar-custom-menu">
-                        <ul class="nav navbar-nav">
-                            <li style="width: 200px"><a class="dropdown-item">{{Session::get('user')}}</a></li>           
-                            <li>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <li style="width: 200px"><a class="dropdown-item">{{Session::get('user')}}</a></li>
+            <li>
+              <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                            document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
+                {{ __('Logout') }}
+              </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </header><!-- end header -->
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+              </form>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header><!-- end header -->
 
 
-            <!-- サイドバー -->
-            <!--<div style="position:fixed;left:0;top:0;">-->
-            <aside class="main-sidebar">
-                <section class="sidebar">
-                    <ul class="sidebar-menu" data-widget="tree">
-                        <!-- メニューヘッダ -->
-                        <!-- メニュー項目 -->  
-                        <!--予算入力-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "budget/enter") class="active" @endif><a onclick="return movePageControl();" href="{{asset("budget/enter")}}" @if(isset($navigation_status[0]["intro"]) && $navigation_status[0]["intro"])  style="font-weight: bold;color:#292939"  @endif>&nbsp;Budget Entry</a></li>
-                        <!--予算照会-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "budget/show") class="active" @endif><a onclick="return movePageControl();" href="{{asset("budget/show")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Budget Report</a></li>
-                        <!--Phase入力-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "phase/enter") class="active" @endif><a onclick="return movePageControl();" href="{{asset("phase/enter")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Phase Entry</a></li>
-                        <!--プロジェクトマスタ-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/project-list") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/project-list")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Project</a></li>
-                        <!--<li style="font-weight: bold" @if(Request::decodedPath() == "master/project") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/project")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Project</a></li>-->
-                        <!--Staffマスタ-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/staff") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/staff")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Staff</a></li>
-                        <!--Taskマスタ-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/task") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/task")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Harvest Task</a></li>
-                        <!--Clientマスタ-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/client") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/client")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Client</a></li>
-                        <!--workマスタ-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/work") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/work")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Phase Standard</a></li>
-                        <!--workList-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "master/work-list") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/work-list")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Phase Tasks</a></li>
-                        <!--task schedule-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "task-schedule") class="active" @endif><a onclick="return movePageControl();" href="{{asset("task-schedule")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Task Schedule</a></li>
-                        <!--Synk Tools-->
-                        <li style="font-weight: bold" @if(Request::decodedPath() == "sync_tools") class="active" @endif><a onclick="return movePageControl();" href="{{asset("sync_tools")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Sync Tools</a></li>
+    <!-- サイドバー -->
+    <!--<div style="position:fixed;left:0;top:0;">-->
+    <aside class="main-sidebar">
+      <section class="sidebar">
+        <ul class="sidebar-menu" data-widget="tree">
+          <!-- メニューヘッダ -->
+          <!-- メニュー項目 -->
+          <!--予算入力-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "budget/enter") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("budget/enter")}}"
+              @if(isset($navigation_status[0]["intro"]) && $navigation_status[0]["intro"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Budget Entry</a></li>
+          <!--予算照会-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "budget/show") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("budget/show")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Budget Report</a></li>
+          <!--Time-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "timer") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("timer")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Timer Entry</a></li>
+          <!--Phase入力-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "phase/enter") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("phase/enter")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Phase Entry</a></li>
+          <!--プロジェクトマスタ-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "master/project-list") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("master/project-list")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Project</a></li>
+          <!--<li style="font-weight: bold" @if(Request::decodedPath() == "master/project") class="active" @endif><a onclick="return movePageControl();" href="{{asset("master/project")}}" @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"]) style="font-weight: bold;color:#292939" @endif>&nbsp;Project</a></li>-->
+          <!--Staffマスタ-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "master/staff") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("master/staff")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Staff</a></li>
+          <!--Taskマスタ-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "master/task") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("master/task")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Harvest Task</a></li>
+          <!--Clientマスタ-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "master/client") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("master/client")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Client</a></li>
+          <!--workマスタ-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "master/work") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("master/work")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Phase Standard</a></li>
+          <!--workList-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "master/work-list") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("master/work-list")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Phase Tasks</a></li>
+          <!--task schedule weekly-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "task-schedule-weekly") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("task-schedule-weekly")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Weekly Tasks Schedule</a></li>
+          <!--task schedule-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "task-schedule") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("task-schedule")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Task Schedule</a></li>
+          <!--to do list-->
+          <li style="font-weight: bold" @if(Request::decodedPath() == "master/to-do-list") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("master/to-do-list")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;ToDo List</a></li>
+          <!--Synk Tools-->
+          <li style="font-weight: bold;pointer-events: none" @if(Request::decodedPath() == "sync_tools") class="active"
+    @endif><a onclick="return movePageControl();" href="{{asset("sync_tools")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Sync Tools</a></li>
+          <!--Domain List-->
+          <li style="font-weight: bold;" @if(Request::decodedPath() == "domain_list") class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("domain_list")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+        style="font-weight: bold;color:#292939" @endif>&nbsp;Domain List</a></li>
 
-                        <!--<li class="treeview">
+
+          <!--<li class="treeview">
                             <a href="#" style="font-weight: bold;color:#292939">                                
                                 <span>&nbsp;Master</span>
                                 <span class="pull-right-container">
@@ -345,42 +426,43 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Modals</a></li>
                             </ul>
                         </li>-->
-                        
 
-                    </ul>
 
-                </section>
-            </aside><!-- end sidebar -->
-            <!--</div>-->
-            <!-- content -->
-            <div class="content-wrapper" style="background-color: white">
-                <!--Form変更監視-->
-                <input type="hidden" id="isInputFieldChanged" value="false">
-                @yield('content')
+        </ul>
 
-            </div><!-- end content -->
-            
-            
-            <!--<footer class="main-footer">
+      </section>
+    </aside><!-- end sidebar -->
+    <!--</div>-->
+    <!-- content -->
+    <div class="content-wrapper" style="background-color: white">
+      <!--Form変更監視-->
+      <input type="hidden" id="isInputFieldChanged" value="false">
+      @yield('content')
+
+    </div><!-- end content -->
+
+
+    <!--<footer class="main-footer">
                 <div class="pull-right hidden-xs">Version1.0</div>
                 <strong> </strong>
             </footer>--><!-- end footer -->
 
 
 
-        </div><!-- end wrapper -->
+  </div><!-- end wrapper -->
 
-        <!-- AdminLTE App -->
-        <script src="{{asset("admin-lte/dist/js/adminlte.min.js")}}"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <!--decimal.js-->
-        <script type="text/javascript" src="{{ asset('js/decimal.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
-        
-        <!--共通-->
-        <script src="{{asset("js/bwCommon.js")}}"></script>
+  <!-- AdminLTE App -->
+  <script src="{{asset("admin-lte/dist/js/adminlte.min.js")}}"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <!--decimal.js-->
+  <script type="text/javascript" src="{{ asset('js/decimal.js') }}"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
+
+  <!--共通-->
+  <script src="{{asset("js/bwCommon.js")}}"></script>
 
 
-    </body>
+</body>
 
 </html>

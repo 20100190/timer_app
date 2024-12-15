@@ -6,10 +6,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\CustomPasswordReset;
+//use PragmaRX\Google2FA\Google2FA;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    //use Google2FA;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','g2fa_key',
     ];
 
     /**
@@ -47,5 +49,15 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new CustomPasswordReset($token));
+    }
+
+    /**
+     * Generate random verification code
+     *
+     * @return string
+     */
+    public static function generateVerificationCode()
+    {
+        return mt_rand(100000, 999999);
     }
 }

@@ -42,7 +42,16 @@
                 <tr><th>Tel2</th><td>{{$clien->tel2}} </td></tr>
                 <tr><th>Tel3</th><td>{{$clien->tel3}} </td></tr>
                 <tr><th>Fax</th><td>{{$clien->fax}} </td></tr>
-                <tr><th>Fax</th><td>{{$clien->fax}} </td></tr>                
+                <tr><th>Fax</th><td>{{$clien->fax}} </td></tr>  
+                @if($isApprove == 1)                
+                <tr><th>
+                    @if($clien->is_approve == 1)                    
+                    <button style="margin-top: 40px;background-color: #DCDCDC" class="btn btn-primary btn-sm" onclick="approve(this, {{$clien->id}})">Unapprove</button>
+                    @else    
+                    <button style="margin-top: 40px" class="btn btn-primary btn-sm" onclick="approve(this, {{$clien->id}})">Approve</button>        
+                    @endif                    
+                </th></tr>
+                @endif
             </tbody>
         </table>
     </div>
@@ -60,6 +69,7 @@
                 <tr><th>Incorporation State</th><td>{{$clien->incorporation_state}} </td></tr>
                 <tr><th>Business Started</th><td>{{$clien->business_started}} </td></tr>
                 <tr><th>Status</th><td>@if($clien->is_archive == 1) Archived @else Active @endif </td></tr>
+                <tr><th>harvest_client_id</th><td>{{$clientHarvest->id}}</td></tr>
             </tbody>
         </table>
     </div>
