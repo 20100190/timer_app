@@ -11,6 +11,9 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,6 +23,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/budget/enter', 'BudgetController@indexInput');
+Route::get('/time/enter', 'TimeTrackController@index');
 Route::post('/test', 'BudgetController@submit');
 
 Route::get('/budget/show', 'BudgetController@indexShow');
