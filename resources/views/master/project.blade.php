@@ -92,7 +92,7 @@
 <!--<form method="POST" action="/webform/test3" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px">-->
 <form method="POST" enctype="multipart/form-data" id="taskEnter" name="taskEnter" style="margin-left: 20px" autocomplete="off">
     <!--@csrf-->
-    <div class="block-background-color" style="padding-left: 16px;width: 1150px">
+    <div class="block-background-color" style="padding-left: 16px;width: 1200px">
         <div class="project-layout" style="float: left;">        
             <label>Client<font style="color: red;vertical-align: middle">&nbsp;*</font></label><br>
             <select id="client" name="client" class="form-control">
@@ -197,15 +197,19 @@
         </div>
          <div class="project-layout" style="margin-top: 20px;float: left;width: 181px">        
             <label>Status</label><br>
-            <select id="is_archive" name="is_archive" class="form-control" style="width: 100%">            
+            <select id="is_archive" name="is_archive" class="form-control" style="width: 100%" onchange="selectIsArchive()">            
                 <option value="0">Active</option>
                 <option value="1">Archived</option>              
             </select>
         </div>
 
+        <div class="project-layout" style="margin-top: 45px;float: left;width: 2px">                    
+            <input type="button" id="sync_archive_status" name="sync_archive_status" class="btn btn-primary btn-sm project-button" value="Sync Status" style="width: 80px" onclick="syncArchiveStatus()">
+        </div>
+
         <div style="clear: left"></div>
 
-        <div style="float: left;width: 864px;">        
+        <div style="float: left;width: 663px;">        
             <label>Notes</label><br>
             <input type="text" id="note" name="note" class="form-control" style="width: 100%">
         </div>
@@ -213,6 +217,11 @@
         <div style="float: left;width: 180px;margin-left: 20px">        
             <label>Harvest Project ID</label><br>
             <input type="text" id="harvest_project_id" name="harvest_project_id" class="form-control" style="width: 100%" readonly>
+        </div>
+
+        <div style="float: left;width: 180px;margin-left: 21px">        
+            <label>Archive Date</label><br>
+            <input type="text" id="archive_date" name="archive_date" class="form-control datepicker1" style="width: 100%" disabled>
         </div>
 
     </div>
@@ -392,7 +401,7 @@
     
     <div>
             <label style="font-size: 20;margin-right: 25px;float:left">Engagement Fee</label>
-            <input type="button" id="engegementFee" name="engegementFee" value="Add" class="btn btn-primary btn-sm project-button" style="width: 147px;float: left" onclick="appendEngagementRow('',0,0,0,0,0,0,0,0,0,0,0,0)">
+            <input type="button" id="engegementFee" name="engegementFee" value="Add" class="btn btn-primary btn-sm project-button" style="width: 147px;float: left" onclick="appendEngagementRow('',0,0,0,0,0,0,0,0,0,0,0,0,'','')">
             <label style="font-size: 14;margin-left: 25px;float:left;margin-top: 6px;margin-right: 10px">Start</label>
             <select id="start_month" name="start_month" class="form-control" style="width: 100px;float:left;margin-right: 20px" onchange="setEngagementHeader()">
                 <option value="1">Jan</option>
@@ -420,7 +429,9 @@
             <thead>
                 <tr>
                     <th class="project-font-size" style="text-align:center; width:30px;">No</th>
-                    <th class="project-font-size" style="text-align:center; width:200px;">Type</th>
+                    <th class="project-font-size" style="text-align:center; width:200px;">Desc</th>
+                    <th class="project-font-size" style="text-align:center; width:180px;">Doc Type</th>
+                    <th class="project-font-size" style="text-align:center; width:180px;">Location</th>
                     <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_1">Jan-20</span></th>
                     <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_2">Feb-20</span></th>
                     <th class="project-font-size" style="width: 90px;text-align: center"><span id="header_3">Mar-20</span></th>
@@ -442,6 +453,8 @@
             </tbody>
             <tfoot>
                 <tr>
+                    <td class="project-font-size" style="text-align:center; width:130px;"></td>
+                    <td class="project-font-size" style="text-align:center; width:130px;"></td>
                     <td class="project-font-size" style="text-align:center; width:130px;"></td>
                     <td class="project-font-size" style="width: 90px;text-align: center;vertical-align: middle">Total</td>
                     <td class="project-font-size" style="width: 90px;text-align: center"><input type="text" class="form-control" id="total_jan" value="0" style="text-align: right" readonly></td>
@@ -540,6 +553,6 @@
     // "global" vars, built using blade
     var imagesUrl = '{{ URL::asset('/image') }}';
 </script>
-<script src="{{ asset('js/project.js') }}"></script>
+<script src="{{ asset('js/project.js') }}<?php echo '?key='.rand();?>"></script>
 
 @endsection

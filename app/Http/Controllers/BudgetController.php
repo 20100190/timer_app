@@ -12,6 +12,7 @@ use App\Week;
 use App\RoleOrder;
 use App\ProjectPhase;
 use App\ProjectPhaseItem;
+use App\ToDoList;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
@@ -66,6 +67,9 @@ class BudgetController extends Controller
         $staffData = Staff::ActiveStaffOrderByInitial();
         //pic
         $picData = Staff::ActiveStaffOrderByInitial();
+
+        //staff cnt
+        $staffCnt = Staff::ActiveStaffCount();
         
         //role
         $roleData = RoleOrder::GetRoleData();
@@ -75,7 +79,8 @@ class BudgetController extends Controller
                 ->with("project", $projectData)
                 ->with("staff", $staffData)
                 ->with("role", $roleData)
-                ->with("pic", $picData);
+                ->with("pic", $picData)
+                ->with("staff_cnt", $staffCnt);
     }
     
     public function storeInput(Request $request) {
@@ -267,6 +272,84 @@ class BudgetController extends Controller
                 
                 if ($request->staffAS == "true") {
                     $query->where([["staff.status", "=", "Active"]]);
+                }
+
+                if($request->clientAS == "true"){
+                    $query->where([["client.is_archive","<>",1]]);
+                }
+
+                if($request->projectAS == "true"){
+                    $query->where([["project.is_archive","<>",1]]);
+                }
+
+                if ($request->project != "blank") {
+                    $query->wherein('project.project_name', explode(",", $request->project));
+                }
+
+                if ($request->fye != "blank") {
+                    $fye = "";
+        
+                    $fyeArray = explode(",", $request->fye);
+                    $fyeFilter = [];
+                    for ($i = 0; $i < count($fyeArray); $i++) {
+                        if ($fyeArray[$i] == 1) {
+                            array_push($fyeFilter, "01");
+                        }
+                        if ($fyeArray[$i] == 2) {
+                            array_push($fyeFilter, "02");
+                        }
+                        if ($fyeArray[$i] == 3) {
+                            array_push($fyeFilter, "03");
+                        }
+                        if ($fyeArray[$i] == 4) {
+                            array_push($fyeFilter, "04");
+                        }
+                        if ($fyeArray[$i] == 5) {
+                            array_push($fyeFilter, "05");
+                        }
+                        if ($fyeArray[$i] == 6) {
+                            array_push($fyeFilter, "06");
+                        }
+                        if ($fyeArray[$i] == 7) {
+                            array_push($fyeFilter, "07");
+                        }
+                        if ($fyeArray[$i] == 8) {
+                            array_push($fyeFilter, "08");
+                        }
+                        if ($fyeArray[$i] == 9) {
+                            array_push($fyeFilter, "09");
+                        }
+                        if ($fyeArray[$i] == 10) {
+                            array_push($fyeFilter, "10");
+                        }
+                        if ($fyeArray[$i] == 11) {
+                            array_push($fyeFilter, "11");
+                        }
+                        if ($fyeArray[$i] == 12) {
+                            array_push($fyeFilter, "12");
+                        }
+                    }
+        
+                    $query->wherein(DB::raw('Substring(client.fye,1,2)'), $fyeFilter);
+                }
+
+                if ($request->vic != "blank") {
+                    $vic = "";
+                    $vicArray = explode(",", $request->vic);
+                    $vicFilter = [];
+                    for ($i = 0; $i < count($vicArray); $i++) {
+                        if ($vicArray[$i] == 1) {
+                            array_push($vicFilter, "VIC");
+                        }
+                        if ($vicArray[$i] == 2) {
+                            array_push($vicFilter, "IC");
+                        }
+                        if ($vicArray[$i] == 3) {
+                            array_push($vicFilter, "C");
+                        }
+                    }
+        
+                    $query->wherein('client.vic_status', $vicFilter);
                 }
             });
         }
@@ -867,23 +950,493 @@ class BudgetController extends Controller
             }
         }
 
+
+        //overall data + to do list
+        $overallDetailArray = [];
+        //overall detail data
+        foreach($overallDetailData as $ovDetail){
+            $tdata = [];
+            $tdata["day"] = $ovDetail->day;
+            $tdata["initial"] = $ovDetail->initial;
+            $tdata["month"] = $ovDetail->month;
+            $tdata["staff_id"] = $ovDetail->staff_id;
+            $tdata["working_days"] = $ovDetail->working_days;
+            $tdata["year"] = $ovDetail->year;
+
+            array_push($overallDetailArray, $tdata);
+        }
+
+        //overall total data + to do list
+        $overallTotalData = [];
+        foreach($overallTotal as $ovtData){
+            $tdata = [];
+            $tdata["day"] = $ovtData->day;            
+            $tdata["month"] = $ovtData->month;   
+            $tdata["year"] = $ovtData->year;   
+            $tdata["working_days"] = $ovtData->working_days;   
+            
+            array_push($overallTotalData, $tdata);
+        }
+
+        //overall total personal data + to do list
+        $overallPersonalTotalData = [];
+        foreach($overallPersonalTotal as $ovpData){
+            $tdata = [];              
+            $tdata["staff_id"] = $ovpData->staff_id;   
+            $tdata["working_days"] = $ovpData->working_days;   
+
+            array_push($overallPersonalTotalData, $tdata);
+        }
+
+        //overall total week data + to do list
+        $overallWeekTotalData = [];        
+        foreach($overallWeekTotal as $ovwData){
+            $tdata = [];              
+            $tdata["working_days"] = $ovwData->working_days;               
+
+            array_push($overallWeekTotalData, $tdata);
+        }
+        
+
         //------------------------------
+
+        //to do list
+        //-----------------------------------------        
+        $todoListGroupObj = $this->getToDoListDetailObj($request->client, $request->project,$startDateAll,$endDateAll,$request->staff,$request->pic,$request->vic,$request->fye);
+        $todoListGroupData = $todoListGroupObj->get();
+
+        //preparer_idで必要な人数分、行を作成
+        $todoGroupArray = [];
+        $staffArray = explode(",",$request->staff);
+        foreach($todoListGroupData as $lGroupData){
+            $preparerArray = explode(",",$lGroupData->preparer_id);
+            for($i=0; $i<count($preparerArray); $i++){
+
+                if($request->staff != "blank" && !in_array($preparerArray[$i],$staffArray)){
+                    continue;
+                }
+
+                $todoGroupArrayItem = [];                
+                $todoGroupArrayItem["client_id"] = $lGroupData->client_id;
+                $todoGroupArrayItem["project_id"] = $lGroupData->project_id;
+                $todoGroupArrayItem["staff_id"] = $preparerArray[$i];
+
+                $isUnique = true;
+                for($j=0; $j<count($todoGroupArray); $j++){
+                    if($todoGroupArray[$j]["client_id"] == $lGroupData->client_id && $todoGroupArray[$j]["project_id"] == $lGroupData->project_id && $todoGroupArray[$j]["staff_id"] == $preparerArray[$i]){
+                        $isUnique = false;
+                    }
+                }
+
+                if($isUnique){
+                    array_push($todoGroupArray,$todoGroupArrayItem);
+                }
+                
+            }
+        }
+        
+        $xxx = [];
+        $ddd = [];
+        foreach($todoGroupArray as $gData){    
+            $todoListObj = ToDoList::select("to_do_list.requestor_id","client.name as client_name","project.project_name","client.fye","client.vic_status","B.initial as pic","to_do_list.duration","to_do_list.end_time")
+                            ->leftjoin("project", "to_do_list.project_id", "=", "project.id")
+                            ->leftjoin("client", "client.id", "=", "to_do_list.client_id")
+                            ->leftjoin("staff as B", "B.id", "=", "project.pic")                        
+                            //->leftjoin("assign as C", [["C.project_id", "=", "to_do_list.project_id"],["C.staff_id","=","to_do_list.requestor_id"]])
+                            //->leftjoin("staff as D", "D.id", "=", "to_do_list.requestor_id")                        
+                            ->whereRaw('str_to_date(left(end_time,10),"%m/%d/%Y") BETWEEN "' . $startDateAll . '" and "' . $endDateAll . '"'); 
+
+            $todoListObj = $todoListObj->where('to_do_list.client_id',"=", $gData["client_id"]);
+            $todoListObj = $todoListObj->where('to_do_list.project_id',"=" ,$gData["project_id"]);
+            $todoListObj = $todoListObj->whereRaw('FIND_IN_SET(' . $gData["staff_id"] . "," . 'to_do_list.preparer_id)');
+            $todoList = $todoListObj->get();   
+           
+            //role id
+            $roleIdObj = Assign::where([["project_id","=",$gData["project_id"]],["staff_id","=",$gData["staff_id"]]]);
+            $roleName = "";            
+            if($roleIdObj->exists()){
+                $roleName = $roleIdObj->first()->role;                
+            }
+
+            //roleの検索条件があれば除外
+            $isRole = false;
+            if ($request->role != "blank") {                
+                $roleArray = explode(",", $request->role);
+                $roleFilter = [];
+                for ($i = 0; $i < count($roleArray); $i++) {
+                    if ($roleArray[$i] == 1 && $roleName == "Partner") {
+                        $isRole = true;
+                    }   
+                    if ($roleArray[$i] == 2 && $roleName == "Senior Manager") {
+                        $isRole = true;
+                    }
+                    if ($roleArray[$i] == 3 && $roleName == "Manager") {
+                        $isRole = true;
+                    }
+                    if ($roleArray[$i] == 4 && $roleName == "Experienced Senior") {
+                        $isRole = true;
+                    }
+                    if ($roleArray[$i] == 5 && $roleName == "Senior") {
+                        $isRole = true;
+                    }
+                    if ($roleArray[$i] == 6 && $roleName == "Experienced Staff") {
+                        $isRole = true;
+                    }
+                    if ($roleArray[$i] == 7 && $roleName == "Staff") {
+                        $isRole = true;
+                    }
+                }    
+                if($isRole == false){
+                    continue;
+                }
+            }
+            
+
+            //staff initial
+            $assignInitial = Staff::where([["id","=",$gData["staff_id"]]])->first()->initial;
+
+            $data = $this->initArray();
+            $data[$colClient] = $todoList[0]["client_name"];
+            $data[$colProject] = $todoList[0]["project_name"] . "[TD]";
+            $data[$colFye] = $todoList[0]["fye"];
+            $data[$colVic] = $todoList[0]["vic_status"];
+            $data[$colPic] = $todoList[0]["pic"];
+            $data[$colRole] = $roleName;
+            $data[$colAssign] = $assignInitial;
+            $data[$colBudget] = "0";
+            $data[$colAssignedHours] = $todoList[0]["duration"];
+            $data[$colDiff] = $todoList[0]["duration"];
+
+            foreach($todoList as $yyy){
+                $targetToDoYear = substr($yyy->end_time,6,4);
+                $targetToDoMonth = substr($yyy->end_time,0,2);
+                $targetToDoDay = substr($yyy->end_time,3,2);
+                
+                $cellData = $data[$colWeek - 1 + $this->getToDoListWeekNo($weekArray, $targetToDoYear, $targetToDoMonth, $targetToDoDay)];                
+                if($cellData != ""){
+                    //$cellData = doubleval($cellData) + $yyy->duration;
+                    $targetYearArray = $this->getTargetWeek($weekArray, $targetToDoYear, $targetToDoMonth, $targetToDoDay);
+
+                    //overall detail
+                    $isUpdate = false;                    
+                    for($i=0;$i<count($overallDetailArray);$i++){                            
+                        if($overallDetailArray[$i]["staff_id"] == $gData["staff_id"] && $overallDetailArray[$i]["year"] == $targetYearArray["year"] && $overallDetailArray[$i]["month"] == $targetYearArray["month"] && $overallDetailArray[$i]["day"] == $targetYearArray["day"]){                            
+                            //$overallDetailArray[$i]["working_days"] += $cellData;
+                            $overallDetailArray[$i]["working_days"] += $yyy->duration;
+                            $isUpdate = true;
+                        }
+                    }
+
+                    if($isUpdate == false){
+                        $tdata = [];
+                        $tdata["day"] = $targetYearArray["day"];
+                        $tdata["initial"] = $data[$colAssign];
+                        $tdata["month"] = $targetYearArray["month"];
+                        $tdata["staff_id"] = $gData["staff_id"];
+                        $tdata["working_days"] = $cellData;
+                        $tdata["year"] = $targetYearArray["year"];
+        
+                        array_push($overallDetailArray, $tdata);
+                    }
+                    
+                }else{                        
+                    //overall detail
+                    $cellData = $yyy->duration;
+
+                    //over all data 追加
+                    $targetYearArray = $this->getTargetWeek($weekArray, $targetToDoYear, $targetToDoMonth, $targetToDoDay);
+                    $isUpdate = false;                    
+                    for($i=0;$i<count($overallDetailArray);$i++){                            
+                        if($overallDetailArray[$i]["staff_id"] == $gData["staff_id"] && $overallDetailArray[$i]["year"] == $targetYearArray["year"] && $overallDetailArray[$i]["month"] == $targetYearArray["month"] && $overallDetailArray[$i]["day"] == $targetYearArray["day"]){
+                            $overallDetailArray[$i]["working_days"] += $cellData;                            
+                            $isUpdate = true;
+                        }
+                    }
+
+                    if($isUpdate == false){
+                        $tdata = [];
+                        $tdata["day"] = $targetYearArray["day"];
+                        $tdata["initial"] = $data[$colAssign];
+                        $tdata["month"] = $targetYearArray["month"];
+                        $tdata["staff_id"] = $gData["staff_id"];
+                        $tdata["working_days"] = $cellData;
+                        $tdata["year"] = $targetYearArray["year"];
+        
+                        array_push($overallDetailArray, $tdata);
+                    }
+                }
+
+                $data[$colWeek - 1 + $this->getToDoListWeekNo($weekArray, $targetToDoYear, $targetToDoMonth, $targetToDoDay)] = $cellData;
+                $totalBudget = $cellData;//$yyy->duration;                
+
+                //-------------------------------
+                //overall total
+                $isUpdate = false;
+                for($i=0;$i<count($overallTotalData);$i++){                        
+                    if($overallTotalData[$i]["year"] == $targetYearArray["year"] && $overallTotalData[$i]["month"] == $targetYearArray["month"] && $overallTotalData[$i]["day"] == $targetYearArray["day"]){
+                        $overallTotalData[$i]["working_days"] += ceil($yyy->duration);
+                        $isUpdate = true;
+                    }
+                }
+
+                if($isUpdate == false){
+                    $tdata = [];
+                    $tdata["day"] = $targetYearArray["day"];                        
+                    $tdata["month"] = $targetYearArray["month"];                        
+                    $tdata["working_days"] = ceil($yyy->duration);
+                    $tdata["year"] = $targetYearArray["year"];
+        
+                    array_push($overallTotalData, $tdata);
+                }
+
+                //overall personal total                
+                $isUpdate = false;
+                for($i=0;$i<count($overallPersonalTotalData);$i++){                                            
+                    if($overallPersonalTotalData[$i]["staff_id"] == $gData["staff_id"]){
+                        $overallPersonalTotalData[$i]["working_days"] += ceil($yyy->duration);
+                        $isUpdate = true;
+                    }
+                }
+                if($isUpdate == false){
+                    $tdata = [];                                         
+                    $tdata["working_days"] = ceil($yyy->duration);                    
+                    $tdata["staff_id"] = $gData["staff_id"];
+        
+                    array_push($overallPersonalTotalData, $tdata);
+                }
+
+                //overall week total data                
+                for($i=0;$i<count($overallWeekTotalData);$i++){                        
+                    $overallWeekTotalData[$i]["working_days"] += ceil($yyy->duration);
+                }  
+            }
+            
+            $data[$colAssignedHours] = $totalBudget;
+            $data[$colDiff] = $data[$colBudget] - $data[$colAssignedHours];
+
+            if ($totalBudget != 0) {
+                array_push($res, $data);
+            }
+        }
+        //------------------------------------------------
 
 
         $json = [
             "week" => $weekArray,
-            "total" => $overallDetailData,
-            "overallTotal" => $overallTotal,
-            "overallWeekTotal" => $overallWeekTotal,
-            "overallPTotal" => $overallPersonalTotal,
+            //"total" => $overallDetailData,
+            "total" => $overallDetailArray,
+            //"overallTotal" => $overallTotal,
+            "overallTotal" => $overallTotalData,
+            //"overallWeekTotal" => $overallWeekTotal,
+            "overallWeekTotal" => $overallWeekTotalData,
+            //"overallPTotal" => $overallPersonalTotal,            
+            "overallPTotal" => $overallPersonalTotalData,            
             "clientList" => $res,
             "targetAssignId" => $targetAssignId,
             "phaseColor" => $phaseColorList,
-            //"warningProj" => $warningProjectList
+            "warningProj" => $ddd,
+            "xxx" => $xxx
         ];
         
         return response()->json($json);
         
+    }
+
+    function getToDoListDetailObj($client, $project,$startDateAll,$endDateAll,$staff,$pic,$reqVic,$reqFye){        
+        $todoListGroupObj = ToDoList::select("to_do_list.id","to_do_list.client_id","to_do_list.project_id","to_do_list.preparer_id")  
+                            ->leftjoin("project", "to_do_list.project_id", "=", "project.id")
+                            ->leftjoin("client", "client.id", "=", "to_do_list.client_id")
+                            ->leftjoin("staff as B", "B.id", "=", "project.pic")           
+                            ->whereRaw('str_to_date(left(end_time,10),"%m/%d/%Y") BETWEEN "' . $startDateAll . '" and "' . $endDateAll . '"');                
+        if ($client != "blank") {
+            $todoListGroupObj = $todoListGroupObj->wherein('client.id', explode(",", $client));
+        }
+
+        if ($project != "blank") {
+            $todoListGroupObj = $todoListGroupObj->wherein('project.project_name', explode(",", $project));
+        }
+
+        //staff
+        $asigneeStr = "";
+        $assignArray = "";
+        if($staff != "blank"){
+            $assignArray = explode(",",$staff);
+            for($i=0; $i<count($assignArray); $i++){                
+                if($asigneeStr != ""){
+                    $asigneeStr .= " or ";    
+                }
+                $asigneeStr .= "FIND_IN_SET(" . $assignArray[$i] . ",to_do_list.preparer_id)";                
+            }            
+            $todoListGroupObj = $todoListGroupObj->whereRaw("(" . $asigneeStr . ")");
+        }
+
+        //pic
+        if ($pic != "blank") {
+            $picArray = explode(",", $pic);
+            $todoListGroupObj = $todoListGroupObj->wherein('project.pic', $picArray);
+        }
+
+        //vic
+        if ($reqVic != "blank") {
+            $vic = "";
+            $vicArray = explode(",", $reqVic);
+            $vicFilter = [];
+            for ($i = 0; $i < count($vicArray); $i++) {
+                if ($vicArray[$i] == 1) {
+                    array_push($vicFilter, "VIC");
+                }
+                if ($vicArray[$i] == 2) {
+                    array_push($vicFilter, "IC");
+                }
+                if ($vicArray[$i] == 3) {
+                    array_push($vicFilter, "C");
+                }
+            }
+
+            $todoListGroupObj = $todoListGroupObj->wherein('client.vic_status', $vicFilter);
+        }
+
+        //fye
+        if ($reqFye != "blank") {
+            $fye = "";
+
+            $fyeArray = explode(",", $reqFye);
+            $fyeFilter = [];
+            for ($i = 0; $i < count($fyeArray); $i++) {
+                if ($fyeArray[$i] == 1) {
+                    array_push($fyeFilter, "01");
+                }
+                if ($fyeArray[$i] == 2) {
+                    array_push($fyeFilter, "02");
+                }
+                if ($fyeArray[$i] == 3) {
+                    array_push($fyeFilter, "03");
+                }
+                if ($fyeArray[$i] == 4) {
+                    array_push($fyeFilter, "04");
+                }
+                if ($fyeArray[$i] == 5) {
+                    array_push($fyeFilter, "05");
+                }
+                if ($fyeArray[$i] == 6) {
+                    array_push($fyeFilter, "06");
+                }
+                if ($fyeArray[$i] == 7) {
+                    array_push($fyeFilter, "07");
+                }
+                if ($fyeArray[$i] == 8) {
+                    array_push($fyeFilter, "08");
+                }
+                if ($fyeArray[$i] == 9) {
+                    array_push($fyeFilter, "09");
+                }
+                if ($fyeArray[$i] == 10) {
+                    array_push($fyeFilter, "10");
+                }
+                if ($fyeArray[$i] == 11) {
+                    array_push($fyeFilter, "11");
+                }
+                if ($fyeArray[$i] == 12) {
+                    array_push($fyeFilter, "12");
+                }
+            }
+
+            $todoListGroupObj = $todoListGroupObj
+                    ->wherein(DB::raw('Substring(client.fye,1,2)'), $fyeFilter);
+        }
+
+
+        return $todoListGroupObj;
+
+    }
+
+    public function getToDoListWeekNo($week, $year, $month, $day) {
+        $weekNo = 0;
+        $cnt = 0;
+        $isOutOfRange = true;
+        foreach ($week as $w) {
+            if ($w->year == $year && $w->month == $month) {
+                //$weekNo = $cnt;
+                if($w->day == $day){
+                    $weekNo = $cnt;
+                    $isOutOfRange = false;
+                    break;
+                }else if($w->day >= $day) {
+                    $weekNo = $cnt - 1;   
+                    $isOutOfRange = false; 
+                    break;                
+                }
+            }
+            $cnt += 1;
+        }
+        
+        //2023/4/28のようにweekテーブルの月ごとのレコードの最後の日よりも大きい場合、次の月の最初の週にする。
+        if($isOutOfRange){
+            $cnt = 0;
+            $weekNo = 0;
+            $defaultYear = $year;
+            $defaultMonth = $month + 1;        
+            if($month == "12"){
+                $defaultYear = $year + 1;
+                $defaultMonth = "1";        
+            }            
+            foreach ($week as $w) {
+                if ($w->year == $defaultYear && $w->month == $defaultMonth) {
+                    $weekNo = $cnt;
+                    break;
+                }
+                $cnt += 1;
+            }
+        }
+        //--------------------------------------------------------------------------------------------------
+        
+        return $weekNo + 1;
+    }
+
+    public function getTargetWeek($week, $year, $month, $day){
+        $weekNo = 0;
+        $cnt = 0;
+        $targetWeek = [];
+        $targetWeek["year"] = "";
+        $targetWeek["month"] = "";
+        $targetWeek["day"] = "";
+
+        foreach ($week as $w) {
+            if ($w->year == $year && $w->month == $month) {
+                //$weekNo = $cnt;
+                if($w->day == $day){
+                    //$weekNo = $cnt;
+                    $targetWeek["year"] = $w->year;
+                    $targetWeek["month"] = $w->month;
+                    $targetWeek["day"] = $w->day;
+                    break;
+                }else if($w->day >= $day) {
+                    //$weekNo = $cnt - 1;    
+                    $targetWeek["year"] = $week[$cnt-1]["year"];
+                    $targetWeek["month"] = $week[$cnt-1]["month"];
+                    $targetWeek["day"] = $week[$cnt-1]["day"];
+                    break;                
+                }
+            }
+            $cnt += 1;
+        }
+
+        //2023/4/28のようにweekテーブルの月ごとのレコードの最後の日よりも大きい場合、次の月の最初の週にする。
+        if($targetWeek["year"] == ""){            
+            $defaultYear = $year;
+            $defaultMonth = $month + 1;        
+            if($month == "12"){
+                $defaultYear = $year + 1;
+                $defaultMonth = "1";        
+            }            
+            $weekArray = Week::orderBy('month', 'asc')->orderBy('week', 'asc')->where([['year', '=', $defaultYear],["month","=",$defaultMonth]])->first();
+                 
+            $targetWeek["year"] = $weekArray->year;
+            $targetWeek["month"] = $weekArray->month;
+            $targetWeek["day"] = $weekArray->day;           
+        }
+        
+        return $targetWeek;//$weekNo + 1;
     }
     
     function getErrorRow($targetDate, $dueDate,$usDate,$weekArray) {
@@ -1154,6 +1707,42 @@ class BudgetController extends Controller
                 ->leftjoin("client", "project.client_id", "=", "client.id")
                 ->leftjoin("staff as B", "B.id", "=", "project.pic");        
         return $obj;
+    }
+
+    function getWeekStartDate($year, $month, $day){                        
+        $weekArray = Week::orderBy('month', 'asc')->orderBy('week', 'asc')->where([['year', '=', $year],["month","=",$month],["day","=",$day]]);
+        if($weekArray->exists()){
+            return $year . $month . $day;
+        }
+
+        //週の真ん中の場合、週初めの日付を取得
+        $weekArray = Week::orderBy('month', 'asc')->orderBy('week', 'asc')->where([['year', '=', $year],["month","=",$month]])->get();
+        $rowCnt = 0;
+        foreach($weekArray as $item){
+            if($item->day < $day){
+                $targetDateArray = Week::orderBy('month', 'asc')->orderBy('week', 'asc')->where([['year', '=', $year],["month","=",$month]])->get($rowCnt);
+                foreach($targetDateArray as $xxx){
+                    return $xxx->year . $xxx->month . $xxx->day;
+                }
+            }
+            $rowCnt += 1;
+        }
+        
+        //月をまたいだ場合        
+        if($month == 1){
+            $targetYear = $year - 1;
+            $targetMonth = "12";
+        }else{
+            $targetYear = $year;
+            $targetMonth = $month - 1;
+        }
+        
+        $lastRowCnt = Week::orderBy('month', 'asc')->orderBy('week', 'asc')->where([['year', '=', $targetYear],["month","=",$targetMonth]])->get()->count() - 1;
+        $targetDateArray = Week::orderBy('month', 'asc')->orderBy('week', 'asc')->where([['year', '=', $targetYear],["month","=",$targetMonth]])->get($lastRowCnt);
+        foreach($targetDateArray as $xxx){
+            return $xxx->year . $xxx->month . $xxx->day;
+        }
+
     }
        
 }

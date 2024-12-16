@@ -52,3 +52,16 @@ function compFromToDate(fromDate, toDate) {
     
     return isBiggerThanToDate;
 }
+
+function getHeightClamped(text) {
+  const minHeight = 1;
+  const maxHeight = 10;
+  const textHeight = text.split("\n").length;
+  if (textHeight < minHeight) {
+      return minHeight;
+  } else if (textHeight > maxHeight) {
+      return maxHeight;
+  } else {
+      return textHeight;
+  }
+}

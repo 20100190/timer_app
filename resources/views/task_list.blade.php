@@ -121,6 +121,53 @@
                 </div>                 
             </div>
         </div>
+        <div id="filter_left" style="float: left;height: 180px;margin-bottom: 30px;margin-left: 100px">
+            <div class="row entry-filter-bottom">
+                <div class="col col-md-5">
+                    <span class="line-height">Phase</span>
+                </div>
+                <div class="col col-md-1">
+                <select id="phase_status" name="phase_status" class="form-control" style="width:150px;hight:10px;">
+                        <option value=""></option>
+                        <option value="Phase">Phase</option>
+                        <option value="ToDo">ToDoList</option>
+                    </select>
+                </div>                 
+            </div>
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-5">
+                    <span class="line-height">FYE</span>
+                </div>
+                <div class="col col-md-1">
+                    <select id="fye" name="fye" class="form-control" multiple="multiple" >                            
+                        <option value="1">1/31</option>
+                        <option value="2">2/28</option>
+                        <option value="3">3/31</option>
+                        <option value="4">4/30</option>
+                        <option value="5">5/31</option>
+                        <option value="6">6/30</option>
+                        <option value="7">7/31</option>
+                        <option value="8">8/31</option>
+                        <option value="9">9/30</option>
+                        <option value="10">10/31</option>
+                        <option value="11">11/30</option>
+                        <option value="12">12/31</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row entry-filter-bottom" style="zoom: 100%">
+                <div class="col col-md-5">
+                    <span class="line-height">Group</span>
+                </div>
+                <div class="col col-md-1">
+                    <select id="group" name="group" class="form-control" style="width:150px;hight:10px;">                            
+                        <option value=""></option>
+                        <option value="Phase">Phase</option>  
+                        <option value="Project">Project</option>  
+                    </select>
+                </div>
+            </div>     
+        </div>
     </div>
        
     <table class="table" id="task_schedule">
@@ -130,6 +177,7 @@
                 <th style="width: 20px">Link</th>
                 <th style="width: 50px">Staff</th>                
                 <th style="width: 60px">Due Date</th>
+                <th style="width: 60px">FYE</th>
                 <th style="width: 200px">Client</th>
                 <th style="width: 150px">Project</th>
                 <th style="width: 50px">Status</th>

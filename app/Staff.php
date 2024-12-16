@@ -40,5 +40,11 @@ class Staff extends Model
         
         return $isEdit;
     }
+
+    //staffカウント
+    public function scopeActiveStaffCount($query){
+        $staffData = $query->selectRaw('Max(id) as staff_cnt')->first();        
+        return $staffData["staff_cnt"];
+    }
     
 }

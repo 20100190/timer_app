@@ -90,10 +90,14 @@
         z-index: 10;
     }
 </style>      
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 
 @section('content')   
 
 <div style="margin-left: 0px">
+
+    <input type="hidden" id="staff_cnt" name="staff_cnt" value="{{isset($staff_cnt) ? $staff_cnt : "32"}}">
 
     <div style="overflow: hidden;height: 5%;margin-left: 20px;margin-right: 20px;text-align: right">       
         <!--<button style="" onclick="closeOverrall()">閉じる</button>-->
@@ -212,9 +216,14 @@
                     <button id="btn_load" name="btn_load" class="btn btn-primary" type="button" style="width: 150px;margin-left: 0px" onclick="getData()">
                         <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
                         <span id="loadingText">Search</span>
+                    </button>                    
+                </div>
+                <div class="col">
+                    <button id="btn_export" name="btn_export" class="btn btn-primary" type="button" style="width: 150px;margin-left: 98px" onclick="exportBudgetReportData()">
+                        <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="visibility: hidden"></span>
+                        <span id="loadingText">Export</span>
                     </button>
                 </div>
-               
             </div>
             
         </div>       
@@ -344,7 +353,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for($x = 1; $x <=30; $x++)
+                    @for($x = 1; $x <= $staff_cnt; $x++)
                     <tr>
                         <td class="column_row_block" style="background-color: white;"></td>
                         <td class="column_row_block col2" colspan="2" style="background-color: white;"></td>                        
@@ -430,5 +439,5 @@
     // "global" vars, built using blade
     var imagesUrl = '{{ URL::asset('/image') }}';
 </script>
-<script src="{{ asset('js/budgetWebform.js') }}"></script>
+<script src="{{ asset('js/budgetWebform.js') . '?p=' . rand()  }}"></script>
 @endsection

@@ -24,6 +24,14 @@ function closeOverrall() {
 $(document).ready(function () {
     jQuery('#loader-bg').hide();
 
+    //Date From 初期値
+    var dateToday = new Date();
+     document.getElementById("filter_date").value = dateToday.toLocaleString("en-US",{
+         "year": "numeric",
+         "month": "2-digit",
+         "day": "2-digit",	
+     });    
+
     var buttonWidth = "400px";
     var buttonWidth2 = "150px";
     $('#client').multiselect({
@@ -665,6 +673,10 @@ function getProjectAllData() {
     var year = "2020";
     var month = "1";
     var day = "6";
+    var archived = 0;
+    if ($("#is_archive").prop("checked") == false) {
+        archived = 1;
+    }
 
     client = setDelimiter(clientObj);
     project = setDelimiter(projectObj);
@@ -681,7 +693,7 @@ function getProjectAllData() {
     }
 
     $.ajax({
-        url: "/phase/entry/" + client + "/" + project + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + year + "/" + month + "/" + day,
+        url: "/phase/entry/" + client + "/" + project + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + year + "/" + month + "/" + day + "/" + archived,
         dataType: "json",
         success: data => {
             $('#budget_info').val(JSON.stringify(data.budget));
@@ -923,6 +935,118 @@ function clearInputFilter() {
     document.getElementById("filter_date").value = "";
 }
 
+function exportPhaseData(){
+    var client = "blank";
+    var clientObj = $("#client").val();
+    var projectObj = $("#project").val();
+    var project = "blank";
+    var vicObj = $("#vic").val();
+    var vic = "blank";
+    var picObj = $("#pic").val();
+    var pic = "blank";
+    var staffObj = $("#sel_staff").val();
+    var staff = "blank";
+    var roleObj = $("#sel_role").val();
+    var role = "blank";
+    var year = "2020";
+    var month = "1";
+    var day = "6";
+    var archived = 0;
+    if ($("#is_archive").prop("checked") == false) {
+        archived = 1;
+    }
+
+    client = setDelimiter(clientObj);
+    project = setDelimiter(projectObj);
+    vic = setDelimiter(vicObj);
+    pic = setDelimiter(picObj);
+    staff = setDelimiter(staffObj);
+    role = setDelimiter(roleObj);
+
+    var dateObj = document.getElementById("filter_date");
+    if (dateObj.value != "") {
+        year = parseInt(dateObj.value.split("/")[2]);
+        month = parseInt(dateObj.value.split("/")[0]);
+        day = parseInt(dateObj.value.split("/")[1]);
+    }
+
+    $.ajax({
+        url: "/phase/entry/" + client + "/" + project + "/" + vic + "/" + pic + "/" + staff + "/" + role + "/" + year + "/" + month + "/" + day + "/" + archived,
+        dataType: "json",
+        success: data => {
+            createExportPhaseData(data);
+        }
+    });
+
+}
+
+function createExportPhaseData(data){
+    var daysArray = ["Client","Project","PIC"];
+    var reportArray = [];
+    //header
+    for (var i = 0; i < data.week.length; i++) {
+        daysArray.push(data.week[i]);
+    }
+
+    reportArray.push(daysArray);
+
+    //detail
+    for(var x=0; x<data.budget.length; x++){
+        data.budget[x].shift();
+        reportArray.push(data.budget[x]);
+    }
+
+    exportBudgetDataFunc(reportArray);
+}
+
+function exportBudgetDataFunc(header1) {
+    // 書き込み時のオプションは以下を参照
+    // https://github.com/SheetJS/js-xlsx/blob/master/README.md#writing-options
+    var write_opts = {
+        type: 'binary'
+    };
+
+    /*var array1 =
+      [
+        ["apple", "banana", "cherry"],
+        [1, 2, 3]
+      ];*/
+
+    // ArrayをWorkbookに変換する
+    var wb = aoa_to_workbook(header1);
+    var wb_out = XLSX.write(wb, write_opts);
+
+    // WorkbookからBlobオブジェクトを生成
+    // 参照：https://developer.mozilla.org/ja/docs/Web/API/Blob
+    var blob = new Blob([s2ab(wb_out)], { type: 'application/octet-stream' });
+
+    // FileSaverのsaveAs関数で、xlsxファイルとしてダウンロード
+    // 参照：https://github.com/eligrey/FileSaver.js/
+    saveAs(blob, 'myExcelFile.xlsx');
+}
+
+// SheetをWorkbookに追加する
+// 参照：https://github.com/SheetJS/js-xlsx/issues/163
+function sheet_to_workbook(sheet/*:Worksheet*/, opts)/*:Workbook*/ {
+    var n = opts && opts.sheet ? opts.sheet : "Sheet1";
+    var sheets = {}; sheets[n] = sheet;
+    return { SheetNames: [n], Sheets: sheets };
+}
+
+// ArrayをWorkbookに変換する
+// 参照：https://github.com/SheetJS/js-xlsx/issues/163
+function aoa_to_workbook(data/*:Array<Array<any> >*/, opts)/*:Workbook*/ {
+    return sheet_to_workbook(XLSX.utils.aoa_to_sheet(data, opts), opts);
+}
+
+// stringをArrayBufferに変換する
+// 参照：https://stackoverflow.com/questions/34993292/how-to-save-xlsx-data-to-file-as-a-blob
+function s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+}
 
 
 

@@ -140,6 +140,11 @@ class PhaseEntryController extends Controller
             $comments = $comments
                     ->wherein('role_order.id', $roleArray);           
         }
+
+        if($request->archive == "0"){
+            $comments = $comments
+                    ->wherein('project.is_archive', ["0"]);   
+        }
         
         $comments = $comments
                 ->orderBy("client", "asc")

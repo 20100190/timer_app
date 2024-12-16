@@ -1,0 +1,284 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Auth;
+use Validate;
+//use DB;
+use App\Project;
+use App\Client;
+use App\ContactPerson;
+use App\Shareholders;
+use App\Officers;
+use App\ClientHarvest;
+use App\ProjectHarvest;
+use App\Assign;
+use App\ProjectTask;
+use App\Staff;
+use App\TaskHarvest;
+use App\Task;
+use App\ToDoList;
+use App\OutlookAccessToken;
+use App\OutlookClientInfo;
+use Illuminate\Support\Facades\DB;
+
+//=======================================================================
+class TodoListEntryController extends Controller {
+
+    /**
+     * Display a listing of the resource.
+     * 
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request) {
+        $clientList = Client::orderBy("name", "asc")->get();
+        $projectList = Project::select("project_name", "id")->groupBy('project_name', 'id')->orderBy("project_name", "id", "asc")->get();
+        $taskList = Task::select("name", "id")->groupBy('name', 'id')->orderBy("name", "id", "asc")->get();
+        $requestorList = Staff::ActiveStaffOrderByInitial();
+        $preparerList = Staff::ActiveStaffOrderByInitial();
+        $optionalList = Staff::ActiveStaffOrderByInitial();
+        return view("master.to_do_list_entry", compact("clientList", "projectList", "taskList", "requestorList", "preparerList", "optionalList"));
+    }
+
+    public function saveToDoListTable(Request $request) {
+        $todoListObj = ToDoList::where([['client_id', '=', $request->input("client")], ["project_id", "=", $request->input("project")]]);
+        $isExistTodoList = $todoListObj->exists();
+        
+        if (!$isExistTodoList) {
+            $todoListTable = new ToDoList;
+            $todoListTable->client_id = $request->input("client");
+            $todoListTable->project_id = $request->input("project");
+            $todoListTable->project_task_id = $request->input("task");
+            $todoListTable->requestor_id = $request->input("requestor");
+            $todoListTable->preparer_id = $request->input("preparer");
+            $todoListTable->optional_personnel = $request->input("optional");
+            $todoListTable->start_time = $this->formatDate($request->input("start_date"), $request->input("start_time"));
+            $todoListTable->duration = $request->input("duration");
+            $todoListTable->end_time = $this->formatDate(mb_substr($request->input("end_time"), 0, 10), substr($request->input("end_time"), -8));
+            $todoListTable->progress = $request->input("progress");
+            $todoListTable->location = $request->input("location");
+            $todoListTable->memo = $request->input("memo");
+
+            $todoListTable->save();
+        } else {
+            $updateItem = [
+                "client_id" => $request->input("client"),
+                "project_id" => $request->input("project"),
+                "project_task_id" => $request->input("task"),
+                "requestor_id" => $request->input("requestor"),
+                "preparer_id" => $request->input("preparer"),
+                "optional_personnel" => $request->input("optional"),
+                "start_time" => $this->formatDate($request->input("start_date"), $request->input("start_time")),
+                "duration" => $request->input("duration"),
+                "end_time" => $this->formatDate(mb_substr($request->input("end_time"), 0, 10), substr($request->input("end_time"), -8)),
+                "progress" => $request->input("progress"),
+                "location" => $request->input("location"),
+                "memo" => $request->input("memo")
+            ];
+
+            $todoListObj->update($updateItem);
+        }
+        $todoListId = $todoListObj->first()["id"];
+
+        return $todoListId;
+    }
+
+    public function formatDate($dateStr, $timeStr) {
+        $dateJp = NULL;
+
+        if ($dateStr != "") {
+            $dateArray = explode('/', $dateStr);
+            $dateJp = $dateArray[2] . "-" . $dateArray[0] . "-" . $dateArray[1] . "-" . $timeStr;
+        }
+        return $dateJp;
+    }
+    
+    function taskDropdownStore(Request $request) {
+        $clientId = explode(",", $request->project);
+
+        $projectListObj = ProjectTask::select("task.name", "task.id")
+                ->leftjoin("task", "task.id", "=", "project task.task_id")
+                ->groupBy("task.name", 'task.id')
+                ->orderBy('task.name', 'task.id', 'asc');
+
+        if ($clientId != 'blank') {
+            $projectListObj = $projectListObj->whereIn("project_id", $clientId);
+        }
+        $projectList = $projectListObj->get();
+
+        $json = [];
+        $json = [
+            "projectData" => $projectList,
+        ];
+        return response()->json($json);
+    }
+
+    public function getTodoListEntryData(Request $request) {
+        $client = $request->client_id;
+        $project = $request->project_id;
+        //$task = $request->task_id;
+        $requestor = $request->requestor_id;
+        $preparerList = explode(",", $request->preparer_idList);
+        $optionalList = explode(",", $request->optional_idList);
+
+        $clientList = Client::select("name")->where("id", "=", $client)->get();
+        $projectList = project::select("project_name")->where("id", "=", $project)->get();
+        //$taskList = Task::select("name")->where("id", "=", $task)->get();
+        $requestorList = Staff::select("first_name as requestor_first_name", "last_name as requestor_last_name", "staff.email as requestor_email")->where("id", "=", $requestor)->get();
+        $preparerData = $this->getNameEmail($preparerList);
+        $optionalData = $this->getNameEmail($optionalList);
+
+        $todoListEntryData = [];
+
+        $todoListEntryData["client"] = $clientList[0]->name;
+        $todoListEntryData["project"] = $projectList[0]->project_name;
+        $todoListEntryData["task"] = "";//$taskList[0]->name;
+        $todoListEntryData["requestor_name"] = $requestorList[0]->requestor_first_name ." ". $requestorList[0]->requestor_last_name;
+        $todoListEntryData["requestor_email"] = $requestorList[0]->requestor_email;
+        $todoListEntryData["preparer_name"] = $preparerData["names"];
+        $todoListEntryData["preparer_email"] = $preparerData["emails"];
+        $todoListEntryData["optional_name"] = $optionalData["names"];
+        $todoListEntryData["optional_email"] = $optionalData["emails"];
+
+        $json = [
+            "todoListEntryData" => $todoListEntryData,
+        ];
+        return response() -> json($json);
+
+    }
+
+    function getNameEmail($id_list) {
+        $str = "";
+        $mails = "";
+        if ($id_list != [null]) {
+            for ($i = 0; $i < count($id_list); $i++) {
+                $staffList = Staff::where("id", "=", $id_list[$i])->get();
+                foreach ($staffList as $staff) {
+                    $first_name = $staff->first_name;
+                    $last_name = $staff->last_name;
+                    $name = $first_name. " ". $last_name;
+                    $str = $str . $name;
+                    $mails = $mails . $staff->email;
+                    if ($i != count($id_list) - 1){
+                        $str = $str . ",";
+                        $mails = $mails . ",";
+                    }
+                }
+            }
+        } else {
+            $str = null;
+        }
+        return ["names"=>$str, "emails"=>$mails];
+    }
+
+    //Get access_token from refresh_token
+    public function execPostCurl() {
+        /*
+        $headers = array(
+            "Content-Type: application/x-www-form-urlencoded",
+        );
+        */
+        $userId = Auth::id();
+        
+        $refresh_token = $this->get_refresh_token($userId);
+        //$refresh_token = $this->get_refresh_token("1");
+
+        //outlook client情報取得
+        $outlookClientInfo = $this->getOutlookClientInfo($userId);
+
+        $params = [
+            "Content-Type: application/x-www-form-urlencoded",
+            //"client_id" => "0c331368-cc2c-4c80-b73e-97f26f3adad7",
+            "client_id" => $outlookClientInfo->outlook_client_id,
+            "scope" => "Calendars.ReadWrite offline_access",
+            //"client_secret" => "MDJ8Q~yOXLv270V.w7MApwUNzmPHvIquZhtDnawz",
+            "client_secret" => $outlookClientInfo->outlook_client_secret,
+            "grant_type" => "refresh_token",
+            "refresh_token" => $refresh_token
+            //"redirect_uri" => "http://localhost:8000/to_do_list_entry",
+            //"state" => "12345",
+            //"code" => "0.AVkA1Vy7vVrcGUyCBg364o7KjmQENvX96RROk1TF5LF7q35ZACA.AgABAAIAAAD--DLA3VO7QrddgJg7WevrAgDs_wQA9P_WQ4IJihkMPhCJIvnv0H7IVff_S49aRXm7plo277ydOmipOKFKfu_W-9fcEfo23HL8HR7oaqpiZ_gKEUuEcwMj1uDxWUdiDTatchcPf5a108EwhbDBFo2vJwb3IGjjUHby-Chhbw2I-JXlUIF-x9CA1MQ7ZBpGlelxh-h16wuNTew7fW1BufvzhbEmI10Cglw96wHwVOjY9zpgtDvYNm1pqR3ryNKFKgKtZTaS1IXuCzKherRv7lIP767CgXQkgEE733S1lMLqSF48Mf1akSG6a4YoiMinpqIibf78xmdkHHgS7p9lZqn1S-PZnZHMnX-utUHzuB7p5Wj9Hh_BtkQFb57ui-MKRnED3SmXXBLu-EbynZXpG8DxjprkeiY3o7UPxOooWKMaETx-C8yy6OjcC5ketGZ4syzXWdgnT-QjhynCrTYtrPXKVHn14OyqVr3thJDArtSTV82ndAFFb0fv6dJhANXVkoHAAsknpfyd0jQkeYCG_XNavfu6loJYv150AXpcCoUDgJbEn0sbmNxDyKJlgbt01FV3xvujLYJ6Z4H-v56aebMSvN1nyPuK7I9oI3p7IVpyC87AXYgcjnXpHL40jtdw_oyn9TCloo_UKkL59GiPrry_UwJ7ldeOHmnUmV0k23UawaFxHXO54RJcLLkNs8h9zIIuIQdKiF6F"
+            
+        ];
+
+        $conn = curl_init();
+        curl_setopt($conn, CURLOPT_POST, true);
+        curl_setopt($conn, CURLOPT_URL, "https://login.microsoftonline.com/bdbb5cd5-dc5a-4c19-8206-0dfae28eca8e/oauth2/v2.0/token");
+        curl_setopt($conn, CURLOPT_RETURNTRANSFER, true);
+        //curl_setopt($conn, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($conn, CURLOPT_POSTFIELDS, $params);
+        //curl_setopt($conn, CURLOPT_POSTFIELDS, $targetJson);
+
+        $res = curl_exec($conn);
+        curl_close($conn);
+
+        $ary = json_decode($res, true);
+        
+        $access_token = $ary["access_token"];
+        $new_refresh_token = $ary["refresh_token"];
+
+        /*
+        $conn = curl_init();
+        curl_setopt($conn, CURLOPT_POST, true);
+        curl_setopt($conn, CURLOPT_URL, " https://graph.microsoft.com/v1.0/users/260e2e6d-9aea-49c2-927d-23957ae7b7d4");
+        curl_setopt($conn, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($conn, CURLOPT_POSTFIELDS, ["Authorization: Bearer " . $access_token]);
+        */
+
+        $this->saveToken($userId, $access_token, $new_refresh_token);
+        //$this->saveToken("1", $access_token, $new_refresh_token);
+
+        return $ary;
+    }
+
+    //Save access_token and refresh_token to database
+    function saveToken($staff_id, $access_token, $refresh_token) {
+        $tokenObj = OutlookAccessToken::where([['staff_id', "=", $staff_id]]);
+        $isExistToken = $tokenObj->exists();
+        if (!$isExistToken) {
+            $tokenListTable = new OutlookAccessToken;
+            $tokenListTable->staff_id = $staff_id;
+            $tokenListTable->access_token = $access_token;
+            $tokenListTable->refresh_token = $refresh_token;
+
+            $tokenListTable->save();
+        } else {
+            $updateItem = [
+                "staff_id" => $staff_id,
+                "access_token" => $access_token,
+                "refresh_token" => $refresh_token
+            ];
+
+            $tokenObj->update($updateItem);
+        }
+    }
+
+    //get refresh_token from database
+    function get_refresh_token($staff_id) {
+        //$refresh_token = "0.AVkA1Vy7vVrcGUyCBg364o7KjmQENvX96RROk1TF5LF7q35ZACA.AgABAAEAAAD--DLA3VO7QrddgJg7WevrAgDs_wQA9P_ViOgbJe5-HFrXTPMvORHF7o7J7TNDc64J9gA3KyE8I-EjHnDr7e8rmuKdfuxejBZwsUiutYxrxG_qdPCV6isB-HNm1hjt4l7pHJyRrXCSYuiisF47E4ZWSsUhCrgvnnxM9SFbMwZGIiJkzHQKqELGVzBtEC1iA8rEzSi0t9MjfhKP6EHZMj-BcLGP2FoNtoEWiF8N83STX4PrYCqz1_INGEtMS-MrWEGgeOBRcfNhGKrn91fzbaFaUOvTFPIqlfwNqDWYAYH_P159eG2pGiQykIU-Rhg2xmUEmfXutXx3JW88xcB_BSTq8es61aTSagoRNGtczh3HgqprmJLcnhUBTdr-uRNd4Ts7FnMWSOgXAJRSd90pXSUZFFZSKWYKFKLUSilfy2t6sUrDYxT9mzdc7viyz-HXoeEWSzCPXC3Catd9oHGn7jcERIAg5fYlOzuHILJeqn_WNMBk_t5mAKCAEdswiizrEPlHDzowtOEnFOnAnnRzCGrLAbBh9nXdje5maXyoW2PpBREQZE5gFsQFmtwmkxK2AYn5SFHotjQxWyzpZXLEv9vmwv8Jae-unXbVqj0DVwnRdXNCUxGyU8XDEizEetATzeXSgzzJCSNHbLemgEo_Z9EBPHm2gCGNv_3DhMn5I-rZwGk_jrl0RCtJkWiJSG3IYfvA2PWut2YPlPGZ2XIcgUqGS1cLsHcIWxM1YDFMIe-6SSzAqnnaDyiio7y6Xn6pDIzoL1jkviJkHxeMdarzveDT3ozcoigXzbTrpHjpxo4";
+        
+        $refresh_token = "";
+        $tokenObjList = OutlookAccessToken::select("refresh_token")->where("staff_id", "=", $staff_id)->get();
+        foreach ($tokenObjList as $tokenObj) {
+            $refresh_token = $tokenObj["refresh_token"];
+        }        
+        
+        return $refresh_token;
+        
+    }
+
+    function getOutlookClientInfo($staff_id){
+        $clientInfo = OutlookClientInfo::where("staff_id","=",$staff_id)->first();
+
+        return $clientInfo;
+    }
+
+    function console_log($text) {
+        echo '<script>';
+        echo 'console.log('.json_encode($text).')';
+        echo '</script>';
+    }
+}
+
+//=======================================================================
