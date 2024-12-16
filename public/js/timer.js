@@ -326,6 +326,7 @@ weekViewButtons.forEach((button, index) => {
         const selectedDay = new Date(startOfWeek);
         selectedDay.setDate(startOfWeek.getDate() + index);
         currentDate = selectedDay;
+        console.log(currentDate);
         updateUI();
     });
 });
@@ -418,4 +419,22 @@ startTimerButton.addEventListener("click", function () {
 });
 
 setInterval(() => populateTasksForDate(currentDate), 60_000);
+getWeekData();
 updateUI();
+
+
+function getWeekData(){
+    fetch(`/timer/week-summary`)
+    .then(response => response.json())
+    .then(data => {
+        updateWeekView(data);
+    })
+    .catch(error => console.error('Error fetching week summary:', error));
+}
+function updateWeekView(data) {
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+dayNames.forEach((day, index) => {
+    const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
+    timeSpan.textContent = data[day] || '0:00'; // Replace with fetched time or keep 0:00
+});
+}

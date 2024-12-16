@@ -157,6 +157,24 @@ class TimerController extends Controller
     ]);
   }
 
+  public function getWeekSummary()
+{
+    $weekStart = Carbon::now()->startOfWeek();
+    $weekEnd = Carbon::now()->endOfWeek();
+
+    // Group tasks by date and calculate total time
+    $summary = UserTasks::whereBetween('timer_date', [$weekStart, $weekEnd])
+        ->selectRaw('DATE(timer_date) as date, SUM(timer) as total_time')
+        ->groupBy('date')
+        ->get()
+        ->mapWithKeys(function ($item) {
+            return [Carbon::parse($item->date)->format('D') => gmdate('H:i', $item->total_time)];
+        });
+
+    return response()->json($summary);
+}
+
+
   /**
    * Show the form for creating a new resource.
    *

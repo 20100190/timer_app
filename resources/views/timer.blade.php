@@ -1,95 +1,207 @@
 @extends('layouts.main')
 
 <style type="text/css">
-  button {
-    cursor: pointer;
-  }
+/* Global Styles */
+:root {
+  --primary-bg: #f4f7fc;
+  --secondary-bg: #ffffff;
+  --primary-color: #4caf50;
+  --hover-color: #45a049;
+  --border-color: #e0e4eb;
+  --text-color: #333;
+}
 
-  .inner-container {
-    margin: 20px;
-  }
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: var(--primary-bg);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
 
+h1 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin: 10px 0;
+}
+
+/* Buttons */
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Table Design */
+.day-tasks {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: var(--secondary-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.day-tasks th, 
+.day-tasks td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.day-tasks tr:nth-child(even) {
+  background-color: var(--primary-bg);
+}
+
+.day-tasks tr:hover {
+  background-color: #e8f5e9;
+  cursor: pointer;
+}
+
+/* Navigation and Week View */
+/* Align arrows, + button, and week days on the same line */
+/* Navigation and Date Container */
+.date-navigator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start; /* Align items to the left */
+  margin-bottom: 10px;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.date-title {
+  font-size: 2rem;
+  color: var(--text-color);
+  margin: 0;
+}
+
+/* Week view container */
+.week-view {
+  display: flex;                /* Enable horizontal alignment */
+  align-items: center;          /* Vertically center all items */
+  justify-content: flex-start;  /* Align items to the left */
+  gap: 10px;                    /* Add spacing between elements */
+  margin-top: 10px;             /* Add spacing above */
+  flex-wrap: nowrap;            /* Prevent wrapping to a new line */
+}
+
+/* Week days container */
+.week-view ul {
+  display: flex;                /* Keep day buttons inline */
+  align-items: center;          /* Align vertically */
+  gap: 10px;                    /* Space between day buttons */
+  margin: 0;
+  padding: 0;
+  list-style: none;             /* Remove bullets */
+}
+
+/* Individual day buttons */
+.week-view button {
+  background-color: var(--secondary-bg);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 8px;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;          /* Prevent button content wrapping */
+}
+
+.week-view button:hover {
+  background-color: var(--hover-color);
+  color: white;
+}
+
+/* + Button */
+.time-tracker {
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 10px; /* Space after day names */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.time-tracker:hover {
+  transform: scale(1.1);
+}
+
+/* Dialogue Popup */
+.dialogue {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--secondary-bg);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dialogue label {
+  margin-bottom: 5px;
+}
+
+.dialogue input, 
+.dialogue select {
+  padding: 8px;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.dialogue-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .date-navigator {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    gap: 20px;
-  }
-
-  .action-bar {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-  }
-
-  .time-tracker {
-    background-color: green;
-    color: white;
-    width: 50px;
-    height: 50px;
+    flex-direction: column;
+    align-items: center;
   }
 
   .week-view ul {
-    margin: 0;
-    display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .week-view li {
-    list-style: none;
+  .day-tasks th, .day-tasks td {
+    font-size: 0.9rem;
   }
 
-  .day-tasks {
-    margin-top: 20px;
-    border-collapse: collapse;
+  button {
+    padding: 6px 10px;
   }
+}
 
-  .day-tasks th,
-  .day-tasks td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-  }
 
-  .dialogue {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-
-  .dialogue-inner {
-    display: grid;
-    grid-template-columns: 100px 200px;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .dialogue-row {
-    display: contents;
-  }
-
-  .dialogue-row label {
-    grid-column: 1;
-    padding-right: 10px;
-  }
-
-  .dialogue-row input,
-  .dialogue-row select {
-    grid-column: 2;
-    width: 100%;
-  }
-
-  .dialogue-actions {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-  }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.full.min.js"></script>

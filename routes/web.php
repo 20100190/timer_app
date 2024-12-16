@@ -29,6 +29,7 @@ Route::post('/timer/init-timer', 'TimerController@initTimer');
 Route::get('/timer/get-tasks/{date}', 'TimerController@getTasks');
 Route::post('/timer/start-timer/{taskId}', 'TimerController@startTimer');
 Route::post('/timer/stop-timer/{taskId}', 'TimerController@stopTimer');
+Route::get('/timer/week-summary', 'TimerController@getWeekSummary');
 
 Route::get('/budget/enter', 'BudgetController@indexInput');
 Route::post('/test', 'BudgetController@submit');
