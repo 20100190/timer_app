@@ -158,46 +158,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="week-view-entry focused-entry" data-project-id="43039591" data-task-id="23639166">
-                                <td id="project43039591-task23639166" class="name">
-                                    <div class="entry-project">Budget Webform</div>
-                                    <div class="entry-client">
-                                        <span class="pds-show@md">(</span>
-                                        Budget Webform
-                                        <span class="pds-show@md">)</span>
-                                    </div>
-                                    <div class="entry-task">Design</div>
-                                </td>
-                                <td class="day is-today"> <input class="pds-input js-compound-entry" data-unique-name="day351_project43039591_task23639166" type="text" value="1:00" aria-label="Hours on Monday, 16 December" aria-describedby="project43039591-task23639166">
-                                </td>
-                                <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day352_project43039591_task23639166" type="text" value="" aria-label="Hours on Tuesday, 17 December" aria-describedby="project43039591-task23639166">
-                                </td>
-                                <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day353_project43039591_task23639166" type="text" value="" aria-label="Hours on Wednesday, 18 December" aria-describedby="project43039591-task23639166">
-                                </td>
-                                <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day354_project43039591_task23639166" type="text" value="" aria-label="Hours on Thursday, 19 December" aria-describedby="project43039591-task23639166">
-                                </td>
-                                <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day355_project43039591_task23639166" type="text" value="" aria-label="Hours on Friday, 20 December" aria-describedby="project43039591-task23639166">
-                                </td>
-                                <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day356_project43039591_task23639166" type="text" value="" aria-label="Hours on Saturday, 21 December" aria-describedby="project43039591-task23639166">
-                                </td>
-                                <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day357_project43039591_task23639166" type="text" value="" aria-label="Hours on Sunday, 22 December" aria-describedby="project43039591-task23639166">
-                                </td>
-                                <td class="total">1:00
-                                </td>
-                                <td class="delete js-end-of-week-row ">
-                                    <button id="remove-row-43039591-23639166-view28" class="pds-button pds-button-sm pds-button-icon js-remove-row" aria-label="Delete row" type="button" aria-expanded="false" data-analytics-element-id="timesheet-week-remove-row" data-popover="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="X icon">
-                                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                                        </svg>
-                                    </button>
-                                    <div class="popover is-down-right pds-text-center pds-p-md pds-text-sm popover-week-delete" aria-labelledby="remove-row-43039591-23639166-view28" aria-hidden="true">
-                                        <p class="pds-mb-sm">Delete time entries from this timesheet?</p>
-                                        <button class="pds-button pds-button-sm pds-button-danger pds-mb-xs pds-w-full js-confirm-delete-entry" type="button" aria-label="Confirm delete" data-analytics-element-id="timesheet-week-remove-row-confirm">Delete time entries</button>
-                                        <button class="pds-button pds-button-sm pds-w-full js-cancel-delete-entry" type="button" data-analytics-element-id="timesheet-week-remove-row-cancel">Cancel</button>
-                                    </div>
-                                </td>
-                            </tr>
+                         
                         </tbody>
                         <tfoot>
                             <tr>

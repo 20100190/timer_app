@@ -8,6 +8,7 @@ use App\Project;
 use App\UserTasks;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TimerController extends Controller
 {
@@ -19,6 +20,10 @@ class TimerController extends Controller
   public function index()
   {
     return view("timer");
+  }
+  public function indexWeekly()
+  {
+    return view("weekly-timer");
   }
 
   /**
@@ -122,6 +127,67 @@ class TimerController extends Controller
 
     return response()->json($tasks);
   }
+  public function getWeeklyTasks($date)
+  {
+    $userId = Auth::id(); // Get the authenticated user's ID
+
+    // Parse the date and calculate the start (Monday) and end (Sunday) of the week
+    $startOfWeek = Carbon::parse($date)->startOfWeek(Carbon::MONDAY);
+    $endOfWeek = Carbon::parse($date)->endOfWeek(Carbon::SUNDAY);
+
+    // Fetch tasks for the week, grouped by date, project, and client
+    $tasks = UserTasks::whereBetween('timer_date', [$startOfWeek->toDateString(), $endOfWeek->toDateString()])
+      ->select(
+        'timer_date',
+        'project_name',
+        'client_name',
+        'project_id',
+        'client_id',
+        DB::raw('SUM(timer) as total_time') // Sum the 'timer' field
+      )
+      ->groupBy('timer_date', 'project_name', 'client_name', 'project_id', 'client_id', 'created_at')
+      ->orderBy('created_at', 'ASC')
+      ->get();
+    // Initialize the response structure
+    $result = [];
+
+    // Get all unique combinations of project and client names from tasks
+    $projectsAndClients = $tasks->map(function ($task) {
+      return "{$task->project_name} + {$task->client_name}";
+    })->unique();
+
+    // Iterate over each project + client combination
+    foreach ($projectsAndClients as $projectAndClient) {
+      $result[$projectAndClient] = [];
+
+      // Extract project and client names
+      $tasksForCombination = $tasks->filter(function ($task) use ($projectAndClient) {
+        return "{$task->project_name} + {$task->client_name}" === $projectAndClient;
+      });
+
+      // Iterate through each day of the week
+      for ($date = $startOfWeek->copy(); $date->lte($endOfWeek); $date->addDay()) {
+        $currentDate = $date->toDateString();
+        $dayName = $date->format('l'); // Get the day name (e.g., Monday)
+
+        // Find tasks for the current date
+        $dayTask = $tasksForCombination->first(function ($task) use ($currentDate) {
+          return Carbon::parse($task->timer_date)->toDateString() === $currentDate;
+        });
+        // Append the task data for the current day
+        $result[$projectAndClient][] = [
+          'day' => $dayName,
+          'time' => $dayTask->total_time ?? 0, // Default to 0 if no tasks found
+          'project_id' => $dayTask->project_id ?? '',
+          'client_id' => $dayTask->client_id ?? '',
+        ];
+        // dd($result);
+
+      }
+    }
+    return $result;
+  }
+
 
   public function startTimer($taskId)
   {
@@ -158,21 +224,21 @@ class TimerController extends Controller
   }
 
   public function getWeekSummary()
-{
+  {
     $weekStart = Carbon::now()->startOfWeek();
     $weekEnd = Carbon::now()->endOfWeek();
 
     // Group tasks by date and calculate total time
     $summary = UserTasks::whereBetween('timer_date', [$weekStart, $weekEnd])
-        ->selectRaw('DATE(timer_date) as date, SUM(timer) as total_time')
-        ->groupBy('date')
-        ->get()
-        ->mapWithKeys(function ($item) {
-            return [Carbon::parse($item->date)->format('D') => gmdate('H:i', $item->total_time)];
-        });
+      ->selectRaw('DATE(timer_date) as date, SUM(timer) as total_time')
+      ->groupBy('date')
+      ->get()
+      ->mapWithKeys(function ($item) {
+        return [Carbon::parse($item->date)->format('D') => gmdate('H:i', $item->total_time)];
+      });
 
     return response()->json($summary);
-}
+  }
 
 
   /**
@@ -239,5 +305,22 @@ class TimerController extends Controller
   public function destroy($id)
   {
     //
+  }
+  public function deleteWeekData(Request $request)
+  {
+    $validated = $request->validate([
+      'project_id' => 'required|integer',
+      'client_id' => 'required|integer',
+      'dates' => 'required|array',
+      'dates.*' => 'date',
+    ]);
+
+    // Perform the deletion
+    UserTasks::where('project_id', $validated['project_id'])
+      ->where('client_id', $validated['client_id'])
+      ->whereIn('timer_date', $validated['dates'])
+      ->delete();
+
+    return response()->json(['message' => 'Data deleted successfully']);
   }
 }

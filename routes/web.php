@@ -24,6 +24,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/timer', 'TimerController@index');
+Route::get('/timer/weekly', 'TimerController@indexWeekly');
 Route::get('/timer/get-clients', 'TimerController@getClients');
 Route::get('/timer/get-projects/{clientId}', 'TimerController@getProjects');
 Route::get('/timer/get-user', 'TimerController@getUser');
@@ -32,6 +33,9 @@ Route::get('/timer/get-tasks/{date}', 'TimerController@getTasks');
 Route::post('/timer/start-timer/{taskId}', 'TimerController@startTimer');
 Route::post('/timer/stop-timer/{taskId}', 'TimerController@stopTimer');
 Route::get('/timer/week-summary', 'TimerController@getWeekSummary');
+Route::get('/timer/get-week-tasks/{date}', 'TimerController@getWeeklyTasks');
+Route::post('/timer/delete-week-data', 'TimerController@deleteWeekData');
+
 
 Route::get('/budget/enter', 'BudgetController@indexInput');
 Route::get('/time/enter', 'TimeTrackController@index');

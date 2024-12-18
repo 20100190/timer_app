@@ -13,12 +13,28 @@ const taskRows = document.querySelector(".day-tasks tbody");
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 let currentDate = new Date();
 let currentUserName = null;
+const calendarButton = document.getElementById("calendar-button");
+const datePicker = document.getElementById("date-picker");
+calendarButton.addEventListener("click", () => {
+    datePicker.showPicker(); // Trigger the date picker
+});
+datePicker.addEventListener("change", (event) => {
+    const selectedDate = new Date(event.target.value);
+    changeDay(selectedDate);
 
+});
 function formatDate(date) {
-    const options = { weekday: "long", day: "numeric", month: "short" };
-    return date.toLocaleDateString("en-GB", options);
-}
+    const today = new Date();
+    const isToday = date.toDateString() === today.toDateString();
 
+    const options = { weekday: "long", day: "numeric", month: "short" };
+    const formattedDate = date.toLocaleDateString("en-GB", options)
+        .replace(/(\w+)\s(\d+)/, '$1, $2'); // Add comma after day
+
+    return isToday
+        ? `<strong>Today:</strong> ${formattedDate}`
+        : `${formattedDate} <a href="javascript:void(0)" id="return-to-today" type="button" class="small-button" onClick="changeDay('today')">Return to today</a>`;
+}
 function getCurrentWeekRange(date) {
     const dayOfWeek = date.getDay();
     const startOfWeek = new Date(date);
@@ -29,10 +45,28 @@ function getCurrentWeekRange(date) {
 
     return { startOfWeek, endOfWeek };
 }
-
 function changeDay(direction) {
-    currentDate.setDate(currentDate.getDate() + direction);
-    updateUI();
+    console.log("Current Day:", currentDate.toDateString());
+    console.log("Direction:", direction);
+
+    if (direction === "today") {
+        // Reset to today's date
+        currentDate = new Date();
+    }
+    else if (typeof direction === "number") {
+        // Increment or decrement by direction
+        currentDate.setDate(currentDate.getDate() + direction);
+    }
+    else if (!isNaN(Date.parse(direction))) {
+        // Set currentDate to a specific valid date
+        currentDate = new Date(direction);
+    }
+    else {
+        console.error("Invalid direction:", direction);
+        return;
+    }
+
+    updateUI(); // Update the UI with the new currentDate
 }
 
 function clearTable() {
@@ -274,7 +308,9 @@ function populateTasksForDate(dateObject) {
 }
 
 function updateUI() {
-    selectedDateEl.textContent = formatDate(currentDate);
+    console.log("Updating UI...");
+    console.log(currentDate);
+    selectedDateEl.innerHTML = formatDate(currentDate);
 
     const { startOfWeek, endOfWeek } = getCurrentWeekRange(currentDate);
     const daysOfWeek = Array.from(weekViewButtons);
@@ -423,18 +459,18 @@ getWeekData();
 updateUI();
 
 
-function getWeekData(){
+function getWeekData() {
     fetch(`/timer/week-summary`)
-    .then(response => response.json())
-    .then(data => {
-        updateWeekView(data);
-    })
-    .catch(error => console.error('Error fetching week summary:', error));
+        .then(response => response.json())
+        .then(data => {
+            updateWeekView(data);
+        })
+        .catch(error => console.error('Error fetching week summary:', error));
 }
 function updateWeekView(data) {
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-dayNames.forEach((day, index) => {
-    const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
-    timeSpan.textContent = data[day] || '0:00'; // Replace with fetched time or keep 0:00
-});
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    dayNames.forEach((day, index) => {
+        const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
+        timeSpan.textContent = data[day] || '0:00'; // Replace with fetched time or keep 0:00
+    });
 }
