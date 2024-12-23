@@ -138,6 +138,10 @@ function appendWeeklyTasks(weeklyTasks) {
                     $('<input>')
                         .addClass('pds-input js-compound-entry')
                         .attr('type', 'text')
+                        .attr('data-task-id', day.task_id)
+                        .attr('data-project-id', day.project_id)
+                        .attr('data-client-id', day.client_id)
+                        .attr('date', day.date)
                         .attr('aria-label', `Hours on ${day.day}`)
                         .val(
                             timeInSeconds
@@ -198,6 +202,7 @@ function calculateAndAppendColumnTotals() {
 
     // Array to store column totals
     const columnTotals = [];
+    let hasData = false; // Flag to check if there's valid data
 
     // Iterate through each column (excluding the first and last columns for name and total)
     table.find('tbody tr').each(function () {
@@ -207,10 +212,22 @@ function calculateAndAppendColumnTotals() {
 
             if (timeText) {
                 const [hours, minutes] = timeText.split(':').map(Number);
-                columnTotals[index] += (hours || 0) * 3600 + (minutes || 0) * 60; // Convert to seconds
+                if (!isNaN(hours) || !isNaN(minutes)) {
+                    hasData = true; // Mark as having data if valid time found
+                    columnTotals[index] += (hours || 0) * 3600 + (minutes || 0) * 60; // Convert to seconds
+                }
             }
         });
     });
+
+    // If there's no valid data, reset the footer to 0:00
+    if (!hasData) {
+        tfootRow.find('td.day').each(function () {
+            $(this).text('0:00');
+        });
+        tfootRow.find('td.total').text('0:00');
+        return; // Exit the function
+    }
 
     // Update the footer row with the totals
     tfootRow.find('td.day').each(function (index) {
@@ -412,7 +429,6 @@ function populateTasksForWeek(dateObject) {
 
 function updateUI() {
     selectedDateEl.innerHTML = formatWeekRange(currentDate);
-    console.log(currentDate);
     updateDaysOfWeek(currentDate);
     populateTasksForWeek(currentDate);
 }
@@ -596,7 +612,7 @@ startTimerButton.addEventListener("click", function () {
     closeDialogue();
 });
 
-setInterval(() => populateTasksForWeek(currentDate), 60_000);
+// setInterval(() => populateTasksForWeek(currentDate), 60_000);
 getWeekData();
 updateUI();
 
@@ -610,56 +626,142 @@ function getWeekData() {
         .catch(error => console.error('Error fetching week summary:', error));
 }
 function updateWeekView(data) {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    dayNames.forEach((day, index) => {
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    days.forEach((day, index) => {
         const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
-        timeSpan.textContent = data[day] || '0:00'; // Replace with fetched time or keep 0:00
+        if (timeSpan) { // Check if the element exists
+            timeSpan.textContent = data[day] || '0:00'; // Replace with fetched time or keep 0:00
+        }
     });
 }
+
 // Attach event delegation to a parent element
+let changedInputs = {}; // Object to track changed inputs
+let autoSaveTimer = null; // Timer for auto-saving changes
+
+// Track changes in input fields dynamically
 document.addEventListener('input', function (event) {
-    // Check if the event target matches the desired input class
     if (event.target.classList.contains('js-compound-entry')) {
         const input = event.target;
+        const taskId = input.dataset.taskId; // Assuming `data-task-id` holds the task ID
         const value = input.value;
 
-        // Remove invalid characters dynamically
-        const sanitizedValue = value.replace(/[^0-9:]/g, '').slice(0, 5); // Limit to 5 characters
+        // Sanitize the value (remove invalid characters)
+        const sanitizedValue = value.replace(/[^0-9:]/g, '').slice(0, 5);
         if (value !== sanitizedValue) {
             input.value = sanitizedValue;
         }
+
+        // Track changes in the `changedInputs` object
+        changedInputs[taskId] = {
+            time: input.value.trim(),
+            date: input.dataset.date, // Assuming `data-date` holds the date
+            project_id: input.dataset.projectId, // Assuming `data-project-id` holds the project ID
+            client_id: input.dataset.clientId // Assuming `data-client-id` holds the client ID
+        };
+
+        // Reset auto-save timer
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(autoSaveChanges, 30000); // Auto-save after 30 seconds
     }
 });
 
-document.addEventListener('blur', function (event) {
-    // Check if the event target matches the desired input class
-    if (event.target.classList.contains('js-compound-entry')) {
-        const input = event.target;
-        const value = input.value.trim(); // Trim whitespace
+// Validate and format input on blur
+document.addEventListener(
+    'blur',
+    function (event) {
+        if (event.target.classList.contains('js-compound-entry')) {
+            const input = event.target;
+            let value = input.value.trim();
 
-        // Validate the time format (HH:MM)
-        const timeRegex = /^([0-9]{1,2}):([0-5][0-9])$/;
-        const match = value.match(timeRegex);
-
-        if (!match) {
-            // Reset the input if invalid
-            input.value = '';
-            alert('Please enter a valid time in HH:MM format.');
-        } else {
-            const hours = parseInt(match[1], 10);
-            const minutes = parseInt(match[2], 10);
-            saveButton.disabled = false; // Enable the button
-            saveButton.classList.add('enabled');
-            // Ensure valid hours and minutes
-            if (hours > 23 || minutes > 59) {
-                input.value = '';
-                alert('Hours must be 0-23 and minutes must be 0-59.');
+            // Automatically append ':00' if only hours are entered
+            if (/^\d{1,2}$/.test(value)) {
+                value = `${value}:00`;
+                input.value = value;
             }
 
-        }
-    }
-}, true); // Use capture phase for blur events
+            // Validate time format (HH:MM)
+            const timeRegex = /^([0-9]{1,2}):([0-5][0-9])$/;
+            const match = value.match(timeRegex);
 
+            input.classList.remove('error');
+            let errorMessage = input.nextElementSibling;
+            if (errorMessage && errorMessage.classList.contains('error-message')) {
+                errorMessage.remove();
+            }
+
+            if (!match) {
+                input.classList.add('error');
+                errorMessage = document.createElement('span');
+                errorMessage.textContent = 'Please enter a valid time in HH:MM format.';
+                errorMessage.classList.add('error-message');
+                input.after(errorMessage);
+                input.value = '';
+            } else {
+                const hours = parseInt(match[1], 10);
+                const minutes = parseInt(match[2], 10);
+
+                if (hours > 23 || minutes > 59) {
+                    input.classList.add('error');
+                    errorMessage = document.createElement('span');
+                    errorMessage.textContent = 'Hours must be 0-23 and minutes must be 0-59.';
+                    errorMessage.classList.add('error-message');
+                    input.after(errorMessage);
+                    input.value = '';
+                } else {
+                    saveButton.disabled = false;
+                    saveButton.classList.add('enabled');
+                    calculateAndAppendColumnTotals();
+                }
+            }
+        }
+    },
+    true
+);
+
+// Auto-save function
+function autoSaveChanges() {
+    if (Object.keys(changedInputs).length === 0) return; // No changes to save
+    saveChangesToDatabase();
+}
+
+// Save button click event
+saveButton.addEventListener('click', function () {
+    if (Object.keys(changedInputs).length === 0) {
+        alert('No changes to save.');
+        return;
+    }
+    saveChangesToDatabase();
+});
+
+// Function to save changes to the database
+function saveChangesToDatabase() {
+    fetch('/save-tasks', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ tasks: changedInputs })
+    })
+        .then((response) => {
+            console.log(response);
+            if (!response.ok) {
+                throw new Error('Failed to save changes.');
+            }
+            // updateUI();
+            return response.json();
+        })
+        .then((data) => {
+            console.log('Changes saved successfully:', data);
+            changedInputs = {}; // Clear tracked changes after saving
+        })
+        .catch((error) => {
+            
+            console.error('Error saving changes:', error);
+            // alert('Failed to save changes. Please try again.');
+        });
+}
 
 
 function deleteWeekData(buttonElement) {

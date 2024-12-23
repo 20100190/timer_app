@@ -28,13 +28,17 @@ Route::get('/timer/weekly', 'TimerController@indexWeekly');
 Route::get('/timer/get-clients', 'TimerController@getClients');
 Route::get('/timer/get-projects/{clientId}', 'TimerController@getProjects');
 Route::get('/timer/get-user', 'TimerController@getUser');
-Route::post('/timer/init-timer', 'TimerController@initTimer');
+Route::post('/timer/init-timer', 'TimerController@initTimer')->name('startTimer');
 Route::get('/timer/get-tasks/{date}', 'TimerController@getTasks');
 Route::post('/timer/start-timer/{taskId}', 'TimerController@startTimer');
 Route::post('/timer/stop-timer/{taskId}', 'TimerController@stopTimer');
 Route::get('/timer/week-summary', 'TimerController@getWeekSummary');
 Route::get('/timer/get-week-tasks/{date}', 'TimerController@getWeeklyTasks');
 Route::post('/timer/delete-week-data', 'TimerController@deleteWeekData');
+Route::post('/save-tasks', 'TimerController@saveTasks');
+Route::get('/timer/get-clients-and-projects', 'TimerController@getClientsNprojects');
+Route::get('/timer/get-tasks', 'TimerController@getTaskList');
+
 
 
 Route::get('/budget/enter', 'BudgetController@indexInput');

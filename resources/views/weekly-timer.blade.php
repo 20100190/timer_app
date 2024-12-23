@@ -1,5 +1,5 @@
 @extends('layouts.main')
-<link rel="stylesheet" href="https://cache.harvestapp.com/static/styles-F5WBYAS5.css" media="all" />
+<link rel="stylesheet" href="{{asset('css/timer.css')}}" media="all" />
 
 <style type="text/css">
   /* Global Styles */
@@ -45,6 +45,18 @@
   .hidden-date-picker {
     position: absolute;
     visibility: hidden;
+  }
+
+  .error {
+    border: 2px solid red;
+    outline: none;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 4px;
+    display: block;
   }
 
   /* Buttons */
@@ -334,7 +346,7 @@
                     </div>
                     <div class="entry-task">Design</div>
                   </td>
-                  <td class="day is-today"> <input class="pds-input js-compound-entry" data-unique-name="day351_project43039591_task23639166" type="text" value="1:00" aria-label="Hours on Monday, 16 December" aria-describedby="project43039591-task23639166">
+                  <td class="day is-today"> <input class="pds-input js-compound-entry" data-unique-name="day351_project43039591_task23639166" type="text" value="" aria-label="Hours on Monday, 16 December" aria-describedby="project43039591-task23639166">
                   </td>
                   <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day352_project43039591_task23639166" type="text" value="" aria-label="Hours on Tuesday, 17 December" aria-describedby="project43039591-task23639166">
                   </td>
@@ -348,7 +360,7 @@
                   </td>
                   <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day357_project43039591_task23639166" type="text" value="" aria-label="Hours on Sunday, 22 December" aria-describedby="project43039591-task23639166">
                   </td>
-                  <td class="total">1:00
+                  <td class="total">
                   </td>
                   <td class="delete js-end-of-week-row ">
                     <button id="remove-row-43039591-23639166-view28" class="pds-button pds-button-sm pds-button-icon js-remove-row" aria-label="Delete row" type="button" aria-expanded="false" data-analytics-element-id="timesheet-week-remove-row" data-popover="">
@@ -414,6 +426,7 @@
             <div class="dialogue-row">
               <label for="clientSelect">Client (*)</label>
               <select id="clientSelect" class="searchable-select">
+                  <option value="" disabled selected>Select a client and project</option>
               </select>
             </div>
             <div class="dialogue-row">

@@ -178,6 +178,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
   <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
   <!-- jQuery UI -->
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>

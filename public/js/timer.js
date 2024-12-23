@@ -1,13 +1,14 @@
 const selectedDateEl = document.querySelector(".selected-date");
 const weekViewButtons = document.querySelectorAll(".week-view button");
 const previousDayButton = document.querySelector(".previous-day");
+const taskDate = document.querySelector(".js-spent-at-display");
 const nextDayButton = document.querySelector(".next-day");
 const timeTrackerButton = document.querySelector(".time-tracker");
 const dialogue = document.querySelector(".dialogue");
 const clientSelect = document.getElementById("clientSelect");
 const projectSelect = document.getElementById("projectSelect");
 const timeInput = document.getElementById("timeInput");
-const startTimerButton = document.getElementById("startTimerButton");
+// const startTimerButton = document.getElementById("startTimerButton");
 const cancelButton = document.getElementById("cancelButton");
 const taskRows = document.querySelector(".day-tasks tbody");
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -34,6 +35,15 @@ function formatDate(date) {
     return isToday
         ? `<strong>Today:</strong> ${formattedDate}`
         : `${formattedDate} <a href="javascript:void(0)" id="return-to-today" type="button" class="small-button" onClick="changeDay('today')">Return to today</a>`;
+}
+function formatDateForPopUp(date) {
+    const today = new Date();
+    const isToday = date.toDateString() === today.toDateString();
+
+    const options = { weekday: "long", day: "numeric", month: "short" };
+    const formattedDate = date.toLocaleDateString("en-GB", options)
+        .replace(/(\w+)\s(\d+)/, '$1, $2'); // Add comma after day
+    return formattedDate;
 }
 function getCurrentWeekRange(date) {
     const dayOfWeek = date.getDay();
@@ -77,12 +87,8 @@ function createRow(rowData) {
     const row = document.createElement("tr");
 
     const projectCell = document.createElement("td");
-    projectCell.textContent = rowData.project;
+    projectCell.innerHTML = rowData.project;
     row.appendChild(projectCell);
-
-    const clientCell = document.createElement("td");
-    clientCell.textContent = rowData.client;
-    row.appendChild(clientCell);
 
     const timeCell = document.createElement("td");
     timeCell.textContent = rowData.time;
@@ -175,7 +181,7 @@ function fetchUserName() {
 function populateClients() {
     clientSelect.innerHTML = '<option value="">Select a Client</option>';
 
-    fetch("/timer/get-clients")
+    fetch("/timer/get-clients-and-projects")
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -184,17 +190,27 @@ function populateClients() {
         })
         .then((clients) => {
             clients.forEach((client) => {
-                const option = document.createElement("option");
-                option.value = client.id;
-                option.setAttribute("data-name", client.name);
-                option.textContent = client.name;
-                clientSelect.appendChild(option);
+                // Create an optgroup for the client
+                const optgroup = document.createElement("optgroup");
+                optgroup.label = client.name;
+
+                // Add each project under the optgroup
+                client.projects.forEach((project) => {
+                    const option = document.createElement("option");
+                    option.value = project.id;
+                    option.textContent = project.project_name;
+                    optgroup.appendChild(option);
+                });
+
+                // Append the optgroup to the select element
+                clientSelect.appendChild(optgroup);
             });
         })
         .catch((error) => {
             console.error("Error fetching clients:", error);
             alert("Failed to load clients. Please try again.");
         });
+
 }
 
 function populateProjects(clientId) {
@@ -237,10 +253,12 @@ function closeDialogue() {
 }
 
 function openDialogue() {
+    $('#taskDate').val(currentDate);
     dialogue.style.display = "block";
     clientSelect.innerHTML = "";
     projectSelect.innerHTML = "";
     projectSelect.disabled = true;
+    taskDate.innerHTML = formatDateForPopUp(currentDate);
     populateClients();
     fetchUserName();
 }
@@ -291,8 +309,7 @@ function populateTasksForDate(dateObject) {
 
                 return {
                     id: task.id,
-                    project: task.project_name,
-                    client: task.client_name,
+                    project: (task.client.name + '(' + task.project.project_name + ')' + '<br>' + task.task.name ),
                     time: secondsToHHMM(elapsedSeconds),
                     action: task.is_running ? "Stop" : "Start",
                     is_running: task.is_running,
@@ -308,8 +325,6 @@ function populateTasksForDate(dateObject) {
 }
 
 function updateUI() {
-    console.log("Updating UI...");
-    console.log(currentDate);
     selectedDateEl.innerHTML = formatDate(currentDate);
 
     const { startOfWeek, endOfWeek } = getCurrentWeekRange(currentDate);
@@ -371,88 +386,46 @@ previousDayButton.addEventListener("click", () => changeDay(-1));
 nextDayButton.addEventListener("click", () => changeDay(1));
 timeTrackerButton.addEventListener("click", () => openDialogue());
 cancelButton.addEventListener("click", () => closeDialogue());
+function populateTasks(selectedProjectId) {
+    projectSelect.innerHTML = '<option value="">Select a Project</option>';
+    projectSelect.disabled = true;
 
-clientSelect.addEventListener("change", function () {
-    const selectedClientId = this.value;
-    populateProjects(selectedClientId);
-});
+    if (!selectedProjectId) return;
 
-startTimerButton.addEventListener("click", function () {
-    const clientId = parseInt(clientSelect.value, 10);
-    const projectId = parseInt(projectSelect.value, 10);
-
-    const rawTime = timeInput.value;
-    const { hours, minutes } = parseTimeString(rawTime);
-    initialTime = hours * 3600 + minutes * 60;
-
-    const isRunning = true;
-    const now = new Date();
-    const startedAt = getUTCDateString(now);
-    const timerDate = getLocalDateString(currentDate);
-
-    if (isNaN(clientId) || clientId <= 0) {
-        alert("Please select a valid client");
-        return;
-    }
-
-    if (isNaN(projectId) || projectId <= 0) {
-        alert("Please select a valid project");
-        return;
-    }
-
-    const selectedClientOption =
-        clientSelect.options[clientSelect.selectedIndex];
-    const clientName = selectedClientOption.getAttribute("data-name");
-
-    const selectedProjectOption =
-        projectSelect.options[projectSelect.selectedIndex];
-    const projectName = selectedProjectOption.getAttribute("data-name");
-
-    const timerData = {
-        username: currentUserName,
-        client_id: clientId,
-        project_id: projectId,
-        client_name: clientName,
-        project_name: projectName,
-        timer: initialTime,
-        started_at: startedAt,
-        timer_date: timerDate,
-        is_running: isRunning,
-    };
-
-    fetch("/timer/init-timer", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute("content"),
-        },
-        body: JSON.stringify(timerData),
-    })
+    fetch(`/timer/get-tasks`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
-            return response.text();
+            return response.json();
         })
-        .then((data) => {
-            try {
-                const jsonData = JSON.parse(data);
-                console.log("Timer started successfully", jsonData);
-            } catch (e) {
-                console.error("Error parsing JSON:", e, data);
-                alert("Failed to start timer. Invalid response format.");
+        .then((projects) => {
+            if (projects.length > 0) {
+                projects.forEach((project) => {
+                    const option = document.createElement("option");
+                    option.value = project.id;
+                    option.setAttribute("data-name", project.name);
+                    option.textContent = project.name;
+                    projectSelect.appendChild(option);
+                });
+
+                projectSelect.disabled = false;
+            } else {
+                projectSelect.innerHTML =
+                    '<option value="">No Task available</option>';
             }
         })
         .catch((error) => {
-            console.error("Error saving timer:", error);
-            alert("Failed to start timer. Please try again.");
+            console.error("Error fetching projects:", error);
+            alert("Failed to load projects. Please try again.");
         });
+}
 
-    populateTasksForDate(currentDate);
-    closeDialogue();
+clientSelect.addEventListener("change", function () {
+    const selectedProjectId = this.value;
+    populateTasks(selectedProjectId);
 });
+
 
 setInterval(() => populateTasksForDate(currentDate), 60_000);
 getWeekData();
@@ -474,3 +447,63 @@ function updateWeekView(data) {
         timeSpan.textContent = data[day] || '0:00'; // Replace with fetched time or keep 0:00
     });
 }
+
+$(document).ready(() => {
+    const showError = () => {
+        Swal.fire({
+            title: "Error!",
+            text: 'Sorry, looks like there are some errors detected, please try again.',
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok, got it!",
+            customClass: {
+                confirmButton: "btn btn-primary"
+            }
+        });
+    };
+    $("#create_form").validate({
+        rules: {
+            client_select: {
+                required: true,
+            },
+            task_select: {
+                required: true,
+            },
+        },
+        messages: {
+            client_select: {
+                required: "Please enter your name",
+            },
+            task_select: {
+                required: "Please enter your email",
+            },
+        },
+        errorElement: "span",
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        },
+        submitHandler: function (form, event) { // Add `event` as the second parameter
+            event.preventDefault(); // Prevent default form submission
+            const url = $("#create_form").data("url");
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: $("#create_form").serialize(),
+                success: (response) => {
+                    alert()
+                    populateTasksForDate(currentDate); // Refresh tasks for the current week
+                    closeDialogue();
+                },
+                error: (response) => {
+
+                    showError();
+                }
+            });
+        }
+    });
+});

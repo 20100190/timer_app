@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Client;
 use App\Project;
+use App\Task;
+use App\TaskName;
 use App\UserTasks;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TimerController extends Controller
 {
@@ -38,6 +41,15 @@ class TimerController extends Controller
     return response()->json($clients);
   }
 
+  public function getClientsNprojects()
+  {
+    $clients = Client::select('id', 'name') // Select only the 'id' and 'name' fields from the 'clients' table
+      ->with([
+        'projects' // Load the 'projects' relationship but only select 'id' and 'project_name' columns
+      ])
+      ->get(); // Fetch the data
+    return response()->json($clients);
+  }
   /**
    * Get projects for a specific client
    * 
@@ -48,6 +60,13 @@ class TimerController extends Controller
   {
     $projects = Project::where('client_id', $clientId)
       ->select('id', 'project_name')
+      ->get();
+
+    return response()->json($projects);
+  }
+  public function getTaskList()
+  {
+    $projects = TaskName::select('id', 'name')
       ->get();
 
     return response()->json($projects);
@@ -76,42 +95,46 @@ class TimerController extends Controller
   {
     try {
       $validatedData = $request->validate([
-        'username' => 'required|string',
-        'client_id' => 'required|integer|exists:client,id',
-        'project_id' => 'required|integer|exists:project,id',
-        'client_name' => 'required|string',
-        'project_name' => 'required|string',
-        'timer' => 'required|integer',
-        'started_at' => 'required|date',
-        'timer_date' => 'required|date',
-        'is_running' => 'required|boolean'
+        'client_select' => 'required|integer|exists:project,id',
+        'task_select' => 'required|integer|exists:task,id',
+        'taskDate' => 'required',
       ]);
+      $project = Project::where('id', $request->input('client_select'))->first();
+      if ($project) {
+        $taskDate = preg_replace('/\s*\(.*?\)$/', '', $request->input('taskDate')); // "Tue Dec 24 2024 00:09:20 GMT+0500"
 
-      $userTasks = UserTasks::create([
-        'username' => $validatedData['username'],
-        'client_id' => $validatedData['client_id'],
-        'project_id' => $validatedData['project_id'],
-        'client_name' => $validatedData['client_name'],
-        'project_name' => $validatedData['project_name'],
-        'timer' => $validatedData['timer'],
-        'started_at' => $validatedData['started_at'],
-        'timer_date' => $validatedData['timer_date'],
-        'is_running' => $validatedData['is_running']
-      ]);
-
-      return response()->json([
-        'message' => 'Timer started successfully',
-        'task_id' => $userTasks->id
-      ], 201);
+        // Convert it to Y-m-d format
+        $formattedDate = Carbon::parse($taskDate)->format('Y-m-d');
+        $formattedDateTime = Carbon::parse($taskDate)->format('Y-m-d H:i:s'); // Output: "2024-12-24 00:05:56"
+        $userTasks = UserTasks::create([
+          'user_id' => Auth::id(),
+          'client_id' => $project->client_id,
+          'project_id' => $validatedData['client_select'],
+          'task_id' => $validatedData['task_select'],
+          'timer' => '0',
+          'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
+          'timer_date' => $formattedDate,     // Today's date
+          'is_running' => 1
+        ]);
+        return response()->json([
+          'message' => 'Timer started successfully',
+          'task_id' => $userTasks->id
+        ], 201);
+      } else {
+        return response()->json([
+          'message' => 'Failed to start timer',
+          'error' => 'No project found'
+        ], 500);
+      }
     } catch (\Illuminate\Validation\ValidationException $ve) {
-      \Log::error('Validation Error: ' . json_encode($ve->errors()));
+      Log::error('Validation Error: ' . json_encode($ve->errors()));
       return response()->json([
         'message' => 'Validation failed',
         'errors' => $ve->errors()
       ], 422);
     } catch (\Exception $e) {
-      \Log::error('Error starting timer: ' . $e->getMessage());
-      \Log::error('Error Trace: ' . $e->getTraceAsString());
+      Log::error('Error starting timer: ' . $e->getMessage());
+      Log::error('Error Trace: ' . $e->getTraceAsString());
       return response()->json([
         'message' => 'Failed to start timer',
         'error' => $e->getMessage()
@@ -121,8 +144,14 @@ class TimerController extends Controller
 
   public function getTasks($date)
   {
-    $tasks = UserTasks::whereDate('timer_date', $date)
-      ->select('id', 'username', 'client_id', 'project_id', 'client_name', 'project_name', 'timer', 'started_at', 'timer_date', 'is_running')
+    $userId = Auth::id(); // Get the authenticated user's ID
+    $tasks = UserTasks::whereDate('timer_date', $date)->where('user_id', $userId)
+      ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running','task_id')->with([
+        'username',
+        'client',
+        'project',
+        'task'
+      ])
       ->get();
 
     return response()->json($tasks);
@@ -138,6 +167,7 @@ class TimerController extends Controller
     // Fetch tasks for the week, grouped by date, project, and client
     $tasks = UserTasks::whereBetween('timer_date', [$startOfWeek->toDateString(), $endOfWeek->toDateString()])
       ->select(
+        'id',
         'timer_date',
         'project_name',
         'client_name',
@@ -145,9 +175,10 @@ class TimerController extends Controller
         'client_id',
         DB::raw('SUM(timer) as total_time') // Sum the 'timer' field
       )
-      ->groupBy('timer_date', 'project_name', 'client_name', 'project_id', 'client_id', 'created_at')
+      ->groupBy('timer_date', 'project_name', 'client_name', 'project_id', 'client_id', 'created_at', 'id')
       ->orderBy('created_at', 'ASC')
       ->get();
+
     // Initialize the response structure
     $result = [];
 
@@ -165,6 +196,9 @@ class TimerController extends Controller
         return "{$task->project_name} + {$task->client_name}" === $projectAndClient;
       });
 
+      // Use the first task to retrieve project and client IDs for this combination
+      $sampleTask = $tasksForCombination->first();
+
       // Iterate through each day of the week
       for ($date = $startOfWeek->copy(); $date->lte($endOfWeek); $date->addDay()) {
         $currentDate = $date->toDateString();
@@ -174,17 +208,19 @@ class TimerController extends Controller
         $dayTask = $tasksForCombination->first(function ($task) use ($currentDate) {
           return Carbon::parse($task->timer_date)->toDateString() === $currentDate;
         });
+
         // Append the task data for the current day
         $result[$projectAndClient][] = [
+          'task_id' => $sampleTask->id,
           'day' => $dayName,
           'time' => $dayTask->total_time ?? 0, // Default to 0 if no tasks found
-          'project_id' => $dayTask->project_id ?? '',
-          'client_id' => $dayTask->client_id ?? '',
+          'project_id' => $sampleTask->project_id ?? '', // Use project_id from the combination
+          'client_id' => $sampleTask->client_id ?? '',  // Use client_id from the combination
+          'date' => $currentDate, // Use the current date for the week
         ];
-        // dd($result);
-
       }
     }
+
     return $result;
   }
 
@@ -322,5 +358,34 @@ class TimerController extends Controller
       ->delete();
 
     return response()->json(['message' => 'Data deleted successfully']);
+  }
+  public function saveTasks(Request $request)
+  {
+    dd($request);
+    $validatedData = $request->validate([
+      'tasks' => 'required|array',
+      'tasks.*.time' => 'required|regex:/^\d{1,2}:\d{2}$/',
+      'tasks.*.date' => 'required|date',
+      'tasks.*.project_id' => 'required',
+      'tasks.*.client_id' => 'required',
+    ]);
+    DB::enable_query_log();
+    foreach ($validatedData['tasks'] as $taskData) {
+      [$hours, $minutes] = explode(':', $taskData['time']);
+      $totalTimeInSeconds = ($hours * 3600) + ($minutes * 60);
+
+      UserTasks::updateOrCreate(
+        ['id' => $taskData['task_id'] ?? null],
+        [
+          'timer' => $totalTimeInSeconds,
+          'timer_date' => $taskData['date'],
+          'project_id' => $taskData['project_id'],
+          'client_id' => $taskData['client_id']
+        ]
+      );
+    }
+    // dd(DB::get_query_log());
+
+    // return response()->json(['message' => 'Tasks saved successfully.']);
   }
 }
