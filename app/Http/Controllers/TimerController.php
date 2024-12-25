@@ -293,11 +293,19 @@ class TimerController extends Controller
     ]);
   }
 
-  public function getWeekSummary()
+  public function getWeekSummary($date)
   {
-    $weekStart = Carbon::now()->startOfWeek();
-    $weekEnd = Carbon::now()->endOfWeek();
+    // $date = "2024-12-25";
+    $carbonDate = Carbon::parse($date);
+    // Set week start as Sunday and week end as Saturday
+    Carbon::setWeekStartsAt(Carbon::SUNDAY);
+    Carbon::setWeekEndsAt(Carbon::SATURDAY);
+    // Start and end of the week for the parsed date
+    $weekStart = $carbonDate->copy()->startOfWeek();
+    $weekEnd = $carbonDate->copy()->endOfWeek();
 
+    // Dump results
+    // dd($date, $carbonDate, $weekStart, $weekEnd);
     // Group tasks by date and calculate total time
     $summary = UserTasks::whereBetween('timer_date', [$weekStart, $weekEnd])
       ->selectRaw('DATE(timer_date) as date, SUM(timer) as total_time')

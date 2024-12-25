@@ -56,9 +56,7 @@ function getCurrentWeekRange(date) {
     return { startOfWeek, endOfWeek };
 }
 function changeDay(direction) {
-    console.log("Current Day:", currentDate.toDateString());
-    console.log("Direction:", direction);
-
+   
     if (direction === "today") {
         // Reset to today's date
         currentDate = new Date();
@@ -77,6 +75,7 @@ function changeDay(direction) {
     }
 
     updateUI(); // Update the UI with the new currentDate
+    getWeekData();
 }
 
 function clearTable() {
@@ -454,7 +453,9 @@ updateUI();
 
 
 function getWeekData() {
-    fetch(`/timer/week-summary`)
+    const dateFormatted = getLocalDateString(currentDate);
+
+    fetch(`/timer/week-summary/${dateFormatted}`)
         .then(response => response.json())
         .then(data => {
             updateWeekView(data);
