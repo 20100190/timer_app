@@ -98,10 +98,19 @@ class TimerController extends Controller
         'client_select' => 'required|integer|exists:project,id',
         'task_select' => 'required|integer|exists:task,id',
         'taskDate' => 'required',
+        'notes' => 'nullable',
+        'timeInput' => 'nullable'
       ]);
       $project = Project::where('id', $request->input('client_select'))->first();
       if ($project) {
         $taskDate = preg_replace('/\s*\(.*?\)$/', '', $request->input('taskDate')); // "Tue Dec 24 2024 00:09:20 GMT+0500"
+        // Get the time input from the user (e.g., 1:02)
+        $timeInSeconds = 0;
+        $timeInput = $request->input('timeInput');
+        if ($timeInput) {
+          // Call the helper function to convert to seconds
+          $timeInSeconds = $this->convertTimeToSeconds($timeInput);
+        }
 
         // Convert it to Y-m-d format
         $formattedDate = Carbon::parse($taskDate)->format('Y-m-d');
@@ -111,11 +120,19 @@ class TimerController extends Controller
           'client_id' => $project->client_id,
           'project_id' => $validatedData['client_select'],
           'task_id' => $validatedData['task_select'],
-          'timer' => '0',
+          'notes' => $validatedData['notes'],
+          'timer' => $timeInSeconds,
           'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
           'timer_date' => $formattedDate,     // Today's date
           'is_running' => 1
         ]);
+        UserTasks::where('user_id',  Auth::id()) // Assuming user_id links tasks to the user
+          ->where('id', '!=', $userTasks->id) // Exclude the current task
+          ->where('timer_date', $formattedDate) // Exclude the current task
+          ->update([
+            'is_running' => false,
+            'started_at' => null, // Clear started_at for stopped tasks
+          ]);
         return response()->json([
           'message' => 'Timer started successfully',
           'task_id' => $userTasks->id
@@ -141,12 +158,22 @@ class TimerController extends Controller
       ], 500);
     }
   }
+  private function convertTimeToSeconds($timeInput)
+  {
+    // Split the input on the colon (:)
+    list($hours, $decimalMinutes) = explode(':', $timeInput);
 
+    // Convert the input to decimal hours
+    $totalHours = $hours + ($decimalMinutes / 100);
+
+    // Convert hours to seconds
+    return round($totalHours * 3600); // Round to nearest second if needed
+  }
   public function getTasks($date)
   {
     $userId = Auth::id(); // Get the authenticated user's ID
     $tasks = UserTasks::whereDate('timer_date', $date)->where('user_id', $userId)
-      ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running','task_id')->with([
+      ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')->with([
         'username',
         'client',
         'project',
@@ -232,7 +259,14 @@ class TimerController extends Controller
     $task->is_running = true;
     $task->started_at = now();
     $task->save();
-
+    // Stop all other tasks for the user
+    UserTasks::where('user_id', $task->user_id) // Assuming user_id links tasks to the user
+      ->where('id', '!=', $taskId) // Exclude the current task
+      ->where('timer_date', $task->timer_date) // Exclude the current task
+      ->update([
+        'is_running' => false,
+        'started_at' => null, // Clear started_at for stopped tasks
+      ]);
     return response()->json([
       'success' => true,
       'message' => 'Timer started',

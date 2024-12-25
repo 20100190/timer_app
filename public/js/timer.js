@@ -96,7 +96,7 @@ function createRow(rowData) {
 
     const actionCell = document.createElement("td");
     const actionButton = document.createElement("button");
-    actionButton.textContent = rowData.action;
+    actionButton.innerHTML = rowData.action;
     actionButton.setAttribute("data-id", rowData.id);
     actionButton.setAttribute("data-is-running", rowData.is_running);
 
@@ -107,11 +107,15 @@ function createRow(rowData) {
 
         if (isRunning) {
             stopTask(taskId).then(() => {
-                actionButton.textContent = "Start";
+                actionButton.innerHTML = "Start";
             });
         } else {
             startTask(taskId).then(() => {
-                actionButton.textContent = "Stop";
+                actionButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12" class="clock-running-minute-hand"></polyline>
+          <polyline points="12 12 16 14" class="clock-running-hour-hand"></polyline>
+        </svg>Stop`;
             });
         }
 
@@ -309,9 +313,26 @@ function populateTasksForDate(dateObject) {
 
                 return {
                     id: task.id,
-                    project: (task.client.name + '(' + task.project.project_name + ')' + '<br>' + task.task.name ),
+                    project: `<div class="entry-details">
+                    <div class="entry-project" style="font-weight: 550;">${task.project.project_name} (${task.client.name})</div>
+                
+                    <div class="entry-task">           ${task.task.name} 
+                </div>
+
+                        <div class="notes" style="    color: #1d1e1cb3;
+                    font-size: 13px;
+                    line-height: 1.25;
+                    margin-top: 4px;
+                    overflow-wrap: anywhere;">
+                    ${task.notes ? task.notes : ''}
+                        </div>
+                    </div>`,
                     time: secondsToHHMM(elapsedSeconds),
-                    action: task.is_running ? "Stop" : "Start",
+                    action: task.is_running ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12" class="clock-running-minute-hand"></polyline>
+          <polyline points="12 12 16 14" class="clock-running-hour-hand"></polyline>
+        </svg>Stop` : "Start",
                     is_running: task.is_running,
                 };
             });
@@ -495,7 +516,6 @@ $(document).ready(() => {
                 method: "POST",
                 data: $("#create_form").serialize(),
                 success: (response) => {
-                    alert()
                     populateTasksForDate(currentDate); // Refresh tasks for the current week
                     closeDialogue();
                 },

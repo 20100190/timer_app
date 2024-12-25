@@ -17,7 +17,8 @@ class UserTasks extends Model
     'timer',
     'started_at',
     'timer_date',
-    'is_running'
+    'is_running',
+    'notes',
   ];
 
   protected $dates = ['started_at'];
