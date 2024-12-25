@@ -56,7 +56,7 @@ function getCurrentWeekRange(date) {
     return { startOfWeek, endOfWeek };
 }
 function changeDay(direction) {
-   
+
     if (direction === "today") {
         // Reset to today's date
         currentDate = new Date();
@@ -75,7 +75,6 @@ function changeDay(direction) {
     }
 
     updateUI(); // Update the UI with the new currentDate
-    getWeekData();
 }
 
 function clearTable() {
@@ -98,6 +97,12 @@ function createRow(rowData) {
     actionButton.innerHTML = rowData.action;
     actionButton.setAttribute("data-id", rowData.id);
     actionButton.setAttribute("data-is-running", rowData.is_running);
+    const editButton = document.createElement("button");
+    editButton.innerHTML = 'Edit';
+    editButton.setAttribute("data-id", rowData.id);
+    editButton.setAttribute("class", "pds-button pds-button-sm js-edit-entry");
+
+    editButton.setAttribute("data-is-running", rowData.is_running);
 
     actionButton.addEventListener("click", function (e) {
         const button = e.target;
@@ -106,7 +111,10 @@ function createRow(rowData) {
 
         if (isRunning) {
             stopTask(taskId).then(() => {
-                actionButton.innerHTML = "Start";
+                actionButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>Start`;
             });
         } else {
             startTask(taskId).then(() => {
@@ -117,12 +125,58 @@ function createRow(rowData) {
         </svg>Stop`;
             });
         }
-
         updateUI();
         populateTasksForDate(currentDate);
     });
+    editButton.addEventListener("click", function (e) {
+        const button = e.target;
+        const taskId = button.getAttribute("data-id");
+        fetch(`/timer/get-task/${taskId}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((response) => {
+                console.log(JSON.stringify(response));
+                // $('#taskDate').val(currentDate);
+                populateClients(response.project_id);
+                populateTasks(response.project_id, response.task_id);
+                $('#taskDate').val(response.timer_date);
+                $('textarea.entry-notes').html(response.notes);
+                $('#timeInput').removeAttr('disabled');
 
+                let startedAtTime = null;
+                if (response.started_at) {
+                    const isoString = response.started_at.replace(" ", "T") + "Z";
+                    startedAtTime = new Date(isoString);
+                }
+
+                let elapsedSeconds;
+                if (response.is_running && startedAtTime) {
+                    $('#timeInput').attr('disabled', 'disabled');
+                    const nowMs = Date.now();
+                    const startedMs = startedAtTime.getTime();
+                    const diffInSeconds = Math.floor(
+                        (nowMs - startedMs) / 1000
+                    );
+
+                    elapsedSeconds = response.timer + diffInSeconds;
+                } else {
+                    elapsedSeconds = response.timer;
+                }
+                $("#timeInput").val(secondtoHour(elapsedSeconds));
+                $("#startTimerButton").text("update Timer")
+                dialogue.style.display = "block";
+            })
+            .catch((error) => {
+                console.error("Error fetching projects:", error);
+                alert("Failed to load projects. Please try again.");
+            });
+    });
     actionCell.appendChild(actionButton);
+    actionCell.appendChild(editButton);
     row.appendChild(actionCell);
 
     document.querySelector(".day-tasks tbody").appendChild(row);
@@ -181,7 +235,7 @@ function fetchUserName() {
         });
 }
 
-function populateClients() {
+function populateClients(project_id = null) {
     clientSelect.innerHTML = '<option value="">Select a Client</option>';
 
     fetch("/timer/get-clients-and-projects")
@@ -207,6 +261,9 @@ function populateClients() {
 
                 // Append the optgroup to the select element
                 clientSelect.appendChild(optgroup);
+                if (client.projects.some(project => project.id === project_id)) {
+                    $(clientSelect).val(project_id);
+                }
             });
         })
         .catch((error) => {
@@ -284,6 +341,10 @@ function secondsToHHMM(totalSeconds) {
 
     return `${hoursStr}:${minutesStr}`;
 }
+function secondtoHour(seconds) {
+    const hours = (seconds / 3600).toFixed(2);
+    return hours;
+}
 
 function populateTasksForDate(dateObject) {
     const dateFormatted = getLocalDateString(dateObject);
@@ -331,7 +392,10 @@ function populateTasksForDate(dateObject) {
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12" class="clock-running-minute-hand"></polyline>
           <polyline points="12 12 16 14" class="clock-running-hour-hand"></polyline>
-        </svg>Stop` : "Start",
+        </svg>Stop` : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>Start`,
                     is_running: task.is_running,
                 };
             });
@@ -356,6 +420,7 @@ function updateUI() {
     daysOfWeek[selectedDay].style.backgroundColor = "lightgreen";
 
     populateTasksForDate(currentDate);
+    getWeekData();
 }
 
 function getLocalDateString(dateObject) {
@@ -406,7 +471,7 @@ previousDayButton.addEventListener("click", () => changeDay(-1));
 nextDayButton.addEventListener("click", () => changeDay(1));
 timeTrackerButton.addEventListener("click", () => openDialogue());
 cancelButton.addEventListener("click", () => closeDialogue());
-function populateTasks(selectedProjectId) {
+function populateTasks(selectedProjectId, selectedTaskId = null) {
     projectSelect.innerHTML = '<option value="">Select a Project</option>';
     projectSelect.disabled = true;
 
@@ -428,7 +493,9 @@ function populateTasks(selectedProjectId) {
                     option.textContent = project.name;
                     projectSelect.appendChild(option);
                 });
-
+                if (projects.some(project => project.id === selectedTaskId)) {
+                    $(projectSelect).val(selectedTaskId);
+                }
                 projectSelect.disabled = false;
             } else {
                 projectSelect.innerHTML =

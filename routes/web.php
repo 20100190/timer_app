@@ -30,6 +30,8 @@ Route::get('/timer/get-projects/{clientId}', 'TimerController@getProjects');
 Route::get('/timer/get-user', 'TimerController@getUser');
 Route::post('/timer/init-timer', 'TimerController@initTimer')->name('startTimer');
 Route::get('/timer/get-tasks/{date}', 'TimerController@getTasks');
+Route::get('/timer/get-task/{taskId}', 'TimerController@getTask');
+
 Route::post('/timer/start-timer/{taskId}', 'TimerController@startTimer');
 Route::post('/timer/stop-timer/{taskId}', 'TimerController@stopTimer');
 Route::get('/timer/week-summary/{date}', 'TimerController@getWeekSummary');

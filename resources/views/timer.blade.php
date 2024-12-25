@@ -385,7 +385,7 @@
                 <span class="pds-field-description shift-enter-helper-text"><kbd>Shift+Return</kbd> for line break</span>
               </div>
 
-              <input type="text" name="timeInput" placeholder="0:00" class="pds-input js-hours hours-input" aria-label="hours" pattern="^\d+:\d{2}$" value="">
+              <input type="text" name="timeInput" id="timeInput" placeholder="0:00" class="pds-input js-hours hours-input" aria-label="hours" pattern="^\d+:\d{2}$" value="">
 
               <div class="js-validation-error-placeholder pds-text-right" data-for="hours"></div>
             </div>

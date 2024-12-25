@@ -183,6 +183,15 @@ class TimerController extends Controller
 
     return response()->json($tasks);
   }
+  public function getTask($taskId)
+  {
+    $userId = Auth::id(); // Get the authenticated user's ID
+    $tasks = UserTasks::where('id', $taskId)->where('user_id', $userId)
+      ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')
+      ->first();
+
+    return response()->json($tasks);
+  }
   public function getWeeklyTasks($date)
   {
     $userId = Auth::id(); // Get the authenticated user's ID
