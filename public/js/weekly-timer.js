@@ -15,6 +15,8 @@ let currentDate = new Date();
 let currentUserName = null;
 const calendarButton = document.getElementById("calendar-button");
 const datePicker = document.getElementById("date-picker");
+const taskDate = document.querySelector(".js-spent-at-display");
+
 calendarButton.addEventListener("click", () => {
     datePicker.showPicker(); // Trigger the date picker
 });
@@ -110,6 +112,9 @@ function appendWeeklyTasks(weeklyTasks) {
     $.each(weeklyTasks, function (clientProject, days) {
         // Create the <tr> element
         const projectId = days.find((day) => day.project_id)?.project_id || ''; // Find the first valid projectId, fallback to empty string
+        const project_name = days.find((day) => day.project_name)?.project_name || ''; // Find the first valid projectId, fallback to empty string
+        const client_name = days.find((day) => day.client_name)?.client_name || ''; // Find the first valid projectId, fallback to empty string
+        const task_name = days.find((day) => day.task_name)?.task_name || ''; // Find the first valid projectId, fallback to empty string
         const clientId = days.find((day) => day.client_id)?.client_id || ''; // Find the first valid projectId, fallback to empty string
         const $row = $('<tr>')
             .addClass('week-view-entry')
@@ -117,9 +122,15 @@ function appendWeeklyTasks(weeklyTasks) {
             .attr('data-client-id', clientId);
         // Add the project+client column
         const $nameCell = $('<td>').addClass('name').append(
-            $('<div>').addClass('entry-project').text(clientProject.split(' + ')[0]), // Project name
+            $('<div>').addClass('entry-project').text(project_name), // Project name
             $('<div>').addClass('entry-client').html(
-                `<span class="pds-show@md">(</span>${clientProject.split(' + ')[1]}<span class="pds-show@md">)</span>`
+                `<span class="pds-show@md">(</span>${client_name}<span class="pds-show@md">)</span>`
+            ),
+            $('<div>').addClass('entry-task').html(
+                `${task_name}`
+            ),
+            $('<div>').addClass('entry-notes').html(
+                `${clientProject.split('+')[3]}`
             )
         );
         $row.append($nameCell);
@@ -303,11 +314,53 @@ function fetchUserName() {
             alert("Failed to load user information.");
         });
 }
+function populateTasks(selectedProjectId, selectedTaskId = null) {
+    projectSelect.innerHTML = '<option value="">Select a Project</option>';
+    projectSelect.disabled = true;
 
-function populateClients() {
+    if (!selectedProjectId) return;
+
+    fetch(`/timer/get-tasks`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then((projects) => {
+            if (projects.length > 0) {
+                projects.forEach((project) => {
+                    const option = document.createElement("option");
+                    option.value = project.id;
+                    option.setAttribute("data-name", project.name);
+                    option.textContent = project.name;
+                    projectSelect.appendChild(option);
+                });
+                if (projects.some(project => project.id === selectedTaskId)) {
+                    $(projectSelect).val(selectedTaskId);
+                }
+                projectSelect.disabled = false;
+            } else {
+                projectSelect.innerHTML =
+                    '<option value="">No Task available</option>';
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching projects:", error);
+            alert("Failed to load projects. Please try again.");
+        });
+}
+
+clientSelect.addEventListener("change", function () {
+    const selectedProjectId = this.value;
+    populateTasks(selectedProjectId);
+});
+
+
+function populateClients(project_id = null) {
     clientSelect.innerHTML = '<option value="">Select a Client</option>';
 
-    fetch("/timer/get-clients")
+    fetch("/timer/get-clients-and-projects")
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -316,17 +369,30 @@ function populateClients() {
         })
         .then((clients) => {
             clients.forEach((client) => {
-                const option = document.createElement("option");
-                option.value = client.id;
-                option.setAttribute("data-name", client.name);
-                option.textContent = client.name;
-                clientSelect.appendChild(option);
+                // Create an optgroup for the client
+                const optgroup = document.createElement("optgroup");
+                optgroup.label = client.name;
+
+                // Add each project under the optgroup
+                client.projects.forEach((project) => {
+                    const option = document.createElement("option");
+                    option.value = project.id;
+                    option.textContent = project.project_name;
+                    optgroup.appendChild(option);
+                });
+
+                // Append the optgroup to the select element
+                clientSelect.appendChild(optgroup);
+                if (client.projects.some(project => project.id === project_id)) {
+                    $(clientSelect).val(project_id);
+                }
             });
         })
         .catch((error) => {
             console.error("Error fetching clients:", error);
             alert("Failed to load clients. Please try again.");
         });
+
 }
 
 function populateProjects(clientId) {
@@ -343,6 +409,8 @@ function populateProjects(clientId) {
             return response.json();
         })
         .then((projects) => {
+            projectSelect.innerHTML = '<option value="">Select a Project</option>';
+
             // Get all projects currently in the table
             const existingProjects = new Set();
             document.querySelectorAll("table tbody tr").forEach((row) => {
@@ -386,6 +454,7 @@ function closeDialogue() {
 }
 
 function openDialogue() {
+    $('#taskDate').val(currentDate);
     dialogue.style.display = "block";
     clientSelect.innerHTML = "";
     projectSelect.innerHTML = "";
@@ -526,114 +595,9 @@ clientSelect.addEventListener("change", function () {
     populateProjects(selectedClientId);
 });
 
-startTimerButton.addEventListener("click", function () {
-    const clientId = parseInt(clientSelect.value, 10);
-    const projectId = parseInt(projectSelect.value, 10);
-    const now = new Date();
-    const startedAt = getUTCDateString(now);
-    const timerDate = getLocalDateString(currentDate); // Assume this is the selected week's start date
 
-    if (isNaN(clientId) || clientId <= 0) {
-        alert("Please select a valid client");
-        return;
-    }
 
-    if (isNaN(projectId) || projectId <= 0) {
-        alert("Please select a valid project");
-        return;
-    }
-
-    const selectedClientOption =
-        clientSelect.options[clientSelect.selectedIndex];
-    const clientName = selectedClientOption.getAttribute("data-name");
-
-    const selectedProjectOption =
-        projectSelect.options[projectSelect.selectedIndex];
-    const projectName = selectedProjectOption.getAttribute("data-name");
-
-    // Function to calculate the start and end of the week
-    function getWeekDates(baseDate) {
-        const startOfWeek = new Date(baseDate);
-        startOfWeek.setDate(baseDate.getDate() - baseDate.getDay() + 1); // Set to Monday
-
-        const weekDates = [];
-        for (let i = 0; i < 7; i++) {
-            const date = new Date(startOfWeek);
-            date.setDate(startOfWeek.getDate() + i); // Add days for the week
-            weekDates.push(date);
-        }
-
-        return weekDates;
-    }
-
-    const weekDates = getWeekDates(currentDate);
-
-    const timerEntries = weekDates.map((date) => ({
-        username: currentUserName,
-        client_id: clientId,
-        project_id: projectId,
-        client_name: clientName,
-        project_name: projectName,
-        is_running: false,
-        timer: '0',
-        started_at: startedAt,
-        timer_date: timerDate, // Format each day's date
-    }));
-
-    // Send timer entries for each day of the week
-    Promise.all(
-        timerEntries.map((entry) =>
-            fetch("/timer/init-timer", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
-                },
-                body: JSON.stringify(entry),
-            })
-        )
-    )
-        .then((responses) => {
-            const failedResponses = responses.filter((res) => !res.ok);
-            if (failedResponses.length > 0) {
-                alert("Some timer entries failed to save.");
-            } else {
-                console.log("All timer entries saved successfully.");
-            }
-        })
-        .catch((error) => {
-            console.error("Error saving timer entries:", error);
-            alert("Failed to save timer entries. Please try again.");
-        });
-
-    populateTasksForWeek(currentDate); // Refresh tasks for the current week
-    closeDialogue();
-});
-
-// setInterval(() => populateTasksForWeek(currentDate), 60_000);
-getWeekData();
 updateUI();
-
-
-function getWeekData() {
-    fetch(`/timer/week-summary`)
-        .then(response => response.json())
-        .then(data => {
-            updateWeekView(data);
-        })
-        .catch(error => console.error('Error fetching week summary:', error));
-}
-function updateWeekView(data) {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    days.forEach((day, index) => {
-        const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
-        if (timeSpan) { // Check if the element exists
-            timeSpan.textContent = data[day] || '0:00'; // Replace with fetched time or keep 0:00
-        }
-    });
-}
 
 // Attach event delegation to a parent element
 let changedInputs = {}; // Object to track changed inputs
@@ -757,7 +721,7 @@ function saveChangesToDatabase() {
             changedInputs = {}; // Clear tracked changes after saving
         })
         .catch((error) => {
-            
+
             console.error('Error saving changes:', error);
             // alert('Failed to save changes. Please try again.');
         });
@@ -845,3 +809,61 @@ function deleteWeekData(buttonElement) {
             alert('Failed to delete data. Please try again.');
         });
 }
+$(document).ready(() => {
+    const showError = () => {
+        Swal.fire({
+            title: "Error!",
+            text: 'Sorry, looks like there are some errors detected, please try again.',
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok, got it!",
+            customClass: {
+                confirmButton: "btn btn-primary"
+            }
+        });
+    };
+    $("#create_form").validate({
+        rules: {
+            client_select: {
+                required: true,
+            },
+            task_select: {
+                required: true,
+            },
+        },
+        messages: {
+            client_select: {
+                required: "Please enter your name",
+            },
+            task_select: {
+                required: "Please enter your email",
+            },
+        },
+        errorElement: "span",
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        },
+        submitHandler: function (form, event) { // Add `event` as the second parameter
+            event.preventDefault(); // Prevent default form submission
+            const url = $("#create_form").data("url");
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: $("#create_form").serialize(),
+                success: (response) => {
+                    populateTasksForWeek(currentDate); // Refresh tasks for the current week
+                    closeDialogue();
+                },
+                error: (response) => {
+
+                    showError();
+                }
+            });
+        }
+    });
+});

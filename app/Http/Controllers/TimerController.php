@@ -158,21 +158,85 @@ class TimerController extends Controller
       ], 500);
     }
   }
-  private function convertTimeToSeconds($timeInput)
+  public function initWeekTimer(Request $request)
   {
-    // Split the input on the colon (:)
-    list($hours, $decimalMinutes) = explode(':', $timeInput);
-
-    // Convert the input to decimal hours
-    $totalHours = $hours + ($decimalMinutes / 100);
-
-    // Convert hours to seconds
-    return round($totalHours * 3600); // Round to nearest second if needed
+    try {
+      $validatedData = $request->validate([
+        'client_select' => 'required|integer|exists:project,id',
+        'task_select' => 'required|integer|exists:task,id',
+        'taskDate' => 'required',
+        'notes' => 'nullable',
+        'timeInput' => 'nullable'
+      ]);
+      $project = Project::where('id', $request->input('client_select'))->first();
+      if ($project) {
+        $taskDate = preg_replace('/\s*\(.*?\)$/', '', $request->input('taskDate')); // "Tue Dec 24 2024 00:09:20 GMT+0500"
+        // Parse the date and calculate the start (Monday) and end (Sunday) of the week
+        $startOfWeek = Carbon::parse($taskDate)->startOfWeek(Carbon::MONDAY);
+        $endOfWeek = Carbon::parse($taskDate)->endOfWeek(Carbon::SUNDAY);
+        $weekDates = [];
+        for ($date = $startOfWeek; $date->lte($endOfWeek); $date->addDay()) {
+          $weekDates[] = $date->toDateString(); // Format: "YYYY-MM-DD"
+        }
+        $finalDateArray = [];
+        foreach ($weekDates as $date) {
+          $formattedDate = Carbon::parse($date)->format('Y-m-d');
+          $finalDateArray[] = [
+            'user_id' => Auth::id(),
+            'client_id' => $project->client_id,
+            'project_id' => $validatedData['client_select'],
+            'task_id' => $validatedData['task_select'],
+            'notes' => null,
+            'timer' => 0,
+            'started_at' => null, // Current date and time
+            'timer_date' => $formattedDate,     // Today's date
+            'is_running' => 0
+          ];
+        }
+        UserTasks::insert($finalDateArray);
+        return response()->json([
+          'message' => 'Timer started successfully',
+        ], 201);
+      } else {
+        return response()->json([
+          'message' => 'Failed to start timer',
+          'error' => 'No project found'
+        ], 500);
+      }
+    } catch (\Illuminate\Validation\ValidationException $ve) {
+      Log::error('Validation Error: ' . json_encode($ve->errors()));
+      return response()->json([
+        'message' => 'Validation failed',
+        'errors' => $ve->errors()
+      ], 422);
+    } catch (\Exception $e) {
+      Log::error('Error starting timer: ' . $e->getMessage());
+      Log::error('Error Trace: ' . $e->getTraceAsString());
+      return response()->json([
+        'message' => 'Failed to start timer',
+        'error' => $e->getMessage()
+      ], 500);
+    }
   }
+
+
+
+  /**
+   * Generate an array of dates from the start to the end of the week.
+   */
+  private function generateWeekDates(Carbon $startOfWeek, Carbon $endOfWeek): array
+  {
+    $dates = [];
+    for ($date = $startOfWeek->copy(); $date->lte($endOfWeek); $date->addDay()) {
+      $dates[] = $date->toDateString(); // Format: "YYYY-MM-DD"
+    }
+    return $dates;
+  }
+
   public function getTasks($date)
   {
     $userId = Auth::id(); // Get the authenticated user's ID
-    $tasks = UserTasks::whereDate('timer_date', $date)->where('user_id', $userId)
+    $tasks = UserTasks::whereDate('timer_date', $date)->where('user_id', $userId)->where('is_weekly_only', 0)
       ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')->with([
         'username',
         'client',
@@ -183,10 +247,16 @@ class TimerController extends Controller
 
     return response()->json($tasks);
   }
+  private function convertTimeToSeconds(string $timeInput): int
+  {
+    [$hours, $minutes] = array_pad(explode('.', $timeInput), 2, 0);
+    return ((int)$hours * 3600) + ((int)$minutes * 60);
+  }
+
   public function getTask($taskId)
   {
     $userId = Auth::id(); // Get the authenticated user's ID
-    $tasks = UserTasks::where('id', $taskId)->where('user_id', $userId)
+    $tasks = UserTasks::where('id', $taskId)->where(['user_id' => $userId, 'is_weekly_only' => 0])
       ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')
       ->first();
 
@@ -201,38 +271,58 @@ class TimerController extends Controller
     $endOfWeek = Carbon::parse($date)->endOfWeek(Carbon::SUNDAY);
 
     // Fetch tasks for the week, grouped by date, project, and client
+    // Updated query without project_name and client_name
     $tasks = UserTasks::whereBetween('timer_date', [$startOfWeek->toDateString(), $endOfWeek->toDateString()])
       ->select(
         'id',
+        'user_id',
+        'client_id',
+        'project_id',
+        'timer',
+        'started_at',
         'timer_date',
-        'project_name',
-        'client_name',
+        'is_running',
+        'task_id',
+        'notes',
+        DB::raw('SUM(timer) as total_time')
+      )
+      ->with(['username', 'client', 'project', 'task'])
+      ->groupBy(
+        'timer_date',
+        'task_id',
+        'notes',
         'project_id',
         'client_id',
-        DB::raw('SUM(timer) as total_time') // Sum the 'timer' field
+        'created_at',
+        'id'
       )
-      ->groupBy('timer_date', 'project_name', 'client_name', 'project_id', 'client_id', 'created_at', 'id')
       ->orderBy('created_at', 'ASC')
       ->get();
 
     // Initialize the response structure
     $result = [];
 
-    // Get all unique combinations of project and client names from tasks
-    $projectsAndClients = $tasks->map(function ($task) {
-      return "{$task->project_name} + {$task->client_name}";
+    // Get all unique combinations of project_id, client_id, task_id, and notes
+    $projectsClientsTasksNotes = $tasks->map(function ($task) {
+      return "{$task->project_id}+{$task->client_id}+{$task->task_id}+{$task->notes}";
     })->unique();
 
-    // Iterate over each project + client combination
-    foreach ($projectsAndClients as $projectAndClient) {
-      $result[$projectAndClient] = [];
+    // Iterate over each combination of project (client), task, and notes
+    foreach ($projectsClientsTasksNotes as $combination) {
+      $result[$combination] = [];
 
-      // Extract project and client names
-      $tasksForCombination = $tasks->filter(function ($task) use ($projectAndClient) {
-        return "{$task->project_name} + {$task->client_name}" === $projectAndClient;
+      // Split the combination back into IDs and notes
+      [$projectId, $clientId, $taskId, $notes] = explode('+', $combination);
+
+      // Extract tasks for the current combination
+      $tasksForCombination = $tasks->filter(function ($task) use ($projectId, $clientId, $taskId, $notes) {
+        return $task->project_id == $projectId
+          && $task->client_id == $clientId
+          && $task->task_id == $taskId
+          && $task->notes == $notes;
       });
 
-      // Use the first task to retrieve project and client IDs for this combination
+      // Use the first task to retrieve additional task details
       $sampleTask = $tasksForCombination->first();
 
       // Iterate through each day of the week
@@ -245,13 +335,17 @@ class TimerController extends Controller
           return Carbon::parse($task->timer_date)->toDateString() === $currentDate;
         });
 
-        // Append the task data for the current day
-        $result[$projectAndClient][] = [
-          'task_id' => $sampleTask->id,
+        // Append the task data for the current day=
+        $result[$combination][] = [
+          'task_id' => $taskId, // Use the task_id for this combination
           'day' => $dayName,
           'time' => $dayTask->total_time ?? 0, // Default to 0 if no tasks found
-          'project_id' => $sampleTask->project_id ?? '', // Use project_id from the combination
-          'client_id' => $sampleTask->client_id ?? '',  // Use client_id from the combination
+          'project_id' => $projectId,
+          'project_name' => $sampleTask->project->project_name ?? '',
+          'client_name' => $sampleTask->client->name ?? '',
+          'task_name' => $sampleTask->task->name ?? '',
+          'client_id' => $clientId,
+          'notes' => $notes, // Include the notes
           'date' => $currentDate, // Use the current date for the week
         ];
       }
@@ -412,7 +506,6 @@ class TimerController extends Controller
   }
   public function saveTasks(Request $request)
   {
-    dd($request);
     $validatedData = $request->validate([
       'tasks' => 'required|array',
       'tasks.*.time' => 'required|regex:/^\d{1,2}:\d{2}$/',

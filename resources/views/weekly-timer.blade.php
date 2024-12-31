@@ -421,23 +421,77 @@
         <div class="week-view">
 
         </div>
-        <div class="dialogue">
-          <div class="dialogue-inner">
-            <div class="dialogue-row">
-              <label for="clientSelect">Client (*)</label>
-              <select id="clientSelect" class="searchable-select">
-                  <option value="" disabled selected>Select a client and project</option>
-              </select>
-            </div>
-            <div class="dialogue-row">
-              <label for="projectSelect">Project (*)</label>
-              <select id="projectSelect" class="searchable-select" disabled>
-              </select>
-            </div>
-          </div>
-          <div class="dialogue-actions">
-            <button id="startTimerButton">Save Row</button>
-            <button id="cancelButton">Cancel</button>
+        <div id="new-entry-dialog" aria-labelledby="modal-time-entry-title" class="pds-dialog dialogue" role="dialog">
+          <h1 id="modal-time-entry-title" class="pds-dialog-title">
+           Add row to this time sheet
+          </h1>
+
+          <div class="js-editor">
+            <form class="day-entry-editor" id="create_form" data-url="{{ route('startWeekTimer') }}">
+              <div class="pds-mb-sm js-projects">
+                <label class="pds-label pds-display-inline-block">Project / Task</label>
+
+                <div class="pds-fl-right js-project-info"></div>
+                <div id="calendar-recurring-event-popover-wrapper" class="pds-position-relative" data-popover-placement="right">
+                  <div class="dialogue-row">
+                    <select id="clientSelect" name="client_select" class="searchable-select">
+                    </select>
+                  </div>
+                  <div class="dialogue-row" style="margin-top:10px;">
+                    <select id="projectSelect" name="task_select" class="searchable-select" disabled>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <input type="hidden" id="taskDate" name="taskDate">
+
+          
+
+              <div class="pds-flex-list pds-gap-md pds-justify-between pds-mt-md js-form-buttons">
+                <div class="pds-flex-list@xs-stretch">
+                  <button type="submit" id="startTimerButton" class="pds-button pds-button-primary js-submit" data-analytics-element-id="timesheet-day-entry-editor-start-timer-or-save-entry">Start timer</button>
+                  <button type="button" class="pds-button js-close" id="cancelButton" aria-label="Cancel and close dialog" data-analytics-element-id="timesheet-day-entry-editor-cancel">Cancel</button>
+                  <span class="form-loading js-loading"></span>
+                  <span class="form-success js-success">Saved!</span>
+                </div>
+
+                <!-- <div class="pds-flex-list pds-ml-auto">
+                <button type="button" class="pds-button-link pds-flex-list js-calendar-button">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  Pull in a calendar event
+                </button>
+
+                <button class="pds-button-link pds-color-muted js-change-date" type="button" hidden="">
+                  Change date
+                </button>
+                <input class="pds-input pds-input-sm spent-at js-spent-at-field" name="spent_at" autocomplete="off" data-newdatepicker="" hidden="">
+
+              </div> -->
+              </div>
+
+              <div class="expenses-form-delete-confirmation pds-flex-list pds-justify-end pds-button-input-height-md pds-text-sm pds-mt-md js-entry-delete-confirmation" hidden="">
+                <span class="pds-mr@md-sm">Permanently delete this time entry?</span>
+                <div class="pds-flex-list@xs-stretch">
+                  <button class="pds-button pds-button-sm pds-button-danger js-confirm-delete-entry" type="button" data-analytics-element-id="timesheet-day-entry-editor-delete-confirm">Delete time entry</button>
+                  <button class="pds-button pds-button-sm js-cancel-delete-entry" type="button" data-analytics-element-id="timesheet-day-entry-editor-delete-cancel">Cancel</button>
+                </div>
+              </div>
+
+              <div class="pdsf-card pdsf-card-warning pds-text-center pds-mt-md js-timer-start-confirmation" hidden="">
+                This is not today’s timesheet. Are you sure you want to start this timer?
+                <div class="pds-flex-list pds-justify-center pds-mt-sm">
+                  <button class="pds-button pds-button-sm pds-button-primary js-cancel-start-timer" type="button" data-analytics-element-id="timesheet-day-entry-editor-start-timer-cancel">Cancel</button>
+                  <button class="pds-button pds-button-sm js-confirm-start-timer" type="button" data-analytics-element-id="timesheet-day-entry-editor-start-timer-not-today">Yes, start this timer on Friday</button>
+                  <button class="pds-button pds-button-sm js-confirm-start-timer-today" type="button" data-analytics-element-id="timesheet-day-entry-editor-start-timer-today">Start timer on today’s date</button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

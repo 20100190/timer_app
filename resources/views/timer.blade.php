@@ -328,31 +328,7 @@
 
       </div>
 
-      {{--
-    <div class="dialogue">
-        <div class="dialogue-inner">
-          <div class="dialogue-row">
-            <label for="clientSelect">Client (*)</label>
-            <select id="clientSelect" class="searchable-select">
-            </select>
-          </div>
-          <div class="dialogue-row">
-            <label for="projectSelect">Project (*)</label>
-            <select id="projectSelect" class="searchable-select" disabled>
-            </select>
-          </div>
-          <div class="dialogue-row">
-            <label for="timeInput">Add time</label>
-            <input type="text" id="timeInput" placeholder="h:mm" pattern="^\d+:\d{2}$">
-          </div>
-        </div>
-        <div class="dialogue-actions">
-          <button id="startTimerButton">Start Timer</button>
-          <button id="cancelButton">Cancel</button>
-        </div>
-      </div>
-    </div>
-    --}}
+     
       <div id="new-entry-dialog" aria-labelledby="modal-time-entry-title" class="pds-dialog dialogue" role="dialog">
         <h1 id="modal-time-entry-title" class="pds-dialog-title">
           New time entry for
@@ -385,7 +361,7 @@
                 <span class="pds-field-description shift-enter-helper-text"><kbd>Shift+Return</kbd> for line break</span>
               </div>
 
-              <input type="text" name="timeInput" id="timeInput" placeholder="0:00" class="pds-input js-hours hours-input" aria-label="hours" pattern="^\d+:\d{2}$" value="">
+              <input type="text" name="timeInput" id="timeInput" placeholder="0.00" class="pds-input js-hours hours-input" aria-label="hours" pattern="^\d+.\d{2}$" value="">
 
               <div class="js-validation-error-placeholder pds-text-right" data-for="hours"></div>
             </div>
