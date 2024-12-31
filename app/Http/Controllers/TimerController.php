@@ -325,6 +325,7 @@ class TimerController extends Controller
         'project_id',
         'client_id',
         'created_at',
+        'user_id',
         'id'
       )
       ->orderBy('created_at', 'ASC')
