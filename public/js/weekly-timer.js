@@ -152,7 +152,7 @@ function appendWeeklyTasks(weeklyTasks) {
                         .attr('data-task-id', day.task_id)
                         .attr('data-project-id', day.project_id)
                         .attr('data-client-id', day.client_id)
-                        .attr('date', day.date)
+                        .attr('data-date', day.date)
                         .attr('aria-label', `Hours on ${day.day}`)
                         .val(
                             timeInSeconds
@@ -607,8 +607,11 @@ let autoSaveTimer = null; // Timer for auto-saving changes
 document.addEventListener('input', function (event) {
     if (event.target.classList.contains('js-compound-entry')) {
         const input = event.target;
-        const taskId = input.dataset.taskId; // Assuming `data-task-id` holds the task ID
-        const value = input.value;
+        const taskId = input.dataset.taskId;
+        const projectId = input.dataset.projectId; 
+        const clientId = input.dataset.clientId; // Assuming `data-task-id` holds the task ID
+        const date = input.dataset.date; // Assuming `data-task-id` holds the task ID
+        const value = input.value.trim();
 
         // Sanitize the value (remove invalid characters)
         const sanitizedValue = value.replace(/[^0-9:]/g, '').slice(0, 5);
@@ -616,12 +619,19 @@ document.addEventListener('input', function (event) {
             input.value = sanitizedValue;
         }
 
+        // Automatically append ':00' if only hours are entered
+        // if (/^\d{1,2}$/.test(value)) {
+        //     value = `${value}:00`;
+        // }
+
+
         // Track changes in the `changedInputs` object
-        changedInputs[taskId] = {
-            time: input.value.trim(),
+        changedInputs[taskId+'_'+projectId+'_'+clientId+'_'+date] = {
+            time: value,
             date: input.dataset.date, // Assuming `data-date` holds the date
             project_id: input.dataset.projectId, // Assuming `data-project-id` holds the project ID
-            client_id: input.dataset.clientId // Assuming `data-client-id` holds the client ID
+            client_id: input.dataset.clientId, // Assuming `data-client-id` holds the client ID
+            task_id: input.dataset.taskId, // Assuming `data-client-id` holds the client ID
         };
 
         // Reset auto-save timer
@@ -700,31 +710,28 @@ saveButton.addEventListener('click', function () {
 
 // Function to save changes to the database
 function saveChangesToDatabase() {
-    fetch('/save-tasks', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ tasks: changedInputs })
-    })
-        .then((response) => {
-            console.log(response);
-            if (!response.ok) {
-                throw new Error('Failed to save changes.');
-            }
-            // updateUI();
-            return response.json();
-        })
-        .then((data) => {
-            console.log('Changes saved successfully:', data);
-            changedInputs = {}; // Clear tracked changes after saving
-        })
-        .catch((error) => {
 
-            console.error('Error saving changes:', error);
-            // alert('Failed to save changes. Please try again.');
-        });
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: '/save-tasks',
+        method: "POST",
+        data: {
+            tasks: changedInputs
+        },
+        success: (response) => {
+            console.log(response);
+            populateTasksForWeek(currentDate); // Refresh tasks for the current week
+            // closeDialogue();
+        },
+        error: (response) => {
+            console.log(response);
+            showError();
+        }
+    });
 }
 
 

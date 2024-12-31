@@ -93,6 +93,7 @@ class TimerController extends Controller
 
   public function initTimer(Request $request)
   {
+    // DB::enableQueryLog();
     try {
       $validatedData = $request->validate([
         'client_select' => 'required|integer|exists:project,id',
@@ -115,17 +116,44 @@ class TimerController extends Controller
         // Convert it to Y-m-d format
         $formattedDate = Carbon::parse($taskDate)->format('Y-m-d');
         $formattedDateTime = Carbon::parse($taskDate)->format('Y-m-d H:i:s'); // Output: "2024-12-24 00:05:56"
-        $userTasks = UserTasks::create([
-          'user_id' => Auth::id(),
+        $userTasks = UserTasks::where([
           'client_id' => $project->client_id,
           'project_id' => $validatedData['client_select'],
           'task_id' => $validatedData['task_select'],
-          'notes' => $validatedData['notes'],
-          'timer' => $timeInSeconds,
-          'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
-          'timer_date' => $formattedDate,     // Today's date
-          'is_running' => 1
-        ]);
+          'user_id' => Auth::id(),
+          'notes' => null,
+          'is_weekly_only' => 1,
+          'timer_date' => $formattedDate
+        ])->first();
+        if ($userTasks) {
+          $userTasks->update(
+            [
+              'user_id' => Auth::id(),
+              'client_id' => $project->client_id,
+              'project_id' => $validatedData['client_select'],
+              'task_id' => $validatedData['task_select'],
+              'notes' => $validatedData['notes'],
+              'timer' => $timeInSeconds,
+              'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
+              'timer_date' => $formattedDate,     // Today's date
+              'is_running' => 1,
+              'is_weekly_only' => 0, // Updated to pass as an integer
+            ]
+          );
+        } else {
+          $userTasks = UserTasks::create([
+            'user_id' => Auth::id(),
+            'client_id' => $project->client_id,
+            'project_id' => $validatedData['client_select'],
+            'task_id' => $validatedData['task_select'],
+            'notes' => $validatedData['notes'],
+            'timer' => $timeInSeconds,
+            'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
+            'timer_date' => $formattedDate,     // Today's date
+            'is_running' => 1,
+            'is_weekly_only' => 0
+          ]);
+        }
         UserTasks::where('user_id',  Auth::id()) // Assuming user_id links tasks to the user
           ->where('id', '!=', $userTasks->id) // Exclude the current task
           ->where('timer_date', $formattedDate) // Exclude the current task
@@ -190,7 +218,10 @@ class TimerController extends Controller
             'timer' => 0,
             'started_at' => null, // Current date and time
             'timer_date' => $formattedDate,     // Today's date
-            'is_running' => 0
+            'is_running' => 0,
+            'is_weekly_only' => 1,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
           ];
         }
         UserTasks::insert($finalDateArray);
@@ -508,28 +539,38 @@ class TimerController extends Controller
   {
     $validatedData = $request->validate([
       'tasks' => 'required|array',
-      'tasks.*.time' => 'required|regex:/^\d{1,2}:\d{2}$/',
-      'tasks.*.date' => 'required|date',
-      'tasks.*.project_id' => 'required',
-      'tasks.*.client_id' => 'required',
     ]);
-    DB::enable_query_log();
+    DB::enableQueryLog();
     foreach ($validatedData['tasks'] as $taskData) {
-      [$hours, $minutes] = explode(':', $taskData['time']);
-      $totalTimeInSeconds = ($hours * 3600) + ($minutes * 60);
+      $timeValue = $taskData['time']; // Assuming the input timeValue is passed via a request
 
+      if (preg_match('/^\d{1,2}$/', $timeValue)) {
+        $timeValue = $timeValue . ':00';
+      }
+      // dd($timeValue);
+      [$hours, $minutes] = explode(':', $timeValue);
+      $totalTimeInSeconds = ($hours * 3600) + ($minutes * 60);
+      $formattedDate = Carbon::parse($taskData['date'])->format('Y-m-d');
       UserTasks::updateOrCreate(
-        ['id' => $taskData['task_id'] ?? null],
+        [
+          'client_id' => $taskData['client_id'],
+          'project_id' => $taskData['project_id'],
+          'task_id' => $taskData['task_id'],
+          'user_id' => Auth::id(),
+          'timer_date' => $formattedDate
+        ],
         [
           'timer' => $totalTimeInSeconds,
-          'timer_date' => $taskData['date'],
+          'client_id' => $taskData['client_id'],
           'project_id' => $taskData['project_id'],
-          'client_id' => $taskData['client_id']
+          'task_id' => $taskData['task_id'],
+          'timer_date' => $formattedDate,     // Today's date
+          'is_weekly_only' => 0
         ]
       );
     }
-    // dd(DB::get_query_log());
+    // dd(DB::getQueryLog());
 
-    // return response()->json(['message' => 'Tasks saved successfully.']);
+    return response()->json(['message' => 'Tasks saved successfully.']);
   }
 }
