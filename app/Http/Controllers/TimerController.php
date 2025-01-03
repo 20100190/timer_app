@@ -154,13 +154,23 @@ class TimerController extends Controller
             'is_weekly_only' => 0
           ]);
         }
-        UserTasks::where('user_id',  Auth::id()) // Assuming user_id links tasks to the user
+
+        $otherTasks = UserTasks::where('user_id',  Auth::id()) // Assuming user_id links tasks to the user
           ->where('id', '!=', $userTasks->id) // Exclude the current task
           ->where('timer_date', $formattedDate) // Exclude the current task
-          ->update([
-            'is_running' => false,
-            'started_at' => null, // Clear started_at for stopped tasks
-          ]);
+          ->get();
+        if ($otherTasks) {
+          foreach ($otherTasks as $task) {
+            if ($task->is_running && $task->started_at) {
+
+              $diffInSeconds = $task->started_at->diffInSeconds(now());
+              $task->timer = ($task->timer ?? 0) + $diffInSeconds;
+              $task->is_running = false;
+              $task->started_at = null;
+              $task->save();
+            }
+          }
+        }
         return response()->json([
           'message' => 'Timer started successfully',
           'task_id' => $userTasks->id
@@ -272,6 +282,7 @@ class TimerController extends Controller
         'username',
         'client',
         'project',
+        'project.pic',
         'task'
       ])
       ->get();
@@ -317,7 +328,13 @@ class TimerController extends Controller
         'notes',
         DB::raw('SUM(timer) as total_time')
       )
-      ->with(['username', 'client', 'project', 'task'])
+      ->with([
+        'username',
+        'client',
+        'project',
+        'task',
+        'project.pic',
+      ])
       ->groupBy(
         'timer_date',
         'task_id',
@@ -326,6 +343,8 @@ class TimerController extends Controller
         'client_id',
         'created_at',
         'user_id',
+        'started_at',
+        'is_running',
         'id'
       )
       ->orderBy('created_at', 'ASC')
@@ -573,5 +592,110 @@ class TimerController extends Controller
     // dd(DB::getQueryLog());
 
     return response()->json(['message' => 'Tasks saved successfully.']);
+  }
+  public function updateTimer(Request $request)
+  {
+    // DB::enableQueryLog();
+    try {
+      $validatedData = $request->validate([
+        'client_select' => 'required|integer|exists:project,id',
+        'task_select' => 'required|integer|exists:task,id',
+        'taskDate' => 'required',
+        'notes' => 'nullable',
+        'timeInput' => 'nullable'
+      ]);
+      $project = Project::where('id', $request->input('client_select'))->first();
+      if ($project) {
+        $taskDate = preg_replace('/\s*\(.*?\)$/', '', $request->input('taskDate')); // "Tue Dec 24 2024 00:09:20 GMT+0500"
+        // Get the time input from the user (e.g., 1:02)
+        $timeInSeconds = 0;
+        $timeInput = $request->input('timeInput');
+        if ($timeInput) {
+          // Call the helper function to convert to seconds
+          $timeInSeconds = $this->convertTimeToSeconds($timeInput);
+        }
+
+        // Convert it to Y-m-d format
+        $formattedDate = Carbon::parse($taskDate)->format('Y-m-d');
+        $formattedDateTime = Carbon::parse($taskDate)->format('Y-m-d H:i:s'); // Output: "2024-12-24 00:05:56"
+        $userTasks = UserTasks::where([
+          'client_id' => $project->client_id,
+          'project_id' => $validatedData['client_select'],
+          'task_id' => $validatedData['task_select'],
+          'user_id' => Auth::id(),
+          'notes' => null,
+          'is_weekly_only' => 1,
+          'timer_date' => $formattedDate
+        ])->first();
+        if ($userTasks) {
+          $userTasks->update(
+            [
+              'user_id' => Auth::id(),
+              'client_id' => $project->client_id,
+              'project_id' => $validatedData['client_select'],
+              'task_id' => $validatedData['task_select'],
+              'notes' => $validatedData['notes'],
+              'timer' => $timeInSeconds,
+              'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
+              'timer_date' => $formattedDate,     // Today's date
+              'is_running' => 1,
+              'is_weekly_only' => 0, // Updated to pass as an integer
+            ]
+          );
+        } else {
+          $userTasks = UserTasks::create([
+            'user_id' => Auth::id(),
+            'client_id' => $project->client_id,
+            'project_id' => $validatedData['client_select'],
+            'task_id' => $validatedData['task_select'],
+            'notes' => $validatedData['notes'],
+            'timer' => $timeInSeconds,
+            'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
+            'timer_date' => $formattedDate,     // Today's date
+            'is_running' => 1,
+            'is_weekly_only' => 0
+          ]);
+        }
+
+        $otherTasks = UserTasks::where('user_id',  Auth::id()) // Assuming user_id links tasks to the user
+          ->where('id', '!=', $userTasks->id) // Exclude the current task
+          ->where('timer_date', $formattedDate) // Exclude the current task
+          ->get();
+        if ($otherTasks) {
+          foreach ($otherTasks as $task) {
+            if ($task->is_running && $task->started_at) {
+
+              $diffInSeconds = $task->started_at->diffInSeconds(now());
+              $task->timer = ($task->timer ?? 0) + $diffInSeconds;
+              $task->is_running = false;
+              $task->started_at = null;
+              $task->save();
+            }
+          }
+        }
+        return response()->json([
+          'message' => 'Timer started successfully',
+          'task_id' => $userTasks->id
+        ], 201);
+      } else {
+        return response()->json([
+          'message' => 'Failed to start timer',
+          'error' => 'No project found'
+        ], 500);
+      }
+    } catch (\Illuminate\Validation\ValidationException $ve) {
+      Log::error('Validation Error: ' . json_encode($ve->errors()));
+      return response()->json([
+        'message' => 'Validation failed',
+        'errors' => $ve->errors()
+      ], 422);
+    } catch (\Exception $e) {
+      Log::error('Error starting timer: ' . $e->getMessage());
+      Log::error('Error Trace: ' . $e->getTraceAsString());
+      return response()->json([
+        'message' => 'Failed to start timer',
+        'error' => $e->getMessage()
+      ], 500);
+    }
   }
 }

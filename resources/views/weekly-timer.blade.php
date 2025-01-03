@@ -423,7 +423,7 @@
         </div>
         <div id="new-entry-dialog" aria-labelledby="modal-time-entry-title" class="pds-dialog dialogue" role="dialog">
           <h1 id="modal-time-entry-title" class="pds-dialog-title">
-           Add row to this time sheet
+            Add row to this time sheet
           </h1>
 
           <div class="js-editor">
@@ -446,7 +446,7 @@
 
               <input type="hidden" id="taskDate" name="taskDate">
 
-          
+
 
               <div class="pds-flex-list pds-gap-md pds-justify-between pds-mt-md js-form-buttons">
                 <div class="pds-flex-list@xs-stretch">
@@ -497,6 +497,8 @@
       </div>
     </div>
   </div>
+  <div class="pds-toast pds-toast-notice d-none" ><span>Processing...</span></div>
+  <div class="pds-toast pds-toast-success d-none" ><span>Saved.</span></div>
   <script>
     var imagesUrl = '{{ URL::asset(' / image ') }}';
   </script>

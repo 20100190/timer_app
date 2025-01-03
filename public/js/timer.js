@@ -84,6 +84,14 @@ function clearTable() {
 function createRow(rowData) {
     const row = document.createElement("tr");
 
+    const clientCell = document.createElement("td");
+    clientCell.innerHTML = rowData.client;
+    row.appendChild(clientCell);
+
+    const picCell = document.createElement("td");
+    picCell.innerHTML = rowData.pic;
+    row.appendChild(picCell);
+
     const projectCell = document.createElement("td");
     projectCell.innerHTML = rowData.project;
     row.appendChild(projectCell);
@@ -373,8 +381,10 @@ function populateTasksForDate(dateObject) {
 
                 return {
                     id: task.id,
+                    client: task.client.name,
+                    pic: (task.project.pic ? task.project.pic.initial : ''),
                     project: `<div class="entry-details">
-                    <div class="entry-project" style="font-weight: 550;">${task.project.project_name} (${task.client.name})</div>
+                    <div class="entry-project" style="font-weight: 550;">${task.project.project_name}</div>
                 
                     <div class="entry-task">           ${task.task.name} 
                 </div>
@@ -477,7 +487,7 @@ function populateTasks(selectedProjectId, selectedTaskId = null) {
 
     if (!selectedProjectId) return;
 
-    fetch(`/timer/get-tasks`)
+    fetch(`/timer/get-tasks-list`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -531,11 +541,32 @@ function getWeekData() {
 }
 function updateWeekView(data) {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    dayNames.forEach((day, index) => {
+
+    // Create a Date object from the currentDate
+    const current = new Date(currentDate);
+
+    // Get the index of the current day (0 = Sunday, 6 = Saturday)
+    const currentDayIndex = current.getDay();
+
+    days.forEach((day, index) => {
         const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
         timeSpan.textContent = data[day] || '0:00'; // Replace with fetched time or keep 0:00
+
+        const dateSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-date`);
+
+        // Calculate the correct date for each day
+        const date = new Date(current);
+        date.setDate(current.getDate() + (index - currentDayIndex)); // Adjust to match the week's starting day
+
+        // Format the date as "2 Dec"
+        const options = { day: 'numeric', month: 'short' };
+        const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+
+        // Update the date span
+        dateSpan.textContent = formattedDate;
     });
 }
+
 
 $(document).ready(() => {
     const showError = () => {

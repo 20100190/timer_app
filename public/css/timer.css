@@ -2,6 +2,9 @@
     animation: fadeout .2s 1 forwards;
     pointer-events: none
 }
+.d-none{
+    display: none!important;
+}
 
 @keyframes fadeout {
     to {
@@ -3463,7 +3466,7 @@ input.pds-input::file-selector-button {
     height: 29px;
     line-height: 29px;
     padding: 0 8px;
-    margin-left:10px
+    margin-left: 10px
 }
 
 .pds-button-xs,
@@ -3664,14 +3667,23 @@ input.pds-input::file-selector-button {
 .pds-toast-notice,
 .pds-alert-notice {
     background: #deedfd;
-    border: 1px solid #86b1f1
+    border: 1px solid #86b1f1;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    z-index: 99999;
 }
 
 .pds-card-success,
 .pds-toast-success,
 .pds-alert-success {
     background: #daefdc;
-    border: 1px solid #76bc82
+    border: 1px solid #76bc82;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    z-index: 99999;
+
 }
 
 .pds-card-warning,

@@ -320,7 +320,7 @@ function populateTasks(selectedProjectId, selectedTaskId = null) {
 
     if (!selectedProjectId) return;
 
-    fetch(`/timer/get-tasks`)
+    fetch(`/timer/get-tasks-list`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -590,10 +590,7 @@ nextWeekButton.addEventListener("click", () => changeWeek(1));
 timeTrackerButton.addEventListener("click", () => openDialogue());
 cancelButton.addEventListener("click", () => closeDialogue());
 
-clientSelect.addEventListener("change", function () {
-    const selectedClientId = this.value;
-    populateProjects(selectedClientId);
-});
+
 
 
 
@@ -608,7 +605,7 @@ document.addEventListener('input', function (event) {
     if (event.target.classList.contains('js-compound-entry')) {
         const input = event.target;
         const taskId = input.dataset.taskId;
-        const projectId = input.dataset.projectId; 
+        const projectId = input.dataset.projectId;
         const clientId = input.dataset.clientId; // Assuming `data-task-id` holds the task ID
         const date = input.dataset.date; // Assuming `data-task-id` holds the task ID
         const value = input.value.trim();
@@ -626,7 +623,7 @@ document.addEventListener('input', function (event) {
 
 
         // Track changes in the `changedInputs` object
-        changedInputs[taskId+'_'+projectId+'_'+clientId+'_'+date] = {
+        changedInputs[taskId + '_' + projectId + '_' + clientId + '_' + date] = {
             time: value,
             date: input.dataset.date, // Assuming `data-date` holds the date
             project_id: input.dataset.projectId, // Assuming `data-project-id` holds the project ID
@@ -722,10 +719,20 @@ function saveChangesToDatabase() {
         data: {
             tasks: changedInputs
         },
+        beforeSend: () => {
+            $('.pds-toast-success').addClass('d-none');
+            $('.pds-toast-notice').removeClass('d-none'); // Show toast notice before sending the request
+        },
         success: (response) => {
-            console.log(response);
+            $('.pds-toast-success').removeClass('d-none'); // Show toast notice before sending the request
+            $('.pds-toast-notice').addClass('d-none'); // Show toast notice before sending the request
             populateTasksForWeek(currentDate); // Refresh tasks for the current week
             // closeDialogue();
+            saveButton.disabled = true;
+            saveButton.classList.remove('enabled');
+            setTimeout(() => {
+                $('.pds-toast-success').addClass('d-none');
+            }, 5000); // 30 seconds
         },
         error: (response) => {
             console.log(response);

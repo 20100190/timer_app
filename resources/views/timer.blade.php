@@ -302,13 +302,13 @@
           </button>
           <div class="week-view">
             <ul>
-              <li><button><span class="day-name">Sun</span><br><span class="day-time">0:00</span></button></li>
-              <li><button><span class="day-name">Mon</span><br><span class="day-time">0:00</span></button></li>
-              <li><button><span class="day-name">Tue</span><br><span class="day-time">0:00</span></button></li>
-              <li><button><span class="day-name">Wed</span><br><span class="day-time">0:00</span></button></li>
-              <li><button><span class="day-name">Thu</span><br><span class="day-time">0:00</span></button></li>
-              <li><button><span class="day-name">Fri</span><br><span class="day-time">0:00</span></button></li>
-              <li><button><span class="day-name">Sat</span><br><span class="day-time">0:00</span></button></li>
+              <li><button><span class="day-name">Sun</span><br><span class="day-date">2 Dec</span><br><span class="day-time">0:00</span></button></li>
+              <li><button><span class="day-name">Mon</span><br><span class="day-date">2 Dec</span><br><span class="day-time">0:00</span></button></li>
+              <li><button><span class="day-name">Tue</span><br><span class="day-date">2 Dec</span><br><span class="day-time">0:00</span></button></li>
+              <li><button><span class="day-name">Wed</span><br><span class="day-date">2 Dec</span><br><span class="day-time">0:00</span></button></li>
+              <li><button><span class="day-name">Thu</span><br><span class="day-date">2 Dec</span><br><span class="day-time">0:00</span></button></li>
+              <li><button><span class="day-name">Fri</span><br><span class="day-date">2 Dec</span><br><span class="day-time">0:00</span></button></li>
+              <li><button><span class="day-name">Sat</span><br><span class="day-date">2 Dec</span><br><span class="day-time">0:00</span></button></li>
             </ul>
           </div>
         </div>
@@ -317,18 +317,22 @@
           <table class="day-tasks">
             <thead>
               <tr>
-                <th>Project</th>
-                <th>Time</th>
+                <th>Client</th>
+                <th>PIC</th>
+                <th>Project And Task</th>
+                <th>Hours</th>
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+
+            </tbody>
           </table>
         </div>
 
       </div>
 
-     
+
       <div id="new-entry-dialog" aria-labelledby="modal-time-entry-title" class="pds-dialog dialogue" role="dialog">
         <h1 id="modal-time-entry-title" class="pds-dialog-title">
           New time entry for
@@ -336,7 +340,7 @@
         </h1>
 
         <div class="js-editor">
-          <form class="day-entry-editor" id="create_form"  data-url="{{ route('startTimer') }}">
+          <form class="day-entry-editor" id="create_form" data-url="{{ route('startTimer') }}">
             <div class="pds-mb-sm js-projects">
               <label class="pds-label pds-display-inline-block">Project / Task</label>
 
@@ -414,6 +418,8 @@
       </div>
     </div>
   </div>
+  <div class="pds-toast pds-toast-notice d-none" ><span>Processing...</span></div>
+  <div class="pds-toast pds-toast-success d-none" ><span>Saved.</span></div>
   <script>
     var imagesUrl = '{{ URL::asset(' / image ') }}';
   </script>
