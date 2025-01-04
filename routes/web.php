@@ -29,7 +29,7 @@ Route::get('/timer/get-clients', 'TimerController@getClients');
 Route::get('/timer/get-projects/{clientId}', 'TimerController@getProjects');
 Route::get('/timer/get-user', 'TimerController@getUser');
 Route::post('/timer/init-timer', 'TimerController@initTimer')->name('startTimer');
-Route::post('/timer/update-timer', 'TimerController@updateTimer')->name('updateTimer');
+Route::post('/timer/update-timer/{id}', 'TimerController@updateTimer')->name('updateTimer');
 Route::post('/timer/init-week-timer', 'TimerController@initWeekTimer')->name('startWeekTimer');
 Route::get('/timer/get-tasks/{date}', 'TimerController@getTasks');
 Route::get('/timer/get-task/{taskId}', 'TimerController@getTask');
@@ -42,6 +42,7 @@ Route::post('/timer/delete-week-data', 'TimerController@deleteWeekData');
 Route::post('/save-tasks', 'TimerController@saveTasks');
 Route::get('/timer/get-clients-and-projects', 'TimerController@getClientsNprojects');
 Route::get('/timer/get-tasks-list', 'TimerController@getTaskList');
+Route::get('/timer/get-running-tasks-list', 'TimerController@getRunningTaskList');
 
 
 

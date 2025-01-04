@@ -593,7 +593,7 @@ class TimerController extends Controller
 
     return response()->json(['message' => 'Tasks saved successfully.']);
   }
-  public function updateTimer(Request $request)
+  public function updateTimer(Request $request, $id)
   {
     // DB::enableQueryLog();
     try {
@@ -608,73 +608,40 @@ class TimerController extends Controller
       if ($project) {
         $taskDate = preg_replace('/\s*\(.*?\)$/', '', $request->input('taskDate')); // "Tue Dec 24 2024 00:09:20 GMT+0500"
         // Get the time input from the user (e.g., 1:02)
-        $timeInSeconds = 0;
-        $timeInput = $request->input('timeInput');
-        if ($timeInput) {
-          // Call the helper function to convert to seconds
-          $timeInSeconds = $this->convertTimeToSeconds($timeInput);
-        }
+
 
         // Convert it to Y-m-d format
         $formattedDate = Carbon::parse($taskDate)->format('Y-m-d');
         $formattedDateTime = Carbon::parse($taskDate)->format('Y-m-d H:i:s'); // Output: "2024-12-24 00:05:56"
         $userTasks = UserTasks::where([
-          'client_id' => $project->client_id,
-          'project_id' => $validatedData['client_select'],
-          'task_id' => $validatedData['task_select'],
-          'user_id' => Auth::id(),
-          'notes' => null,
-          'is_weekly_only' => 1,
-          'timer_date' => $formattedDate
+          'id' => $id
         ])->first();
+        $timeInSeconds = 0;
+        $timeInput = $request->input('timeInput');
+        if ($timeInput) {
+          // Call the helper function to convert to seconds
+          $timeInSeconds = $this->convertTimeToSeconds($timeInput);
+        } else {
+          // Use the timer value from the database if it exists
+          $timeInSeconds = $userTasks->timer;
+        }
         if ($userTasks) {
           $userTasks->update(
             [
               'user_id' => Auth::id(),
-              'client_id' => $project->client_id,
-              'project_id' => $validatedData['client_select'],
-              'task_id' => $validatedData['task_select'],
+              'client_id' => $project->client_id ?? $userTasks->client_id,
+              'project_id' => $validatedData['client_select'] ?? $userTasks->project_id,
+              'task_id' => $validatedData['task_select'] ?? $userTasks->task_id,
               'notes' => $validatedData['notes'],
               'timer' => $timeInSeconds,
-              'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
-              'timer_date' => $formattedDate,     // Today's date
-              'is_running' => 1,
-              'is_weekly_only' => 0, // Updated to pass as an integer
+              // 'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
+              // 'timer_date' => $formattedDate,     // Today's date
             ]
           );
-        } else {
-          $userTasks = UserTasks::create([
-            'user_id' => Auth::id(),
-            'client_id' => $project->client_id,
-            'project_id' => $validatedData['client_select'],
-            'task_id' => $validatedData['task_select'],
-            'notes' => $validatedData['notes'],
-            'timer' => $timeInSeconds,
-            'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
-            'timer_date' => $formattedDate,     // Today's date
-            'is_running' => 1,
-            'is_weekly_only' => 0
-          ]);
         }
 
-        $otherTasks = UserTasks::where('user_id',  Auth::id()) // Assuming user_id links tasks to the user
-          ->where('id', '!=', $userTasks->id) // Exclude the current task
-          ->where('timer_date', $formattedDate) // Exclude the current task
-          ->get();
-        if ($otherTasks) {
-          foreach ($otherTasks as $task) {
-            if ($task->is_running && $task->started_at) {
-
-              $diffInSeconds = $task->started_at->diffInSeconds(now());
-              $task->timer = ($task->timer ?? 0) + $diffInSeconds;
-              $task->is_running = false;
-              $task->started_at = null;
-              $task->save();
-            }
-          }
-        }
         return response()->json([
-          'message' => 'Timer started successfully',
+          'message' => 'Timer updated successfully',
           'task_id' => $userTasks->id
         ], 201);
       } else {
@@ -697,5 +664,21 @@ class TimerController extends Controller
         'error' => $e->getMessage()
       ], 500);
     }
+  }
+  public function getRunningTaskList()
+  {
+    $userId = Auth::id(); // Get the authenticated user's ID
+    $tasks = UserTasks::where('user_id', $userId)->where('is_weekly_only', 0)->where('is_running', 1)
+      ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')->with([
+        'username',
+        'client',
+        'project',
+        'project.pic',
+        'task'
+      ])
+      ->groupby('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')
+      ->get();
+
+    return response()->json($tasks);
   }
 }

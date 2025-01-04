@@ -176,6 +176,7 @@ function createRow(rowData) {
                 }
                 $("#timeInput").val(secondtoHour(elapsedSeconds));
                 $("#startTimerButton").text("update Timer")
+                $('#create_form').attr('data-url', `/timer/update-timer/${response.id}`)
                 dialogue.style.display = "block";
             })
             .catch((error) => {
@@ -417,6 +418,31 @@ function populateTasksForDate(dateObject) {
             console.error("Error fetching tasks:", error);
         });
 }
+function isAnyTaskRunning() {
+    fetch(`/timer/get-running-tasks-list`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then((runningTask) => {
+
+        })
+        .catch((error) => {
+            console.error("Error fetching projects:", error);
+            // alert("Failed to load projects. Please try again.");
+        });
+}
+
+function populateAlerts() {
+    console.log('here');
+    if (isAnyTaskRunning()) {
+        console.log("A task is running.");
+    } else {
+        console.log("No tasks are currently running.");
+    }
+}
 
 function updateUI() {
     selectedDateEl.innerHTML = formatDate(currentDate);
@@ -431,6 +457,7 @@ function updateUI() {
 
     populateTasksForDate(currentDate);
     getWeekData();
+    populateAlerts();
 }
 
 function getLocalDateString(dateObject) {

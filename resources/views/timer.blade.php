@@ -254,7 +254,7 @@
 
   <div style="margin: 20px">
     <div class="inner-container">
-
+   
       <header class="day-view-header">
         <div class="js-flash-wrap">
           <div id="pds-alerts">
