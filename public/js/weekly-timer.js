@@ -110,9 +110,11 @@ function appendWeeklyTasks(weeklyTasks) {
 
     // Iterate over each client+project in the result
     $.each(weeklyTasks, function (clientProject, days) {
+        console.log(days);
         // Create the <tr> element
         const projectId = days.find((day) => day.project_id)?.project_id || ''; // Find the first valid projectId, fallback to empty string
         const project_name = days.find((day) => day.project_name)?.project_name || ''; // Find the first valid projectId, fallback to empty string
+        const project_pic = days.find((day) => day.project_pic)?.project_pic || ''; // Find the first valid projectId, fallback to empty string
         const client_name = days.find((day) => day.client_name)?.client_name || ''; // Find the first valid projectId, fallback to empty string
         const task_name = days.find((day) => day.task_name)?.task_name || ''; // Find the first valid projectId, fallback to empty string
         const clientId = days.find((day) => day.client_id)?.client_id || ''; // Find the first valid projectId, fallback to empty string
@@ -121,20 +123,22 @@ function appendWeeklyTasks(weeklyTasks) {
             .attr('data-project-id', projectId)
             .attr('data-client-id', clientId);
         // Add the project+client column
+        const $projectCell = $('<td>').addClass('name').append(
+            $('<div>').addClass('entry-client').text(client_name), // Project name
+
+        );
+        $row.append($projectCell);
+        const $picCell = $('<td>').addClass('name').append(
+            $('<div>').addClass('entry-pic').text(project_pic), // Project name
+        );
+        $row.append($picCell);
         const $nameCell = $('<td>').addClass('name').append(
             $('<div>').addClass('entry-project').text(project_name), // Project name
-            $('<div>').addClass('entry-client').html(
-                `<span class="pds-show@md">(</span>${client_name}<span class="pds-show@md">)</span>`
-            ),
             $('<div>').addClass('entry-task').html(
                 `${task_name}`
-            ),
-            $('<div>').addClass('entry-notes').html(
-                `${clientProject.split('+')[3]}`
             )
         );
         $row.append($nameCell);
-
         // Add day-wise hours
 
         let totalTime = 0; // Initialize total time for the row
@@ -156,9 +160,10 @@ function appendWeeklyTasks(weeklyTasks) {
                         .attr('aria-label', `Hours on ${day.day}`)
                         .val(
                             timeInSeconds
-                                ? `${Math.floor(timeInSeconds / 3600)}:${String(Math.floor((timeInSeconds % 3600) / 60)).padStart(2, '0')}` // Format as HH:mm
+                                ? (timeInSeconds / 3600).toFixed(2) // Convert seconds to hours and format to 2 decimal places
                                 : ''
                         )
+
                 );
 
             // Highlight today (optional)
@@ -611,7 +616,8 @@ document.addEventListener('input', function (event) {
         const value = input.value.trim();
 
         // Sanitize the value (remove invalid characters)
-        const sanitizedValue = value.replace(/[^0-9:]/g, '').slice(0, 5);
+        const sanitizedValue = value.replace(/[^0-9.]/g, '').slice(0, 5);
+
         if (value !== sanitizedValue) {
             input.value = sanitizedValue;
         }
@@ -633,9 +639,10 @@ document.addEventListener('input', function (event) {
 
         // Reset auto-save timer
         clearTimeout(autoSaveTimer);
-        autoSaveTimer = setTimeout(autoSaveChanges, 30000); // Auto-save after 30 seconds
+        autoSaveTimer = setTimeout(autoSaveChanges, 5000); // Auto-save after 5 seconds
     }
 });
+
 
 // Validate and format input on blur
 document.addEventListener(
@@ -645,15 +652,9 @@ document.addEventListener(
             const input = event.target;
             let value = input.value.trim();
 
-            // Automatically append ':00' if only hours are entered
-            if (/^\d{1,2}$/.test(value)) {
-                value = `${value}:00`;
-                input.value = value;
-            }
-
-            // Validate time format (HH:MM)
-            const timeRegex = /^([0-9]{1,2}):([0-5][0-9])$/;
-            const match = value.match(timeRegex);
+            // Validate decimal hours format (e.g., 1.5, 0.25, 23.75)
+                const decimalHoursRegex = /^(\d{1,2})(\.\d{1,2})?$/;
+            const match = value.match(decimalHoursRegex);
 
             input.classList.remove('error');
             let errorMessage = input.nextElementSibling;
@@ -662,24 +663,29 @@ document.addEventListener(
             }
 
             if (!match) {
+                // Invalid input, show error
                 input.classList.add('error');
                 errorMessage = document.createElement('span');
-                errorMessage.textContent = 'Please enter a valid time in HH:MM format.';
+                errorMessage.textContent = 'Please enter a valid time in decimal hours (e.g., 1.25, 0.50, up to 23.99).';
                 errorMessage.classList.add('error-message');
                 input.after(errorMessage);
                 input.value = '';
             } else {
-                const hours = parseInt(match[1], 10);
-                const minutes = parseInt(match[2], 10);
+                const hours = parseFloat(value);
 
-                if (hours > 23 || minutes > 59) {
+                // Check if hours are within valid range (0 to 23.99)
+                if (hours < 0 || hours >= 24) {
                     input.classList.add('error');
                     errorMessage = document.createElement('span');
-                    errorMessage.textContent = 'Hours must be 0-23 and minutes must be 0-59.';
+                    errorMessage.textContent = 'Hours must be between 0 and 23.99.';
                     errorMessage.classList.add('error-message');
                     input.after(errorMessage);
                     input.value = '';
                 } else {
+                    // Format to 2 decimal points if necessary
+                    input.value = hours.toFixed(2);
+
+                    // Enable the save button and perform further calculations
                     saveButton.disabled = false;
                     saveButton.classList.add('enabled');
                     calculateAndAppendColumnTotals();

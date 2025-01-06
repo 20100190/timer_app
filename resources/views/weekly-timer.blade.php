@@ -289,12 +289,14 @@
         </div>
       </header>
       <div class="day-view">
-        <div class="action-bar">
+        <div class="weekly-action-bar">
           <div class="pds-table-wrapper">
             <table class="week-view-table pds-table">
               <thead>
                 <tr>
-                  <th class="name"></th>
+                  <th class="client" style="width:20%; padding-left:16px">Client</th>
+                  <th class="pic" style="width:20%;padding-left:16px">PIC</th>
+                  <th class="name" style="width:20%;padding-left:16px">Project And Task</th>
                   <th class="day focused-day"><a class="js-backbone test-Monday js-day is-today has-completion-signal" href="/time/day/2024/12/16/5123637" aria-label="Monday, 16 December" data-tooltip="" data-tooltip-delay="500" data-tooltip-hide-on-hover="" aria-describedby="has-completion-signal-tooltip-Monday" data-analytics-element-id="timesheet-navigate-day-Monday">
                       Mon
                       <span>16 Dec</span>
@@ -337,13 +339,17 @@
               </thead>
               <tbody>
                 <tr class="week-view-entry focused-entry" data-project-id="43039591" data-task-id="23639166">
+                <td id="project43039591-task23639166" class="name">
+                    <div class="entry-client">Budget Webform</div>
+                    
+                  </td>
+                  <td id="project43039591-task23639166" class="name">
+                    <div class="entry-pic">Budget Webform</div>
+                   
+                  </td>
                   <td id="project43039591-task23639166" class="name">
                     <div class="entry-project">Budget Webform</div>
-                    <div class="entry-client">
-                      <span class="pds-show@md">(</span>
-                      Budget Webform
-                      <span class="pds-show@md">)</span>
-                    </div>
+                   
                     <div class="entry-task">Design</div>
                   </td>
                   <td class="day is-today"> <input class="pds-input js-compound-entry" data-unique-name="day351_project43039591_task23639166" type="text" value="" aria-label="Hours on Monday, 16 December" aria-describedby="project43039591-task23639166">
@@ -393,6 +399,10 @@
                       </div>
 
                     </div>
+                  </td>
+                  <td class="">
+                  </td>
+                  <td class="">
                   </td>
                   <td class="day today test-day-total-1">1:00
                   </td>

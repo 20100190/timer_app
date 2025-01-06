@@ -383,7 +383,7 @@ function populateTasksForDate(dateObject) {
                 return {
                     id: task.id,
                     client: task.client.name,
-                    pic: (task.project.pic ? task.project.pic.initial : ''),
+                    pic: (task.project.picInitial ? task.project.picInitial.initial : ''),
                     project: `<div class="entry-details">
                     <div class="entry-project" style="font-weight: 550;">${task.project.project_name}</div>
                 

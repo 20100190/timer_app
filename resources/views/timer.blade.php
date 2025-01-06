@@ -254,7 +254,7 @@
 
   <div style="margin: 20px">
     <div class="inner-container">
-   
+
       <header class="day-view-header">
         <div class="js-flash-wrap">
           <div id="pds-alerts">
@@ -293,13 +293,14 @@
       </header>
       <div class="day-view">
         <div class="action-bar">
-          <button class="time-tracker">
+          <a class="time-tracker" label="Track Time">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-          </button>
+          </a>
+
           <div class="week-view">
             <ul>
               <li><button><span class="day-name">Sun</span><br><span class="day-date">2 Dec</span><br><span class="day-time">0:00</span></button></li>
@@ -418,8 +419,8 @@
       </div>
     </div>
   </div>
-  <div class="pds-toast pds-toast-notice d-none" ><span>Processing...</span></div>
-  <div class="pds-toast pds-toast-success d-none" ><span>Saved.</span></div>
+  <div class="pds-toast pds-toast-notice d-none"><span>Processing...</span></div>
+  <div class="pds-toast pds-toast-success d-none"><span>Saved.</span></div>
   <script>
     var imagesUrl = '{{ URL::asset(' / image ') }}';
   </script>

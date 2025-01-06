@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 
 class TimerController extends Controller
 {
@@ -282,7 +283,7 @@ class TimerController extends Controller
         'username',
         'client',
         'project',
-        'project.pic',
+        'project.picInitial',
         'task'
       ])
       ->get();
@@ -333,7 +334,7 @@ class TimerController extends Controller
         'client',
         'project',
         'task',
-        'project.pic',
+        'project.picInitial',
       ])
       ->groupBy(
         'timer_date',
@@ -345,7 +346,8 @@ class TimerController extends Controller
         'user_id',
         'started_at',
         'is_running',
-        'id'
+        'id',
+        'timer'
       )
       ->orderBy('created_at', 'ASC')
       ->get();
@@ -375,7 +377,6 @@ class TimerController extends Controller
 
       // Use the first task to retrieve additional task details
       $sampleTask = $tasksForCombination->first();
-
       // Iterate through each day of the week
       for ($date = $startOfWeek->copy(); $date->lte($endOfWeek); $date->addDay()) {
         $currentDate = $date->toDateString();
@@ -393,6 +394,7 @@ class TimerController extends Controller
           'time' => $dayTask->total_time ?? 0, // Default to 0 if no tasks found
           'project_id' => $projectId,
           'project_name' => $sampleTask->project->project_name ?? '',
+          'project_pic' => ($sampleTask->project && $sampleTask->project->picInitial && $sampleTask->project->picInitial->initial ? $sampleTask->project->picInitial->initial : ''),
           'client_name' => $sampleTask->client->name ?? '',
           'task_name' => $sampleTask->task->name ?? '',
           'client_id' => $clientId,
@@ -563,13 +565,24 @@ class TimerController extends Controller
     DB::enableQueryLog();
     foreach ($validatedData['tasks'] as $taskData) {
       $timeValue = $taskData['time']; // Assuming the input timeValue is passed via a request
-
-      if (preg_match('/^\d{1,2}$/', $timeValue)) {
+      if (preg_match('/^\d{1,2}(\.\d{1,2})?$/', $timeValue)) {
+        // If the input is a valid decimal hour format
+        $hours = (float)$timeValue; // Convert the input directly to float
+        $totalTimeInSeconds = $hours * 3600; // Convert hours to seconds
+      } elseif (preg_match('/^\d{1,2}$/', $timeValue)) {
+        // If only hours are entered as integers, append ":00"
         $timeValue = $timeValue . ':00';
+        [$hours, $minutes] = explode(':', $timeValue);
+        $totalTimeInSeconds = ($hours * 3600) + ($minutes * 60);
+      } elseif (preg_match('/^\d{1,2}:\d{1,2}$/', $timeValue)) {
+        // If time is in "HH:mm" format
+        [$hours, $minutes] = explode(':', $timeValue);
+        $totalTimeInSeconds = ($hours * 3600) + ($minutes * 60);
+      } else {
+        // Handle invalid input
+        throw new InvalidArgumentException('Invalid time format. Please enter time in HH:mm or decimal hours.');
       }
-      // dd($timeValue);
-      [$hours, $minutes] = explode(':', $timeValue);
-      $totalTimeInSeconds = ($hours * 3600) + ($minutes * 60);
+
       $formattedDate = Carbon::parse($taskData['date'])->format('Y-m-d');
       UserTasks::updateOrCreate(
         [
@@ -673,7 +686,7 @@ class TimerController extends Controller
         'username',
         'client',
         'project',
-        'project.pic',
+        'project.picInitial',
         'task'
       ])
       ->groupby('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')

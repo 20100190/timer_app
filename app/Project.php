@@ -11,7 +11,7 @@ class Project extends Model
    //タイムスタンプの更新を無効にする
     public $timestamps = false;
 
-    public function pic(): BelongsTo
+    public function picInitial(): BelongsTo
     {
       return $this->belongsTo(Staff::class, 'pic', 'id');
     }

@@ -6555,11 +6555,18 @@ body {
 }
 
 .action-bar {
+    display: flex;
+    align-items: center;
+    column-gap: 25px;
     background: #fff;
     box-shadow: inset 0 -1px #c6c6c6;
     padding: 16px 0
 }
-
+.weekly-action-bar {
+    background: #fff;
+    box-shadow: inset 0 -1px #c6c6c6;
+    padding: 16px 0
+}
 #footer {
     align-items: center;
     display: flex;
@@ -12634,7 +12641,7 @@ body.detailed-reports-controller.index-action {
 
 .week-view-table :is(th, td) {
     padding: 16px 4px;
-    text-align: right
+    text-align: left
 }
 
 .week-view-table .name {
@@ -12647,7 +12654,8 @@ body.detailed-reports-controller.index-action {
 }
 
 .week-view-table .day {
-    width: 64px
+    width: 64px;
+    text-align:right;
 }
 
 .week-view-table .total {
