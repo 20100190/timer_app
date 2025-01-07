@@ -587,6 +587,7 @@
   <script>
     var imagesUrl = '{{ URL::asset(' / image ') }}';
   </script>
-  <script src="{{ asset('js/weekly-timer.js')}}"></script>
+  <script src=" {{ asset('js/weekly-timer.js') . '?p=' . rand()  }}"></script>
+
   <script src=" {{ asset('js/budgetWebform.js') . '?p=' . rand()  }}"></script>
   @endsection

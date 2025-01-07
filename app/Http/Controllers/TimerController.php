@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
+use phpDocumentor\Reflection\Types\Null_;
 
 class TimerController extends Controller
 {
@@ -383,7 +384,7 @@ class TimerController extends Controller
         $dayTask = $tasksForCombination->first(function ($task) use ($currentDate) {
           return Carbon::parse($task->timer_date)->toDateString() === $currentDate;
         });
-        $notes = UserTasks::where('timer_date',$currentDate)->select('notes')->first();
+        $notes = UserTasks::where('timer_date', $currentDate)->select('notes')->first();
         // Append the task data for the current day=
         $result[$combination][] = [
           'task_id' => $taskId, // Use the task_id for this combination
@@ -690,5 +691,65 @@ class TimerController extends Controller
       ->get();
 
     return response()->json($tasks);
+  }
+  public function updateNotes(Request $request, $taskid, $projectid, $clientid, $date)
+  {
+    // DB::enableQueryLog();
+    try {
+      $validatedData = $request->validate([
+        'notes' => 'nullable',
+      ]);
+      $taskDate = preg_replace('/\s*\(.*?\)$/', '', $request->input('taskDate')); // "Tue Dec 24 2024 00:09:20 GMT+0500"
+      // Get the time input from the user (e.g., 1:02)
+
+
+      // Convert it to Y-m-d format
+      $formattedDateTime = Carbon::parse($date)->format('Y-m-d H:i:s'); // Output: "2024-12-24 00:05:56"
+      $userTasks = UserTasks::where([
+        'task_id' => $taskid,
+        'project_id' => $projectid,
+        'client_id' => $clientid,
+        'timer_date' => $formattedDateTime,
+      ])->get();
+      if ($userTasks->isNotEmpty()) {
+        foreach ($userTasks as $task) {
+          $task->update(
+            [
+              'notes' => $validatedData['notes'],
+            ]
+          );
+        }
+      } else {
+        $userTasks = UserTasks::create([
+          'user_id' => Auth::id(),
+          'client_id' => $clientid,
+          'project_id' => $projectid,
+          'task_id' => $taskid,
+          'notes' => $validatedData['notes'],
+          'timer' => 0,
+          'started_at' => Null, // Current date and time
+          'timer_date' => $formattedDateTime,     // Today's date
+          'is_running' => 0,
+          'is_weekly_only' => 1
+        ]);
+      }
+
+      return response()->json([
+        'message' => 'Notes updated successfully',
+      ], 201);
+    } catch (\Illuminate\Validation\ValidationException $ve) {
+      Log::error('Validation Error: ' . json_encode($ve->errors()));
+      return response()->json([
+        'message' => 'Validation failed',
+        'errors' => $ve->errors()
+      ], 422);
+    } catch (\Exception $e) {
+      Log::error('Error starting timer: ' . $e->getMessage());
+      Log::error('Error Trace: ' . $e->getTraceAsString());
+      return response()->json([
+        'message' => 'Failed to start timer',
+        'error' => $e->getMessage()
+      ], 500);
+    }
   }
 }

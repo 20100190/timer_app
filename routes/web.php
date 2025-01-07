@@ -43,6 +43,7 @@ Route::post('/save-tasks', 'TimerController@saveTasks');
 Route::get('/timer/get-clients-and-projects', 'TimerController@getClientsNprojects');
 Route::get('/timer/get-tasks-list', 'TimerController@getTaskList');
 Route::get('/timer/get-running-tasks-list', 'TimerController@getRunningTaskList');
+Route::post('/update-notes/{taskid}/{projectid}/{clientid}/{date}', 'TimerController@updateNotes')->name('updateNotes');
 
 
 

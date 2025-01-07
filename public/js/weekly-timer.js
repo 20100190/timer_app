@@ -151,50 +151,86 @@ function appendWeeklyTasks(weeklyTasks) {
         );
         $row.append($nameCell);
         // Add day-wise hours
-
-        let totalTime = 0; // Initialize total time for the row
-
-        days.forEach((day) => {
-            var $notesIcon = $('<span>')
+        function createNotesIcon(day) {
+            // Create the notes icon
+            var $svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24">
+                        <g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24">
+                            <image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAALNJREFUSEvtlVEOgjAQRB/3QO/DRTiHHEMvotcxcg7EMTQpFah2KfGDJnzQsPN2tulQkHkVmfXZFFABF6A0umqBGrhKx3dwB45GcVf+cFo+oBuA1rE9B8pbZwdMHdl/jWjUDRB7l6NZB2Hxx8c5ACnX4icHO2B0k6cOedURKaCsSboYdorrM3BIadurUaOK61sYdqGuG5n2T69gbFLAS9HsAMni3zgwiccAEtdjWta/VxTeAy9uLxlndmWDAAAAAElFTkSuQmCC"/>
+                        </g>
+                        <defs>
+                            <clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath>
+                        </defs>
+                    </svg>`;
+                    if(day.notes){
+                        $svg = ` <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24 (1)"><image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAIFJREFUSEtjZKAxYKSx+Qx0teAvAwMDExV9BHY8sg9GLUAPXfoH0T+0OKE0vjF8MCAWwFLZf6h3CPGRfU2UDwgZiC5PsgWUxAOGD2DBQImheH0wagHBnDz0gwjdi8g+agAWI43kJC98NRrMArINR69wsPmAIsMJWQAyHIQpAjSv9AHrjR0Zem8DIAAAAABJRU5ErkJggg=="/></g><defs><clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath></defs></svg>`;
+                    }
+            const $notesIcon = $('<span>')
                 .addClass('notes-icon')
                 .attr('aria-label', 'Click to see notes')
-                .html(
-                    `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24"><image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAALNJREFUSEvtlVEOgjAQRB/3QO/DRTiHHEMvotcxcg7EMTQpFah2KfGDJnzQsPN2tulQkHkVmfXZFFABF6A0umqBGrhKx3dwB45GcVf+cFo+oBuA1rE9B8pbZwdMHdl/jWjUDRB7l6NZB2Hxx8c5ACnX4icHO2B0k6cOedURKaCsSboYdorrM3BIadurUaOK61sYdqGuG5n2T69gbFLAS9HsAMni3zgwiccAEtdjWta/VxTeAy9uLxlndmWDAAAAAElFTkSuQmCC"/></g><defs><clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath></defs></svg>`
-                );
-            var $tooltip = $('<div>')
+                .html($svg);
+
+            // Create the tooltip
+            const $tooltip = $('<div>')
                 .addClass('tooltipForm')
                 .html(`
-                    <input type="text" placeholder="Enter notes here">
-                    <button>Save</button>
-                    <button>Cancel</button>
+                    <input type="text" placeholder="Enter notes here" name="notes" value="${day.notes || ''}">
+                    <button type="button" class="updateNotes" data-task-id="${day.task_id}" data-project-id="${day.project_id}" data-client-id="${day.client_id}" data-date="${day.date}">Save</button>
+                    <button type="button" class="cancelNotes">Cancel</button>
                 `);
 
-            // Append the tooltip to the icon
+            // Append tooltip to the notes icon
             $notesIcon.append($tooltip);
+
+            // Toggle tooltip visibility on click
             $notesIcon.on('click', function () {
                 $tooltip.addClass('active');
             });
 
-            // Conditionally add the tooltip text
-            if (day.notes) {
-                var $notesIcon = $('<span>')
-                    .addClass('notes-icon')
-                    .attr('aria-label', 'Click to see notes')
-                    .html(
-                        `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24 (1)"><image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAIFJREFUSEtjZKAxYKSx+Qx0teAvAwMDExV9BHY8sg9GLUAPXfoH0T+0OKE0vjF8MCAWwFLZf6h3CPGRfU2UDwgZiC5PsgWUxAOGD2DBQImheH0wagHBnDz0gwjdi8g+agAWI43kJC98NRrMArINR69wsPmAIsMJWQAyHIQpAjSv9AHrjR0Zem8DIAAAAABJRU5ErkJggg=="/></g><defs><clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath></defs></svg>`
-                    );
-                var $tooltip = $('<div>')
-                    .addClass('tooltipForm')
-                    .html(`
-                        <input type="text" placeholder="Enter notes here" value="${day.notes}">
-                        <button>Update</button>
-                        <button>Cancel</button>
-                    `);
-                $notesIcon.on('click', function () {
-                    $tooltip.addClass('active');
+            // Save notes functionality
+            $tooltip.find('.updateNotes').on('click', function () {
+                const $button = $(this);
+                const notes = $tooltip.find('input[name="notes"]').val();
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    },
                 });
-                $notesIcon.append($tooltip);
-            }
+
+                $.ajax({
+                    url: `/update-notes/${$button.data('task-id')}/${$button.data('project-id')}/${$button.data('client-id')}/${$button.data('date')}`,
+                    method: 'POST',
+                    data: { notes },
+                    beforeSend: function () {
+                        $('.pds-toast-success').addClass('d-none');
+                        $('.pds-toast-notice').removeClass('d-none');
+                    },
+                    success: function (response) {
+                        $('.pds-toast-success').removeClass('d-none');
+                        $('.pds-toast-notice').addClass('d-none');
+                        populateTasksForWeek(currentDate); // Refresh tasks
+                        setTimeout(() => {
+                            $('.pds-toast-success').addClass('d-none');
+                        }, 5000);
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        showError();
+                    },
+                });
+            });
+
+            // Cancel button functionality
+            $('.cancelNotes').on('click', function () {
+                $('.tooltipForm').removeClass('active');
+            });
+
+            return $notesIcon;
+        }
+        let totalTime = 0; // Initialize total time for the row
+
+        days.forEach((day) => {
+            const $icon = createNotesIcon(day);
             const timeInSeconds = parseInt(day.time, 10) || 0; // Ensure time is a number, default to 0 if invalid
             totalTime += timeInSeconds; // Accumulate the total time
             const $dayCell = $('<td>')
@@ -213,7 +249,7 @@ function appendWeeklyTasks(weeklyTasks) {
                                 ? (timeInSeconds / 3600).toFixed(2) // Convert seconds to hours and format to 2 decimal places
                                 : ''
                         ),
-                    $notesIcon
+                    $icon
 
                 );
 
