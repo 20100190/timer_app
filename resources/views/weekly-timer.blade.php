@@ -230,6 +230,72 @@
 
 
   }
+
+
+  .notes-icon {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .tooltip-text {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px;
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .notes-icon:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .tooltipForm {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 4px;
+    z-index: 1000;
+  }
+
+  .tooltipForm.active {
+    display: block;
+  }
+
+  .tooltipForm input {
+    width: 200px;
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .tooltipForm button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .tooltipForm button:hover {
+    background-color: #0056b3;
+  }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.2/xlsx.full.min.js"></script>
@@ -339,21 +405,30 @@
               </thead>
               <tbody>
                 <tr class="week-view-entry focused-entry" data-project-id="43039591" data-task-id="23639166">
-                <td id="project43039591-task23639166" class="name">
+                  <td id="project43039591-task23639166" class="name">
                     <div class="entry-client">Budget Webform</div>
-                    
+
                   </td>
                   <td id="project43039591-task23639166" class="name">
                     <div class="entry-pic">Budget Webform</div>
-                   
+
                   </td>
                   <td id="project43039591-task23639166" class="name">
                     <div class="entry-project">Budget Webform</div>
-                   
+
                     <div class="entry-task">Design</div>
                   </td>
-                  <td class="day is-today"> <input class="pds-input js-compound-entry" data-unique-name="day351_project43039591_task23639166" type="text" value="" aria-label="Hours on Monday, 16 December" aria-describedby="project43039591-task23639166">
+                  <td class="day is-today">
+                    <input
+                      class="pds-input js-compound-entry"
+                      data-unique-name="day351_project43039591_task23639166"
+                      type="text"
+                      value=""
+                      aria-label="Hours on Monday, 16 December"
+                      aria-describedby="project43039591-task23639166">
+
                   </td>
+
                   <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day352_project43039591_task23639166" type="text" value="" aria-label="Hours on Tuesday, 17 December" aria-describedby="project43039591-task23639166">
                   </td>
                   <td class="day is-not-today"> <input class="pds-input js-compound-entry" data-unique-name="day353_project43039591_task23639166" type="text" value="" aria-label="Hours on Wednesday, 18 December" aria-describedby="project43039591-task23639166">
@@ -507,8 +582,8 @@
       </div>
     </div>
   </div>
-  <div class="pds-toast pds-toast-notice d-none" ><span>Processing...</span></div>
-  <div class="pds-toast pds-toast-success d-none" ><span>Saved.</span></div>
+  <div class="pds-toast pds-toast-notice d-none"><span>Processing...</span></div>
+  <div class="pds-toast pds-toast-success d-none"><span>Saved.</span></div>
   <script>
     var imagesUrl = '{{ URL::asset(' / image ') }}';
   </script>

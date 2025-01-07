@@ -361,6 +361,7 @@ function populateTasksForDate(dateObject) {
         .then((response) => response.json())
         .then((tasks) => {
             const data = tasks.map((task) => {
+                console.log(task)
                 let startedAtTime = null;
                 if (task.started_at) {
                     const isoString = task.started_at.replace(" ", "T") + "Z";
@@ -383,7 +384,7 @@ function populateTasksForDate(dateObject) {
                 return {
                     id: task.id,
                     client: task.client.name,
-                    pic: (task.project.picInitial ? task.project.picInitial.initial : ''),
+                    pic: (task.project.pic_initial ? task.project.pic_initial.initial : ''),
                     project: `<div class="entry-details">
                     <div class="entry-project" style="font-weight: 550;">${task.project.project_name}</div>
                 

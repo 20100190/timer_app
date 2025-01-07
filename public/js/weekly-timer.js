@@ -103,14 +103,24 @@ function clearTable() {
     // Clear existing rows in the table body
     tableBody.empty();
 }
+// const notesIcon = document.querySelector('.notes-icon');
+// const tooltip = document.querySelector('.tooltip');
 
+// notesIcon.addEventListener('click', () => {
+//     tooltip.classList.toggle('active');
+// });
+
+// document.addEventListener('click', (e) => {
+//     if (!notesIcon.contains(e.target) && !tooltip.contains(e.target)) {
+//         tooltip.classList.remove('active');
+//     }
+// });
 function appendWeeklyTasks(weeklyTasks) {
     // Get the table body where rows need to be appended
     const tableBody = $('table tbody'); // Adjust the selector to target your table's body
 
     // Iterate over each client+project in the result
     $.each(weeklyTasks, function (clientProject, days) {
-        console.log(days);
         // Create the <tr> element
         const projectId = days.find((day) => day.project_id)?.project_id || ''; // Find the first valid projectId, fallback to empty string
         const project_name = days.find((day) => day.project_name)?.project_name || ''; // Find the first valid projectId, fallback to empty string
@@ -118,6 +128,7 @@ function appendWeeklyTasks(weeklyTasks) {
         const client_name = days.find((day) => day.client_name)?.client_name || ''; // Find the first valid projectId, fallback to empty string
         const task_name = days.find((day) => day.task_name)?.task_name || ''; // Find the first valid projectId, fallback to empty string
         const clientId = days.find((day) => day.client_id)?.client_id || ''; // Find the first valid projectId, fallback to empty string
+
         const $row = $('<tr>')
             .addClass('week-view-entry')
             .attr('data-project-id', projectId)
@@ -144,9 +155,48 @@ function appendWeeklyTasks(weeklyTasks) {
         let totalTime = 0; // Initialize total time for the row
 
         days.forEach((day) => {
+            var $notesIcon = $('<span>')
+                .addClass('notes-icon')
+                .attr('aria-label', 'Click to see notes')
+                .html(
+                    `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24"><image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAALNJREFUSEvtlVEOgjAQRB/3QO/DRTiHHEMvotcxcg7EMTQpFah2KfGDJnzQsPN2tulQkHkVmfXZFFABF6A0umqBGrhKx3dwB45GcVf+cFo+oBuA1rE9B8pbZwdMHdl/jWjUDRB7l6NZB2Hxx8c5ACnX4icHO2B0k6cOedURKaCsSboYdorrM3BIadurUaOK61sYdqGuG5n2T69gbFLAS9HsAMni3zgwiccAEtdjWta/VxTeAy9uLxlndmWDAAAAAElFTkSuQmCC"/></g><defs><clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath></defs></svg>`
+                );
+            var $tooltip = $('<div>')
+                .addClass('tooltipForm')
+                .html(`
+                    <input type="text" placeholder="Enter notes here">
+                    <button>Save</button>
+                    <button>Cancel</button>
+                `);
+
+            // Append the tooltip to the icon
+            $notesIcon.append($tooltip);
+            $notesIcon.on('click', function () {
+                $tooltip.addClass('active');
+            });
+
+            // Conditionally add the tooltip text
+            if (day.notes) {
+                var $notesIcon = $('<span>')
+                    .addClass('notes-icon')
+                    .attr('aria-label', 'Click to see notes')
+                    .html(
+                        `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24 (1)"><image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAIFJREFUSEtjZKAxYKSx+Qx0teAvAwMDExV9BHY8sg9GLUAPXfoH0T+0OKE0vjF8MCAWwFLZf6h3CPGRfU2UDwgZiC5PsgWUxAOGD2DBQImheH0wagHBnDz0gwjdi8g+agAWI43kJC98NRrMArINR69wsPmAIsMJWQAyHIQpAjSv9AHrjR0Zem8DIAAAAABJRU5ErkJggg=="/></g><defs><clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath></defs></svg>`
+                    );
+                var $tooltip = $('<div>')
+                    .addClass('tooltipForm')
+                    .html(`
+                        <input type="text" placeholder="Enter notes here" value="${day.notes}">
+                        <button>Update</button>
+                        <button>Cancel</button>
+                    `);
+                $notesIcon.on('click', function () {
+                    $tooltip.addClass('active');
+                });
+                $notesIcon.append($tooltip);
+            }
             const timeInSeconds = parseInt(day.time, 10) || 0; // Ensure time is a number, default to 0 if invalid
             totalTime += timeInSeconds; // Accumulate the total time
-
             const $dayCell = $('<td>')
                 .addClass('day')
                 .append(
@@ -162,7 +212,8 @@ function appendWeeklyTasks(weeklyTasks) {
                             timeInSeconds
                                 ? (timeInSeconds / 3600).toFixed(2) // Convert seconds to hours and format to 2 decimal places
                                 : ''
-                        )
+                        ),
+                    $notesIcon
 
                 );
 
@@ -172,7 +223,7 @@ function appendWeeklyTasks(weeklyTasks) {
             } else {
                 $dayCell.addClass('is-not-today');
             }
-
+            console.log($dayCell)
             $row.append($dayCell);
         });
 
@@ -653,7 +704,7 @@ document.addEventListener(
             let value = input.value.trim();
 
             // Validate decimal hours format (e.g., 1.5, 0.25, 23.75)
-                const decimalHoursRegex = /^(\d{1,2})(\.\d{1,2})?$/;
+            const decimalHoursRegex = /^(\d{1,2})(\.\d{1,2})?$/;
             const match = value.match(decimalHoursRegex);
 
             input.classList.remove('error');

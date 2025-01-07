@@ -326,7 +326,6 @@ class TimerController extends Controller
         'timer_date',
         'is_running',
         'task_id',
-        'notes',
         DB::raw('SUM(timer) as total_time')
       )
       ->with([
@@ -339,7 +338,6 @@ class TimerController extends Controller
       ->groupBy(
         'timer_date',
         'task_id',
-        'notes',
         'project_id',
         'client_id',
         'created_at',
@@ -357,7 +355,7 @@ class TimerController extends Controller
 
     // Get all unique combinations of project_id, client_id, task_id, and notes
     $projectsClientsTasksNotes = $tasks->map(function ($task) {
-      return "{$task->project_id}+{$task->client_id}+{$task->task_id}+{$task->notes}";
+      return "{$task->project_id}+{$task->client_id}+{$task->task_id}";
     })->unique();
 
     // Iterate over each combination of project (client), task, and notes
@@ -365,14 +363,13 @@ class TimerController extends Controller
       $result[$combination] = [];
 
       // Split the combination back into IDs and notes
-      [$projectId, $clientId, $taskId, $notes] = explode('+', $combination);
+      [$projectId, $clientId, $taskId] = explode('+', $combination);
 
       // Extract tasks for the current combination
-      $tasksForCombination = $tasks->filter(function ($task) use ($projectId, $clientId, $taskId, $notes) {
+      $tasksForCombination = $tasks->filter(function ($task) use ($projectId, $clientId, $taskId) {
         return $task->project_id == $projectId
           && $task->client_id == $clientId
-          && $task->task_id == $taskId
-          && $task->notes == $notes;
+          && $task->task_id == $taskId;
       });
 
       // Use the first task to retrieve additional task details
@@ -386,7 +383,7 @@ class TimerController extends Controller
         $dayTask = $tasksForCombination->first(function ($task) use ($currentDate) {
           return Carbon::parse($task->timer_date)->toDateString() === $currentDate;
         });
-
+        $notes = UserTasks::where('timer_date',$currentDate)->select('notes')->first();
         // Append the task data for the current day=
         $result[$combination][] = [
           'task_id' => $taskId, // Use the task_id for this combination
@@ -398,7 +395,7 @@ class TimerController extends Controller
           'client_name' => $sampleTask->client->name ?? '',
           'task_name' => $sampleTask->task->name ?? '',
           'client_id' => $clientId,
-          'notes' => $notes, // Include the notes
+          'notes' => $notes->notes ?? "", // Include the notes
           'date' => $currentDate, // Use the current date for the week
         ];
       }
