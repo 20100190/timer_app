@@ -103,18 +103,8 @@ function clearTable() {
     // Clear existing rows in the table body
     tableBody.empty();
 }
-// const notesIcon = document.querySelector('.notes-icon');
-// const tooltip = document.querySelector('.tooltip');
 
-// notesIcon.addEventListener('click', () => {
-//     tooltip.classList.toggle('active');
-// });
 
-// document.addEventListener('click', (e) => {
-//     if (!notesIcon.contains(e.target) && !tooltip.contains(e.target)) {
-//         tooltip.classList.remove('active');
-//     }
-// });
 function appendWeeklyTasks(weeklyTasks) {
     // Get the table body where rows need to be appended
     const tableBody = $('table tbody'); // Adjust the selector to target your table's body
@@ -161,9 +151,9 @@ function appendWeeklyTasks(weeklyTasks) {
                             <clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath>
                         </defs>
                     </svg>`;
-                    if(day.notes){
-                        $svg = ` <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24 (1)"><image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAIFJREFUSEtjZKAxYKSx+Qx0teAvAwMDExV9BHY8sg9GLUAPXfoH0T+0OKE0vjF8MCAWwFLZf6h3CPGRfU2UDwgZiC5PsgWUxAOGD2DBQImheH0wagHBnDz0gwjdi8g+agAWI43kJC98NRrMArINR69wsPmAIsMJWQAyHIQpAjSv9AHrjR0Zem8DIAAAAABJRU5ErkJggg=="/></g><defs><clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath></defs></svg>`;
-                    }
+            if (day.notes) {
+                $svg = ` <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24 (1)"><image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAIFJREFUSEtjZKAxYKSx+Qx0teAvAwMDExV9BHY8sg9GLUAPXfoH0T+0OKE0vjF8MCAWwFLZf6h3CPGRfU2UDwgZiC5PsgWUxAOGD2DBQImheH0wagHBnDz0gwjdi8g+agAWI43kJC98NRrMArINR69wsPmAIsMJWQAyHIQpAjSv9AHrjR0Zem8DIAAAAABJRU5ErkJggg=="/></g><defs><clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath></defs></svg>`;
+            }
             const $notesIcon = $('<span>')
                 .addClass('notes-icon')
                 .attr('aria-label', 'Click to see notes')
@@ -175,7 +165,7 @@ function appendWeeklyTasks(weeklyTasks) {
                 .html(`
                     <input type="text" placeholder="Enter notes here" name="notes" value="${day.notes || ''}">
                     <button type="button" class="updateNotes" data-task-id="${day.task_id}" data-project-id="${day.project_id}" data-client-id="${day.client_id}" data-date="${day.date}">Save</button>
-                    <button type="button" class="cancelNotes">Cancel</button>
+                    <button type="button" class="cancelNotes" onclick="updateUI()">Cancel</button>
                 `);
 
             // Append tooltip to the notes icon
@@ -183,8 +173,11 @@ function appendWeeklyTasks(weeklyTasks) {
 
             // Toggle tooltip visibility on click
             $notesIcon.on('click', function () {
+                $tooltip.css('display', 'block');
                 $tooltip.addClass('active');
             });
+            // Attach cancel button click event
+
 
             // Save notes functionality
             $tooltip.find('.updateNotes').on('click', function () {
@@ -219,12 +212,6 @@ function appendWeeklyTasks(weeklyTasks) {
                     },
                 });
             });
-
-            // Cancel button functionality
-            $('.cancelNotes').on('click', function () {
-                $('.tooltipForm').removeClass('active');
-            });
-
             return $notesIcon;
         }
         let totalTime = 0; // Initialize total time for the row
@@ -259,7 +246,6 @@ function appendWeeklyTasks(weeklyTasks) {
             } else {
                 $dayCell.addClass('is-not-today');
             }
-            console.log($dayCell)
             $row.append($dayCell);
         });
 
@@ -296,6 +282,8 @@ function appendWeeklyTasks(weeklyTasks) {
         tableBody.append($row);
 
     });
+  
+
     calculateAndAppendColumnTotals();
 
 }

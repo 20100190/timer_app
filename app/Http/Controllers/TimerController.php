@@ -384,7 +384,7 @@ class TimerController extends Controller
         $dayTask = $tasksForCombination->first(function ($task) use ($currentDate) {
           return Carbon::parse($task->timer_date)->toDateString() === $currentDate;
         });
-        $notes = UserTasks::where('timer_date', $currentDate)->select('notes')->first();
+        $notes = UserTasks::where(['timer_date' => $currentDate, 'project_id' => $projectId, 'client_id' => $clientId, 'task_id' => $taskId,])->select('notes')->first();
         // Append the task data for the current day=
         $result[$combination][] = [
           'task_id' => $taskId, // Use the task_id for this combination
