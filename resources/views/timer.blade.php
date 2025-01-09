@@ -315,7 +315,7 @@
         </div>
 
         <div class="tasks-view">
-          <table class="day-tasks">
+          <table class="day-tasks" id="day-tasks">
             <thead>
               <tr>
                 <th>Client</th>
@@ -362,7 +362,7 @@
 
             <div class="duration">
               <div class="pds-position-relative">
-                <textarea name="notes" placeholder="Notes (optional)" class="pds-input entry-notes js-notes"></textarea>
+                <textarea name="notes" placeholder="Notes (optional)" class="pds-input entry-notes js-notes" id="entry-notes"></textarea>
                 <span class="pds-field-description shift-enter-helper-text"><kbd>Shift+Return</kbd> for line break</span>
               </div>
 

@@ -2,6 +2,7 @@ const selectedDateEl = document.querySelector(".selected-date");
 const weekViewButtons = document.querySelectorAll(".week-view button");
 const previousDayButton = document.querySelector(".previous-day");
 const taskDate = document.querySelector(".js-spent-at-display");
+const taskNotes = document.querySelector(".entry-notes");
 const nextDayButton = document.querySelector(".next-day");
 const timeTrackerButton = document.querySelector(".time-tracker");
 const dialogue = document.querySelector(".dialogue");
@@ -136,54 +137,7 @@ function createRow(rowData) {
         updateUI();
         populateTasksForDate(currentDate);
     });
-    editButton.addEventListener("click", function (e) {
-        const button = e.target;
-        const taskId = button.getAttribute("data-id");
-        fetch(`/timer/get-task/${taskId}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then((response) => {
-                console.log(JSON.stringify(response));
-                // $('#taskDate').val(currentDate);
-                populateClients(response.project_id);
-                populateTasks(response.project_id, response.task_id);
-                $('#taskDate').val(response.timer_date);
-                $('textarea.entry-notes').html(response.notes);
-                $('#timeInput').removeAttr('disabled');
 
-                let startedAtTime = null;
-                if (response.started_at) {
-                    const isoString = response.started_at.replace(" ", "T") + "Z";
-                    startedAtTime = new Date(isoString);
-                }
-
-                let elapsedSeconds;
-                if (response.is_running && startedAtTime) {
-                    $('#timeInput').attr('disabled', 'disabled');
-                    const nowMs = Date.now();
-                    const startedMs = startedAtTime.getTime();
-                    const diffInSeconds = Math.floor(
-                        (nowMs - startedMs) / 1000
-                    );
-
-                    elapsedSeconds = response.timer + diffInSeconds;
-                } else {
-                    elapsedSeconds = response.timer;
-                }
-                $("#timeInput").val(secondtoHour(elapsedSeconds));
-                $("#startTimerButton").text("update Timer")
-                $('#create_form').attr('data-url', `/timer/update-timer/${response.id}`)
-                dialogue.style.display = "block";
-            })
-            .catch((error) => {
-                console.error("Error fetching projects:", error);
-                alert("Failed to load projects. Please try again.");
-            });
-    });
     actionCell.appendChild(actionButton);
     actionCell.appendChild(editButton);
     row.appendChild(actionCell);
@@ -318,6 +272,14 @@ function populateProjects(clientId) {
 }
 
 function closeDialogue() {
+    $('#timeInput').val('');
+    $('#entry-notes').html('');
+    $('#create_form').attr('data-url','/timer/init-timer');
+    $("#startTimerButton").text("Start Timer")
+    clientSelect.innerHTML = "";
+    projectSelect.innerHTML = "";
+    projectSelect.disabled = true;
+    taskNotes.innerHTML = "";
     dialogue.style.display = "none";
 }
 
@@ -361,7 +323,6 @@ function populateTasksForDate(dateObject) {
         .then((response) => response.json())
         .then((tasks) => {
             const data = tasks.map((task) => {
-                console.log(task)
                 let startedAtTime = null;
                 if (task.started_at) {
                     const isoString = task.started_at.replace(" ", "T") + "Z";
@@ -632,7 +593,7 @@ $(document).ready(() => {
         },
         submitHandler: function (form, event) { // Add `event` as the second parameter
             event.preventDefault(); // Prevent default form submission
-            const url = $("#create_form").data("url");
+            const url = $("#create_form").attr("data-url");
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -652,5 +613,52 @@ $(document).ready(() => {
                 }
             });
         }
+    });
+    $('#day-tasks').on('click', '.js-edit-entry', function () {
+        const selectedTaskId = $(this).attr("data-id");
+        $('#entry-notes').html('');
+        fetch(`/timer/get-task/${selectedTaskId}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((response) => {
+                // $('#taskDate').val(currentDate);
+                populateClients(response.project_id);
+                populateTasks(response.project_id, response.task_id);
+                $('#taskDate').val(response.timer_date);
+                $('#entry-notes').html(response.notes);
+                $('#timeInput').removeAttr('disabled');
+
+                let startedAtTime = null;
+                if (response.started_at) {
+                    const isoString = response.started_at.replace(" ", "T") + "Z";
+                    startedAtTime = new Date(isoString);
+                }
+
+                let elapsedSeconds;
+                if (response.is_running && startedAtTime) {
+                    $('#timeInput').attr('disabled', 'disabled');
+                    const nowMs = Date.now();
+                    const startedMs = startedAtTime.getTime();
+                    const diffInSeconds = Math.floor(
+                        (nowMs - startedMs) / 1000
+                    );
+
+                    elapsedSeconds = response.timer + diffInSeconds;
+                } else {
+                    elapsedSeconds = response.timer;
+                }
+                $("#timeInput").val(secondtoHour(elapsedSeconds));
+                $("#startTimerButton").text("update Timer")
+                $('#create_form').attr('data-url', `/timer/update-timer/${response.id}`)
+                dialogue.style.display = "block";
+            })
+            .catch((error) => {
+                console.error("Error fetching projects:", error);
+                alert("Failed to load projects. Please try again.");
+            });
     });
 });
