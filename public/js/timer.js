@@ -7,6 +7,7 @@ const nextDayButton = document.querySelector(".next-day");
 const timeTrackerButton = document.querySelector(".time-tracker");
 const dialogue = document.querySelector(".dialogue");
 const clientSelect = document.getElementById("clientSelect");
+const userSelect = document.getElementById("userSelect");
 const projectSelect = document.getElementById("projectSelect");
 const timeInput = document.getElementById("timeInput");
 // const startTimerButton = document.getElementById("startTimerButton");
@@ -15,6 +16,8 @@ const taskRows = document.querySelector(".day-tasks tbody");
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 let currentDate = new Date();
 let currentUserName = null;
+
+let currentUser = null;
 const calendarButton = document.getElementById("calendar-button");
 const datePicker = document.getElementById("date-picker");
 calendarButton.addEventListener("click", () => {
@@ -274,7 +277,7 @@ function populateProjects(clientId) {
 function closeDialogue() {
     $('#timeInput').val('');
     $('#entry-notes').html('');
-    $('#create_form').attr('data-url','/timer/init-timer');
+    $('#create_form').attr('data-url', '/timer/init-timer');
     $("#startTimerButton").text("Start Timer")
     clientSelect.innerHTML = "";
     projectSelect.innerHTML = "";
@@ -319,7 +322,12 @@ function secondtoHour(seconds) {
 
 function populateTasksForDate(dateObject) {
     const dateFormatted = getLocalDateString(dateObject);
-    fetch(`/timer/get-tasks/${dateFormatted}`)
+    if (currentUser) {
+        var geturl = `/timer/get-tasks/${dateFormatted}/${currentUser}`;
+    } else {
+        var geturl = `/timer/get-tasks/${dateFormatted}`;
+    }
+    fetch(geturl)
         .then((response) => response.json())
         .then((tasks) => {
             const data = tasks.map((task) => {
@@ -381,7 +389,12 @@ function populateTasksForDate(dateObject) {
         });
 }
 function isAnyTaskRunning() {
-    fetch(`/timer/get-running-tasks-list`)
+    if(currentUser){
+        var runningTaskUrl = `/timer/get-running-tasks-list/${currentUser}`;
+    }else{
+        runningTaskUrl = `/timer/get-running-tasks-list`;
+    }
+    fetch(runningTaskUrl)
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -407,7 +420,7 @@ function populateAlerts() {
 }
 
 function updateUI() {
-    selectedDateEl.innerHTML = formatDate(currentDate);
+    selectedDateEl.innerHTML = formatDate(currentDate,);
 
     const { startOfWeek, endOfWeek } = getCurrentWeekRange(currentDate);
     const daysOfWeek = Array.from(weekViewButtons);
@@ -512,16 +525,26 @@ clientSelect.addEventListener("change", function () {
     populateTasks(selectedProjectId);
 });
 
+userSelect.addEventListener("change", function () {
+    const selecteduserId = this.value;
+    currentUser = selecteduserId;
+    $('#user_id').val(selecteduserId);
+    updateUI();
+
+});
 
 setInterval(() => populateTasksForDate(currentDate), 60_000);
-getWeekData();
 updateUI();
 
 
 function getWeekData() {
     const dateFormatted = getLocalDateString(currentDate);
-
-    fetch(`/timer/week-summary/${dateFormatted}`)
+    if(currentUser){
+        var getweekSummaryUrl = `/timer/week-summary/${dateFormatted}/${currentUser}`;
+    }else{
+        getweekSummaryUrl = `/timer/week-summary/${dateFormatted}`;
+    }
+    fetch(getweekSummaryUrl)
         .then(response => response.json())
         .then(data => {
             updateWeekView(data);
@@ -617,7 +640,12 @@ $(document).ready(() => {
     $('#day-tasks').on('click', '.js-edit-entry', function () {
         const selectedTaskId = $(this).attr("data-id");
         $('#entry-notes').html('');
-        fetch(`/timer/get-task/${selectedTaskId}`)
+        if (currentUser) {
+            var getsingleTaskURl = `/timer/get-task/${selectedTaskId}/${currentUser}`;
+        } else {
+            var getsingleTaskURl = `/timer/get-task/${selectedTaskId}`;
+        }
+        fetch(getsingleTaskURl)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");

@@ -7,6 +7,7 @@ use App\Client;
 use App\Project;
 use App\Task;
 use App\TaskName;
+use App\User;
 use App\UserTasks;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,8 @@ class TimerController extends Controller
    */
   public function index()
   {
-    return view("timer");
+    $users = User::get();
+    return view("timer", compact('users'));
   }
   public function indexWeekly()
   {
@@ -104,6 +106,10 @@ class TimerController extends Controller
         'notes' => 'nullable',
         'timeInput' => 'nullable'
       ]);
+      $user_id = $request->user_id;
+      if (!$user_id || empty($user_id)) {
+        $user_id = Auth::id();
+      }
       $project = Project::where('id', $request->input('client_select'))->first();
       if ($project) {
         $taskDate = preg_replace('/\s*\(.*?\)$/', '', $request->input('taskDate')); // "Tue Dec 24 2024 00:09:20 GMT+0500"
@@ -122,7 +128,7 @@ class TimerController extends Controller
           'client_id' => $project->client_id,
           'project_id' => $validatedData['client_select'],
           'task_id' => $validatedData['task_select'],
-          'user_id' => Auth::id(),
+          'user_id' => $user_id,
           'notes' => null,
           'is_weekly_only' => 1,
           'timer_date' => $formattedDate
@@ -130,7 +136,7 @@ class TimerController extends Controller
         if ($userTasks) {
           $userTasks->update(
             [
-              'user_id' => Auth::id(),
+              'user_id' => $user_id,
               'client_id' => $project->client_id,
               'project_id' => $validatedData['client_select'],
               'task_id' => $validatedData['task_select'],
@@ -144,7 +150,7 @@ class TimerController extends Controller
           );
         } else {
           $userTasks = UserTasks::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user_id,
             'client_id' => $project->client_id,
             'project_id' => $validatedData['client_select'],
             'task_id' => $validatedData['task_select'],
@@ -276,9 +282,12 @@ class TimerController extends Controller
     return $dates;
   }
 
-  public function getTasks($date)
+  public function getTasks($date, $userId = null)
   {
-    $userId = Auth::id(); // Get the authenticated user's ID
+    if (!$userId) {
+      $userId = Auth::id();
+    }
+    // Get the authenticated user's ID
     $tasks = UserTasks::whereDate('timer_date', $date)->where('user_id', $userId)->where('is_weekly_only', 0)
       ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')->with([
         'username',
@@ -297,9 +306,11 @@ class TimerController extends Controller
     return ((int)$hours * 3600) + ((int)$minutes * 60);
   }
 
-  public function getTask($taskId)
+  public function getTask($taskId, $userId = null)
   {
-    $userId = Auth::id(); // Get the authenticated user's ID
+    if (!$userId) {
+      $userId = Auth::id();
+    }
     $tasks = UserTasks::where('id', $taskId)->where(['user_id' => $userId, 'is_weekly_only' => 0])
       ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')
       ->first();
@@ -447,8 +458,11 @@ class TimerController extends Controller
     ]);
   }
 
-  public function getWeekSummary($date)
+  public function getWeekSummary($date, $userId = null)
   {
+    if (!$userId) {
+      $userId = Auth::id();
+    }
     // $date = "2024-12-25";
     $carbonDate = Carbon::parse($date);
     // Set week start as Sunday and week end as Saturday
@@ -461,7 +475,7 @@ class TimerController extends Controller
     // Dump results
     // dd($date, $carbonDate, $weekStart, $weekEnd);
     // Group tasks by date and calculate total time
-    $summary = UserTasks::whereBetween('timer_date', [$weekStart, $weekEnd])
+    $summary = UserTasks::whereBetween('timer_date', [$weekStart, $weekEnd])->where('user_id', $userId)
       ->selectRaw('DATE(timer_date) as date, SUM(timer) as total_time')
       ->groupBy('date')
       ->get()
@@ -615,6 +629,10 @@ class TimerController extends Controller
         'notes' => 'nullable',
         'timeInput' => 'nullable'
       ]);
+      $user_id = $request->user_id;
+      if(!$user_id || empty($user_id)){
+        $user_id = Auth::id();
+      }
       $project = Project::where('id', $request->input('client_select'))->first();
       if ($project) {
         $taskDate = preg_replace('/\s*\(.*?\)$/', '', $request->input('taskDate')); // "Tue Dec 24 2024 00:09:20 GMT+0500"
@@ -639,7 +657,7 @@ class TimerController extends Controller
         if ($userTasks) {
           $userTasks->update(
             [
-              'user_id' => Auth::id(),
+              'user_id' => $user_id,
               'client_id' => $project->client_id ?? $userTasks->client_id,
               'project_id' => $validatedData['client_select'] ?? $userTasks->project_id,
               'task_id' => $validatedData['task_select'] ?? $userTasks->task_id,
@@ -676,9 +694,11 @@ class TimerController extends Controller
       ], 500);
     }
   }
-  public function getRunningTaskList()
+  public function getRunningTaskList($userId = null)
   {
-    $userId = Auth::id(); // Get the authenticated user's ID
+    if(!$userId || empty($userId)){
+      $userId = Auth::id(); // Get the authenticated user's ID
+    }
     $tasks = UserTasks::where('user_id', $userId)->where('is_weekly_only', 0)->where('is_running', 1)
       ->select('id', 'user_id', 'client_id', 'project_id', 'timer', 'started_at', 'timer_date', 'is_running', 'task_id', 'notes')->with([
         'username',
