@@ -37,13 +37,13 @@ Route::get('/timer/get-task/{taskId}/{userId?}', 'TimerController@getTask');
 Route::post('/timer/start-timer/{taskId}', 'TimerController@startTimer');
 Route::post('/timer/stop-timer/{taskId}', 'TimerController@stopTimer');
 Route::get('/timer/week-summary/{date}/{userId?}', 'TimerController@getWeekSummary');
-Route::get('/timer/get-week-tasks/{date}', 'TimerController@getWeeklyTasks');
+Route::get('/timer/get-week-tasks/{date}/{userId?}', 'TimerController@getWeeklyTasks');
 Route::post('/timer/delete-week-data', 'TimerController@deleteWeekData');
-Route::post('/save-tasks', 'TimerController@saveTasks');
+Route::post('/save-tasks/{userId?}', 'TimerController@saveTasks');
 Route::get('/timer/get-clients-and-projects', 'TimerController@getClientsNprojects');
 Route::get('/timer/get-tasks-list', 'TimerController@getTaskList');
 Route::get('/timer/get-running-tasks-list/{userId?}', 'TimerController@getRunningTaskList');
-Route::post('/update-notes/{taskid}/{projectid}/{clientid}/{date}', 'TimerController@updateNotes')->name('updateNotes');
+Route::post('/update-notes/{taskid}/{projectid}/{clientid}/{date}/{userId?}', 'TimerController@updateNotes')->name('updateNotes');
 
 
 

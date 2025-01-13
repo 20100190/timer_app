@@ -12701,7 +12701,7 @@ body.detailed-reports-controller.index-action {
 }
 
 .week-view-table thead .day>:is(a, div).is-today {
-    color: #fa5d00
+    color: #fa5d00!important
 }
 
 .week-view-table thead .day.focused-day a {

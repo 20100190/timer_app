@@ -14,10 +14,28 @@ const timeInput = document.getElementById("timeInput");
 const cancelButton = document.getElementById("cancelButton");
 const taskRows = document.querySelector(".day-tasks tbody");
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-let currentDate = new Date();
-let currentUserName = null;
 
 let currentUser = null;
+userSelect.addEventListener("change", function () {
+    const selecteduserId = this.value;
+    currentUser = selecteduserId;
+    $('#user_id').val(selecteduserId);
+    updateUI();
+
+});
+let currentDate = new Date();
+const urlParams = new URLSearchParams(window.location.search);
+const dateParam = urlParams.get('date');
+if (dateParam) {
+    changeDay(dateParam);
+    urlParams.delete('date');
+    const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+    window.history.replaceState({}, document.title, newUrl);
+}
+
+
+let currentUserName = null;
+
 const calendarButton = document.getElementById("calendar-button");
 const datePicker = document.getElementById("date-picker");
 calendarButton.addEventListener("click", () => {
@@ -119,8 +137,8 @@ function createRow(rowData) {
     actionButton.addEventListener("click", function (e) {
         const button = e.target;
         const taskId = button.getAttribute("data-id");
-        const isRunning = button.getAttribute("data-is-running") === "1";
-
+        const isRunning = button.getAttribute("data-is-running") == "1";
+        console.log(isRunning)
         if (isRunning) {
             stopTask(taskId).then(() => {
                 actionButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -368,7 +386,7 @@ function populateTasksForDate(dateObject) {
                     ${task.notes ? task.notes : ''}
                         </div>
                     </div>`,
-                    time: secondsToHHMM(elapsedSeconds),
+                    time: secondtoHour(elapsedSeconds),
                     action: task.is_running ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12" class="clock-running-minute-hand"></polyline>
@@ -525,13 +543,7 @@ clientSelect.addEventListener("change", function () {
     populateTasks(selectedProjectId);
 });
 
-userSelect.addEventListener("change", function () {
-    const selecteduserId = this.value;
-    currentUser = selecteduserId;
-    $('#user_id').val(selecteduserId);
-    updateUI();
 
-});
 
 setInterval(() => populateTasksForDate(currentDate), 60_000);
 updateUI();
@@ -562,7 +574,7 @@ function updateWeekView(data) {
 
     days.forEach((day, index) => {
         const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
-        timeSpan.textContent = data[day] || '0:00'; // Replace with fetched time or keep 0:00
+        timeSpan.textContent = data[day] || '0.00'; // Replace with fetched time or keep 0:00
 
         const dateSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-date`);
 

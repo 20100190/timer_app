@@ -13,9 +13,18 @@ const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const saveButton = document.querySelector('.js-save');
 let currentDate = new Date();
 let currentUserName = null;
+let currentUser = null;
 const calendarButton = document.getElementById("calendar-button");
 const datePicker = document.getElementById("date-picker");
 const taskDate = document.querySelector(".js-spent-at-display");
+const userSelect = document.getElementById("userSelect");
+userSelect.addEventListener("change", function () {
+    const selecteduserId = this.value;
+    currentUser = selecteduserId;
+    $('#user_id').val(selecteduserId);
+    updateUI();
+
+});
 
 calendarButton.addEventListener("click", () => {
     datePicker.showPicker(); // Trigger the date picker
@@ -157,6 +166,7 @@ function appendWeeklyTasks(weeklyTasks) {
             const $notesIcon = $('<span>')
                 .addClass('notes-icon')
                 .attr('aria-label', 'Click to see notes')
+                .attr('title', `${day.notes || 'Click to add/edit notes'}`) // Add title attribute for tooltip
                 .html($svg);
 
             // Create the tooltip
@@ -173,6 +183,8 @@ function appendWeeklyTasks(weeklyTasks) {
 
             // Toggle tooltip visibility on click
             $notesIcon.on('click', function () {
+                $('.tooltipForm').css('display', 'none');
+                $('.tooltipForm').removeClass('active');
                 $tooltip.css('display', 'block');
                 $tooltip.addClass('active');
             });
@@ -183,7 +195,13 @@ function appendWeeklyTasks(weeklyTasks) {
             $tooltip.find('.updateNotes').on('click', function () {
                 const $button = $(this);
                 const notes = $tooltip.find('input[name="notes"]').val();
+                if (currentUser) {
+                    var notesurl = `/update-notes/${$button.data('task-id')}/${$button.data('project-id')}/${$button.data('client-id')}/${$button.data('date')}/${currentUser}`;
 
+                } else {
+                    notesurl = `/update-notes/${$button.data('task-id')}/${$button.data('project-id')}/${$button.data('client-id')}/${$button.data('date')}`;
+
+                }
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -191,7 +209,7 @@ function appendWeeklyTasks(weeklyTasks) {
                 });
 
                 $.ajax({
-                    url: `/update-notes/${$button.data('task-id')}/${$button.data('project-id')}/${$button.data('client-id')}/${$button.data('date')}`,
+                    url: notesurl,
                     method: 'POST',
                     data: { notes },
                     beforeSend: function () {
@@ -239,9 +257,10 @@ function appendWeeklyTasks(weeklyTasks) {
                     $icon
 
                 );
-
+            const today = new Date(currentDate);
+            const dayDate = new Date(day.date);
             // Highlight today (optional)
-            if (day.isToday) {
+            if (today.toDateString() === dayDate.toDateString()) {
                 $dayCell.addClass('is-today');
             } else {
                 $dayCell.addClass('is-not-today');
@@ -249,15 +268,12 @@ function appendWeeklyTasks(weeklyTasks) {
             $row.append($dayCell);
         });
 
-        // Calculate total hours and minutes for the row
-        const totalHours = Math.floor(totalTime / 3600);
-        const totalMinutes = Math.floor((totalTime % 3600) / 60);
+        const totalHours = (totalTime / 3600).toFixed(2); // Convert seconds to hours and format to 2 decimals
 
         // Append the total time in the last column
         $row.append(
-            $('<td>').addClass('total').text(`${totalHours}:${totalMinutes.toString().padStart(2, '0')}`)
+            $('<td>').addClass('total').text(totalHours)
         );
-
 
         // Add delete button column
         $row.append(
@@ -282,7 +298,7 @@ function appendWeeklyTasks(weeklyTasks) {
         tableBody.append($row);
 
     });
-  
+
 
     calculateAndAppendColumnTotals();
 
@@ -295,50 +311,43 @@ function calculateAndAppendColumnTotals() {
     const columnTotals = [];
     let hasData = false; // Flag to check if there's valid data
 
-    // Iterate through each column (excluding the first and last columns for name and total)
+    // Iterate through each row and calculate totals for each column
     table.find('tbody tr').each(function () {
         $(this).find('td.day').each(function (index) {
             const timeText = $(this).find('input').val() || $(this).text();
             if (!columnTotals[index]) columnTotals[index] = 0;
 
             if (timeText) {
-                const [hours, minutes] = timeText.split(':').map(Number);
-                if (!isNaN(hours) || !isNaN(minutes)) {
+                const timeInHours = parseFloat(timeText);
+                if (!isNaN(timeInHours)) {
                     hasData = true; // Mark as having data if valid time found
-                    columnTotals[index] += (hours || 0) * 3600 + (minutes || 0) * 60; // Convert to seconds
+                    columnTotals[index] += timeInHours; // Accumulate hours directly
                 }
             }
         });
     });
 
-    // If there's no valid data, reset the footer to 0:00
+    // If there's no valid data, reset the footer to 0.00
     if (!hasData) {
         tfootRow.find('td.day').each(function () {
-            $(this).text('0:00');
+            $(this).text('0.00');
         });
-        tfootRow.find('td.total').text('0:00');
+        tfootRow.find('td.total').text('0.00');
         return; // Exit the function
     }
 
-    // Update the footer row with the totals
+    // Update the footer row with the totals for each column
     tfootRow.find('td.day').each(function (index) {
         if (columnTotals[index] !== undefined) {
-            const totalSeconds = columnTotals[index];
-            const totalHours = Math.floor(totalSeconds / 3600);
-            const totalMinutes = Math.floor((totalSeconds % 3600) / 60);
-
-            $(this).text(`${totalHours}:${String(totalMinutes).padStart(2, '0')}`);
+            const totalHours = columnTotals[index];
+            $(this).text(totalHours.toFixed(2)); // Format to 2 decimal points
         }
     });
 
     // Calculate the overall total for the last column
-    const overallTotal = columnTotals.reduce((sum, seconds) => sum + seconds, 0);
-    const overallHours = Math.floor(overallTotal / 3600);
-    const overallMinutes = Math.floor((overallTotal % 3600) / 60);
-
-    tfootRow.find('td.total').text(`${overallHours}:${String(overallMinutes).padStart(2, '0')}`);
+    const overallTotal = columnTotals.reduce((sum, hours) => sum + hours, 0);
+    tfootRow.find('td.total').text(overallTotal.toFixed(2)); // Format to 2 decimal points
 }
-
 // Call the function after populating the table
 
 
@@ -564,7 +573,12 @@ function secondsToHHMM(totalSeconds) {
 
 function populateTasksForWeek(dateObject) {
     const dateFormatted = getLocalDateString(dateObject);
-    fetch(`/timer/get-week-tasks/${dateFormatted}`)
+    if (currentUser) {
+        var geturl = `/timer/get-week-tasks/${dateFormatted}/${currentUser}`;
+    } else {
+        var geturl = `/timer/get-week-tasks/${dateFormatted}`;
+    }
+    fetch(geturl)
         .then((response) => response.json())
         .then((tasks) => {
             clearTable();
@@ -612,6 +626,8 @@ function updateDaysOfWeek(currentDate) {
 
         const dayAnchor = dayHeaders[i].querySelector('a');
         dayAnchor.setAttribute('href', `javascript:void(0)`);
+        dayAnchor.setAttribute('class', `gotoDayView`);
+        dayAnchor.setAttribute('daydate', currentDay.toDateString());
         dayAnchor.setAttribute('aria-label', `${dayName}, ${dayDate} ${dayMonth}`);
         dayAnchor.querySelector('span').innerText = `${dayDate} ${dayMonth}`;
 
@@ -788,14 +804,19 @@ saveButton.addEventListener('click', function () {
 
 // Function to save changes to the database
 function saveChangesToDatabase() {
+    if (currentUser) {
+        var saveTaskURl = `/save-tasks/${currentUser}`;
+    } else {
+        saveTaskURl = '/save-tasks';
 
+    }
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
     $.ajax({
-        url: '/save-tasks',
+        url: saveTaskURl,
         method: "POST",
         data: {
             tasks: changedInputs
@@ -874,6 +895,7 @@ function deleteWeekData(buttonElement) {
     const deleteData = {
         project_id: projectId,
         client_id: clientId,
+        user_id: currentUser,
         dates: deleteWeekDates,
     };
 
@@ -905,6 +927,23 @@ function deleteWeekData(buttonElement) {
         });
 }
 $(document).ready(() => {
+    document.querySelectorAll('a.gotoDayView').forEach(link => {
+        link.addEventListener('click', function () {
+            const dayDate = this.getAttribute('daydate');
+            if (dayDate) {
+                const targetDate = new Date(dayDate);
+                const year = targetDate.getFullYear();
+                const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+                const day = String(targetDate.getDate()).padStart(2, '0');
+    
+                // Redirect to the new URL with the date in local format (YYYY-MM-DD)
+                const newUrl = `/timer?date=${year}-${month}-${day}`;
+                // console.log(newUrl);          
+                 window.location.href = newUrl;
+
+            }
+        });
+    });
     const showError = () => {
         Swal.fire({
             title: "Error!",

@@ -306,6 +306,18 @@
     <div class="pds-container">
       <ul class="sub-nav-tabs">
         <li><a data-analytics-element-id="sub-nav-time-timesheet" class="current" href="https://budgetwebform.harvestapp.com/time">Timesheet</a></li>
+        <li>
+          <div class="" style="margin-top:10px;">
+            <select id="userSelect" name="user_select" class="searchable-user-select">
+              <option value="">Select a User</option>
+              @if(!empty($users))
+              @foreach($users as $user)
+              <option value="{{$user->id}}" @if($user->id == Auth::id()) selected @endif>{{$user->name}}</option>
+              @endforeach
+              @endif
+            </select>
+          </div>
+        </li>
 
       </ul>
     </div>
@@ -530,9 +542,7 @@
               </div>
 
               <input type="hidden" id="taskDate" name="taskDate">
-
-
-
+              <input type="hidden" id="user_id" name="user_id">
               <div class="pds-flex-list pds-gap-md pds-justify-between pds-mt-md js-form-buttons">
                 <div class="pds-flex-list@xs-stretch">
                   <button type="submit" id="startTimerButton" class="pds-button pds-button-primary js-submit" data-analytics-element-id="timesheet-day-entry-editor-start-timer-or-save-entry">Start timer</button>
