@@ -113,7 +113,21 @@ function clearTable() {
     tableBody.empty();
 }
 
+function keeptimerunning(startedAtTime, elapsedSeconds, ID) {
+    if (startedAtTime) {
+        const nowMs = Date.now();
+        const startedMs = startedAtTime.getTime();
+        const diffInSeconds = Math.floor(
+            (nowMs - startedMs) / 1000
+        );
+        elapsedSeconds = Number(elapsedSeconds) + Number(diffInSeconds);
+    }
+    const timeinhours = elapsedSeconds
+        ? (elapsedSeconds / 3600).toFixed(2) // Convert seconds to hours and format to 2 decimal places
+        : '';
+    $(`#${ID}`).text(timeinhours);
 
+}
 function appendWeeklyTasks(weeklyTasks) {
     // Get the table body where rows need to be appended
     const tableBody = $('table tbody'); // Adjust the selector to target your table's body
@@ -127,10 +141,13 @@ function appendWeeklyTasks(weeklyTasks) {
         const client_name = days.find((day) => day.client_name)?.client_name || ''; // Find the first valid projectId, fallback to empty string
         const task_name = days.find((day) => day.task_name)?.task_name || ''; // Find the first valid projectId, fallback to empty string
         const clientId = days.find((day) => day.client_id)?.client_id || ''; // Find the first valid projectId, fallback to empty string
+        const taskId = days.find((day) => day.task_id)?.task_id || ''; // Find the first valid projectId, fallback to empty string
+        const allTimersRunning = days.every((day) => day.is_task_running === 1);
 
         const $row = $('<tr>')
             .addClass('week-view-entry')
             .attr('data-project-id', projectId)
+            .attr('data-task-id', taskId)
             .attr('data-client-id', clientId);
         // Add the project+client column
         const $projectCell = $('<td>').addClass('name').append(
@@ -149,7 +166,28 @@ function appendWeeklyTasks(weeklyTasks) {
             )
         );
         $row.append($nameCell);
-        // Add day-wise hours
+        if (allTimersRunning) {
+            var $startStopButton = $('<td>').addClass('name').append(
+                $('<div>').html(`<button data-task-id="${taskId}" data-project-id="${projectId}" data-client-id="${clientId}" class="start_row_timer"  onclick='StopWeekData(this)'><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12" class="clock-running-minute-hand"></polyline>
+                <polyline points="12 12 16 14" class="clock-running-hour-hand"></polyline>
+                </svg>Stop Row</button>`), // Project name
+
+            );
+        } else {
+            $startStopButton = $('<td>').addClass('name').append(
+                $('<div>').html(`<button data-task-id="${taskId}" data-project-id="${projectId}" data-client-id="${clientId}" class="start_row_timer"  onclick='StartWeekData(this)'><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>Start Row</button>`), // Project name
+
+            );
+        }
+
+        // Save notes functionality
+
+        $row.append($startStopButton);        // Add day-wise hours
         function createNotesIcon(day) {
             // Create the notes icon
             var $svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24">
@@ -238,25 +276,59 @@ function appendWeeklyTasks(weeklyTasks) {
             const $icon = createNotesIcon(day);
             const timeInSeconds = parseInt(day.time, 10) || 0; // Ensure time is a number, default to 0 if invalid
             totalTime += timeInSeconds; // Accumulate the total time
-            const $dayCell = $('<td>')
-                .addClass('day')
-                .append(
-                    $('<input>')
-                        .addClass('pds-input js-compound-entry')
-                        .attr('type', 'text')
-                        .attr('data-task-id', day.task_id)
-                        .attr('data-project-id', day.project_id)
-                        .attr('data-client-id', day.client_id)
-                        .attr('data-date', day.date)
-                        .attr('aria-label', `Hours on ${day.day}`)
-                        .val(
-                            timeInSeconds
-                                ? (timeInSeconds / 3600).toFixed(2) // Convert seconds to hours and format to 2 decimal places
-                                : ''
-                        ),
-                    $icon
-
+            let startedAtTime = null;
+            if (day.started_at) {
+                const isoString = day.started_at.replace(" ", "T") + "Z";
+                startedAtTime = new Date(isoString);
+            }
+            let elapsedSeconds;
+            if (day.is_task_running && startedAtTime) {
+                const nowMs = Date.now();
+                const startedMs = startedAtTime.getTime();
+                const diffInSeconds = Math.floor(
+                    (nowMs - startedMs) / 1000
                 );
+                elapsedSeconds = Number(day.time) + Number(diffInSeconds);
+            } else {
+                elapsedSeconds = day.time;
+            }
+            const timeinhours = elapsedSeconds
+                ? (elapsedSeconds / 3600).toFixed(2) // Convert seconds to hours and format to 2 decimal places
+                : '';
+            if (day.is_task_running === 1) {
+                var $dayCell = $('<td>')
+                    .addClass('day')
+                    .append(
+                        $(`<div style="display:flex; justify-content: center;"><span id="${day.task_id + day.project_id + day.client_id + day.date + day.day}" class=runningTime>${timeinhours}</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12" class="clock-running-minute-hand"></polyline>
+                            <polyline points="12 12 16 14" class="clock-running-hour-hand"></polyline>
+                            </svg></div>`));
+                setInterval(() => {
+                    keeptimerunning(startedAtTime, day.time, day.task_id + day.project_id + day.client_id + day.date + day.day);
+                }, 60000);
+            } else {
+                $dayCell = $('<td>')
+                    .addClass('day')
+                    .append(
+                        $('<input>')
+                            .addClass('pds-input js-compound-entry')
+                            .attr('type', 'text')
+                            .attr('data-task-id', day.task_id)
+                            .attr('data-project-id', day.project_id)
+                            .attr('data-client-id', day.client_id)
+                            .attr('data-date', day.date)
+                            .attr('aria-label', `Hours on ${day.day}`)
+                            .val(
+                                timeInSeconds
+                                    ? (timeInSeconds / 3600).toFixed(2) // Convert seconds to hours and format to 2 decimal places
+                                    : ''
+                            ),
+                        $icon
+
+                    );
+            }
+
             const today = new Date(currentDate);
             const dayDate = new Date(day.date);
             // Highlight today (optional)
@@ -843,6 +915,28 @@ function saveChangesToDatabase() {
     });
 }
 
+// Function to calculate the start and end of the week
+function getdeleteWeekDates(baseDate) {
+    const startOfWeek = new Date(baseDate);
+    // Calculate the offset to set the date to Monday
+    const dayOffset = (startOfWeek.getDay() + 6) % 7; // Adjust so Monday is 0, Sunday is 6
+    startOfWeek.setDate(startOfWeek.getDate() - dayOffset); // Set to Monday
+
+    const deleteWeekDates = [];
+    for (let i = 0; i < 7; i++) {
+        // Clone the `startOfWeek` date object to avoid mutating the original
+        const date = new Date(startOfWeek.getTime());
+        date.setDate(startOfWeek.getDate() + i); // Add days for the week
+
+        // Format the date manually to avoid timezone issues
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const day = String(date.getDate()).padStart(2, '0');
+        deleteWeekDates.push(`${year}-${month}-${day}`);
+    }
+
+    return deleteWeekDates;
+}
 
 function deleteWeekData(buttonElement) {
     // Find the parent row from the button element
@@ -855,28 +949,6 @@ function deleteWeekData(buttonElement) {
         return;
     }
 
-    // Function to calculate the start and end of the week
-    function getdeleteWeekDates(baseDate) {
-        const startOfWeek = new Date(baseDate);
-        // Calculate the offset to set the date to Monday
-        const dayOffset = (startOfWeek.getDay() + 6) % 7; // Adjust so Monday is 0, Sunday is 6
-        startOfWeek.setDate(startOfWeek.getDate() - dayOffset); // Set to Monday
-
-        const deleteWeekDates = [];
-        for (let i = 0; i < 7; i++) {
-            // Clone the `startOfWeek` date object to avoid mutating the original
-            const date = new Date(startOfWeek.getTime());
-            date.setDate(startOfWeek.getDate() + i); // Add days for the week
-
-            // Format the date manually to avoid timezone issues
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-            const day = String(date.getDate()).padStart(2, '0');
-            deleteWeekDates.push(`${year}-${month}-${day}`);
-        }
-
-        return deleteWeekDates;
-    }
 
     // Example usage
     const deleteWeekDates = getdeleteWeekDates(currentDate);
@@ -926,6 +998,106 @@ function deleteWeekData(buttonElement) {
             alert('Failed to delete data. Please try again.');
         });
 }
+function StartWeekData(buttonElement) {
+    // Find the parent row from the button element
+    const row = buttonElement.closest('tr');
+    const projectId = row.getAttribute('data-project-id');
+    const taskId = row.getAttribute('data-task-id');
+    const clientId = row.getAttribute('data-client-id'); // Ensure this attribute exists in your row
+    if (!projectId || !clientId) {
+        alert('Project ID or Client ID not found.');
+        return;
+    }
+    // Example usage
+    const deleteWeekDates = getdeleteWeekDates(currentDate);
+
+    // Prepare the payload
+    const updateData = {
+        project_id: projectId,
+        client_id: clientId,
+        task_id: taskId,
+        user_id: currentUser,
+        dates: deleteWeekDates,
+    };
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        },
+    });
+
+    $.ajax({
+        url: '/start-row-timer',
+        method: 'POST',
+        data: updateData,
+        beforeSend: function () {
+            $('.pds-toast-success').addClass('d-none');
+            $('.pds-toast-notice').removeClass('d-none');
+        },
+        success: function (response) {
+            $('.pds-toast-success').removeClass('d-none');
+            $('.pds-toast-notice').addClass('d-none');
+            populateTasksForWeek(currentDate); // Refresh tasks
+            setTimeout(() => {
+                $('.pds-toast-success').addClass('d-none');
+            }, 5000);
+        },
+        error: function (error) {
+            console.error(error);
+            showError();
+        },
+    });
+}
+function StopWeekData(buttonElement) {
+    // Find the parent row from the button element
+    const row = buttonElement.closest('tr');
+    const projectId = row.getAttribute('data-project-id');
+    const taskId = row.getAttribute('data-task-id');
+    const clientId = row.getAttribute('data-client-id'); // Ensure this attribute exists in your row
+    if (!projectId || !clientId) {
+        alert('Project ID or Client ID not found.');
+        return;
+    }
+    // Example usage
+    const deleteWeekDates = getdeleteWeekDates(currentDate);
+
+    // Prepare the payload
+    const updateData = {
+        project_id: projectId,
+        client_id: clientId,
+        task_id: taskId,
+        user_id: currentUser,
+        dates: deleteWeekDates,
+    };
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        },
+    });
+
+    $.ajax({
+        url: '/stop-row-timer',
+        method: 'POST',
+        data: updateData,
+        beforeSend: function () {
+            $('.pds-toast-success').addClass('d-none');
+            $('.pds-toast-notice').removeClass('d-none');
+        },
+        success: function (response) {
+            $('.pds-toast-success').removeClass('d-none');
+            $('.pds-toast-notice').addClass('d-none');
+            populateTasksForWeek(currentDate); // Refresh tasks
+            setTimeout(() => {
+                $('.pds-toast-success').addClass('d-none');
+            }, 5000);
+        },
+        error: function (error) {
+            console.error(error);
+            showError();
+        },
+    });
+}
 $(document).ready(() => {
     document.querySelectorAll('a.gotoDayView').forEach(link => {
         link.addEventListener('click', function () {
@@ -935,11 +1107,11 @@ $(document).ready(() => {
                 const year = targetDate.getFullYear();
                 const month = String(targetDate.getMonth() + 1).padStart(2, '0');
                 const day = String(targetDate.getDate()).padStart(2, '0');
-    
+
                 // Redirect to the new URL with the date in local format (YYYY-MM-DD)
                 const newUrl = `/timer?date=${year}-${month}-${day}`;
                 // console.log(newUrl);          
-                 window.location.href = newUrl;
+                window.location.href = newUrl;
 
             }
         });

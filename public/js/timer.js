@@ -119,6 +119,8 @@ function createRow(rowData) {
     row.appendChild(projectCell);
 
     const timeCell = document.createElement("td");
+    timeCell.setAttribute('class', 'time-cell')
+    timeCell.setAttribute("data-is-running", rowData.is_running);
     timeCell.textContent = rowData.time;
     row.appendChild(timeCell);
 
@@ -138,7 +140,6 @@ function createRow(rowData) {
         const button = e.target;
         const taskId = button.getAttribute("data-id");
         const isRunning = button.getAttribute("data-is-running") == "1";
-        console.log(isRunning)
         if (isRunning) {
             stopTask(taskId).then(() => {
                 actionButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -407,9 +408,9 @@ function populateTasksForDate(dateObject) {
         });
 }
 function isAnyTaskRunning() {
-    if(currentUser){
+    if (currentUser) {
         var runningTaskUrl = `/timer/get-running-tasks-list/${currentUser}`;
-    }else{
+    } else {
         runningTaskUrl = `/timer/get-running-tasks-list`;
     }
     fetch(runningTaskUrl)
@@ -546,14 +547,16 @@ clientSelect.addEventListener("change", function () {
 
 
 setInterval(() => populateTasksForDate(currentDate), 60_000);
+setInterval(() => getWeekData(), 60_000);
+
 updateUI();
 
 
 function getWeekData() {
     const dateFormatted = getLocalDateString(currentDate);
-    if(currentUser){
+    if (currentUser) {
         var getweekSummaryUrl = `/timer/week-summary/${dateFormatted}/${currentUser}`;
-    }else{
+    } else {
         getweekSummaryUrl = `/timer/week-summary/${dateFormatted}`;
     }
     fetch(getweekSummaryUrl)
@@ -564,6 +567,7 @@ function getWeekData() {
         .catch(error => console.error('Error fetching week summary:', error));
 }
 function updateWeekView(data) {
+    console.log(data);
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     // Create a Date object from the currentDate
@@ -574,7 +578,22 @@ function updateWeekView(data) {
 
     days.forEach((day, index) => {
         const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
-        timeSpan.textContent = data[day] || '0.00'; // Replace with fetched time or keep 0:00
+        // if (data[day]['is_running'] === true) {
+        //     let totalRunningTime = 0;
+
+        //     // Select all <td> elements with data-is-running="1"
+        //     $('.time-cell[data-is-running="1"]').each(function () {
+        //         // Parse the time value from the cell and add it to the total
+        //         const timeValue = parseFloat($(this).text());
+        //         if (!isNaN(timeValue)) {
+        //             totalRunningTime += timeValue;
+        //         }
+        //     });
+        //     timeSpan.textContent = totalRunningTime.toFixed(2); // Replace with fetched time or keep 0:00
+        // } else {
+        //     timeSpan.textContent = data[day]['total_time'] || '0.00'; // Replace with fetched time or keep 0:00
+        // }
+        timeSpan.textContent = data[day]['total_time'] || '0.00'; // Replace with fetched time or keep 0:00
 
         const dateSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-date`);
 

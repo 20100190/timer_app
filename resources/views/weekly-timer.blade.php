@@ -372,9 +372,10 @@
             <table class="week-view-table pds-table">
               <thead>
                 <tr>
-                  <th class="client" style="width:20%; padding-left:16px">Client</th>
-                  <th class="pic" style="width:20%;padding-left:16px">PIC</th>
-                  <th class="name" style="width:20%;padding-left:16px">Project And Task</th>
+                  <th class="client" style="width:15%; padding-left:16px">Client</th>
+                  <th class="pic" style="width:15%;padding-left:16px">PIC</th>
+                  <th class="name" style="width:15%;padding-left:16px">Project And Task</th>
+                  <th class="start_stop" style="width:15%;padding-left:16px"></th>
                   <th class="day focused-day"><a class="js-backbone test-Monday js-day is-today has-completion-signal" href="/time/day/2024/12/16/5123637" aria-label="Monday, 16 December" data-tooltip="" data-tooltip-delay="500" data-tooltip-hide-on-hover="" aria-describedby="has-completion-signal-tooltip-Monday" data-analytics-element-id="timesheet-navigate-day-Monday">
                       Mon
                       <span>16 Dec</span>
@@ -429,6 +430,12 @@
                     <div class="entry-project">Budget Webform</div>
 
                     <div class="entry-task">Design</div>
+                  </td>
+                  <td id="project43039591-task23639166" class="start_stop_row">
+                    <button data-id="26" data-is-running="0"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>Start</button>
                   </td>
                   <td class="day is-today">
                     <input

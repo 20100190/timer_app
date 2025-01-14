@@ -400,7 +400,7 @@ class TimerController extends Controller
         $dayTask = $tasksForCombination->first(function ($task) use ($currentDate) {
           return Carbon::parse($task->timer_date)->toDateString() === $currentDate;
         });
-        $notes = UserTasks::where(['timer_date' => $currentDate, 'project_id' => $projectId, 'client_id' => $clientId, 'task_id' => $taskId, 'user_id' => $userId])->select('notes')->first();
+        $notes = UserTasks::where(['timer_date' => $currentDate, 'project_id' => $projectId, 'client_id' => $clientId, 'task_id' => $taskId, 'user_id' => $userId])->first();
         // Append the task data for the current day='
         $result[$combination][] = [
           'task_id' => $taskId, // Use the task_id for this combination
@@ -414,6 +414,8 @@ class TimerController extends Controller
           'client_id' => $clientId,
           'notes' => $notes->notes ?? "", // Include the notes
           'date' => $currentDate, // Use the current date for the week
+          'is_task_running' => $notes->is_running ?? 0, // Use the current date for the week
+          'started_at' => isset($notes->started_at) &&  !empty($notes->started_at) ? Carbon::parse($notes->started_at)->format('Y-m-d H:i:s') : '', // Use the current date for the week
         ];
       }
     }
@@ -468,30 +470,37 @@ class TimerController extends Controller
     if (!$userId) {
       $userId = Auth::id();
     }
-    // $date = "2024-12-25";
+
+    // Parse date and set week start/end
     $carbonDate = Carbon::parse($date);
-    // Set week start as Sunday and week end as Saturday
     Carbon::setWeekStartsAt(Carbon::SUNDAY);
     Carbon::setWeekEndsAt(Carbon::SATURDAY);
-    // Start and end of the week for the parsed date
     $weekStart = $carbonDate->copy()->startOfWeek();
     $weekEnd = $carbonDate->copy()->endOfWeek();
 
-    // Dump results
-    // dd($date, $carbonDate, $weekStart, $weekEnd);
-    // Group tasks by date and calculate total time
-    $summary = UserTasks::whereBetween('timer_date', [$weekStart, $weekEnd])->where('user_id', $userId)
-      ->selectRaw('DATE(timer_date) as date, SUM(timer) as total_time')
+    // Group tasks by date, calculate total time, and check if any task is running
+    $summary = UserTasks::whereBetween('timer_date', [$weekStart, $weekEnd])
+      ->where('user_id', $userId)
+      ->selectRaw(
+        'DATE(timer_date) as date, 
+              SUM(timer) as total_time, 
+              MAX(is_running) as is_running' // Check if any task is running
+      )
       ->groupBy('date')
       ->get()
       ->mapWithKeys(function ($item) {
-        $hours = number_format($item->total_time / 3600, 2, '.', ''); // Convert seconds to hours and format to 2 decimal places
-        return [Carbon::parse($item->date)->format('D') => $hours];
+        $hours = number_format($item->total_time / 3600, 2, '.', ''); // Convert seconds to hours
+        $isRunning = $item->is_running ? true : false; // Convert to boolean
+        return [
+          Carbon::parse($item->date)->format('D') => [
+            'total_time' => $hours,
+            'is_running' => $isRunning,
+          ]
+        ];
       });
 
     return response()->json($summary);
   }
-
 
   /**
    * Show the form for creating a new resource.
@@ -789,5 +798,106 @@ class TimerController extends Controller
         'error' => $e->getMessage()
       ], 500);
     }
+  }
+
+  public function startRowTimer(Request $request)
+  {
+    $validated = $request->validate([
+      'project_id' => 'required|integer',
+      'client_id' => 'required|integer',
+      'task_id' => 'required|integer',
+      'dates' => 'required|array',
+      'dates.*' => 'date',
+    ]);
+    $userId = $request->user_id;
+    if (!$userId) {
+      $userId = Auth::id();
+    }
+    foreach ($validated['dates'] as $date) {
+      $formattedDate = Carbon::parse($date)->format('Y-m-d');
+      $userTasks = UserTasks::where([
+        'client_id' => $validated['client_id'],
+        'project_id' => $validated['project_id'],
+        'task_id' => $validated['task_id'],
+        'user_id' => $userId,
+        'timer_date' => $formattedDate
+      ])->first();
+      if ($userTasks) {
+        $userTasks->update(
+          [
+            'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
+            'is_running' => 1,
+          ]
+        );
+      } else {
+        $userTasks = UserTasks::create([
+          'client_id' => $validated['client_id'],
+          'project_id' => $validated['project_id'],
+          'task_id' => $validated['task_id'],
+          'user_id' => $userId,
+          'notes' => Null,
+          'timer' => 0,
+          'started_at' => Carbon::now()->format('Y-m-d H:i:s'), // Current date and time
+          'timer_date' => $formattedDate,     // Today's date
+          'is_running' => 1,
+          'is_weekly_only' => 0
+        ]);
+      }
+
+      $otherTasks = UserTasks::where('user_id',  $userId) // Assuming user_id links tasks to the user
+        ->where('id', '!=', $userTasks->id) // Exclude the current task
+        ->where('timer_date', $formattedDate) // Exclude the current task
+        ->get();
+      if ($otherTasks) {
+        foreach ($otherTasks as $task) {
+          if ($task->is_running && $task->started_at) {
+
+            $diffInSeconds = $task->started_at->diffInSeconds(now());
+            $task->timer = ($task->timer ?? 0) + $diffInSeconds;
+            $task->is_running = false;
+            $task->started_at = null;
+            $task->save();
+          }
+        }
+      }
+    }
+    return response()->json(['message' => 'Data deleted successfully']);
+  }
+  public function stopRowTimer(Request $request)
+  {
+    $validated = $request->validate([
+      'project_id' => 'required|integer',
+      'client_id' => 'required|integer',
+      'task_id' => 'required|integer',
+      'dates' => 'required|array',
+      'dates.*' => 'date',
+    ]);
+    $userId = $request->user_id;
+    if (!$userId) {
+      $userId = Auth::id();
+    }
+    foreach ($validated['dates'] as $date) {
+      $formattedDate = Carbon::parse($date)->format('Y-m-d');
+      $userTasks = UserTasks::where([
+        'client_id' => $validated['client_id'],
+        'project_id' => $validated['project_id'],
+        'task_id' => $validated['task_id'],
+        'user_id' => $userId,
+        'timer_date' => $formattedDate
+      ])->get();
+      if ($userTasks) {
+        foreach ($userTasks as $task) {
+          if ($task->is_running && $task->started_at) {
+
+            $diffInSeconds = $task->started_at->diffInSeconds(now());
+            $task->timer = ($task->timer ?? 0) + $diffInSeconds;
+            $task->is_running = false;
+            $task->started_at = null;
+            $task->save();
+          }
+        }
+      }
+    }
+    return response()->json(['message' => 'Data deleted successfully']);
   }
 }
