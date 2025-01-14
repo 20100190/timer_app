@@ -129,6 +129,11 @@ function createRow(rowData) {
     actionButton.innerHTML = rowData.action;
     actionButton.setAttribute("data-id", rowData.id);
     actionButton.setAttribute("data-is-running", rowData.is_running);
+    if (rowData.is_running == 1) {
+        actionButton.setAttribute("class", "stopButton-style");
+    } else {
+        actionButton.setAttribute("class", "startButton-style");
+    }
     const editButton = document.createElement("button");
     editButton.innerHTML = 'Edit';
     editButton.setAttribute("data-id", rowData.id);
@@ -149,6 +154,7 @@ function createRow(rowData) {
             });
         } else {
             startTask(taskId).then(() => {
+
                 actionButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12" class="clock-running-minute-hand"></polyline>
@@ -430,7 +436,6 @@ function isAnyTaskRunning() {
 }
 
 function populateAlerts() {
-    console.log('here');
     if (isAnyTaskRunning()) {
         console.log("A task is running.");
     } else {
@@ -567,7 +572,6 @@ function getWeekData() {
         .catch(error => console.error('Error fetching week summary:', error));
 }
 function updateWeekView(data) {
-    console.log(data);
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     // Create a Date object from the currentDate
@@ -578,22 +582,31 @@ function updateWeekView(data) {
 
     days.forEach((day, index) => {
         const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
-        // if (data[day]['is_running'] === true) {
-        //     let totalRunningTime = 0;
+        if (data[day]['is_running'] == true) {
+            let realTimeStartTime = null;
+            if (data[day]['started_at']) {
+                const isoString = data[day]['started_at'].replace(" ", "T") + "Z";
+                realTimeStartTime = new Date(isoString);
+            }
 
-        //     // Select all <td> elements with data-is-running="1"
-        //     $('.time-cell[data-is-running="1"]').each(function () {
-        //         // Parse the time value from the cell and add it to the total
-        //         const timeValue = parseFloat($(this).text());
-        //         if (!isNaN(timeValue)) {
-        //             totalRunningTime += timeValue;
-        //         }
-        //     });
-        //     timeSpan.textContent = totalRunningTime.toFixed(2); // Replace with fetched time or keep 0:00
-        // } else {
-        //     timeSpan.textContent = data[day]['total_time'] || '0.00'; // Replace with fetched time or keep 0:00
-        // }
-        timeSpan.textContent = data[day]['total_time'] || '0.00'; // Replace with fetched time or keep 0:00
+            let realTimeTimeUpdate;
+            if (data[day]['is_running'] && realTimeStartTime) {
+                const nowMs = Date.now();
+                const startedMs = realTimeStartTime.getTime();
+                const diffInTime = Math.floor(
+                    (nowMs - startedMs) / 1000
+                );
+                console.log(diffInTime)
+                realTimeTimeUpdate = Number(data[day]['time_in_sec']) + Number(diffInTime);
+            } else {
+                realTimeTimeUpdate = data[day]['time_in_sec'];
+            }
+            console.log(realTimeTimeUpdate)
+            timeSpan.textContent = secondtoHour(realTimeTimeUpdate); // Replace with fetched time or keep 0:00
+
+        } else {
+            timeSpan.textContent = data[day]['total_time'] || '0.00'; // Replace with fetched time or keep 0:00
+        }
 
         const dateSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-date`);
 
@@ -659,6 +672,7 @@ $(document).ready(() => {
                 data: $("#create_form").serialize(),
                 success: (response) => {
                     populateTasksForDate(currentDate); // Refresh tasks for the current week
+                    getWeekData();
                     closeDialogue();
                 },
                 error: (response) => {

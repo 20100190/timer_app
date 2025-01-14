@@ -483,18 +483,22 @@ class TimerController extends Controller
       ->where('user_id', $userId)
       ->selectRaw(
         'DATE(timer_date) as date, 
-              SUM(timer) as total_time, 
-              MAX(is_running) as is_running' // Check if any task is running
+         SUM(timer) as total_time, 
+         MAX(is_running) as is_running, 
+         MAX(CASE WHEN is_running = 1 THEN started_at ELSE NULL END) as started_at'
       )
       ->groupBy('date')
       ->get()
       ->mapWithKeys(function ($item) {
         $hours = number_format($item->total_time / 3600, 2, '.', ''); // Convert seconds to hours
         $isRunning = $item->is_running ? true : false; // Convert to boolean
+        $startedAt = $item->started_at ? Carbon::parse($item->started_at)->toDateTimeString() : null; // Format started_at
         return [
           Carbon::parse($item->date)->format('D') => [
             'total_time' => $hours,
+            'time_in_sec' => $item->total_time,
             'is_running' => $isRunning,
+            'started_at' => $startedAt,
           ]
         ];
       });

@@ -13085,6 +13085,10 @@ body.detailed-reports-controller.index-action {
     text-decoration: none
 }
 
+.startButton-style{
+    background-color: #fff!important;
+    border: 1px solid rgba(29, 30, 28, .25)!important;
+}
 /*!
 Chosen, a Select Box Enhancer for jQuery and Prototype
 by Patrick Filler for Harvest, http://getharvest.com
