@@ -498,7 +498,6 @@ weekViewButtons.forEach((button, index) => {
         const selectedDay = new Date(startOfWeek);
         selectedDay.setDate(startOfWeek.getDate() + index);
         currentDate = selectedDay;
-        console.log(currentDate);
         updateUI();
     });
 });
@@ -582,7 +581,7 @@ function updateWeekView(data) {
 
     days.forEach((day, index) => {
         const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
-        if (data[day]['is_running'] == true) {
+        if (data[day] && data[day]['is_running'] == true) {
             let realTimeStartTime = null;
             if (data[day]['started_at']) {
                 const isoString = data[day]['started_at'].replace(" ", "T") + "Z";
@@ -596,16 +595,14 @@ function updateWeekView(data) {
                 const diffInTime = Math.floor(
                     (nowMs - startedMs) / 1000
                 );
-                console.log(diffInTime)
                 realTimeTimeUpdate = Number(data[day]['time_in_sec']) + Number(diffInTime);
             } else {
                 realTimeTimeUpdate = data[day]['time_in_sec'];
             }
-            console.log(realTimeTimeUpdate)
             timeSpan.textContent = secondtoHour(realTimeTimeUpdate); // Replace with fetched time or keep 0:00
 
         } else {
-            timeSpan.textContent = data[day]['total_time'] || '0.00'; // Replace with fetched time or keep 0:00
+            timeSpan.textContent = data[day] && data[day]['total_time'] ? data[day]['total_time'] : '0.00'; // Replace with fetched time or keep 0:00
         }
 
         const dateSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-date`);

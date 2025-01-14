@@ -253,7 +253,7 @@
               <option value="">Select a User</option>
               @if(!empty($users))
               @foreach($users as $user)
-              <option value="{{$user->id}}">{{$user->name}}</option>
+              <option value="{{$user->id}}" @if($user->id == Auth::id()) selected @endif>{{$user->name}}</option>
               @endforeach
               @endif
             </select>
