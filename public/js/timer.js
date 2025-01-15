@@ -174,39 +174,45 @@ function createRow(rowData) {
 }
 
 async function startTask(taskId) {
-    const response = await fetch(`/timer/start-timer/${taskId}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute("content"),
-        },
-    });
-    if (!response.ok) {
-        return response.json().then((err) => {
-            throw err;
+    if (taskId) {
+        const response = await fetch(`/timer/start-timer/${taskId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
         });
+        if (!response.ok) {
+            return response.json().then((err) => {
+                throw err;
+            });
+        }
+        return await response.json();
     }
-    return await response.json();
+
 }
 
 async function stopTask(taskId) {
-    const response = await fetch(`/timer/stop-timer/${taskId}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute("content"),
-        },
-    });
-    if (!response.ok) {
-        return response.json().then((err) => {
-            throw err;
+    if (taskId) {
+
+        const response = await fetch(`/timer/stop-timer/${taskId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content"),
+            },
         });
+        if (!response.ok) {
+            return response.json().then((err) => {
+                throw err;
+            });
+        }
+        return await response.json();
     }
-    return await response.json();
 }
 
 function fetchUserName() {

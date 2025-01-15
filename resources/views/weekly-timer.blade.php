@@ -498,6 +498,8 @@
                   </td>
                   <td class="">
                   </td>
+                  <td class="">
+                  </td>
                   <td class="day today test-day-total-1">1:00
                   </td>
                   <td class="day is-not-today test-day-total-2">0
