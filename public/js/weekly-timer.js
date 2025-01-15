@@ -142,8 +142,9 @@ function appendWeeklyTasks(weeklyTasks) {
         const task_name = days.find((day) => day.task_name)?.task_name || ''; // Find the first valid projectId, fallback to empty string
         const clientId = days.find((day) => day.client_id)?.client_id || ''; // Find the first valid projectId, fallback to empty string
         const taskId = days.find((day) => day.task_id)?.task_id || ''; // Find the first valid projectId, fallback to empty string
-        const allTimersRunning = days.every((day) => day.is_task_running === 1);
-
+        const getRunningTimer = days.some((day) =>
+            day.is_task_running === 1 && new Date(day.date).toDateString() === new Date().toDateString()
+        ) ? 1 : 0;
         const $row = $('<tr>')
             .addClass('week-view-entry')
             .attr('data-project-id', projectId)
@@ -166,21 +167,21 @@ function appendWeeklyTasks(weeklyTasks) {
             )
         );
         $row.append($nameCell);
-        if (allTimersRunning) {
+        if (getRunningTimer) {
             var $startStopButton = $('<td>').addClass('name').append(
                 $('<div>').html(`<button data-task-id="${taskId}" data-project-id="${projectId}" data-client-id="${clientId}" class="start_row_timer"  onclick='StopWeekData(this)'><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"></circle>
                 <polyline points="12 6 12 12" class="clock-running-minute-hand"></polyline>
                 <polyline points="12 12 16 14" class="clock-running-hour-hand"></polyline>
-                </svg>Stop Row</button>`), // Project name
+                </svg>Stop Today</button>`), // Project name
 
             );
         } else {
             $startStopButton = $('<td>').addClass('name').append(
-                $('<div>').html(`<button data-task-id="${taskId}" data-project-id="${projectId}" data-client-id="${clientId}" class="start_row_timer"  onclick='StartWeekData(this)'><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                $('<div>').html(`<button data-task-id="${taskId}" data-project-id="${projectId}" data-client-id="${clientId}" class="start_row_timer startButton-style"  onclick='StartWeekData(this)'><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>Start Row</button>`), // Project name
+                    </svg>Start Today</button>`), // Project name
 
             );
         }
@@ -190,16 +191,16 @@ function appendWeeklyTasks(weeklyTasks) {
         $row.append($startStopButton);        // Add day-wise hours
         function createNotesIcon(day) {
             // Create the notes icon
-            var $svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24">
+            var $svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20">
                         <g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24">
-                            <image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAALNJREFUSEvtlVEOgjAQRB/3QO/DRTiHHEMvotcxcg7EMTQpFah2KfGDJnzQsPN2tulQkHkVmfXZFFABF6A0umqBGrhKx3dwB45GcVf+cFo+oBuA1rE9B8pbZwdMHdl/jWjUDRB7l6NZB2Hxx8c5ACnX4icHO2B0k6cOedURKaCsSboYdorrM3BIadurUaOK61sYdqGuG5n2T69gbFLAS9HsAMni3zgwiccAEtdjWta/VxTeAy9uLxlndmWDAAAAAElFTkSuQmCC"/>
+                            <image width="20" height="20" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAALNJREFUSEvtlVEOgjAQRB/3QO/DRTiHHEMvotcxcg7EMTQpFah2KfGDJnzQsPN2tulQkHkVmfXZFFABF6A0umqBGrhKx3dwB45GcVf+cFo+oBuA1rE9B8pbZwdMHdl/jWjUDRB7l6NZB2Hxx8c5ACnX4icHO2B0k6cOedURKaCsSboYdorrM3BIadurUaOK61sYdqGuG5n2T69gbFLAS9HsAMni3zgwiccAEtdjWta/VxTeAy9uLxlndmWDAAAAAElFTkSuQmCC"/>
                         </g>
                         <defs>
                             <clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath>
                         </defs>
                     </svg>`;
             if (day.notes) {
-                $svg = ` <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24"><g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24 (1)"><image width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAIFJREFUSEtjZKAxYKSx+Qx0teAvAwMDExV9BHY8sg9GLUAPXfoH0T+0OKE0vjF8MCAWwFLZf6h3CPGRfU2UDwgZiC5PsgWUxAOGD2DBQImheH0wagHBnDz0gwjdi8g+agAWI43kJC98NRrMArINR69wsPmAIsMJWQAyHIQpAjSv9AHrjR0Zem8DIAAAAABJRU5ErkJggg=="/></g><defs><clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath></defs></svg>`;
+                $svg = ` <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"><g clip-path="url(&quot;#a&quot;)" data-name="icons8-message-24 (1)"><image width="20" height="20" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAIFJREFUSEtjZKAxYKSx+Qx0teAvAwMDExV9BHY8sg9GLUAPXfoH0T+0OKE0vjF8MCAWwFLZf6h3CPGRfU2UDwgZiC5PsgWUxAOGD2DBQImheH0wagHBnDz0gwjdi8g+agAWI43kJC98NRrMArINR69wsPmAIsMJWQAyHIQpAjSv9AHrjR0Zem8DIAAAAABJRU5ErkJggg=="/></g><defs><clipPath id="a"><path d="M0 0h24v24H0V0z"/></clipPath></defs></svg>`;
             }
             const $notesIcon = $('<span>')
                 .addClass('notes-icon')
@@ -303,7 +304,9 @@ function appendWeeklyTasks(weeklyTasks) {
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12" class="clock-running-minute-hand"></polyline>
                             <polyline points="12 12 16 14" class="clock-running-hour-hand"></polyline>
-                            </svg></div>`));
+                            </svg></div>`)
+                    )
+                    .append($icon); // Append $icon after the main content
                 setInterval(() => {
                     keeptimerunning(startedAtTime, day.time, day.task_id + day.project_id + day.client_id + day.date + day.day);
                 }, 60000);
@@ -1009,7 +1012,6 @@ function StartWeekData(buttonElement) {
         return;
     }
     // Example usage
-    const deleteWeekDates = getdeleteWeekDates(currentDate);
 
     // Prepare the payload
     const updateData = {
@@ -1017,7 +1019,7 @@ function StartWeekData(buttonElement) {
         client_id: clientId,
         task_id: taskId,
         user_id: currentUser,
-        dates: deleteWeekDates,
+        date: new Date().toDateString(),
     };
 
     $.ajaxSetup({
@@ -1058,8 +1060,6 @@ function StopWeekData(buttonElement) {
         alert('Project ID or Client ID not found.');
         return;
     }
-    // Example usage
-    const deleteWeekDates = getdeleteWeekDates(currentDate);
 
     // Prepare the payload
     const updateData = {
@@ -1067,7 +1067,7 @@ function StopWeekData(buttonElement) {
         client_id: clientId,
         task_id: taskId,
         user_id: currentUser,
-        dates: deleteWeekDates,
+        date: new Date().toDateString(),
     };
 
     $.ajaxSetup({

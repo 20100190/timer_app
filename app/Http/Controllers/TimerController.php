@@ -810,15 +810,13 @@ class TimerController extends Controller
       'project_id' => 'required|integer',
       'client_id' => 'required|integer',
       'task_id' => 'required|integer',
-      'dates' => 'required|array',
-      'dates.*' => 'date',
+      'date' => 'required',
     ]);
     $userId = $request->user_id;
     if (!$userId) {
       $userId = Auth::id();
     }
-    foreach ($validated['dates'] as $date) {
-      $formattedDate = Carbon::parse($date)->format('Y-m-d');
+      $formattedDate = Carbon::parse($validated['date'])->format('Y-m-d');
       $userTasks = UserTasks::where([
         'client_id' => $validated['client_id'],
         'project_id' => $validated['project_id'],
@@ -864,7 +862,7 @@ class TimerController extends Controller
           }
         }
       }
-    }
+    
     return response()->json(['message' => 'Data deleted successfully']);
   }
   public function stopRowTimer(Request $request)
@@ -873,35 +871,33 @@ class TimerController extends Controller
       'project_id' => 'required|integer',
       'client_id' => 'required|integer',
       'task_id' => 'required|integer',
-      'dates' => 'required|array',
-      'dates.*' => 'date',
+      'date' => 'required',
     ]);
     $userId = $request->user_id;
     if (!$userId) {
       $userId = Auth::id();
     }
-    foreach ($validated['dates'] as $date) {
-      $formattedDate = Carbon::parse($date)->format('Y-m-d');
-      $userTasks = UserTasks::where([
-        'client_id' => $validated['client_id'],
-        'project_id' => $validated['project_id'],
-        'task_id' => $validated['task_id'],
-        'user_id' => $userId,
-        'timer_date' => $formattedDate
-      ])->get();
-      if ($userTasks) {
-        foreach ($userTasks as $task) {
-          if ($task->is_running && $task->started_at) {
+    $formattedDate = Carbon::parse($validated['date'])->format('Y-m-d');
+    $userTasks = UserTasks::where([
+      'client_id' => $validated['client_id'],
+      'project_id' => $validated['project_id'],
+      'task_id' => $validated['task_id'],
+      'user_id' => $userId,
+      'timer_date' => $formattedDate
+    ])->get();
+    if ($userTasks) {
+      foreach ($userTasks as $task) {
+        if ($task->is_running && $task->started_at) {
 
-            $diffInSeconds = $task->started_at->diffInSeconds(now());
-            $task->timer = ($task->timer ?? 0) + $diffInSeconds;
-            $task->is_running = false;
-            $task->started_at = null;
-            $task->save();
-          }
+          $diffInSeconds = $task->started_at->diffInSeconds(now());
+          $task->timer = ($task->timer ?? 0) + $diffInSeconds;
+          $task->is_running = false;
+          $task->started_at = null;
+          $task->save();
         }
       }
     }
+
     return response()->json(['message' => 'Data deleted successfully']);
   }
 }
