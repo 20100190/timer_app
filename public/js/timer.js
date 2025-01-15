@@ -584,6 +584,7 @@ function updateWeekView(data) {
 
     // Get the index of the current day (0 = Sunday, 6 = Saturday)
     const currentDayIndex = current.getDay();
+    const totaltimeSpan = document.querySelector(`.test-day-total`);
 
     days.forEach((day, index) => {
         const timeSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-time`);
@@ -606,9 +607,15 @@ function updateWeekView(data) {
                 realTimeTimeUpdate = data[day]['time_in_sec'];
             }
             timeSpan.textContent = secondtoHour(realTimeTimeUpdate); // Replace with fetched time or keep 0:00
+            if (currentDayIndex == index) {
+                totaltimeSpan.textContent = secondtoHour(realTimeTimeUpdate);
+            }
 
         } else {
             timeSpan.textContent = data[day] && data[day]['total_time'] ? data[day]['total_time'] : '0.00'; // Replace with fetched time or keep 0:00
+            if (currentDayIndex == index) {
+                totaltimeSpan.textContent = data[day] && data[day]['total_time'] ? data[day]['total_time'] : '0.00'; // Replace with fetched time or keep 0:00
+            }
         }
 
         const dateSpan = document.querySelector(`.week-view li:nth-child(${index + 1}) .day-date`);
@@ -648,13 +655,19 @@ $(document).ready(() => {
             task_select: {
                 required: true,
             },
+            timeInput: {
+                validTime: true, // Use a custom rule
+            },
         },
         messages: {
             client_select: {
-                required: "Please enter your name",
+                required: "Please select a client.",
             },
             task_select: {
-                required: "Please enter your email",
+                required: "Please select a task.",
+            },
+            timeInput: {
+                validTime: "Please enter a valid time in decimal hours (e.g., 1.25, 0.50, up to 23.99).",
             },
         },
         errorElement: "span",
@@ -680,11 +693,26 @@ $(document).ready(() => {
                 },
                 error: (response) => {
 
-                    showError();
+                    Swal.fire({
+                        title: "Error!",
+                        text: 'Sorry, looks like there are some errors detected, please try again.',
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
                 }
             });
         }
     });
+    // Define a custom validation rule
+    $.validator.addMethod("validTime", function (value, element) {
+        // Regex to validate time in decimal hours (e.g., 0.50, 1.25, up to 23.99)
+        const validTimeRegex = /^([0-9]|1[0-9]|2[0-3])(\.[0-9]{1,2})?$/;
+        return this.optional(element) || validTimeRegex.test(value);
+    }, "Please enter a valid time in decimal hours (e.g., 1.25, 0.50, up to 23.99).");
     $('#day-tasks').on('click', '.js-edit-entry', function () {
         const selectedTaskId = $(this).attr("data-id");
         $('#entry-notes').html('');

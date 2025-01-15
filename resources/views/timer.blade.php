@@ -341,6 +341,22 @@
           <tbody>
 
           </tbody>
+          <tfoot>
+                <tr>
+                  
+                  <td class="">
+                  </td>
+                  <td class="">
+                  </td>
+                  <td class="" style="text-align:right">
+                    Total:
+                  </td>
+                  <td class="day today test-day-total">1:00
+                  </td>
+                  <td class="">
+                  </td>
+                </tr>
+              </tfoot>
         </table>
       </div>
 
