@@ -128,6 +128,36 @@ function keeptimerunning(startedAtTime, elapsedSeconds, ID) {
     $(`#${ID}`).text(timeinhours);
 
 }
+function updateTotalTimeInRealTime($row, days) {
+    setInterval(() => {
+        console.log('1');
+        let totalTime = 0; // Reset total time for recalculation
+
+        days.forEach((day) => {
+            let elapsedSeconds;
+
+            if (day.is_task_running && day.started_at) {
+                // Calculate elapsed time for running tasks
+                const isoString = day.started_at.replace(" ", "T") + "Z";
+                const startedAtTime = new Date(isoString);
+                const nowMs = Date.now();
+                const startedMs = startedAtTime.getTime();
+                const diffInSeconds = Math.floor((nowMs - startedMs) / 1000);
+                elapsedSeconds = Number(day.time) + diffInSeconds;
+            } else {
+                // Use static time for non-running tasks
+                elapsedSeconds = Number(day.time);
+            }
+
+            totalTime += elapsedSeconds; // Accumulate the total time
+        });
+
+        const totalHours = (totalTime / 3600).toFixed(2); // Convert seconds to hours and format to 2 decimals
+
+        // Update the total time in the last column
+        $row.find('td.total').text(totalHours);
+    }, 1000); // Update every second
+}
 function appendWeeklyTasks(weeklyTasks) {
     // Get the table body where rows need to be appended
     const tableBody = $('table tbody'); // Adjust the selector to target your table's body
@@ -276,7 +306,6 @@ function appendWeeklyTasks(weeklyTasks) {
         days.forEach((day) => {
             const $icon = createNotesIcon(day);
             const timeInSeconds = parseInt(day.time, 10) || 0; // Ensure time is a number, default to 0 if invalid
-            totalTime += timeInSeconds; // Accumulate the total time
             let startedAtTime = null;
             if (day.started_at) {
                 const isoString = day.started_at.replace(" ", "T") + "Z";
@@ -293,6 +322,7 @@ function appendWeeklyTasks(weeklyTasks) {
             } else {
                 elapsedSeconds = day.time;
             }
+            totalTime += Number(elapsedSeconds); // Accumulate the total time
             const timeinhours = elapsedSeconds
                 ? (elapsedSeconds / 3600).toFixed(2) // Convert seconds to hours and format to 2 decimal places
                 : '';
@@ -371,6 +401,7 @@ function appendWeeklyTasks(weeklyTasks) {
                 )
         );
 
+        updateTotalTimeInRealTime($row, days);
 
         // Append the row to the table
         tableBody.append($row);
