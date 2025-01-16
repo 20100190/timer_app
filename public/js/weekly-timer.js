@@ -299,6 +299,7 @@ function appendWeeklyTasks(weeklyTasks) {
             if (day.is_task_running === 1) {
                 var $dayCell = $('<td>')
                     .addClass('day')
+                    .attr('data-running', 1)
                     .append(
                         $(`<div style="display:flex; justify-content: center;"><span id="${day.task_id + day.project_id + day.client_id + day.date + day.day}" class=runningTime>${timeinhours}</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -340,6 +341,8 @@ function appendWeeklyTasks(weeklyTasks) {
             } else {
                 $dayCell.addClass('is-not-today');
             }
+            $dayCell.addClass('timer');
+
             $row.append($dayCell);
         });
 
@@ -423,8 +426,9 @@ function calculateAndAppendColumnTotals() {
     const overallTotal = columnTotals.reduce((sum, hours) => sum + hours, 0);
     tfootRow.find('td.total').text(overallTotal.toFixed(2)); // Format to 2 decimal points
 }
-// Call the function after populating the table
 
+// Periodically check for running timers and update totals
+setInterval(calculateAndAppendColumnTotals, 1000); // Check every second
 
 async function startTask(taskId) {
     const response = await fetch(`/timer/start-timer/${taskId}`, {
