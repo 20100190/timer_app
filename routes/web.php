@@ -47,6 +47,9 @@ Route::post('/update-notes/{taskid}/{projectid}/{clientid}/{date}/{userId?}', 'T
 Route::post('/start-row-timer', 'TimerController@startRowTimer');
 Route::post('/stop-row-timer', 'TimerController@stopRowTimer');
 
+Route::get('/invoice', 'InvoiceController@index');
+Route::post('/invoice', 'InvoiceController@store')->name('invoice.store');
+//Route::post('/invoice', [InvoiceController::class, 'store'])->name('invoice.store');
 
 
 Route::get('/budget/enter', 'BudgetController@indexInput');

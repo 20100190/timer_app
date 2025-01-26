@@ -349,6 +349,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
               onclick="return movePageControl();" href="{{asset("timer")}}"
               @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
               style="font-weight: bold;color:#292939" @endif>&nbsp;Timer Entry</a></li>
+          <!--Invoice-->
+          <li style="font-weight: bold" @if(Request::decodedPath()=="invoice" ) class="active" @endif><a
+              onclick="return movePageControl();" href="{{asset("invoice")}}"
+              @if(isset($navigation_status[0]["personal_info"]) && $navigation_status[0]["personal_info"])
+              style="font-weight: bold;color:#292939" @endif>&nbsp;Invoice Entry</a></li>
           <!--Phase入力-->
           <li style="font-weight: bold" @if(Request::decodedPath()=="phase/enter" ) class="active" @endif><a
               onclick="return movePageControl();" href="{{asset("phase/enter")}}"
