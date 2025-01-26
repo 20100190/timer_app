@@ -45,52 +45,53 @@ class InvoiceController extends Controller
      */
 
      public function store(Request $request)
-     {
-         $validated = $request->validate([
-             'date' => 'required|date',
-             'user_id' => 'required|int',
-             'client_id' => 'required|int',
-             'project_id' => 'required|int',
-             'type' => 'required|string|max:255',
-             'amount' => 'required|numeric',
-             'billable' => 'required|boolean',
-             'unreported' => 'required|string|max:255',
-             'invoiced' => 'required|string|max:255'
-         ]);
-     
-         $invoice = Invoice::create($validated);
-     
-         $filesData = [];
-     
-         if ($request->hasFile('files')) {
-             foreach ($request->file('files') as $file) {
-                 $path = $file->store('public/invoices'); // Storing the file in storage/app/public/invoices
-                 $fileRecord = $invoice->files()->create([
-                     'file_path' => $path,
-                     'file_type' => $file->getClientMimeType()
-                 ]);
-                 $filesData[] = [
-                     'path' => $path,
-                     'type' => $file->getClientMimeType()
-                 ];
-             }
-         }
-     
-         if ($request->ajax()) {
-             return response()->json([
-                 'success' => true,
-                 'invoice' => [
-                     'date' => $invoice->date,
-                     'type' => $invoice->type,
-                     'amount' => $invoice->amount,
-                     'billable' => $invoice->billable ? 'Yes' : 'No',
-                     'files' => $filesData
-                 ]
-             ]);
-         }
-     
-         return redirect()->route('invoices.index')->with('success', 'Invoice and files saved successfully!');
-     }
+{
+    $validated = $request->validate([
+        'user_id' => 'required|int',
+        'client_id' => 'required|int',
+        'project_id' => 'required|int',
+        'type' => 'required|string|max:255',
+        'amount' => 'required|numeric',
+        'billable' => 'required|boolean',
+        'date' => 'required|date'
+    ]);
+
+    $invoice = Invoice::create($validated);
+
+    // Log the files received from the request
+    \Log::info($request->file('files'));
+    
+    $filesData = [];
+
+    if ($request->hasFile('files')) {
+        foreach ($request->file('files') as $file) {
+            $path = $file->store('public/invoices'); // Storing the file in storage/app/public/invoices
+            $fileRecord = $invoice->files()->create([
+                'file_path' => $path,
+                'file_type' => $file->getClientMimeType()
+            ]);
+            $filesData[] = [
+                'path' => $path,
+                'type' => $file->getClientMimeType()
+            ];
+        }
+    }
+
+    if ($request->ajax()) {
+        return response()->json([
+            'success' => true,
+            'invoice' => [
+                'date' => $invoice->date,
+                'type' => $invoice->type,
+                'amount' => $invoice->amount,
+                'billable' => $invoice->billable ? 'Yes' : 'No',
+                'files' => $filesData
+            ]
+        ]);
+    }
+
+    return redirect()->route('invoice.index')->with('success', 'Invoice and files saved successfully!');
+}
      
     
     /**

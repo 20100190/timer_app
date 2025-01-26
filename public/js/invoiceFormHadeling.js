@@ -1,7 +1,8 @@
-// public/js/form-handling.js
 document.addEventListener('DOMContentLoaded', function() {
     const clientSelect = document.getElementById('clientSelect');
     const projectSelect = document.getElementById('projectSelect');
+    const fileInput = document.getElementById('files');
+    const filePreview = document.getElementById('file-preview');
 
     // Load clients
     axios.get('/timer/get-clients')
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Handle form submission
-    document.getElementById('create_form').addEventListener('submit', function(e) {
+    document.getElementById('invoice-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(this);
         axios.post(this.action, formData)
@@ -44,5 +45,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error during form submission:', error.response.data);
                 // Handle errors, e.g., display error messages
             });
+    });
+
+    // Handle file input change event to preview files
+    fileInput.addEventListener('change', function() {
+        filePreview.innerHTML = ''; // Clear previous previews
+        Array.from(this.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.classList.add('file-preview-item');
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = file.name;
+                    div.appendChild(img);
+                } else {
+                    const p = document.createElement('p');
+                    p.textContent = file.name;
+                    div.appendChild(p);
+                }
+                filePreview.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
     });
 });

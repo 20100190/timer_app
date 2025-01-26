@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <style>
@@ -30,17 +29,32 @@
     button.btn {
         width: auto;
     }
+
+    .file-preview-item {
+    margin: 10px;
+    display: inline-block;
+    text-align: center;
+    }
+
+    .file-preview-item img {
+        max-width: 100px;
+        max-height: 100px;
+        display: block;
+        margin: 0 auto;
+    }
+
 </style>
 
 @section('content')
+
 <div class="container">
-    <form class="expense-form" action="{{ route('invoice.store') }}" method="POST" enctype="multipart/form-data">
+    <form class="invoice-form" id="invoice-form" action="{{ route('invoice.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <!-- Form row for Date, Client, and Project -->
         <div class="form-row">
             <div class="form-group">
                 <label>Date:</label>
-                <input type="date" name="date" required>
+                <input id="date" type="date" name="date" required>
             </div>
             <div class="form-group">
                 <label>Client:</label>
@@ -62,15 +76,18 @@
         <div class="form-row">
             <div class="form-group">
                 <label>Type:</label>
-                <input type="text" name="type" required>
+                <input type="text" name="type" required maxlength="255">
             </div>
             <div class="form-group">
                 <label>Amount:</label>
-                <input type="number" name="amount" step="0.01" required>
+                <input type="number" name="amount" required step="0.01">
             </div>
             <div class="form-group">
                 <label>Billable:</label>
-                <input type="checkbox" name="billable">
+                <select name="billable" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
             </div>
         </div>
 
@@ -78,19 +95,24 @@
         <div class="form-row">
             <div class="form-group">
                 <label>Receipt:</label>
-                <input type="file" name="receipt" required>
+                <input type="file" id="files" name="files[]" multiple required>
+
                 <!-- Add JS for drag & drop functionality -->
             </div>
+            <!-- Hidden field for User ID -->
+            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
         </div>
     </form>
+
+    <!-- Preview section -->
+    <div id="file-preview" class="form-row">
+        <!-- Previews will be shown here -->
+    </div>
 </div>
 
 <script src="{{ asset('js/invoiceFormHadeling.js') }}"></script>
 
 @endsection
-
-
-

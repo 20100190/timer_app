@@ -22,8 +22,8 @@ class CreateInvoicesTable extends Migration
             $table->string('type');
             $table->decimal('amount', 8, 2);
             $table->boolean('billable');
-            $table->string('unreported');
-            $table->string('invoiced');
+            $table->string('unreported')->default('unreported');           
+            $table->string('invoiced')->default('non invoiced');  
             $table->timestamps();
         });
     }
