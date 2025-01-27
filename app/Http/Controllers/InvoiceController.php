@@ -58,10 +58,9 @@ class InvoiceController extends Controller
 
     $invoice = Invoice::create($validated);
 
-    // Log the files received from the request
-    \Log::info($request->file('files'));
-    
     $filesData = [];
+
+    //\Log::info('Number of files received: ' . count($request->file('files')));
 
     if ($request->hasFile('files')) {
         foreach ($request->file('files') as $file) {
@@ -104,6 +103,25 @@ class InvoiceController extends Controller
     {
         //
     }
+
+    public function showInvoices()
+    {
+        // Eager load the files and user relationship to prevent N+1 query issues
+        $invoices = Invoice::with(['project', 'client', 'files'])->get();
+        return view('invoice.index', compact('invoices'));
+    }
+
+    public function getInvoices()
+    {
+        try {
+            $invoices = Invoice::with(['client', 'project', 'files'])->get();
+            return response()->json($invoices);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching invoices: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
     /**
      * Show the form for editing the specified resource.

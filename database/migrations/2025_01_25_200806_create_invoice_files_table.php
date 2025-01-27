@@ -18,6 +18,7 @@ class CreateInvoiceFilesTable extends Migration
             $table->integer('invoice_id')->unsigned();
             $table->string('file_path');
             $table->string('file_type');
+            $table->string('file_name');
             $table->timestamps();
         });
     }
